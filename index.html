@@ -6,7 +6,8 @@
   <!-- Preconnect to critical origins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.gstatic.com/s/cairo/v28/SLXgc1nY6HkvalIhTp2mxdt0UX8.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/cairo/v28/SLXgc1nY6HkvalIhTp2mxdt0UX8.woff2" as="font"
+    type="font/woff2" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="dns-prefetch" href="https://api.binance.com">
   <link rel="dns-prefetch" href="https://pro-api.coinmarketcap.com">
@@ -262,7 +263,8 @@
   <link rel="preconnect" href="https://api.binance.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.gstatic.com/s/cairo/v28/SLXgc1nY6HkvalIhTp2mxdt0UX8.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/cairo/v28/SLXgc1nY6HkvalIhTp2mxdt0UX8.woff2" as="font"
+    type="font/woff2" crossorigin>
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
   <!-- Preload critical assets for LCP -->
   <link rel="preload" href="logo.png" as="image" fetchpriority="high">
@@ -293,7 +295,7 @@
 
   <!-- Google AdSense - deferred to not block rendering -->
   <script>
-    window.addEventListener('load', function() {
+    window.addEventListener('load', function () {
       var s = document.createElement('script');
       s.async = true;
       s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6273496386873741';
@@ -305,24 +307,45 @@
   <!-- Tailwind must be blocking to prevent Flash of Unstyled Content (FOUC) -->
   <style>
     /* === CLS PREVENTION === */
-    #tickerWrap { min-height: 110px; contain: layout style; }
-    #globalBar { min-height: 36px; contain: layout style; }
-    #metalsRow { min-height: 130px; contain: layout style; }
-    .cd-tbl-wrap { min-height: 600px; }
-    
+    #tickerWrap {
+      min-height: 110px;
+      contain: layout style;
+    }
+
+    #globalBar {
+      min-height: 36px;
+      contain: layout style;
+    }
+
+    #metalsRow {
+      min-height: 130px;
+      contain: layout style;
+    }
+
+    .cd-tbl-wrap {
+      min-height: 600px;
+    }
+
     /* Prevent font-related CLS */
-    body { font-display: swap; }
-    
+    body {
+      font-display: swap;
+    }
+
     /* Reserve space for skeleton */
-    #cryptoTable tbody:empty { min-height: 400px; display: block; }
-    
+    #cryptoTable tbody:empty {
+      min-height: 400px;
+      display: block;
+    }
+
     /* Prevent ticker layout shift */
-    .ticker-item img, .cmc-bar img { 
-      width: 20px; height: 20px; 
-      aspect-ratio: 1; 
+    .ticker-item img,
+    .cmc-bar img {
+      width: 20px;
+      height: 20px;
+      aspect-ratio: 1;
       object-fit: contain;
     }
-    
+
     /* Metals card skeleton */
     .metal-card-placeholder {
       min-height: 120px;
@@ -330,30 +353,40 @@
       border-radius: 12px;
       animation: shimmer 1.5s infinite;
     }
-    
+
     /* Prevent exchange logo CLS */
-    .exch-logo { width: 20px; height: 20px; aspect-ratio: 1; }
-    
+    .exch-logo {
+      width: 20px;
+      height: 20px;
+      aspect-ratio: 1;
+    }
+
     /* Stable nav height */
-    nav { height: 56px; min-height: 56px; }
-</style>
+    nav {
+      height: 56px;
+      min-height: 56px;
+    }
+  </style>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;600&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;600&display=swap"
     rel="stylesheet">
   <noscript></noscript>
   <style>
-/* Font Awesome fallback - prevent layout shift while loading */
-.fas,.fab,.far,.fa{font-family:'Font Awesome 6 Free',sans-serif;font-style:normal}
-</style>
+    /* Font Awesome fallback - prevent layout shift while loading */
+    .fas,
+    .fab,
+    .far,
+    .fa {
+      font-family: 'Font Awesome 6 Free', sans-serif;
+      font-style: normal
+    }
+  </style>
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <noscript></noscript>
 
   <style>
-    /* === PERFORMANCE: Font display swap to prevent layout shift === */
-    @font-face { font-family: 'Cairo'; font-display: swap; }
-    @font-face { font-family: 'Inter'; font-display: swap; }
+    /* === PERFORMANCE: Font display swap is handled via Google Fonts API URL parameter === */
 
     /* === CSS Block 1 === */
     * {
@@ -620,7 +653,37 @@
       display: none;
       overflow: hidden;
       backdrop-filter: blur(24px);
-      transform-origin: top left
+      transform-origin: top left;
+      flex-direction: column;
+      max-height: calc(100vh - 80px);
+    }
+
+    .stats-panel.active {
+      display: flex;
+      animation: spOpen .3s cubic-bezier(.32, .72, .24, 1.02)
+    }
+
+    .stats-panel-items {
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* Custom Scrollbar for Panel Items */
+    .stats-panel-items::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .stats-panel-items::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .stats-panel-items::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    .stats-panel-items::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
 
     [dir=ltr] .stats-panel {
@@ -632,11 +695,6 @@
     .dark .stats-panel {
       box-shadow: 0 25px 80px rgba(0, 0, 0, .6), 0 0 0 1px rgba(255, 255, 255, .08);
       background: rgba(22, 22, 42, .98)
-    }
-
-    .stats-panel.active {
-      display: block;
-      animation: spOpen .3s cubic-bezier(.32, .72, .24, 1.02)
     }
 
     @keyframes spOpen {
@@ -1588,7 +1646,7 @@
         var lang = document.documentElement.lang || document.body.lang || navigator.language || 'ar';
         lang = lang.toLowerCase();
 
-        if (lang.startsWith('ar') || lang.startsWith('he') || lang.startsWith('fa')) {
+        if (lang.startsWith('ar') || lang.startsWith('fa')) {
           document.documentElement.setAttribute('dir', 'rtl');
           aiModal.setAttribute('dir', 'rtl');
           aiModal.style.textAlign = 'right';
@@ -3878,9 +3936,11 @@
     .nav-hamburger.active .ham-line:nth-child(1) {
       transform: translateY(6px) rotate(45deg);
     }
+
     .nav-hamburger.active .ham-line:nth-child(2) {
       opacity: 0;
     }
+
     .nav-hamburger.active .ham-line:nth-child(3) {
       transform: translateY(-6px) rotate(-45deg);
     }
@@ -4549,11 +4609,15 @@
       height: auto;
       overflow: visible;
       padding-bottom: 20px;
-      min-height: 600px; /* Prevent CLS - reserve space for table */
+      min-height: 600px;
+      /* Prevent CLS - reserve space for table */
     }
 
     /* Skeleton loader to prevent layout shift */
-    .sk-row td { padding: 10px 16px; }
+    .sk-row td {
+      padding: 10px 16px;
+    }
+
     .sk-cell {
       background: linear-gradient(90deg, var(--bg2) 25%, var(--bg3) 50%, var(--bg2) 75%);
       background-size: 200% 100%;
@@ -4562,9 +4626,15 @@
       height: 14px;
       display: block;
     }
+
     @keyframes sk-shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
     }
 
     .ec-row td {
@@ -4979,7 +5049,9 @@
         <div class="flex items-center gap-2.5">
           <a href="#" onclick="location.reload();return false" class="flex items-center gap-2 no-underline"
             style="color:var(--t1)">
-            <img src="logo.png" alt="CryptoHub" fetchpriority="high" style="height:36px;width:auto;object-fit:contain;border-radius:4px" fetchpriority="high" width="36" height="36">
+            <img src="logo.png" alt="CryptoHub" fetchpriority="high"
+              style="height:36px;width:auto;object-fit:contain;border-radius:4px" fetchpriority="high" width="36"
+              height="36">
             <h1 class="text-base font-bold" data-i18n="siteTitle">CryptoHub</h1>
           </a>
           <div class="dropdown" id="exDd"><button class="ddb" onclick="toggleDD('exDd')"><i class="fas fa-exchange-alt"
@@ -5029,7 +5101,8 @@
             <i class="fas fa-moon hidden" style="color:var(--ac)" id="mI"></i>
           </button>
           <div class="dropdown" id="statsDd" style="display:flex;align-items:center;gap:8px;">
-            <button class="nav-icon-btn nav-hamburger" onclick="toggleDD('statsDd')" id="navSecBtn" title="Site Sections">
+            <button class="nav-icon-btn nav-hamburger" onclick="toggleDD('statsDd')" id="navSecBtn"
+              title="Site Sections">
               <span class="ham-line"></span>
               <span class="ham-line"></span>
               <span class="ham-line"></span>
@@ -5047,113 +5120,137 @@
                     class="fas fa-rocket" style="font-size:14px"></i></span> <span data-i18n="navSections"
                   style="font-size:13px;letter-spacing:1px">أقسام الموقع</span>
               </div>
-              <a class="nav-item" onclick="navTo('crypto');return false" href="#">
-                <div class="nav-ico" style="background:linear-gradient(135deg,#3861fb,#6c5ce7);color:#fff"><i
-                    class="fas fa-coins"></i></div>
-                <div style="flex: 1;">
-                  <div class="nav-title" data-i18n="tabCrypto">العملات الرقمية</div>
-                </div>
-                <span class="nav-badge" style="background:rgba(56,97,251,.1);color:var(--ac)"
-                  id="navCryptoBadge">--</span>
-                <i class="fas fa-chevron-left nav-arrow"></i>
-              </a>
-              <a class="nav-item" onclick="navTo('exchanges');return false" href="#"
-                style="background: linear-gradient(90deg, transparent, rgba(240,185,11,0.05)); border-right: 3px solid #f0b90b;">
-                <div class="nav-ico"
-                  style="background:linear-gradient(135deg,#f0b90b,#f5d04e);color:#1a1a2e;box-shadow: 0 4px 15px rgba(240,185,11,0.3);">
-                  <i class="fas fa-crown"></i>
-                </div>
-                <div style="flex: 1;">
-                  <div class="nav-title" data-i18n="tabExchanges"
-                    style="color: #f0b90b; font-size: 14px; display: flex; align-items: center; gap: 6px;">جميع المنصات
-                    <i class="fas fa-fire" style="font-size: 10px; color: #f0b90b;"></i>
+              <div class="stats-panel-items">
+                <a class="nav-item" onclick="navTo('crypto');return false" href="#">
+                  <div class="nav-ico" style="background:linear-gradient(135deg,#3861fb,#6c5ce7);color:#fff"><i
+                      class="fas fa-coins"></i></div>
+                  <div style="flex: 1;">
+                    <div class="nav-title" data-i18n="tabCrypto">العملات الرقمية</div>
                   </div>
-                </div>
-                <span class="nav-badge"
-                  style="background:rgba(240,185,11,.15);color:#f0b90b; border: 1px solid rgba(240,185,11,0.3); display: flex; align-items: center; gap: 4px;"><i
-                    class="fas fa-star" style="font-size: 8px;"></i>102</span>
-                <i class="fas fa-chevron-left nav-arrow" style="color: #f0b90b;"></i>
-              </a>
-              <a class="nav-item" onclick="navTo('commodities');return false" href="#">
-                <div class="nav-ico" style="background:linear-gradient(135deg,#FFD700,#FFA000);color:#fff"><i
-                    class="fas fa-gem"></i></div>
-                <div style="flex: 1;">
-                  <div class="nav-title" data-i18n="tabCommodities">المعادن الثمينة</div>
-                </div>
-                <span class="nav-badge" style="background:rgba(255,215,0,.1);color:#d4a017"><span class="ld"
-                    style="width:5px;height:5px"></span> <span data-i18n="live">مباشر</span></span>
-                <i class="fas fa-chevron-left nav-arrow"></i>
-              </a>
-              <a class="nav-item" onclick="navTo('stocks');return false" href="#">
-                <div class="nav-ico" style="background:linear-gradient(135deg,#16c784,#0ea5e9);color:#fff"><i
-                    class="fas fa-chart-line"></i></div>
-                <div style="flex: 1;">
-                  <div class="nav-title" data-i18n="tabStocks">الأسهم وETF</div>
-                </div>
-                <span class="nav-badge" style="background:rgba(22,199,132,.1);color:var(--gn)"><span class="ld"
-                    style="width:5px;height:5px"></span> <span data-i18n="live">مباشر</span></span>
-                <i class="fas fa-chevron-left nav-arrow"></i>
-              </a>
-              <a class="nav-item" onclick="toggleAnalysis();return false" href="#"
-                style="background: linear-gradient(90deg, transparent, rgba(168,85,247,0.05)); border-right: 3px solid #a855f7;">
-                <div class="nav-ico"
-                  style="background:linear-gradient(135deg,#c084fc,#9333ea);color:#fff;box-shadow: 0 4px 15px rgba(168,85,247,0.3);">
-                  <i class="fas fa-robot"></i>
-                </div>
-                <div style="flex: 1;">
-                  <div class="nav-title" data-i18n="aiTitle"
-                    style="color:#a855f7; display: flex; align-items: center; gap: 6px;">التحليل الفني
-                    <i class="fas fa-sparkles" style="font-size: 10px; color: #a855f7;"></i>
+                  <span class="nav-badge" style="background:rgba(56,97,251,.1);color:var(--ac)"
+                    id="navCryptoBadge">--</span>
+                  <i class="fas fa-chevron-left nav-arrow"></i>
+                </a>
+                <a class="nav-item" onclick="navTo('exchanges');return false" href="#"
+                  style="background: linear-gradient(90deg, transparent, rgba(240,185,11,0.05)); border-right: 3px solid #f0b90b;">
+                  <div class="nav-ico"
+                    style="background:linear-gradient(135deg,#f0b90b,#f5d04e);color:#1a1a2e;box-shadow: 0 4px 15px rgba(240,185,11,0.3);">
+                    <i class="fas fa-crown"></i>
                   </div>
-                  <div class="nav-desc" data-i18n="aiSub" style="color:var(--t2)">تحليل بالذكاء الاصطناعي</div>
-                </div>
-                <span class="nav-badge"
-                  style="background:rgba(168,85,247,.1);color:#a855f7; border: 1px solid rgba(168,85,247,0.3); display: flex; align-items: center; gap: 4px;">
-                  <span class="ld" style="width:5px;height:5px;background:#a855f7"></span> AI
-                </span>
-                <i class="fas fa-chevron-left nav-arrow" style="color: #a855f7;"></i>
-              </a>
-              <a class="nav-item" href="crypto-analyzer"
-                style="background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.05)); border-right: 3px solid #00d4ff;">
-                <div class="nav-ico"
-                  style="background:linear-gradient(135deg,#0070a8,#00d4ff);color:#fff;box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);">
-                  <i class="fas fa-chart-pie"></i>
-                </div>
-                <div style="flex: 1;">
-                  <div class="nav-title" data-i18n="cryptoAnalyzer"
-                    style="color:#00d4ff; display: flex; align-items: center; gap: 6px;">محلل السيولة
-                    <i class="fas fa-bolt" style="font-size: 10px; color: #00d4ff;"></i>
+                  <div style="flex: 1;">
+                    <div class="nav-title" data-i18n="tabExchanges"
+                      style="color: #f0b90b; font-size: 14px; display: flex; align-items: center; gap: 6px;">جميع
+                      المنصات
+                      <i class="fas fa-fire" style="font-size: 10px; color: #f0b90b;"></i>
+                    </div>
                   </div>
-                  <div class="nav-desc" data-i18n="cryptoAnalyzerDesc" style="color:var(--t2)">تحليل متقدم للسيولة
-                    والعملات</div>
-                </div>
-                <span class="nav-badge"
-                  style="background:rgba(0, 212, 255, .1);color:#00d4ff; border: 1px solid rgba(0, 212, 255, 0.3); display: flex; align-items: center; gap: 4px;">
-                  <span class="ld" style="width:5px;height:5px;background:#00d4ff"></span> PRO
-                </span>
-                <i class="fas fa-chevron-left nav-arrow" style="color: #00d4ff;"></i>
-              </a>
-              <a class="nav-item" href="crypto-arbitrage"
-                style="background: linear-gradient(90deg, transparent, rgba(56, 97, 251, 0.05)); border-right: 3px solid #3861fb;">
-                <div class="nav-ico"
-                  style="background:linear-gradient(135deg,#3861fb,#6c5ce7);color:#fff;box-shadow: 0 4px 15px rgba(56, 97, 251, 0.3);">
-                  <i class="fas fa-balance-scale"></i>
-                </div>
-                <div style="flex: 1;">
-                  <div class="nav-title" data-i18n="cryptoArbitrage"
-                    style="color:#3861fb; display: flex; align-items: center; gap: 6px;">ماسح الفروقات
-                    <i class="fas fa-search" style="font-size: 10px; color: #3861fb;"></i>
+                  <span class="nav-badge"
+                    style="background:rgba(240,185,11,.15);color:#f0b90b; border: 1px solid rgba(240,185,11,0.3); display: flex; align-items: center; gap: 4px;"><i
+                      class="fas fa-star" style="font-size: 8px;"></i>102</span>
+                  <i class="fas fa-chevron-left nav-arrow" style="color: #f0b90b;"></i>
+                </a>
+                <a class="nav-item" onclick="navTo('commodities');return false" href="#">
+                  <div class="nav-ico" style="background:linear-gradient(135deg,#FFD700,#FFA000);color:#fff"><i
+                      class="fas fa-gem"></i></div>
+                  <div style="flex: 1;">
+                    <div class="nav-title" data-i18n="tabCommodities">المعادن الثمينة</div>
                   </div>
-                  <div class="nav-desc" data-i18n="cryptoArbitrageDesc" style="color:var(--t2)">مقارنة الأسعار بين 100
-                    منصة</div>
-                </div>
-                <span class="nav-badge"
-                  style="background:rgba(56, 97, 251, .1);color:#3861fb; border: 1px solid rgba(56, 97, 251, 0.3); display: flex; align-items: center; gap: 4px;">
-                  <span class="ld" style="width:5px;height:5px;background:#3861fb"></span> NEW
-                </span>
-                <i class="fas fa-chevron-left nav-arrow" style="color: #3861fb;"></i>
-              </a>
+                  <span class="nav-badge" style="background:rgba(255,215,0,.1);color:#d4a017"><span class="ld"
+                      style="width:5px;height:5px"></span> <span data-i18n="live">مباشر</span></span>
+                  <i class="fas fa-chevron-left nav-arrow"></i>
+                </a>
+                <a class="nav-item" onclick="navTo('stocks');return false" href="#">
+                  <div class="nav-ico" style="background:linear-gradient(135deg,#16c784,#0ea5e9);color:#fff"><i
+                      class="fas fa-chart-line"></i></div>
+                  <div style="flex: 1;">
+                    <div class="nav-title" data-i18n="tabStocks">الأسهم وETF</div>
+                  </div>
+                  <span class="nav-badge" style="background:rgba(22,199,132,.1);color:var(--gn)"><span class="ld"
+                      style="width:5px;height:5px"></span> <span data-i18n="live">مباشر</span></span>
+                  <i class="fas fa-chevron-left nav-arrow"></i>
+                </a>
+                <a class="nav-item" onclick="toggleAnalysis();return false" href="#"
+                  style="background: linear-gradient(90deg, transparent, rgba(168,85,247,0.05)); border-right: 3px solid #a855f7;">
+                  <div class="nav-ico"
+                    style="background:linear-gradient(135deg,#c084fc,#9333ea);color:#fff;box-shadow: 0 4px 15px rgba(168,85,247,0.3);">
+                    <i class="fas fa-robot"></i>
+                  </div>
+                  <div style="flex: 1;">
+                    <div class="nav-title" data-i18n="aiTitle"
+                      style="color:#a855f7; display: flex; align-items: center; gap: 6px;">التحليل الفني
+                      <i class="fas fa-sparkles" style="font-size: 10px; color: #a855f7;"></i>
+                    </div>
+                    <div class="nav-desc" data-i18n="aiSub" style="color:var(--t2)">تحليل بالذكاء الاصطناعي</div>
+                  </div>
+                  <span class="nav-badge"
+                    style="background:rgba(168,85,247,.1);color:#a855f7; border: 1px solid rgba(168,85,247,0.3); display: flex; align-items: center; gap: 4px;">
+                    <span class="ld" style="width:5px;height:5px;background:#a855f7"></span> AI
+                  </span>
+                  <i class="fas fa-chevron-left nav-arrow" style="color: #a855f7;"></i>
+                </a>
+                <a class="nav-item" href="crypto-analyzer"
+                  style="background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.05)); border-right: 3px solid #00d4ff;">
+                  <div class="nav-ico"
+                    style="background:linear-gradient(135deg,#0070a8,#00d4ff);color:#fff;box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);">
+                    <i class="fas fa-chart-pie"></i>
+                  </div>
+                  <div style="flex: 1;">
+                    <div class="nav-title" data-i18n="cryptoAnalyzer"
+                      style="color:#00d4ff; display: flex; align-items: center; gap: 6px;">محلل السيولة
+                      <i class="fas fa-bolt" style="font-size: 10px; color: #00d4ff;"></i>
+                    </div>
+                    <div class="nav-desc" data-i18n="cryptoAnalyzerDesc" style="color:var(--t2)">تحليل متقدم للسيولة
+                      والعملات</div>
+                  </div>
+                  <span class="nav-badge"
+                    style="background:rgba(0, 212, 255, .1);color:#00d4ff; border: 1px solid rgba(0, 212, 255, 0.3); display: flex; align-items: center; gap: 4px;">
+                    <span class="ld" style="width:5px;height:5px;background:#00d4ff"></span> PRO
+                  </span>
+                  <i class="fas fa-chevron-left nav-arrow" style="color: #00d4ff;"></i>
+                </a>
+                <a class="nav-item" href="crypto-arbitrage"
+                  style="background: linear-gradient(90deg, transparent, rgba(56, 97, 251, 0.05)); border-right: 3px solid #3861fb;">
+                  <div class="nav-ico"
+                    style="background:linear-gradient(135deg,#3861fb,#6c5ce7);color:#fff;box-shadow: 0 4px 15px rgba(56, 97, 251, 0.3);">
+                    <i class="fas fa-balance-scale"></i>
+                  </div>
+                  <div style="flex: 1;">
+                    <div class="nav-title" data-i18n="cryptoArbitrage"
+                      style="color:#3861fb; display: flex; align-items: center; gap: 6px;">ماسح الفروقات
+                      <i class="fas fa-search" style="font-size: 10px; color: #3861fb;"></i>
+                    </div>
+                    <div class="nav-desc" data-i18n="cryptoArbitrageDesc" style="color:var(--t2)">مقارنة الأسعار بين 100
+                      منصة</div>
+                  </div>
+                  <span class="nav-badge"
+                    style="background:rgba(56, 97, 251, .1);color:#3861fb; border: 1px solid rgba(56, 97, 251, 0.3); display: flex; align-items: center; gap: 4px;">
+                    <span class="ld" style="width:5px;height:5px;background:#3861fb"></span> NEW
+                  </span>
+                  <i class="fas fa-chevron-left nav-arrow" style="color: #3861fb;"></i>
+                </a>
 
+                <a class="nav-item" href="forex-analyzer.html"
+                  style="background: linear-gradient(90deg, transparent, rgba(0, 230, 118, 0.05)); border-right: 3px solid #00e676;">
+                  <div class="nav-ico"
+                    style="background:linear-gradient(135deg,#00701a,#00e676);color:#fff;box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3);">
+                    <i class="fas fa-dollar-sign"></i>
+                  </div>
+                  <div style="flex: 1;">
+                    <div class="nav-title" data-i18n="forexAnalyzer"
+                      style="color:#00e676; display: flex; align-items: center; gap: 6px;">محلل الفوركس
+                      <i class="fas fa-chart-line" style="font-size: 10px; color: #00e676;"></i>
+                    </div>
+                    <div class="nav-desc" data-i18n="forexAnalyzerDesc" style="color:var(--t2)">تحليل أزواج العملات
+                      الأجنبية</div>
+                  </div>
+                  <span class="nav-badge"
+                    style="background:rgba(0,230,118,.1);color:#00e676; border: 1px solid rgba(0,230,118,0.3); display: flex; align-items: center; gap: 4px;">
+                    <span class="ld" style="width:5px;height:5px;background:#00e676"></span> NEW
+                  </span>
+                  <i class="fas fa-chevron-left nav-arrow" style="color: #00e676;"></i>
+                </a>
+
+              </div>
               <div class="stats-panel-ft"><i class="fas fa-shield-halved"></i> CryptoHub <span>•</span> <span
                   data-i18n="secure">آمن</span></div>
             </div>
@@ -5161,8 +5258,8 @@
 
 
           <div class="dropdown" id="langDd"><button class="nav-icon-btn nav-lang-btn" onclick="toggleDD('langDd')"><span
-                id="cFlag">🇸🇦</span><span id="cCode" class="text-xs font-bold" style="font-size:10px">AR</span><i class="fas fa-chevron-down"
-                style="font-size:8px;opacity:.6"></i></button>
+                id="cFlag">🇸🇦</span><span id="cCode" class="text-xs font-bold" style="font-size:10px">AR</span><i
+                class="fas fa-chevron-down" style="font-size:8px;opacity:.6"></i></button>
             <div class="ddm" id="lMenu" style="min-width:190px"></div>
           </div>
         </div>
@@ -5538,12 +5635,18 @@
           <div class="cmc-net-scroll">
             <button class="cmc-net-btn cmc-net-active" data-net="all"><i class="fas fa-globe"
                 style="font-size:14px"></i> <span data-i18n="allNetworks">All Networks</span></button>
-            <button class="cmc-net-btn" data-net="ethereum"><img loading="lazy" width="20" height="20" src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png" alt="Ethereum"> Ethereum</button>
-            <button class="cmc-net-btn" data-net="binance-smart-chain"><img loading="lazy" width="20" height="20" src="https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png" alt="BSC"> BNB Chain</button>
-            <button class="cmc-net-btn" data-net="solana"><img loading="lazy" width="20" height="20" src="https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png" alt="Solana"> Solana</button>
-            <button class="cmc-net-btn" data-net="base"><img loading="lazy" width="20" height="20" src="https://s2.coinmarketcap.com/static/img/coins/64x64/27716.png" alt="Base"> Base</button>
-            <button class="cmc-net-btn" data-net="polygon-pos"><img loading="lazy" width="20" height="20" src="https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png" alt="Polygon"> Polygon</button>
-            <button class="cmc-net-btn" data-net="arbitrum-one"><img loading="lazy" width="20" height="20" src="https://s2.coinmarketcap.com/static/img/coins/64x64/11841.png" alt="Arbitrum"> Arbitrum</button>
+            <button class="cmc-net-btn" data-net="ethereum"><img loading="lazy" width="20" height="20"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png" alt="Ethereum"> Ethereum</button>
+            <button class="cmc-net-btn" data-net="binance-smart-chain"><img loading="lazy" width="20" height="20"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png" alt="BSC"> BNB Chain</button>
+            <button class="cmc-net-btn" data-net="solana"><img loading="lazy" width="20" height="20"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png" alt="Solana"> Solana</button>
+            <button class="cmc-net-btn" data-net="base"><img loading="lazy" width="20" height="20"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/27716.png" alt="Base"> Base</button>
+            <button class="cmc-net-btn" data-net="polygon-pos"><img loading="lazy" width="20" height="20"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png" alt="Polygon"> Polygon</button>
+            <button class="cmc-net-btn" data-net="arbitrum-one"><img loading="lazy" width="20" height="20"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/11841.png" alt="Arbitrum"> Arbitrum</button>
             <div style="flex-shrink:0;">
               <button class="cmc-net-btn cmc-net-more-btn" id="cmcMoreBtn">More <i class="fas fa-chevron-down"
                   id="cmcMoreChev" style="font-size:10px;transition:transform .3s"></i></button>
@@ -5560,30 +5663,54 @@
             <button class="cmc-mg-item cmc-mg-active" data-net="all"><i class="fas fa-globe"
                 style="width:24px;text-align:center;font-size:18px;color:var(--t2)"></i> <span>All
                 Networks</span></button>
-            <button class="cmc-mg-item" data-net="optimistic-ethereum"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/11840.png"> <span>Optimism</span></button>
-            <button class="cmc-mg-item" data-net="avalanche"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png"> <span>Avalanche</span></button>
-            <button class="cmc-mg-item" data-net="tron"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/1958.png"> <span>TRON</span></button>
-            <button class="cmc-mg-item" data-net="fantom"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/3513.png"> <span>Fantom</span></button>
-            <button class="cmc-mg-item" data-net="cronos"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png"> <span>Cronos</span></button>
-            <button class="cmc-mg-item" data-net="bitcoin"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"> <span>Bitcoin</span></button>
-            <button class="cmc-mg-item" data-net="cardano"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png"> <span>Cardano</span></button>
-            <button class="cmc-mg-item" data-net="polkadot"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png"> <span>Polkadot</span></button>
-            <button class="cmc-mg-item" data-net="cosmos"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png"> <span>Cosmos</span></button>
-            <button class="cmc-mg-item" data-net="near-protocol"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/6535.png"> <span>NEAR</span></button>
-            <button class="cmc-mg-item" data-net="sui"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png"> <span>Sui</span></button>
-            <button class="cmc-mg-item" data-net="aptos"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/21794.png"> <span>Aptos</span></button>
-            <button class="cmc-mg-item" data-net="algorand"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/4030.png"> <span>Algorand</span></button>
-            <button class="cmc-mg-item" data-net="stellar"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/512.png"> <span>Stellar</span></button>
-            <button class="cmc-mg-item" data-net="celo"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/5567.png"> <span>Celo</span></button>
-            <button class="cmc-mg-item" data-net="moonbeam"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/6836.png"> <span>Moonbeam</span></button>
-            <button class="cmc-mg-item" data-net="kava"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/4846.png"> <span>Kava</span></button>
-            <button class="cmc-mg-item" data-net="osmosis"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/12220.png"> <span>Osmosis</span></button>
-            <button class="cmc-mg-item" data-net="mantle"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/27075.png"> <span>Mantle</span></button>
-            <button class="cmc-mg-item" data-net="linea"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/27657.png"> <span>Linea</span></button>
-            <button class="cmc-mg-item" data-net="scroll"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/26998.png"> <span>Scroll</span></button>
-            <button class="cmc-mg-item" data-net="zksync"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/24091.png"> <span>zkSync</span></button>
-            <button class="cmc-mg-item" data-net="manta-pacific"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/13631.png"> <span>Manta</span></button>
-            <button class="cmc-mg-item" data-net="blast"><img loading="lazy" width="24" height="24" src="https://s2.coinmarketcap.com/static/img/coins/64x64/28480.png"> <span>Blast</span></button>
+            <button class="cmc-mg-item" data-net="optimistic-ethereum"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/11840.png"> <span>Optimism</span></button>
+            <button class="cmc-mg-item" data-net="avalanche"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png"> <span>Avalanche</span></button>
+            <button class="cmc-mg-item" data-net="tron"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/1958.png"> <span>TRON</span></button>
+            <button class="cmc-mg-item" data-net="fantom"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/3513.png"> <span>Fantom</span></button>
+            <button class="cmc-mg-item" data-net="cronos"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png"> <span>Cronos</span></button>
+            <button class="cmc-mg-item" data-net="bitcoin"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"> <span>Bitcoin</span></button>
+            <button class="cmc-mg-item" data-net="cardano"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png"> <span>Cardano</span></button>
+            <button class="cmc-mg-item" data-net="polkadot"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png"> <span>Polkadot</span></button>
+            <button class="cmc-mg-item" data-net="cosmos"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png"> <span>Cosmos</span></button>
+            <button class="cmc-mg-item" data-net="near-protocol"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/6535.png"> <span>NEAR</span></button>
+            <button class="cmc-mg-item" data-net="sui"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png"> <span>Sui</span></button>
+            <button class="cmc-mg-item" data-net="aptos"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/21794.png"> <span>Aptos</span></button>
+            <button class="cmc-mg-item" data-net="algorand"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/4030.png"> <span>Algorand</span></button>
+            <button class="cmc-mg-item" data-net="stellar"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/512.png"> <span>Stellar</span></button>
+            <button class="cmc-mg-item" data-net="celo"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/5567.png"> <span>Celo</span></button>
+            <button class="cmc-mg-item" data-net="moonbeam"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/6836.png"> <span>Moonbeam</span></button>
+            <button class="cmc-mg-item" data-net="kava"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/4846.png"> <span>Kava</span></button>
+            <button class="cmc-mg-item" data-net="osmosis"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/12220.png"> <span>Osmosis</span></button>
+            <button class="cmc-mg-item" data-net="mantle"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/27075.png"> <span>Mantle</span></button>
+            <button class="cmc-mg-item" data-net="linea"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/27657.png"> <span>Linea</span></button>
+            <button class="cmc-mg-item" data-net="scroll"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/26998.png"> <span>Scroll</span></button>
+            <button class="cmc-mg-item" data-net="zksync"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/24091.png"> <span>zkSync</span></button>
+            <button class="cmc-mg-item" data-net="manta-pacific"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/13631.png"> <span>Manta</span></button>
+            <button class="cmc-mg-item" data-net="blast"><img loading="lazy" width="24" height="24"
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/28480.png"> <span>Blast</span></button>
           </div>
         </div>
 
@@ -5614,16 +5741,106 @@
           </thead>
           <tbody id="tBody">
             <!-- Skeleton rows prevent CLS by reserving exact table height -->
-            <tr class="sk-row"><td><span class="sk-cell" style="width:140px"></span></td><td><span class="sk-cell" style="width:70px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td></tr>
-            <tr class="sk-row"><td><span class="sk-cell" style="width:120px"></span></td><td><span class="sk-cell" style="width:80px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td></tr>
-            <tr class="sk-row"><td><span class="sk-cell" style="width:150px"></span></td><td><span class="sk-cell" style="width:65px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td></tr>
-            <tr class="sk-row"><td><span class="sk-cell" style="width:100px"></span></td><td><span class="sk-cell" style="width:75px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td></tr>
-            <tr class="sk-row"><td><span class="sk-cell" style="width:130px"></span></td><td><span class="sk-cell" style="width:72px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td></tr>
-            <tr class="sk-row"><td><span class="sk-cell" style="width:110px"></span></td><td><span class="sk-cell" style="width:78px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td></tr>
-            <tr class="sk-row"><td><span class="sk-cell" style="width:145px"></span></td><td><span class="sk-cell" style="width:68px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td></tr>
-            <tr class="sk-row"><td><span class="sk-cell" style="width:125px"></span></td><td><span class="sk-cell" style="width:82px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td></tr>
-            <tr class="sk-row"><td><span class="sk-cell" style="width:115px"></span></td><td><span class="sk-cell" style="width:76px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td></tr>
-            <tr class="sk-row"><td><span class="sk-cell" style="width:135px"></span></td><td><span class="sk-cell" style="width:73px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td><td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td></tr>
+            <tr class="sk-row">
+              <td><span class="sk-cell" style="width:140px"></span></td>
+              <td><span class="sk-cell" style="width:70px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+            </tr>
+            <tr class="sk-row">
+              <td><span class="sk-cell" style="width:120px"></span></td>
+              <td><span class="sk-cell" style="width:80px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+            </tr>
+            <tr class="sk-row">
+              <td><span class="sk-cell" style="width:150px"></span></td>
+              <td><span class="sk-cell" style="width:65px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+            </tr>
+            <tr class="sk-row">
+              <td><span class="sk-cell" style="width:100px"></span></td>
+              <td><span class="sk-cell" style="width:75px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+            </tr>
+            <tr class="sk-row">
+              <td><span class="sk-cell" style="width:130px"></span></td>
+              <td><span class="sk-cell" style="width:72px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+            </tr>
+            <tr class="sk-row">
+              <td><span class="sk-cell" style="width:110px"></span></td>
+              <td><span class="sk-cell" style="width:78px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+            </tr>
+            <tr class="sk-row">
+              <td><span class="sk-cell" style="width:145px"></span></td>
+              <td><span class="sk-cell" style="width:68px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+            </tr>
+            <tr class="sk-row">
+              <td><span class="sk-cell" style="width:125px"></span></td>
+              <td><span class="sk-cell" style="width:82px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+            </tr>
+            <tr class="sk-row">
+              <td><span class="sk-cell" style="width:115px"></span></td>
+              <td><span class="sk-cell" style="width:76px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+            </tr>
+            <tr class="sk-row">
+              <td><span class="sk-cell" style="width:135px"></span></td>
+              <td><span class="sk-cell" style="width:73px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -5662,7 +5879,8 @@
     </div>
 
     <!-- Tab: Commodities -->
-    <div class="tab-content" id="tab_commodities" style="min-height:160px" style="content-visibility:auto;contain-intrinsic-size:0 800px">
+    <div class="tab-content" id="tab_commodities" style="min-height:160px"
+      style="content-visibility:auto;contain-intrinsic-size:0 800px">
       <div class="card mb-4">
         <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
           <div>
@@ -6286,7 +6504,9 @@
         <div>
           <a href="#" onclick="location.reload();return false" class="flex items-center gap-3 mb-4 no-underline"
             style="color:#fff">
-            <img src="logo.png" alt="CryptoHub" fetchpriority="high" style="height:40px;width:auto;object-fit:contain;border-radius:8px;" width="40" height="40" loading="lazy">
+            <img src="logo.png" alt="CryptoHub" fetchpriority="high"
+              style="height:40px;width:auto;object-fit:contain;border-radius:8px;" width="40" height="40"
+              loading="lazy">
             <div>
               <span class="font-bold text-xl block">CryptoHub</span>
               <span class="text-xs" style="color:#3b82f6;font-weight:700;letter-spacing:1px">CRYPTO TRACKER</span>
@@ -6629,8 +6849,8 @@
       <!-- Header -->
       <div class="cd-hd">
         <div style="display:flex;align-items:center;gap:12px;min-width:0">
-          <img loading="lazy" id="mLogo" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-            class="cd-logo">
+          <img loading="lazy" id="mLogo"
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="cd-logo">
           <div style="min-width:0">
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span id="mName"
                 style="font-size:20px;font-weight:800">--</span><span id="mSym" class="cd-badge">--</span><span
@@ -6767,49 +6987,49 @@
     };
     // Complete native translations for remaining languages
     // Defer rare language translations (cs, ro, el, sv, da, fi, ms, bn, sw)
-    setTimeout(function() {
-    T.cs = { trustScore: 'Důvěra', siteTitle: 'CryptoHub', exchanges: 'Burzy', recommendedExchanges: 'Doporučené Burzy', live: 'Živě', fearGreedTitle: 'Index Strachu a Chamtivosti', fearGreedSub: 'Sentiment Trhu - od Binance', outOf100: 'ze 100', extremeFear: 'Extrémní Strach', fear: 'Strach', neutral: 'Neutrální', greed: 'Chamtivost', extremeGreed: 'Extrémní Chamtivost', aiTitle: 'AI Analýza', aiSub: 'Předpovědi na bázi AI', analyzing: 'Analyzuji...', bullishSignals: 'Býčí Signály', bearishSignals: 'Medvědí Signály', bollingerBands: 'Bollinger', searchCoin: 'Hledat kryptoměnu...', sortBy: 'Řadit podle', network: 'Síť', show: 'Zobrazit', loadMore: 'Načíst Více', loadingData: 'Načítání...', filteredBy: 'Filtr:', colName: 'Název', colPrice: 'Cena', colMarketCap: 'Tržní Kap.', colVolume: 'Objem 24h', colExchanges: 'Burzy', prev: 'Předchozí', next: 'Další', showing: 'Zobrazeno', of: 'z', coins: 'kryptoměn', availableOn: 'Dostupné na', exchange: 'burzách', referralNote: '🎁 Doporučující odkazy', register: 'Registrace', visit: 'Navštívit', trustHigh: 'Vysoká Důvěra', trustMedium: 'Střední Důvěra', trustLow: 'Nízká Důvěra', volume: 'Objem', allNetworks: 'Všechny Sítě', rank: 'Pořadí', marketCap: 'Tržní Kap.', price: 'Cena', change24h: 'Změna 24h', noExchanges: 'Nenalezeno', errorLoading: 'Chyba načítání', retry: 'Opakovat', allLoaded: 'Vše Načteno', loadMoreRemaining: 'Načíst Více', oversold: 'Přeprodáno', overbought: 'Překoupeno', bullish: 'Býčí', bearish: 'Medvědí', nearBottom: 'Blízko Dna', nearTop: 'Blízko Vrcholu', goldenCross: 'Zlatý Kříž', deathCross: 'Kříž Smrti', strongBuy: 'Silný Nákup', buy: 'Koupit', sell: 'Prodat', strongSell: 'Silný Prodej', coinsFound: 'nalezeno', trendingTitle: 'Trendy', trendingSub: 'Top 100 kryptoměn dle objemu 24h', altcoinIndex: 'Index Sezóny Altcoinů', altcoinSeason: 'Sezóna Altcoinů', btcDominance: 'Dominance BTC', ethDominance: 'Dominance ETH', totalMarketCap: 'Celková Kap.', totalVolume24: 'Celkový Objem 24h', fgHistory: 'Historie', now: 'Nyní', yesterday: 'Včera', lastWeek: 'Minulý Týden', lastMonth: 'Minulý Měsíc', entryExitTitle: 'Signály Vstupu a Výstupu - Bitcoin', entryZone: 'Zóna Vstupu', exitZone: 'Zóna Výstupu', currentPrice: 'Aktuální Cena', entryNote: 'Na úrovni podpory', exitNote: 'Na úrovni odporu', volAnalysis: 'Analýza Objemu', supportResistance: 'Podpora/Odpor', aiRecommendation: 'Doporučení', strongTrend: 'Silný Trend', weakTrend: 'Slabý Trend', highVol: 'Vysoký Objem', lowVol: 'Nízký Objem', aboveAvg: 'Nad Průměrem', belowAvg: 'Pod Průměrem', footerDesc: 'Vaše komplexní platforma pro sledování 5000+ kryptoměn s pokročilými AI nástroji a cenami v reálném čase.', quickLinks: 'Rychlé Odkazy', home: 'Domů', topExchanges: 'Top Burzy', disclaimer: 'Vyloučení Odpovědnosti', disclaimerText: 'Informace na tomto webu jsou pouze pro vzdělávací účely a nepředstavují finanční poradenství. Obchodování s kryptoměnami je vysoce rizikové.', allRights: 'Všechna Práva Vyhrazena', btcSeason: 'Sezóna Bitcoin', holdEntry: 'Čekat na lepší vstup', goodEntry: 'Dobrá příležitost vstupu', riskHigh: 'Vysoké Riziko', support: 'Podpora', yourName: 'Vaše Jméno', yourEmail: 'Váš Email', yourMessage: 'Vaše Zpráva...', sendMessage: 'Odeslat', messageSent: 'Zpráva úspěšně odeslána!', languages: 'Jazyky', secure: 'Bezpečné', loading: 'Načítání...', tabCrypto: 'Kryptoměny', tabExchanges: 'Všechny Burzy', tabCommodities: 'Zlato, Stříbro a Akcie', allExchangesTitle: 'Všechny Globální Burzy', allExchangesSub: '102 licencovaných burz • Dle důvěryhodnosti • Přímé obchodní odkazy', searchExchange: 'Hledat burzu...', metalExTitle: 'Platformy Drahých Kovů', metalExSub: 'Všechny burzy podporující obchodování s drahými kovy', stocksTitle: 'Hlavní Akcie a ETF', stocksSub: 'Tokenizované akcie a ETF drahých kovů • Data z Yahoo Finance v reálném čase', colExchange2: 'Burza', colPairs: 'Obchodní Páry', colRefPrice: 'Ref. Cena', colVol24h: 'Objem 24h', colTrade: 'Obchodovat', colStock: 'Akcie' };
-    T.ro = { trustScore: 'Încredere', siteTitle: 'CryptoHub', exchanges: 'Burse', recommendedExchanges: 'Burse Recomandate', live: 'Live', fearGreedTitle: 'Indicele Frică și Lăcomie', fearGreedSub: 'Sentimentul Pieței - de la Binance', outOf100: 'din 100', extremeFear: 'Frică Extremă', fear: 'Frică', neutral: 'Neutru', greed: 'Lăcomie', extremeGreed: 'Lăcomie Extremă', aiTitle: 'Analiză AI', aiSub: 'Predicții bazate pe AI', analyzing: 'Se analizează...', bullishSignals: 'Semnale de Creștere', bearishSignals: 'Semnale de Scădere', bollingerBands: 'Bollinger', searchCoin: 'Caută monedă...', sortBy: 'Sortează după', network: 'Rețea', show: 'Afișează', loadMore: 'Încarcă Mai Mult', loadingData: 'Se încarcă...', filteredBy: 'Filtru:', colName: 'Nume', colPrice: 'Preț', colMarketCap: 'Cap. Piață', colVolume: 'Volum 24h', colExchanges: 'Burse', prev: 'Anterior', next: 'Următor', showing: 'Afișare', of: 'din', coins: 'monede', availableOn: 'Disponibil pe', exchange: 'burse', referralNote: '🎁 Linkuri de recomandare', register: 'Înregistrare', visit: 'Vizitează', trustHigh: 'Încredere Ridicată', trustMedium: 'Încredere Medie', trustLow: 'Încredere Scăzută', volume: 'Volum', allNetworks: 'Toate Rețelele', rank: 'Rang', marketCap: 'Cap. Piață', price: 'Preț', change24h: 'Schimbare 24h', noExchanges: 'Nu s-a găsit', errorLoading: 'Eroare de încărcare', retry: 'Reîncearcă', allLoaded: 'Totul Încărcat', loadMoreRemaining: 'Încarcă Mai Mult', oversold: 'Supravândut', overbought: 'Supracumpărat', bullish: 'Bullish', bearish: 'Bearish', nearBottom: 'Aproape de Minim', nearTop: 'Aproape de Maxim', goldenCross: 'Crucea de Aur', deathCross: 'Crucea Morții', strongBuy: 'Cumpărare Puternică', buy: 'Cumpără', sell: 'Vinde', strongSell: 'Vânzare Puternică', coinsFound: 'găsite', trendingTitle: 'Trending', trendingSub: 'Top 100 monede după volum 24h', altcoinIndex: 'Indexul Sezonului Altcoin', altcoinSeason: 'Sezon Altcoin', btcDominance: 'Dominanță BTC', ethDominance: 'Dominanță ETH', totalMarketCap: 'Cap. Totală', totalVolume24: 'Volum Total 24h', fgHistory: 'Istoric', now: 'Acum', yesterday: 'Ieri', lastWeek: 'Săptămâna Trecută', lastMonth: 'Luna Trecută', entryExitTitle: 'Semnale de Intrare și Ieșire - Bitcoin', entryZone: 'Zona de Intrare', exitZone: 'Zona de Ieșire', currentPrice: 'Preț Curent', entryNote: 'La nivel de suport', exitNote: 'La nivel de rezistență', volAnalysis: 'Analiza Volumului', supportResistance: 'Suport/Rezistență', aiRecommendation: 'Recomandare', strongTrend: 'Trend Puternic', weakTrend: 'Trend Slab', highVol: 'Volum Ridicat', lowVol: 'Volum Scăzut', aboveAvg: 'Peste Medie', belowAvg: 'Sub Medie', footerDesc: 'Platforma ta completă pentru urmărirea a peste 5000 de criptomonede cu instrumente AI avansate și prețuri în timp real.', quickLinks: 'Linkuri Rapide', home: 'Acasă', topExchanges: 'Top Burse', disclaimer: 'Declinarea Responsabilității', disclaimerText: 'Informațiile de pe acest site sunt doar în scop educativ și nu constituie sfaturi financiare. Tranzacționarea cripto implică riscuri foarte mari.', allRights: 'Toate Drepturile Rezervate', btcSeason: 'Sezon Bitcoin', holdEntry: 'Așteaptă o intrare mai bună', goodEntry: 'Oportunitate bună de intrare', riskHigh: 'Risc Ridicat', support: 'Suport', yourName: 'Numele Tău', yourEmail: 'Emailul Tău', yourMessage: 'Mesajul Tău...', sendMessage: 'Trimite', messageSent: 'Mesaj trimis cu succes!', languages: 'Limbi', secure: 'Securizat', loading: 'Se încarcă...', tabCrypto: 'Criptomonede', tabExchanges: 'Toate Bursele', tabCommodities: 'Aur, Argint și Acțiuni', allExchangesTitle: 'Toate Bursele Globale', allExchangesSub: '102 burse licențiate • După încredere • Linkuri directe de tranzacționare', searchExchange: 'Caută bursă...', metalExTitle: 'Platforme Metale Prețioase', metalExSub: 'Toate bursele care suportă tranzacționarea metalelor prețioase', stocksTitle: 'Acțiuni Principale și ETF-uri', stocksSub: 'Acțiuni tokenizate și ETF-uri metale prețioase • Date în timp real', colExchange2: 'Bursă', colPairs: 'Perechi de Tranzacționare', colRefPrice: 'Preț Ref.', colVol24h: 'Volum 24h', colTrade: 'Tranzacționează', colStock: 'Acțiune' };
-    T.el = { trustScore: 'Εμπιστοσύνη', siteTitle: 'CryptoHub', exchanges: 'Ανταλλακτήρια', recommendedExchanges: 'Προτεινόμενα Ανταλλακτήρια', live: 'Ζωντανά', fearGreedTitle: 'Δείκτης Φόβου & Απληστίας', fearGreedSub: 'Συναίσθημα Αγοράς - από Binance', outOf100: 'από 100', extremeFear: 'Ακραίος Φόβος', fear: 'Φόβος', neutral: 'Ουδέτερο', greed: 'Απληστία', extremeGreed: 'Ακραία Απληστία', aiTitle: 'Ανάλυση AI', aiSub: 'Προβλέψεις με AI', analyzing: 'Ανάλυση...', bullishSignals: 'Ανοδικά Σήματα', bearishSignals: 'Πτωτικά Σήματα', bollingerBands: 'Bollinger', searchCoin: 'Αναζήτηση κρυπτονομίσματος...', sortBy: 'Ταξινόμηση', network: 'Δίκτυο', show: 'Εμφάνιση', loadMore: 'Φόρτωση Περισσότερων', loadingData: 'Φόρτωση...', filteredBy: 'Φίλτρο:', colName: 'Όνομα', colPrice: 'Τιμή', colMarketCap: 'Κεφαλαιοποίηση', colVolume: 'Όγκος 24ω', colExchanges: 'Ανταλλακτήρια', prev: 'Προηγούμενο', next: 'Επόμενο', showing: 'Εμφάνιση', of: 'από', coins: 'κρυπτονομίσματα', availableOn: 'Διαθέσιμο σε', exchange: 'ανταλλακτήρια', referralNote: '🎁 Σύνδεσμοι παραπομπής', register: 'Εγγραφή', visit: 'Επίσκεψη', trustHigh: 'Υψηλή Εμπιστοσύνη', trustMedium: 'Μέτρια Εμπιστοσύνη', trustLow: 'Χαμηλή Εμπιστοσύνη', volume: 'Όγκος', allNetworks: 'Όλα τα Δίκτυα', rank: 'Κατάταξη', marketCap: 'Κεφαλαιοποίηση', price: 'Τιμή', change24h: 'Μεταβολή 24ω', noExchanges: 'Δεν βρέθηκε', errorLoading: 'Σφάλμα φόρτωσης', retry: 'Επανάληψη', allLoaded: 'Όλα Φορτώθηκαν', loadMoreRemaining: 'Φόρτωση Περισσότερων', oversold: 'Υπερπωλημένο', overbought: 'Υπεραγορασμένο', bullish: 'Ανοδικό', bearish: 'Πτωτικό', nearBottom: 'Κοντά στο Πάτο', nearTop: 'Κοντά στην Κορυφή', goldenCross: 'Χρυσός Σταυρός', deathCross: 'Σταυρός Θανάτου', strongBuy: 'Ισχυρή Αγορά', buy: 'Αγορά', sell: 'Πώληση', strongSell: 'Ισχυρή Πώληση', coinsFound: 'βρέθηκαν', trendingTitle: 'Τάσεις', trendingSub: 'Top 100 κρυπτονομίσματα κατά όγκο 24ω', altcoinIndex: 'Δείκτης Εποχής Altcoin', altcoinSeason: 'Εποχή Altcoin', btcDominance: 'Κυριαρχία BTC', ethDominance: 'Κυριαρχία ETH', totalMarketCap: 'Συνολική Κεφαλαιοποίηση', totalVolume24: 'Συνολικός Όγκος 24ω', fgHistory: 'Ιστορικό', now: 'Τώρα', yesterday: 'Χθες', lastWeek: 'Προηγούμενη Εβδομάδα', lastMonth: 'Προηγούμενος Μήνας', entryExitTitle: 'Σήματα Εισόδου & Εξόδου - Bitcoin', entryZone: 'Ζώνη Εισόδου', exitZone: 'Ζώνη Εξόδου', currentPrice: 'Τρέχουσα Τιμή', entryNote: 'Στο επίπεδο στήριξης', exitNote: 'Στο επίπεδο αντίστασης', volAnalysis: 'Ανάλυση Όγκου', supportResistance: 'Στήριξη/Αντίσταση', aiRecommendation: 'Σύσταση', strongTrend: 'Ισχυρή Τάση', weakTrend: 'Αδύναμη Τάση', highVol: 'Υψηλός Όγκος', lowVol: 'Χαμηλός Όγκος', aboveAvg: 'Πάνω από Μέσο Όρο', belowAvg: 'Κάτω από Μέσο Όρο', footerDesc: 'Η ολοκληρωμένη πλατφόρμα σας για παρακολούθηση 5000+ κρυπτονομισμάτων με εργαλεία AI και τιμές σε πραγματικό χρόνο.', quickLinks: 'Γρήγοροι Σύνδεσμοι', home: 'Αρχική', topExchanges: 'Κορυφαία Ανταλλακτήρια', disclaimer: 'Αποποίηση Ευθύνης', disclaimerText: 'Οι πληροφορίες σε αυτόν τον ιστότοπο είναι μόνο για εκπαιδευτικούς σκοπούς. Η διαπραγμάτευση κρυπτονομισμάτων ενέχει πολύ υψηλό κίνδυνο.', allRights: 'Με Επιφύλαξη Παντός Δικαιώματος', btcSeason: 'Εποχή Bitcoin', holdEntry: 'Αναμονή για καλύτερη είσοδο', goodEntry: 'Καλή ευκαιρία εισόδου', riskHigh: 'Υψηλό Ρίσκο', support: 'Υποστήριξη', yourName: 'Το Όνομά σας', yourEmail: 'Το Email σας', yourMessage: 'Το Μήνυμά σας...', sendMessage: 'Αποστολή', messageSent: 'Το μήνυμα στάλθηκε!', languages: 'Γλώσσες', secure: 'Ασφαλές', loading: 'Φόρτωση...', tabCrypto: 'Κρυπτονομίσματα', tabExchanges: 'Όλα τα Ανταλλακτήρια', tabCommodities: 'Χρυσός, Ασήμι & Μετοχές', allExchangesTitle: 'Όλα τα Παγκόσμια Ανταλλακτήρια', allExchangesSub: '102 αδειοδοτημένα ανταλλακτήρια • Κατά αξιοπιστία • Άμεσοι σύνδεσμοι', searchExchange: 'Αναζήτηση ανταλλακτηρίου...', metalExTitle: 'Πλατφόρμες Πολύτιμων Μετάλλων', metalExSub: 'Όλα τα ανταλλακτήρια που υποστηρίζουν πολύτιμα μέταλλα', stocksTitle: 'Κύριες Μετοχές & ETF', stocksSub: 'Tokenized μετοχές & ETF πολύτιμων μετάλλων • Δεδομένα από Yahoo Finance', colExchange2: 'Ανταλλακτήριο', colPairs: 'Ζεύγη Συναλλαγών', colRefPrice: 'Τιμή Αναφ.', colVol24h: 'Όγκος 24ω', colTrade: 'Συναλλαγή', colStock: 'Μετοχή' };
-    T.sv = { trustScore: 'Förtroende', siteTitle: 'CryptoHub', exchanges: 'Börser', recommendedExchanges: 'Rekommenderade Börser', live: 'Live', fearGreedTitle: 'Rädsla & Girighet Index', fearGreedSub: 'Marknadssentiment - från Binance', outOf100: 'av 100', extremeFear: 'Extrem Rädsla', fear: 'Rädsla', neutral: 'Neutral', greed: 'Girighet', extremeGreed: 'Extrem Girighet', aiTitle: 'AI-Analys', aiSub: 'AI-drivna förutsägelser', analyzing: 'Analyserar...', bullishSignals: 'Hausse-Signaler', bearishSignals: 'Baisse-Signaler', bollingerBands: 'Bollinger', searchCoin: 'Sök kryptovaluta...', sortBy: 'Sortera efter', network: 'Nätverk', show: 'Visa', loadMore: 'Ladda Mer', loadingData: 'Laddar...', filteredBy: 'Filter:', colName: 'Namn', colPrice: 'Pris', colMarketCap: 'Marknadsvärde', colVolume: 'Volym 24h', colExchanges: 'Börser', prev: 'Föregående', next: 'Nästa', showing: 'Visar', of: 'av', coins: 'kryptovalutor', availableOn: 'Tillgänglig på', exchange: 'börser', referralNote: '🎁 Hänvisningslänkar', register: 'Registrera', visit: 'Besök', trustHigh: 'Högt Förtroende', trustMedium: 'Medel Förtroende', trustLow: 'Lågt Förtroende', volume: 'Volym', allNetworks: 'Alla Nätverk', rank: 'Ranking', marketCap: 'Marknadsvärde', price: 'Pris', change24h: 'Ändring 24h', noExchanges: 'Hittas inte', errorLoading: 'Laddningsfel', retry: 'Försök igen', allLoaded: 'Allt Laddat', loadMoreRemaining: 'Ladda Mer', oversold: 'Översåld', overbought: 'Överköpt', bullish: 'Hausse', bearish: 'Baisse', nearBottom: 'Nära Botten', nearTop: 'Nära Toppen', goldenCross: 'Gyllene Korset', deathCross: 'Dödskorset', strongBuy: 'Starkt Köp', buy: 'Köp', sell: 'Sälj', strongSell: 'Stark Försäljning', coinsFound: 'hittade', trendingTitle: 'Trender', trendingSub: 'Topp 100 efter 24h volym', altcoinIndex: 'Altcoin Säsongs Index', altcoinSeason: 'Altcoin Säsong', btcDominance: 'BTC Dominans', ethDominance: 'ETH Dominans', totalMarketCap: 'Totalt Marknadsvärde', totalVolume24: 'Total Volym 24h', fgHistory: 'Historik', now: 'Nu', yesterday: 'Igår', lastWeek: 'Förra Veckan', lastMonth: 'Förra Månaden', entryExitTitle: 'In- och Utgångssignaler - Bitcoin', entryZone: 'Ingångszon', exitZone: 'Utgångszon', currentPrice: 'Aktuellt Pris', entryNote: 'Vid stödnivå', exitNote: 'Vid motståndsnivå', volAnalysis: 'Volymanalys', supportResistance: 'Stöd/Motstånd', aiRecommendation: 'Rekommendation', strongTrend: 'Stark Trend', weakTrend: 'Svag Trend', highVol: 'Hög Volym', lowVol: 'Låg Volym', aboveAvg: 'Över Genomsnitt', belowAvg: 'Under Genomsnitt', footerDesc: 'Din kompletta plattform för att spåra 5000+ kryptovalutor med avancerade AI-verktyg och realtidspriser.', quickLinks: 'Snabblänkar', home: 'Hem', topExchanges: 'Toppbörser', disclaimer: 'Ansvarsfriskrivning', disclaimerText: 'Informationen på denna webbplats är endast i utbildningssyfte och utgör inte finansiell rådgivning. Kryptohandel innebär mycket hög risk.', allRights: 'Alla Rättigheter Förbehållna', btcSeason: 'Bitcoin Säsong', holdEntry: 'Vänta på bättre ingång', goodEntry: 'Bra ingångsmöjlighet', riskHigh: 'Hög Risk', support: 'Support', yourName: 'Ditt Namn', yourEmail: 'Din E-post', yourMessage: 'Ditt Meddelande...', sendMessage: 'Skicka', messageSent: 'Meddelande skickat!', languages: 'Språk', secure: 'Säker', loading: 'Laddar...', tabCrypto: 'Kryptovalutor', tabExchanges: 'Alla Börser', tabCommodities: 'Guld, Silver & Aktier', allExchangesTitle: 'Alla Globala Börser', allExchangesSub: '102 licensierade börser • Efter förtroende • Direkta handelslänkar', searchExchange: 'Sök börs...', metalExTitle: 'Ädelmetallplattformar', metalExSub: 'Alla börser med ädelmetallhandel och realtidsvolymer', stocksTitle: 'Stora Aktier & ETF:er', stocksSub: 'Tokeniserade aktier & ädelmetall-ETF:er • Realtidsdata från Yahoo Finance', colExchange2: 'Börs', colPairs: 'Handelspar', colRefPrice: 'Ref. Pris', colVol24h: 'Volym 24h', colTrade: 'Handla', colStock: 'Aktie' };
-    T.da = { trustScore: 'Tillid', siteTitle: 'CryptoHub', exchanges: 'Børser', recommendedExchanges: 'Anbefalede Børser', live: 'Live', fearGreedTitle: 'Frygt & Grådighed Indeks', fearGreedSub: 'Markedsstemning - fra Binance', outOf100: 'af 100', extremeFear: 'Ekstrem Frygt', fear: 'Frygt', neutral: 'Neutral', greed: 'Grådighed', extremeGreed: 'Ekstrem Grådighed', aiTitle: 'AI-Analyse', aiSub: 'AI-drevne forudsigelser', analyzing: 'Analyserer...', bullishSignals: 'Opadgående Signaler', bearishSignals: 'Nedadgående Signaler', bollingerBands: 'Bollinger', searchCoin: 'Søg kryptovaluta...', sortBy: 'Sorter efter', network: 'Netværk', show: 'Vis', loadMore: 'Indlæs Mere', loadingData: 'Indlæser...', filteredBy: 'Filter:', colName: 'Navn', colPrice: 'Pris', colMarketCap: 'Markedsværdi', colVolume: 'Volumen 24t', colExchanges: 'Børser', prev: 'Forrige', next: 'Næste', showing: 'Viser', of: 'af', coins: 'kryptovalutaer', availableOn: 'Tilgængelig på', exchange: 'børser', referralNote: '🎁 Henvisningslinks', register: 'Registrer', visit: 'Besøg', trustHigh: 'Høj Tillid', trustMedium: 'Middel Tillid', trustLow: 'Lav Tillid', volume: 'Volumen', allNetworks: 'Alle Netværk', rank: 'Placering', marketCap: 'Markedsværdi', price: 'Pris', change24h: 'Ændring 24t', noExchanges: 'Ikke fundet', errorLoading: 'Indlæsningsfejl', retry: 'Prøv igen', allLoaded: 'Alt Indlæst', loadMoreRemaining: 'Indlæs Mere', oversold: 'Oversolgt', overbought: 'Overkøbt', bullish: 'Opadgående', bearish: 'Nedadgående', nearBottom: 'Tæt på Bunden', nearTop: 'Tæt på Toppen', goldenCross: 'Gyldent Kors', deathCross: 'Dødskors', strongBuy: 'Stærkt Køb', buy: 'Køb', sell: 'Sælg', strongSell: 'Stærkt Salg', coinsFound: 'fundet', trendingTitle: 'Tendenser', trendingSub: 'Top 100 efter 24t volumen', altcoinIndex: 'Altcoin Sæson Indeks', altcoinSeason: 'Altcoin Sæson', btcDominance: 'BTC Dominans', ethDominance: 'ETH Dominans', totalMarketCap: 'Samlet Markedsværdi', totalVolume24: 'Samlet Volumen 24t', fgHistory: 'Historik', now: 'Nu', yesterday: 'I går', lastWeek: 'Sidste Uge', lastMonth: 'Sidste Måned', entryExitTitle: 'Ind- og Udgangssignaler - Bitcoin', entryZone: 'Indgangszone', exitZone: 'Udgangszone', currentPrice: 'Aktuel Pris', entryNote: 'Ved supportniveau', exitNote: 'Ved modstandsniveau', volAnalysis: 'Volumenanalyse', supportResistance: 'Support/Modstand', aiRecommendation: 'Anbefaling', strongTrend: 'Stærk Trend', weakTrend: 'Svag Trend', highVol: 'Høj Volumen', lowVol: 'Lav Volumen', aboveAvg: 'Over Gennemsnit', belowAvg: 'Under Gennemsnit', footerDesc: 'Din komplette platform til at spore 5000+ kryptovalutaer med avancerede AI-værktøjer og realtidspriser.', quickLinks: 'Hurtige Links', home: 'Hjem', topExchanges: 'Top Børser', disclaimer: 'Ansvarsfraskrivelse', disclaimerText: 'Informationen på denne hjemmeside er kun til uddannelsesmæssige formål og udgør ikke finansiel rådgivning. Kryptohandel indebærer meget høj risiko.', allRights: 'Alle Rettigheder Forbeholdes', btcSeason: 'Bitcoin Sæson', holdEntry: 'Vent på bedre indgang', goodEntry: 'God indgangsmulighed', riskHigh: 'Høj Risiko', support: 'Support', yourName: 'Dit Navn', yourEmail: 'Din E-mail', yourMessage: 'Din Besked...', sendMessage: 'Send', messageSent: 'Besked sendt!', languages: 'Sprog', secure: 'Sikker', loading: 'Indlæser...', tabCrypto: 'Kryptovalutaer', tabExchanges: 'Alle Børser', tabCommodities: 'Guld, Sølv & Aktier', allExchangesTitle: 'Alle Globale Børser', allExchangesSub: '102 licenserede børser • Efter tillid • Direkte handelslinks', searchExchange: 'Søg børs...', metalExTitle: 'Ædelmetalplatforme', metalExSub: 'Alle børser der understøtter ædelmetalhandel', stocksTitle: 'Store Aktier & ETF\'er', stocksSub: 'Tokeniserede aktier & ædelmetalETF\'er • Realtidsdata fra Binance', colExchange2: 'Børs', colPairs: 'Handelspar', colRefPrice: 'Ref. Pris', colVol24h: 'Volumen 24t', colTrade: 'Handl', colStock: 'Aktie' };
-    T.fi = { trustScore: 'Luottamus', siteTitle: 'CryptoHub', exchanges: 'Pörssit', recommendedExchanges: 'Suositellut Pörssit', live: 'Livenä', fearGreedTitle: 'Pelko & Ahneus Indeksi', fearGreedSub: 'Markkinasentimentti - Binancelta', outOf100: '/ 100', extremeFear: 'Äärimmäinen Pelko', fear: 'Pelko', neutral: 'Neutraali', greed: 'Ahneus', extremeGreed: 'Äärimmäinen Ahneus', aiTitle: 'AI-Analyysi', aiSub: 'AI-pohjaiset ennusteet', analyzing: 'Analysoidaan...', bullishSignals: 'Nousevat Signaalit', bearishSignals: 'Laskevat Signaalit', bollingerBands: 'Bollinger', searchCoin: 'Etsi kryptovaluuttaa...', sortBy: 'Lajittele', network: 'Verkko', show: 'Näytä', loadMore: 'Lataa Lisää', loadingData: 'Ladataan...', filteredBy: 'Suodatin:', colName: 'Nimi', colPrice: 'Hinta', colMarketCap: 'Markkina-arvo', colVolume: 'Volyymi 24h', colExchanges: 'Pörssit', prev: 'Edellinen', next: 'Seuraava', showing: 'Näytetään', of: '/', coins: 'kryptovaluuttaa', availableOn: 'Saatavilla:', exchange: 'pörssiä', referralNote: '🎁 Suosittelulinkit', register: 'Rekisteröidy', visit: 'Vieraile', trustHigh: 'Korkea Luottamus', trustMedium: 'Keskitason Luottamus', trustLow: 'Matala Luottamus', volume: 'Volyymi', allNetworks: 'Kaikki Verkot', rank: 'Sijoitus', marketCap: 'Markkina-arvo', price: 'Hinta', change24h: 'Muutos 24h', noExchanges: 'Ei löytynyt', errorLoading: 'Latausvirhe', retry: 'Yritä uudelleen', allLoaded: 'Kaikki Ladattu', loadMoreRemaining: 'Lataa Lisää', oversold: 'Ylimyyty', overbought: 'Yliostettu', bullish: 'Nouseva', bearish: 'Laskeva', nearBottom: 'Lähellä Pohjaa', nearTop: 'Lähellä Huippua', goldenCross: 'Kultainen Risti', deathCross: 'Kuolemanristi', strongBuy: 'Vahva Osto', buy: 'Osta', sell: 'Myy', strongSell: 'Vahva Myynti', coinsFound: 'löydetty', trendingTitle: 'Trendit', trendingSub: 'Top 100 24h volyymin mukaan', altcoinIndex: 'Altcoin-kausi Indeksi', altcoinSeason: 'Altcoin-kausi', btcDominance: 'BTC Dominanssi', ethDominance: 'ETH Dominanssi', totalMarketCap: 'Kokonaismarkkina-arvo', totalVolume24: 'Kokonaisvolyymi 24h', fgHistory: 'Historia', now: 'Nyt', yesterday: 'Eilen', lastWeek: 'Viime Viikko', lastMonth: 'Viime Kuukausi', entryExitTitle: 'Sisään- ja Ulostulosignaalit - Bitcoin', entryZone: 'Sisääntuloalue', exitZone: 'Ulostuloalue', currentPrice: 'Nykyinen Hinta', entryNote: 'Tukitasolla', exitNote: 'Vastustasolla', volAnalysis: 'Volyymianalyysi', supportResistance: 'Tuki/Vastus', aiRecommendation: 'Suositus', strongTrend: 'Vahva Trendi', weakTrend: 'Heikko Trendi', highVol: 'Korkea Volyymi', lowVol: 'Matala Volyymi', aboveAvg: 'Keskiarvon Yläpuolella', belowAvg: 'Keskiarvon Alapuolella', footerDesc: 'Kattava alustasi 5000+ kryptovaluutan seurantaan edistyneillä AI-työkaluilla ja reaaliaikaisilla hinnoilla.', quickLinks: 'Pikalinkit', home: 'Koti', topExchanges: 'Parhaat Pörssit', disclaimer: 'Vastuuvapauslauseke', disclaimerText: 'Tämän sivuston tiedot ovat vain opetuksellisia eivätkä ole taloudellista neuvontaa. Kryptokaupankäynti sisältää erittäin korkean riskin.', allRights: 'Kaikki Oikeudet Pidätetään', btcSeason: 'Bitcoin-kausi', holdEntry: 'Odota parempaa sisääntuloa', goodEntry: 'Hyvä sisääntulomahdollisuus', riskHigh: 'Korkea Riski', support: 'Tuki', yourName: 'Nimesi', yourEmail: 'Sähköpostisi', yourMessage: 'Viestisi...', sendMessage: 'Lähetä', messageSent: 'Viesti lähetetty!', languages: 'Kielet', secure: 'Turvallinen', loading: 'Ladataan...', tabCrypto: 'Kryptovaluutat', tabExchanges: 'Kaikki Pörssit', tabCommodities: 'Kulta, Hopea & Osakkeet', allExchangesTitle: 'Kaikki Maailmanlaajuiset Pörssit', allExchangesSub: '102 lisensoitua pörssiä • Luottamuksen mukaan • Suorat kauppalinkit', searchExchange: 'Etsi pörssiä...', metalExTitle: 'Jalometallialustat', metalExSub: 'Kaikki jalometallikauppaa tukevat pörssit', stocksTitle: 'Tärkeimmät Osakkeet & ETF:t', stocksSub: 'Tokenisoidut osakkeet & jalometalli-ETF:t • Reaaliaikainen data Yahoo Financelta', colExchange2: 'Pörssi', colPairs: 'Kauppaparit', colRefPrice: 'Viitehinta', colVol24h: 'Volyymi 24h', colTrade: 'Käy Kauppaa', colStock: 'Osake' };
-    T.ms = { trustScore: 'Kepercayaan', siteTitle: 'CryptoHub', exchanges: 'Bursa', recommendedExchanges: 'Bursa Disyorkan', live: 'Langsung', fearGreedTitle: 'Indeks Ketakutan & Tamak', fearGreedSub: 'Sentimen Pasaran - daripada Binance', outOf100: 'daripada 100', extremeFear: 'Ketakutan Melampau', fear: 'Takut', neutral: 'Neutral', greed: 'Tamak', extremeGreed: 'Ketamakan Melampau', aiTitle: 'Analisis AI', aiSub: 'Ramalan berasaskan AI', analyzing: 'Menganalisis...', bullishSignals: 'Isyarat Kenaikan', bearishSignals: 'Isyarat Penurunan', bollingerBands: 'Bollinger', searchCoin: 'Cari syiling...', sortBy: 'Susun mengikut', network: 'Rangkaian', show: 'Papar', loadMore: 'Muat Lagi', loadingData: 'Memuatkan...', filteredBy: 'Penapis:', colName: 'Nama', colPrice: 'Harga', colMarketCap: 'Kap. Pasaran', colVolume: 'Jumlah 24j', colExchanges: 'Bursa', prev: 'Sebelumnya', next: 'Seterusnya', showing: 'Memaparkan', of: 'daripada', coins: 'syiling', availableOn: 'Tersedia di', exchange: 'bursa', referralNote: '🎁 Pautan rujukan', register: 'Daftar', visit: 'Lawati', trustHigh: 'Kepercayaan Tinggi', trustMedium: 'Kepercayaan Sederhana', trustLow: 'Kepercayaan Rendah', volume: 'Jumlah', allNetworks: 'Semua Rangkaian', rank: 'Kedudukan', marketCap: 'Kap. Pasaran', price: 'Harga', change24h: 'Perubahan 24j', noExchanges: 'Tidak dijumpai', errorLoading: 'Ralat memuatkan', retry: 'Cuba semula', allLoaded: 'Semua Dimuat', loadMoreRemaining: 'Muat Lagi', oversold: 'Terlebih Jual', overbought: 'Terlebih Beli', bullish: 'Menaik', bearish: 'Menurun', nearBottom: 'Hampir Dasar', nearTop: 'Hampir Puncak', goldenCross: 'Golden Cross', deathCross: 'Death Cross', strongBuy: 'Beli Kuat', buy: 'Beli', sell: 'Jual', strongSell: 'Jual Kuat', coinsFound: 'dijumpai', trendingTitle: 'Trending', trendingSub: '100 syiling teratas mengikut jumlah 24j', altcoinIndex: 'Indeks Musim Altcoin', altcoinSeason: 'Musim Altcoin', btcDominance: 'Dominasi BTC', ethDominance: 'Dominasi ETH', totalMarketCap: 'Jumlah Kap. Pasaran', totalVolume24: 'Jumlah Keseluruhan 24j', fgHistory: 'Sejarah', now: 'Sekarang', yesterday: 'Semalam', lastWeek: 'Minggu Lepas', lastMonth: 'Bulan Lepas', entryExitTitle: 'Isyarat Masuk & Keluar - Bitcoin', entryZone: 'Zon Masuk', exitZone: 'Zon Keluar', currentPrice: 'Harga Semasa', entryNote: 'Pada tahap sokongan', exitNote: 'Pada tahap rintangan', volAnalysis: 'Analisis Jumlah', supportResistance: 'Sokongan/Rintangan', aiRecommendation: 'Cadangan', strongTrend: 'Trend Kuat', weakTrend: 'Trend Lemah', highVol: 'Jumlah Tinggi', lowVol: 'Jumlah Rendah', aboveAvg: 'Atas Purata', belowAvg: 'Bawah Purata', footerDesc: 'Platform lengkap anda untuk menjejaki 5000+ mata wang kripto dengan alat AI dan harga masa nyata.', quickLinks: 'Pautan Pantas', home: 'Utama', topExchanges: 'Bursa Teratas', disclaimer: 'Penafian', disclaimerText: 'Maklumat di laman web ini adalah untuk tujuan pendidikan sahaja dan bukan nasihat kewangan. Perdagangan kripto melibatkan risiko yang sangat tinggi.', allRights: 'Hak Cipta Terpelihara', btcSeason: 'Musim Bitcoin', holdEntry: 'Tunggu kemasukan lebih baik', goodEntry: 'Peluang kemasukan baik', riskHigh: 'Risiko Tinggi', support: 'Sokongan', yourName: 'Nama Anda', yourEmail: 'E-mel Anda', yourMessage: 'Mesej Anda...', sendMessage: 'Hantar', messageSent: 'Mesej berjaya dihantar!', languages: 'Bahasa', secure: 'Selamat', loading: 'Memuatkan...', tabCrypto: 'Mata Wang Kripto', tabExchanges: 'Semua Bursa', tabCommodities: 'Emas, Perak & Saham', allExchangesTitle: 'Semua Bursa Global', allExchangesSub: '102 bursa berlesen • Mengikut kepercayaan • Pautan dagangan terus', searchExchange: 'Cari bursa...', metalExTitle: 'Platform Logam Berharga', metalExSub: 'Semua bursa yang menyokong dagangan logam berharga', stocksTitle: 'Saham Utama & ETF', stocksSub: 'Saham token & ETF logam berharga • Data masa nyata daripada Yahoo Finance', colExchange2: 'Bursa', colPairs: 'Pasangan Dagangan', colRefPrice: 'Harga Ref.', colVol24h: 'Jumlah 24j', colTrade: 'Dagang', colStock: 'Saham' };
-    T.bn = { trustScore: 'বিশ্বাস', siteTitle: 'CryptoHub', exchanges: 'এক্সচেঞ্জ', recommendedExchanges: 'প্রস্তাবিত এক্সচেঞ্জ', live: 'লাইভ', fearGreedTitle: 'ভয় ও লোভ সূচক', fearGreedSub: 'বাজার সেন্টিমেন্ট - Binance থেকে', outOf100: '/ ১০০', extremeFear: 'চরম ভয়', fear: 'ভয়', neutral: 'নিরপেক্ষ', greed: 'লোভ', extremeGreed: 'চরম লোভ', aiTitle: 'AI বিশ্লেষণ', aiSub: 'AI-চালিত পূর্বাভাস', analyzing: 'বিশ্লেষণ হচ্ছে...', bullishSignals: 'ঊর্ধ্বমুখী সংকেত', bearishSignals: 'নিম্নমুখী সংকেত', bollingerBands: 'বলিঞ্জার', searchCoin: 'কয়েন খুঁজুন...', sortBy: 'সাজান', network: 'নেটওয়ার্ক', show: 'দেখান', loadMore: 'আরো লোড করুন', loadingData: 'লোড হচ্ছে...', filteredBy: 'ফিল্টার:', colName: 'নাম', colPrice: 'মূল্য', colMarketCap: 'মার্কেট ক্যাপ', colVolume: 'ভলিউম ২৪ঘ', colExchanges: 'এক্সচেঞ্জ', prev: 'আগের', next: 'পরের', showing: 'দেখানো হচ্ছে', of: 'এর', coins: 'কয়েন', availableOn: 'পাওয়া যায়', exchange: 'এক্সচেঞ্জে', referralNote: '🎁 রেফারেল লিংক', register: 'নিবন্ধন', visit: 'ভিজিট', trustHigh: 'উচ্চ বিশ্বাস', trustMedium: 'মাঝারি বিশ্বাস', trustLow: 'কম বিশ্বাস', volume: 'ভলিউম', allNetworks: 'সকল নেটওয়ার্ক', rank: 'র‍্যাংক', marketCap: 'মার্কেট ক্যাপ', price: 'মূল্য', change24h: 'পরিবর্তন ২৪ঘ', noExchanges: 'পাওয়া যায়নি', errorLoading: 'লোডিং ত্রুটি', retry: 'পুনরায় চেষ্টা', allLoaded: 'সব লোড হয়েছে', loadMoreRemaining: 'আরো লোড করুন', oversold: 'অতিবিক্রীত', overbought: 'অতিক্রীত', bullish: 'ঊর্ধ্বমুখী', bearish: 'নিম্নমুখী', nearBottom: 'তলদেশের কাছে', nearTop: 'শীর্ষের কাছে', goldenCross: 'গোল্ডেন ক্রস', deathCross: 'ডেথ ক্রস', strongBuy: 'শক্তিশালী ক্রয়', buy: 'কিনুন', sell: 'বিক্রি', strongSell: 'শক্তিশালী বিক্রি', coinsFound: 'পাওয়া গেছে', trendingTitle: 'ট্রেন্ডিং', trendingSub: '২৪ঘ ভলিউমে শীর্ষ ১০০', altcoinIndex: 'অল্টকয়েন সিজন সূচক', altcoinSeason: 'অল্টকয়েন সিজন', btcDominance: 'BTC আধিপত্য', ethDominance: 'ETH আধিপত্য', totalMarketCap: 'মোট মার্কেট ক্যাপ', totalVolume24: 'মোট ভলিউম ২৪ঘ', fgHistory: 'ইতিহাস', now: 'এখন', yesterday: 'গতকাল', lastWeek: 'গত সপ্তাহ', lastMonth: 'গত মাস', entryExitTitle: 'এন্ট্রি ও এক্সিট সিগন্যাল - Bitcoin', entryZone: 'এন্ট্রি জোন', exitZone: 'এক্সিট জোন', currentPrice: 'বর্তমান মূল্য', entryNote: 'সাপোর্ট লেভেলে', exitNote: 'রেজিস্ট্যান্স লেভেলে', volAnalysis: 'ভলিউম বিশ্লেষণ', supportResistance: 'সাপোর্ট/রেজিস্ট্যান্স', aiRecommendation: 'সুপারিশ', strongTrend: 'শক্তিশালী ট্রেন্ড', weakTrend: 'দুর্বল ট্রেন্ড', highVol: 'উচ্চ ভলিউম', lowVol: 'কম ভলিউম', aboveAvg: 'গড়ের উপরে', belowAvg: 'গড়ের নিচে', footerDesc: '৫০০০+ ক্রিপ্টোকারেন্সি ট্র্যাক করার জন্য AI বিশ্লেষণ ও রিয়েল-টাইম মূল্য সহ আপনার সম্পূর্ণ প্ল্যাটফর্ম।', quickLinks: 'দ্রুত লিংক', home: 'হোম', topExchanges: 'শীর্ষ এক্সচেঞ্জ', disclaimer: 'দায়মুক্তি', disclaimerText: 'এই সাইটের তথ্য শুধুমাত্র শিক্ষামূলক এবং আর্থিক পরামর্শ নয়। ক্রিপ্টো ট্রেডিংয়ে অত্যন্ত উচ্চ ঝুঁকি রয়েছে।', allRights: 'সর্বস্বত্ব সংরক্ষিত', btcSeason: 'বিটকয়েন সিজন', holdEntry: 'ভালো এন্ট্রির জন্য অপেক্ষা করুন', goodEntry: 'ভালো এন্ট্রি সুযোগ', riskHigh: 'উচ্চ ঝুঁকি', support: 'সহায়তা', yourName: 'আপনার নাম', yourEmail: 'আপনার ইমেইল', yourMessage: 'আপনার বার্তা...', sendMessage: 'পাঠান', messageSent: 'বার্তা সফলভাবে পাঠানো হয়েছে!', languages: 'ভাষা', secure: 'নিরাপদ', loading: 'লোড হচ্ছে...', tabCrypto: 'ক্রিপ্টোকারেন্সি', tabExchanges: 'সকল এক্সচেঞ্জ', tabCommodities: 'সোনা, রূপা ও স্টক', allExchangesTitle: 'সকল গ্লোবাল এক্সচেঞ্জ', allExchangesSub: '১০২টি লাইসেন্সপ্রাপ্ত এক্সচেঞ্জ • বিশ্বস্ততা অনুযায়ী • সরাসরি ট্রেডিং লিংক', searchExchange: 'এক্সচেঞ্জ খুঁজুন...', metalExTitle: 'মূল্যবান ধাতু প্ল্যাটফর্ম', metalExSub: 'মূল্যবান ধাতু ট্রেডিং সমর্থনকারী সকল এক্সচেঞ্জ', stocksTitle: 'প্রধান স্টক ও ETF', stocksSub: 'টোকেনাইজড স্টক ও মূল্যবান ধাতু ETF • Yahoo Finance রিয়েল-টাইম ডেটা', colExchange2: 'এক্সচেঞ্জ', colPairs: 'ট্রেডিং পেয়ার', colRefPrice: 'রেফ. মূল্য', colVol24h: 'ভলিউম ২৪ঘ', colTrade: 'ট্রেড', colStock: 'স্টক' };
-    T.sw = { trustScore: 'Uaminifu', siteTitle: 'CryptoHub', exchanges: 'Masoko', recommendedExchanges: 'Masoko Yaliyopendekezwa', live: 'Moja kwa Moja', fearGreedTitle: 'Fahirisi ya Hofu na Tamaa', fearGreedSub: 'Hali ya Soko - kutoka Binance', outOf100: 'kati ya 100', extremeFear: 'Hofu Kali', fear: 'Hofu', neutral: 'Wastani', greed: 'Tamaa', extremeGreed: 'Tamaa Kali', aiTitle: 'Uchambuzi wa AI', aiSub: 'Utabiri unaodhibitiwa na AI', analyzing: 'Inachambua...', bullishSignals: 'Ishara za Kupanda', bearishSignals: 'Ishara za Kushuka', bollingerBands: 'Bollinger', searchCoin: 'Tafuta sarafu...', sortBy: 'Panga kwa', network: 'Mtandao', show: 'Onyesha', loadMore: 'Pakia Zaidi', loadingData: 'Inapakia...', filteredBy: 'Chuja:', colName: 'Jina', colPrice: 'Bei', colMarketCap: 'Thamani ya Soko', colVolume: 'Kiasi 24s', colExchanges: 'Masoko', prev: 'Iliyotangulia', next: 'Inayofuata', showing: 'Inaonyesha', of: 'ya', coins: 'sarafu', availableOn: 'Inapatikana', exchange: 'masoko', referralNote: '🎁 Viungo vya rufaa', register: 'Jiandikishe', visit: 'Tembelea', trustHigh: 'Imani Kubwa', trustMedium: 'Imani ya Kati', trustLow: 'Imani Ndogo', volume: 'Kiasi', allNetworks: 'Mitandao Yote', rank: 'Nafasi', marketCap: 'Thamani ya Soko', price: 'Bei', change24h: 'Mabadiliko 24s', noExchanges: 'Haijapatikana', errorLoading: 'Hitilafu ya kupakia', retry: 'Jaribu tena', allLoaded: 'Yote Yamepakiwa', loadMoreRemaining: 'Pakia Zaidi', oversold: 'Kuuzwa kupita kiasi', overbought: 'Kununuliwa kupita kiasi', bullish: 'Kupanda', bearish: 'Kushuka', nearBottom: 'Karibu na Chini', nearTop: 'Karibu na Juu', goldenCross: 'Msalaba wa Dhahabu', deathCross: 'Msalaba wa Kifo', strongBuy: 'Nunua Sana', buy: 'Nunua', sell: 'Uza', strongSell: 'Uza Sana', coinsFound: 'zimepatikana', trendingTitle: 'Zinazovuma', trendingSub: 'Sarafu 100 bora kwa kiasi cha 24s', altcoinIndex: 'Fahirisi ya Msimu wa Altcoin', altcoinSeason: 'Msimu wa Altcoin', btcDominance: 'Utawala wa BTC', ethDominance: 'Utawala wa ETH', totalMarketCap: 'Thamani Jumla', totalVolume24: 'Kiasi Jumla 24s', fgHistory: 'Historia', now: 'Sasa', yesterday: 'Jana', lastWeek: 'Wiki Iliyopita', lastMonth: 'Mwezi Uliopita', entryExitTitle: 'Ishara za Kuingia na Kutoka - Bitcoin', entryZone: 'Eneo la Kuingia', exitZone: 'Eneo la Kutoka', currentPrice: 'Bei ya Sasa', entryNote: 'Katika kiwango cha msaada', exitNote: 'Katika kiwango cha upinzani', volAnalysis: 'Uchambuzi wa Kiasi', supportResistance: 'Msaada/Upinzani', aiRecommendation: 'Mapendekezo', strongTrend: 'Mwelekeo Mkali', weakTrend: 'Mwelekeo Dhaifu', highVol: 'Kiasi Kikubwa', lowVol: 'Kiasi Kidogo', aboveAvg: 'Juu ya Wastani', belowAvg: 'Chini ya Wastani', footerDesc: 'Jukwaa lako kamili la kufuatilia sarafu 5000+ za kripto na zana za AI na bei za wakati halisi.', quickLinks: 'Viungo vya Haraka', home: 'Nyumbani', topExchanges: 'Masoko Bora', disclaimer: 'Kanusho', disclaimerText: 'Taarifa kwenye tovuti hii ni kwa madhumuni ya elimu tu na si ushauri wa kifedha. Biashara ya kripto ina hatari kubwa sana.', allRights: 'Haki Zote Zimehifadhiwa', btcSeason: 'Msimu wa Bitcoin', holdEntry: 'Subiri kuingia bora', goodEntry: 'Fursa nzuri ya kuingia', riskHigh: 'Hatari Kubwa', support: 'Msaada', yourName: 'Jina Lako', yourEmail: 'Barua Pepe Yako', yourMessage: 'Ujumbe Wako...', sendMessage: 'Tuma', messageSent: 'Ujumbe umetumwa!', languages: 'Lugha', secure: 'Salama', loading: 'Inapakia...', tabCrypto: 'Sarafu za Kripto', tabExchanges: 'Masoko Yote', tabCommodities: 'Dhahabu, Fedha na Hisa', allExchangesTitle: 'Masoko Yote ya Dunia', allExchangesSub: 'Masoko 102 yenye leseni • Kwa uaminifu • Viungo vya moja kwa moja', searchExchange: 'Tafuta soko...', metalExTitle: 'Majukwaa ya Madini ya Thamani', metalExSub: 'Masoko yote yanayounga mkono biashara ya madini ya thamani', stocksTitle: 'Hisa Kuu na ETF', stocksSub: 'Hisa za tokeni na ETF za madini ya thamani • Data ya wakati halisi kutoka Yahoo Finance', colExchange2: 'Soko', colPairs: 'Jozi za Biashara', colRefPrice: 'Bei ya Ref.', colVol24h: 'Kiasi 24s', colTrade: 'Fanya Biashara', colStock: 'Hisa' };
+    setTimeout(function () {
+      T.cs = { trustScore: 'Důvěra', siteTitle: 'CryptoHub', exchanges: 'Burzy', recommendedExchanges: 'Doporučené Burzy', live: 'Živě', fearGreedTitle: 'Index Strachu a Chamtivosti', fearGreedSub: 'Sentiment Trhu - od Binance', outOf100: 'ze 100', extremeFear: 'Extrémní Strach', fear: 'Strach', neutral: 'Neutrální', greed: 'Chamtivost', extremeGreed: 'Extrémní Chamtivost', aiTitle: 'AI Analýza', aiSub: 'Předpovědi na bázi AI', analyzing: 'Analyzuji...', bullishSignals: 'Býčí Signály', bearishSignals: 'Medvědí Signály', bollingerBands: 'Bollinger', searchCoin: 'Hledat kryptoměnu...', sortBy: 'Řadit podle', network: 'Síť', show: 'Zobrazit', loadMore: 'Načíst Více', loadingData: 'Načítání...', filteredBy: 'Filtr:', colName: 'Název', colPrice: 'Cena', colMarketCap: 'Tržní Kap.', colVolume: 'Objem 24h', colExchanges: 'Burzy', prev: 'Předchozí', next: 'Další', showing: 'Zobrazeno', of: 'z', coins: 'kryptoměn', availableOn: 'Dostupné na', exchange: 'burzách', referralNote: '🎁 Doporučující odkazy', register: 'Registrace', visit: 'Navštívit', trustHigh: 'Vysoká Důvěra', trustMedium: 'Střední Důvěra', trustLow: 'Nízká Důvěra', volume: 'Objem', allNetworks: 'Všechny Sítě', rank: 'Pořadí', marketCap: 'Tržní Kap.', price: 'Cena', change24h: 'Změna 24h', noExchanges: 'Nenalezeno', errorLoading: 'Chyba načítání', retry: 'Opakovat', allLoaded: 'Vše Načteno', loadMoreRemaining: 'Načíst Více', oversold: 'Přeprodáno', overbought: 'Překoupeno', bullish: 'Býčí', bearish: 'Medvědí', nearBottom: 'Blízko Dna', nearTop: 'Blízko Vrcholu', goldenCross: 'Zlatý Kříž', deathCross: 'Kříž Smrti', strongBuy: 'Silný Nákup', buy: 'Koupit', sell: 'Prodat', strongSell: 'Silný Prodej', coinsFound: 'nalezeno', trendingTitle: 'Trendy', trendingSub: 'Top 100 kryptoměn dle objemu 24h', altcoinIndex: 'Index Sezóny Altcoinů', altcoinSeason: 'Sezóna Altcoinů', btcDominance: 'Dominance BTC', ethDominance: 'Dominance ETH', totalMarketCap: 'Celková Kap.', totalVolume24: 'Celkový Objem 24h', fgHistory: 'Historie', now: 'Nyní', yesterday: 'Včera', lastWeek: 'Minulý Týden', lastMonth: 'Minulý Měsíc', entryExitTitle: 'Signály Vstupu a Výstupu - Bitcoin', entryZone: 'Zóna Vstupu', exitZone: 'Zóna Výstupu', currentPrice: 'Aktuální Cena', entryNote: 'Na úrovni podpory', exitNote: 'Na úrovni odporu', volAnalysis: 'Analýza Objemu', supportResistance: 'Podpora/Odpor', aiRecommendation: 'Doporučení', strongTrend: 'Silný Trend', weakTrend: 'Slabý Trend', highVol: 'Vysoký Objem', lowVol: 'Nízký Objem', aboveAvg: 'Nad Průměrem', belowAvg: 'Pod Průměrem', footerDesc: 'Vaše komplexní platforma pro sledování 5000+ kryptoměn s pokročilými AI nástroji a cenami v reálném čase.', quickLinks: 'Rychlé Odkazy', home: 'Domů', topExchanges: 'Top Burzy', disclaimer: 'Vyloučení Odpovědnosti', disclaimerText: 'Informace na tomto webu jsou pouze pro vzdělávací účely a nepředstavují finanční poradenství. Obchodování s kryptoměnami je vysoce rizikové.', allRights: 'Všechna Práva Vyhrazena', btcSeason: 'Sezóna Bitcoin', holdEntry: 'Čekat na lepší vstup', goodEntry: 'Dobrá příležitost vstupu', riskHigh: 'Vysoké Riziko', support: 'Podpora', yourName: 'Vaše Jméno', yourEmail: 'Váš Email', yourMessage: 'Vaše Zpráva...', sendMessage: 'Odeslat', messageSent: 'Zpráva úspěšně odeslána!', languages: 'Jazyky', secure: 'Bezpečné', loading: 'Načítání...', tabCrypto: 'Kryptoměny', tabExchanges: 'Všechny Burzy', tabCommodities: 'Zlato, Stříbro a Akcie', allExchangesTitle: 'Všechny Globální Burzy', allExchangesSub: '102 licencovaných burz • Dle důvěryhodnosti • Přímé obchodní odkazy', searchExchange: 'Hledat burzu...', metalExTitle: 'Platformy Drahých Kovů', metalExSub: 'Všechny burzy podporující obchodování s drahými kovy', stocksTitle: 'Hlavní Akcie a ETF', stocksSub: 'Tokenizované akcie a ETF drahých kovů • Data z Yahoo Finance v reálném čase', colExchange2: 'Burza', colPairs: 'Obchodní Páry', colRefPrice: 'Ref. Cena', colVol24h: 'Objem 24h', colTrade: 'Obchodovat', colStock: 'Akcie' };
+      T.ro = { trustScore: 'Încredere', siteTitle: 'CryptoHub', exchanges: 'Burse', recommendedExchanges: 'Burse Recomandate', live: 'Live', fearGreedTitle: 'Indicele Frică și Lăcomie', fearGreedSub: 'Sentimentul Pieței - de la Binance', outOf100: 'din 100', extremeFear: 'Frică Extremă', fear: 'Frică', neutral: 'Neutru', greed: 'Lăcomie', extremeGreed: 'Lăcomie Extremă', aiTitle: 'Analiză AI', aiSub: 'Predicții bazate pe AI', analyzing: 'Se analizează...', bullishSignals: 'Semnale de Creștere', bearishSignals: 'Semnale de Scădere', bollingerBands: 'Bollinger', searchCoin: 'Caută monedă...', sortBy: 'Sortează după', network: 'Rețea', show: 'Afișează', loadMore: 'Încarcă Mai Mult', loadingData: 'Se încarcă...', filteredBy: 'Filtru:', colName: 'Nume', colPrice: 'Preț', colMarketCap: 'Cap. Piață', colVolume: 'Volum 24h', colExchanges: 'Burse', prev: 'Anterior', next: 'Următor', showing: 'Afișare', of: 'din', coins: 'monede', availableOn: 'Disponibil pe', exchange: 'burse', referralNote: '🎁 Linkuri de recomandare', register: 'Înregistrare', visit: 'Vizitează', trustHigh: 'Încredere Ridicată', trustMedium: 'Încredere Medie', trustLow: 'Încredere Scăzută', volume: 'Volum', allNetworks: 'Toate Rețelele', rank: 'Rang', marketCap: 'Cap. Piață', price: 'Preț', change24h: 'Schimbare 24h', noExchanges: 'Nu s-a găsit', errorLoading: 'Eroare de încărcare', retry: 'Reîncearcă', allLoaded: 'Totul Încărcat', loadMoreRemaining: 'Încarcă Mai Mult', oversold: 'Supravândut', overbought: 'Supracumpărat', bullish: 'Bullish', bearish: 'Bearish', nearBottom: 'Aproape de Minim', nearTop: 'Aproape de Maxim', goldenCross: 'Crucea de Aur', deathCross: 'Crucea Morții', strongBuy: 'Cumpărare Puternică', buy: 'Cumpără', sell: 'Vinde', strongSell: 'Vânzare Puternică', coinsFound: 'găsite', trendingTitle: 'Trending', trendingSub: 'Top 100 monede după volum 24h', altcoinIndex: 'Indexul Sezonului Altcoin', altcoinSeason: 'Sezon Altcoin', btcDominance: 'Dominanță BTC', ethDominance: 'Dominanță ETH', totalMarketCap: 'Cap. Totală', totalVolume24: 'Volum Total 24h', fgHistory: 'Istoric', now: 'Acum', yesterday: 'Ieri', lastWeek: 'Săptămâna Trecută', lastMonth: 'Luna Trecută', entryExitTitle: 'Semnale de Intrare și Ieșire - Bitcoin', entryZone: 'Zona de Intrare', exitZone: 'Zona de Ieșire', currentPrice: 'Preț Curent', entryNote: 'La nivel de suport', exitNote: 'La nivel de rezistență', volAnalysis: 'Analiza Volumului', supportResistance: 'Suport/Rezistență', aiRecommendation: 'Recomandare', strongTrend: 'Trend Puternic', weakTrend: 'Trend Slab', highVol: 'Volum Ridicat', lowVol: 'Volum Scăzut', aboveAvg: 'Peste Medie', belowAvg: 'Sub Medie', footerDesc: 'Platforma ta completă pentru urmărirea a peste 5000 de criptomonede cu instrumente AI avansate și prețuri în timp real.', quickLinks: 'Linkuri Rapide', home: 'Acasă', topExchanges: 'Top Burse', disclaimer: 'Declinarea Responsabilității', disclaimerText: 'Informațiile de pe acest site sunt doar în scop educativ și nu constituie sfaturi financiare. Tranzacționarea cripto implică riscuri foarte mari.', allRights: 'Toate Drepturile Rezervate', btcSeason: 'Sezon Bitcoin', holdEntry: 'Așteaptă o intrare mai bună', goodEntry: 'Oportunitate bună de intrare', riskHigh: 'Risc Ridicat', support: 'Suport', yourName: 'Numele Tău', yourEmail: 'Emailul Tău', yourMessage: 'Mesajul Tău...', sendMessage: 'Trimite', messageSent: 'Mesaj trimis cu succes!', languages: 'Limbi', secure: 'Securizat', loading: 'Se încarcă...', tabCrypto: 'Criptomonede', tabExchanges: 'Toate Bursele', tabCommodities: 'Aur, Argint și Acțiuni', allExchangesTitle: 'Toate Bursele Globale', allExchangesSub: '102 burse licențiate • După încredere • Linkuri directe de tranzacționare', searchExchange: 'Caută bursă...', metalExTitle: 'Platforme Metale Prețioase', metalExSub: 'Toate bursele care suportă tranzacționarea metalelor prețioase', stocksTitle: 'Acțiuni Principale și ETF-uri', stocksSub: 'Acțiuni tokenizate și ETF-uri metale prețioase • Date în timp real', colExchange2: 'Bursă', colPairs: 'Perechi de Tranzacționare', colRefPrice: 'Preț Ref.', colVol24h: 'Volum 24h', colTrade: 'Tranzacționează', colStock: 'Acțiune' };
+      T.el = { trustScore: 'Εμπιστοσύνη', siteTitle: 'CryptoHub', exchanges: 'Ανταλλακτήρια', recommendedExchanges: 'Προτεινόμενα Ανταλλακτήρια', live: 'Ζωντανά', fearGreedTitle: 'Δείκτης Φόβου & Απληστίας', fearGreedSub: 'Συναίσθημα Αγοράς - από Binance', outOf100: 'από 100', extremeFear: 'Ακραίος Φόβος', fear: 'Φόβος', neutral: 'Ουδέτερο', greed: 'Απληστία', extremeGreed: 'Ακραία Απληστία', aiTitle: 'Ανάλυση AI', aiSub: 'Προβλέψεις με AI', analyzing: 'Ανάλυση...', bullishSignals: 'Ανοδικά Σήματα', bearishSignals: 'Πτωτικά Σήματα', bollingerBands: 'Bollinger', searchCoin: 'Αναζήτηση κρυπτονομίσματος...', sortBy: 'Ταξινόμηση', network: 'Δίκτυο', show: 'Εμφάνιση', loadMore: 'Φόρτωση Περισσότερων', loadingData: 'Φόρτωση...', filteredBy: 'Φίλτρο:', colName: 'Όνομα', colPrice: 'Τιμή', colMarketCap: 'Κεφαλαιοποίηση', colVolume: 'Όγκος 24ω', colExchanges: 'Ανταλλακτήρια', prev: 'Προηγούμενο', next: 'Επόμενο', showing: 'Εμφάνιση', of: 'από', coins: 'κρυπτονομίσματα', availableOn: 'Διαθέσιμο σε', exchange: 'ανταλλακτήρια', referralNote: '🎁 Σύνδεσμοι παραπομπής', register: 'Εγγραφή', visit: 'Επίσκεψη', trustHigh: 'Υψηλή Εμπιστοσύνη', trustMedium: 'Μέτρια Εμπιστοσύνη', trustLow: 'Χαμηλή Εμπιστοσύνη', volume: 'Όγκος', allNetworks: 'Όλα τα Δίκτυα', rank: 'Κατάταξη', marketCap: 'Κεφαλαιοποίηση', price: 'Τιμή', change24h: 'Μεταβολή 24ω', noExchanges: 'Δεν βρέθηκε', errorLoading: 'Σφάλμα φόρτωσης', retry: 'Επανάληψη', allLoaded: 'Όλα Φορτώθηκαν', loadMoreRemaining: 'Φόρτωση Περισσότερων', oversold: 'Υπερπωλημένο', overbought: 'Υπεραγορασμένο', bullish: 'Ανοδικό', bearish: 'Πτωτικό', nearBottom: 'Κοντά στο Πάτο', nearTop: 'Κοντά στην Κορυφή', goldenCross: 'Χρυσός Σταυρός', deathCross: 'Σταυρός Θανάτου', strongBuy: 'Ισχυρή Αγορά', buy: 'Αγορά', sell: 'Πώληση', strongSell: 'Ισχυρή Πώληση', coinsFound: 'βρέθηκαν', trendingTitle: 'Τάσεις', trendingSub: 'Top 100 κρυπτονομίσματα κατά όγκο 24ω', altcoinIndex: 'Δείκτης Εποχής Altcoin', altcoinSeason: 'Εποχή Altcoin', btcDominance: 'Κυριαρχία BTC', ethDominance: 'Κυριαρχία ETH', totalMarketCap: 'Συνολική Κεφαλαιοποίηση', totalVolume24: 'Συνολικός Όγκος 24ω', fgHistory: 'Ιστορικό', now: 'Τώρα', yesterday: 'Χθες', lastWeek: 'Προηγούμενη Εβδομάδα', lastMonth: 'Προηγούμενος Μήνας', entryExitTitle: 'Σήματα Εισόδου & Εξόδου - Bitcoin', entryZone: 'Ζώνη Εισόδου', exitZone: 'Ζώνη Εξόδου', currentPrice: 'Τρέχουσα Τιμή', entryNote: 'Στο επίπεδο στήριξης', exitNote: 'Στο επίπεδο αντίστασης', volAnalysis: 'Ανάλυση Όγκου', supportResistance: 'Στήριξη/Αντίσταση', aiRecommendation: 'Σύσταση', strongTrend: 'Ισχυρή Τάση', weakTrend: 'Αδύναμη Τάση', highVol: 'Υψηλός Όγκος', lowVol: 'Χαμηλός Όγκος', aboveAvg: 'Πάνω από Μέσο Όρο', belowAvg: 'Κάτω από Μέσο Όρο', footerDesc: 'Η ολοκληρωμένη πλατφόρμα σας για παρακολούθηση 5000+ κρυπτονομισμάτων με εργαλεία AI και τιμές σε πραγματικό χρόνο.', quickLinks: 'Γρήγοροι Σύνδεσμοι', home: 'Αρχική', topExchanges: 'Κορυφαία Ανταλλακτήρια', disclaimer: 'Αποποίηση Ευθύνης', disclaimerText: 'Οι πληροφορίες σε αυτόν τον ιστότοπο είναι μόνο για εκπαιδευτικούς σκοπούς. Η διαπραγμάτευση κρυπτονομισμάτων ενέχει πολύ υψηλό κίνδυνο.', allRights: 'Με Επιφύλαξη Παντός Δικαιώματος', btcSeason: 'Εποχή Bitcoin', holdEntry: 'Αναμονή για καλύτερη είσοδο', goodEntry: 'Καλή ευκαιρία εισόδου', riskHigh: 'Υψηλό Ρίσκο', support: 'Υποστήριξη', yourName: 'Το Όνομά σας', yourEmail: 'Το Email σας', yourMessage: 'Το Μήνυμά σας...', sendMessage: 'Αποστολή', messageSent: 'Το μήνυμα στάλθηκε!', languages: 'Γλώσσες', secure: 'Ασφαλές', loading: 'Φόρτωση...', tabCrypto: 'Κρυπτονομίσματα', tabExchanges: 'Όλα τα Ανταλλακτήρια', tabCommodities: 'Χρυσός, Ασήμι & Μετοχές', allExchangesTitle: 'Όλα τα Παγκόσμια Ανταλλακτήρια', allExchangesSub: '102 αδειοδοτημένα ανταλλακτήρια • Κατά αξιοπιστία • Άμεσοι σύνδεσμοι', searchExchange: 'Αναζήτηση ανταλλακτηρίου...', metalExTitle: 'Πλατφόρμες Πολύτιμων Μετάλλων', metalExSub: 'Όλα τα ανταλλακτήρια που υποστηρίζουν πολύτιμα μέταλλα', stocksTitle: 'Κύριες Μετοχές & ETF', stocksSub: 'Tokenized μετοχές & ETF πολύτιμων μετάλλων • Δεδομένα από Yahoo Finance', colExchange2: 'Ανταλλακτήριο', colPairs: 'Ζεύγη Συναλλαγών', colRefPrice: 'Τιμή Αναφ.', colVol24h: 'Όγκος 24ω', colTrade: 'Συναλλαγή', colStock: 'Μετοχή' };
+      T.sv = { trustScore: 'Förtroende', siteTitle: 'CryptoHub', exchanges: 'Börser', recommendedExchanges: 'Rekommenderade Börser', live: 'Live', fearGreedTitle: 'Rädsla & Girighet Index', fearGreedSub: 'Marknadssentiment - från Binance', outOf100: 'av 100', extremeFear: 'Extrem Rädsla', fear: 'Rädsla', neutral: 'Neutral', greed: 'Girighet', extremeGreed: 'Extrem Girighet', aiTitle: 'AI-Analys', aiSub: 'AI-drivna förutsägelser', analyzing: 'Analyserar...', bullishSignals: 'Hausse-Signaler', bearishSignals: 'Baisse-Signaler', bollingerBands: 'Bollinger', searchCoin: 'Sök kryptovaluta...', sortBy: 'Sortera efter', network: 'Nätverk', show: 'Visa', loadMore: 'Ladda Mer', loadingData: 'Laddar...', filteredBy: 'Filter:', colName: 'Namn', colPrice: 'Pris', colMarketCap: 'Marknadsvärde', colVolume: 'Volym 24h', colExchanges: 'Börser', prev: 'Föregående', next: 'Nästa', showing: 'Visar', of: 'av', coins: 'kryptovalutor', availableOn: 'Tillgänglig på', exchange: 'börser', referralNote: '🎁 Hänvisningslänkar', register: 'Registrera', visit: 'Besök', trustHigh: 'Högt Förtroende', trustMedium: 'Medel Förtroende', trustLow: 'Lågt Förtroende', volume: 'Volym', allNetworks: 'Alla Nätverk', rank: 'Ranking', marketCap: 'Marknadsvärde', price: 'Pris', change24h: 'Ändring 24h', noExchanges: 'Hittas inte', errorLoading: 'Laddningsfel', retry: 'Försök igen', allLoaded: 'Allt Laddat', loadMoreRemaining: 'Ladda Mer', oversold: 'Översåld', overbought: 'Överköpt', bullish: 'Hausse', bearish: 'Baisse', nearBottom: 'Nära Botten', nearTop: 'Nära Toppen', goldenCross: 'Gyllene Korset', deathCross: 'Dödskorset', strongBuy: 'Starkt Köp', buy: 'Köp', sell: 'Sälj', strongSell: 'Stark Försäljning', coinsFound: 'hittade', trendingTitle: 'Trender', trendingSub: 'Topp 100 efter 24h volym', altcoinIndex: 'Altcoin Säsongs Index', altcoinSeason: 'Altcoin Säsong', btcDominance: 'BTC Dominans', ethDominance: 'ETH Dominans', totalMarketCap: 'Totalt Marknadsvärde', totalVolume24: 'Total Volym 24h', fgHistory: 'Historik', now: 'Nu', yesterday: 'Igår', lastWeek: 'Förra Veckan', lastMonth: 'Förra Månaden', entryExitTitle: 'In- och Utgångssignaler - Bitcoin', entryZone: 'Ingångszon', exitZone: 'Utgångszon', currentPrice: 'Aktuellt Pris', entryNote: 'Vid stödnivå', exitNote: 'Vid motståndsnivå', volAnalysis: 'Volymanalys', supportResistance: 'Stöd/Motstånd', aiRecommendation: 'Rekommendation', strongTrend: 'Stark Trend', weakTrend: 'Svag Trend', highVol: 'Hög Volym', lowVol: 'Låg Volym', aboveAvg: 'Över Genomsnitt', belowAvg: 'Under Genomsnitt', footerDesc: 'Din kompletta plattform för att spåra 5000+ kryptovalutor med avancerade AI-verktyg och realtidspriser.', quickLinks: 'Snabblänkar', home: 'Hem', topExchanges: 'Toppbörser', disclaimer: 'Ansvarsfriskrivning', disclaimerText: 'Informationen på denna webbplats är endast i utbildningssyfte och utgör inte finansiell rådgivning. Kryptohandel innebär mycket hög risk.', allRights: 'Alla Rättigheter Förbehållna', btcSeason: 'Bitcoin Säsong', holdEntry: 'Vänta på bättre ingång', goodEntry: 'Bra ingångsmöjlighet', riskHigh: 'Hög Risk', support: 'Support', yourName: 'Ditt Namn', yourEmail: 'Din E-post', yourMessage: 'Ditt Meddelande...', sendMessage: 'Skicka', messageSent: 'Meddelande skickat!', languages: 'Språk', secure: 'Säker', loading: 'Laddar...', tabCrypto: 'Kryptovalutor', tabExchanges: 'Alla Börser', tabCommodities: 'Guld, Silver & Aktier', allExchangesTitle: 'Alla Globala Börser', allExchangesSub: '102 licensierade börser • Efter förtroende • Direkta handelslänkar', searchExchange: 'Sök börs...', metalExTitle: 'Ädelmetallplattformar', metalExSub: 'Alla börser med ädelmetallhandel och realtidsvolymer', stocksTitle: 'Stora Aktier & ETF:er', stocksSub: 'Tokeniserade aktier & ädelmetall-ETF:er • Realtidsdata från Yahoo Finance', colExchange2: 'Börs', colPairs: 'Handelspar', colRefPrice: 'Ref. Pris', colVol24h: 'Volym 24h', colTrade: 'Handla', colStock: 'Aktie' };
+      T.da = { trustScore: 'Tillid', siteTitle: 'CryptoHub', exchanges: 'Børser', recommendedExchanges: 'Anbefalede Børser', live: 'Live', fearGreedTitle: 'Frygt & Grådighed Indeks', fearGreedSub: 'Markedsstemning - fra Binance', outOf100: 'af 100', extremeFear: 'Ekstrem Frygt', fear: 'Frygt', neutral: 'Neutral', greed: 'Grådighed', extremeGreed: 'Ekstrem Grådighed', aiTitle: 'AI-Analyse', aiSub: 'AI-drevne forudsigelser', analyzing: 'Analyserer...', bullishSignals: 'Opadgående Signaler', bearishSignals: 'Nedadgående Signaler', bollingerBands: 'Bollinger', searchCoin: 'Søg kryptovaluta...', sortBy: 'Sorter efter', network: 'Netværk', show: 'Vis', loadMore: 'Indlæs Mere', loadingData: 'Indlæser...', filteredBy: 'Filter:', colName: 'Navn', colPrice: 'Pris', colMarketCap: 'Markedsværdi', colVolume: 'Volumen 24t', colExchanges: 'Børser', prev: 'Forrige', next: 'Næste', showing: 'Viser', of: 'af', coins: 'kryptovalutaer', availableOn: 'Tilgængelig på', exchange: 'børser', referralNote: '🎁 Henvisningslinks', register: 'Registrer', visit: 'Besøg', trustHigh: 'Høj Tillid', trustMedium: 'Middel Tillid', trustLow: 'Lav Tillid', volume: 'Volumen', allNetworks: 'Alle Netværk', rank: 'Placering', marketCap: 'Markedsværdi', price: 'Pris', change24h: 'Ændring 24t', noExchanges: 'Ikke fundet', errorLoading: 'Indlæsningsfejl', retry: 'Prøv igen', allLoaded: 'Alt Indlæst', loadMoreRemaining: 'Indlæs Mere', oversold: 'Oversolgt', overbought: 'Overkøbt', bullish: 'Opadgående', bearish: 'Nedadgående', nearBottom: 'Tæt på Bunden', nearTop: 'Tæt på Toppen', goldenCross: 'Gyldent Kors', deathCross: 'Dødskors', strongBuy: 'Stærkt Køb', buy: 'Køb', sell: 'Sælg', strongSell: 'Stærkt Salg', coinsFound: 'fundet', trendingTitle: 'Tendenser', trendingSub: 'Top 100 efter 24t volumen', altcoinIndex: 'Altcoin Sæson Indeks', altcoinSeason: 'Altcoin Sæson', btcDominance: 'BTC Dominans', ethDominance: 'ETH Dominans', totalMarketCap: 'Samlet Markedsværdi', totalVolume24: 'Samlet Volumen 24t', fgHistory: 'Historik', now: 'Nu', yesterday: 'I går', lastWeek: 'Sidste Uge', lastMonth: 'Sidste Måned', entryExitTitle: 'Ind- og Udgangssignaler - Bitcoin', entryZone: 'Indgangszone', exitZone: 'Udgangszone', currentPrice: 'Aktuel Pris', entryNote: 'Ved supportniveau', exitNote: 'Ved modstandsniveau', volAnalysis: 'Volumenanalyse', supportResistance: 'Support/Modstand', aiRecommendation: 'Anbefaling', strongTrend: 'Stærk Trend', weakTrend: 'Svag Trend', highVol: 'Høj Volumen', lowVol: 'Lav Volumen', aboveAvg: 'Over Gennemsnit', belowAvg: 'Under Gennemsnit', footerDesc: 'Din komplette platform til at spore 5000+ kryptovalutaer med avancerede AI-værktøjer og realtidspriser.', quickLinks: 'Hurtige Links', home: 'Hjem', topExchanges: 'Top Børser', disclaimer: 'Ansvarsfraskrivelse', disclaimerText: 'Informationen på denne hjemmeside er kun til uddannelsesmæssige formål og udgør ikke finansiel rådgivning. Kryptohandel indebærer meget høj risiko.', allRights: 'Alle Rettigheder Forbeholdes', btcSeason: 'Bitcoin Sæson', holdEntry: 'Vent på bedre indgang', goodEntry: 'God indgangsmulighed', riskHigh: 'Høj Risiko', support: 'Support', yourName: 'Dit Navn', yourEmail: 'Din E-mail', yourMessage: 'Din Besked...', sendMessage: 'Send', messageSent: 'Besked sendt!', languages: 'Sprog', secure: 'Sikker', loading: 'Indlæser...', tabCrypto: 'Kryptovalutaer', tabExchanges: 'Alle Børser', tabCommodities: 'Guld, Sølv & Aktier', allExchangesTitle: 'Alle Globale Børser', allExchangesSub: '102 licenserede børser • Efter tillid • Direkte handelslinks', searchExchange: 'Søg børs...', metalExTitle: 'Ædelmetalplatforme', metalExSub: 'Alle børser der understøtter ædelmetalhandel', stocksTitle: 'Store Aktier & ETF\'er', stocksSub: 'Tokeniserede aktier & ædelmetalETF\'er • Realtidsdata fra Binance', colExchange2: 'Børs', colPairs: 'Handelspar', colRefPrice: 'Ref. Pris', colVol24h: 'Volumen 24t', colTrade: 'Handl', colStock: 'Aktie' };
+      T.fi = { trustScore: 'Luottamus', siteTitle: 'CryptoHub', exchanges: 'Pörssit', recommendedExchanges: 'Suositellut Pörssit', live: 'Livenä', fearGreedTitle: 'Pelko & Ahneus Indeksi', fearGreedSub: 'Markkinasentimentti - Binancelta', outOf100: '/ 100', extremeFear: 'Äärimmäinen Pelko', fear: 'Pelko', neutral: 'Neutraali', greed: 'Ahneus', extremeGreed: 'Äärimmäinen Ahneus', aiTitle: 'AI-Analyysi', aiSub: 'AI-pohjaiset ennusteet', analyzing: 'Analysoidaan...', bullishSignals: 'Nousevat Signaalit', bearishSignals: 'Laskevat Signaalit', bollingerBands: 'Bollinger', searchCoin: 'Etsi kryptovaluuttaa...', sortBy: 'Lajittele', network: 'Verkko', show: 'Näytä', loadMore: 'Lataa Lisää', loadingData: 'Ladataan...', filteredBy: 'Suodatin:', colName: 'Nimi', colPrice: 'Hinta', colMarketCap: 'Markkina-arvo', colVolume: 'Volyymi 24h', colExchanges: 'Pörssit', prev: 'Edellinen', next: 'Seuraava', showing: 'Näytetään', of: '/', coins: 'kryptovaluuttaa', availableOn: 'Saatavilla:', exchange: 'pörssiä', referralNote: '🎁 Suosittelulinkit', register: 'Rekisteröidy', visit: 'Vieraile', trustHigh: 'Korkea Luottamus', trustMedium: 'Keskitason Luottamus', trustLow: 'Matala Luottamus', volume: 'Volyymi', allNetworks: 'Kaikki Verkot', rank: 'Sijoitus', marketCap: 'Markkina-arvo', price: 'Hinta', change24h: 'Muutos 24h', noExchanges: 'Ei löytynyt', errorLoading: 'Latausvirhe', retry: 'Yritä uudelleen', allLoaded: 'Kaikki Ladattu', loadMoreRemaining: 'Lataa Lisää', oversold: 'Ylimyyty', overbought: 'Yliostettu', bullish: 'Nouseva', bearish: 'Laskeva', nearBottom: 'Lähellä Pohjaa', nearTop: 'Lähellä Huippua', goldenCross: 'Kultainen Risti', deathCross: 'Kuolemanristi', strongBuy: 'Vahva Osto', buy: 'Osta', sell: 'Myy', strongSell: 'Vahva Myynti', coinsFound: 'löydetty', trendingTitle: 'Trendit', trendingSub: 'Top 100 24h volyymin mukaan', altcoinIndex: 'Altcoin-kausi Indeksi', altcoinSeason: 'Altcoin-kausi', btcDominance: 'BTC Dominanssi', ethDominance: 'ETH Dominanssi', totalMarketCap: 'Kokonaismarkkina-arvo', totalVolume24: 'Kokonaisvolyymi 24h', fgHistory: 'Historia', now: 'Nyt', yesterday: 'Eilen', lastWeek: 'Viime Viikko', lastMonth: 'Viime Kuukausi', entryExitTitle: 'Sisään- ja Ulostulosignaalit - Bitcoin', entryZone: 'Sisääntuloalue', exitZone: 'Ulostuloalue', currentPrice: 'Nykyinen Hinta', entryNote: 'Tukitasolla', exitNote: 'Vastustasolla', volAnalysis: 'Volyymianalyysi', supportResistance: 'Tuki/Vastus', aiRecommendation: 'Suositus', strongTrend: 'Vahva Trendi', weakTrend: 'Heikko Trendi', highVol: 'Korkea Volyymi', lowVol: 'Matala Volyymi', aboveAvg: 'Keskiarvon Yläpuolella', belowAvg: 'Keskiarvon Alapuolella', footerDesc: 'Kattava alustasi 5000+ kryptovaluutan seurantaan edistyneillä AI-työkaluilla ja reaaliaikaisilla hinnoilla.', quickLinks: 'Pikalinkit', home: 'Koti', topExchanges: 'Parhaat Pörssit', disclaimer: 'Vastuuvapauslauseke', disclaimerText: 'Tämän sivuston tiedot ovat vain opetuksellisia eivätkä ole taloudellista neuvontaa. Kryptokaupankäynti sisältää erittäin korkean riskin.', allRights: 'Kaikki Oikeudet Pidätetään', btcSeason: 'Bitcoin-kausi', holdEntry: 'Odota parempaa sisääntuloa', goodEntry: 'Hyvä sisääntulomahdollisuus', riskHigh: 'Korkea Riski', support: 'Tuki', yourName: 'Nimesi', yourEmail: 'Sähköpostisi', yourMessage: 'Viestisi...', sendMessage: 'Lähetä', messageSent: 'Viesti lähetetty!', languages: 'Kielet', secure: 'Turvallinen', loading: 'Ladataan...', tabCrypto: 'Kryptovaluutat', tabExchanges: 'Kaikki Pörssit', tabCommodities: 'Kulta, Hopea & Osakkeet', allExchangesTitle: 'Kaikki Maailmanlaajuiset Pörssit', allExchangesSub: '102 lisensoitua pörssiä • Luottamuksen mukaan • Suorat kauppalinkit', searchExchange: 'Etsi pörssiä...', metalExTitle: 'Jalometallialustat', metalExSub: 'Kaikki jalometallikauppaa tukevat pörssit', stocksTitle: 'Tärkeimmät Osakkeet & ETF:t', stocksSub: 'Tokenisoidut osakkeet & jalometalli-ETF:t • Reaaliaikainen data Yahoo Financelta', colExchange2: 'Pörssi', colPairs: 'Kauppaparit', colRefPrice: 'Viitehinta', colVol24h: 'Volyymi 24h', colTrade: 'Käy Kauppaa', colStock: 'Osake' };
+      T.ms = { trustScore: 'Kepercayaan', siteTitle: 'CryptoHub', exchanges: 'Bursa', recommendedExchanges: 'Bursa Disyorkan', live: 'Langsung', fearGreedTitle: 'Indeks Ketakutan & Tamak', fearGreedSub: 'Sentimen Pasaran - daripada Binance', outOf100: 'daripada 100', extremeFear: 'Ketakutan Melampau', fear: 'Takut', neutral: 'Neutral', greed: 'Tamak', extremeGreed: 'Ketamakan Melampau', aiTitle: 'Analisis AI', aiSub: 'Ramalan berasaskan AI', analyzing: 'Menganalisis...', bullishSignals: 'Isyarat Kenaikan', bearishSignals: 'Isyarat Penurunan', bollingerBands: 'Bollinger', searchCoin: 'Cari syiling...', sortBy: 'Susun mengikut', network: 'Rangkaian', show: 'Papar', loadMore: 'Muat Lagi', loadingData: 'Memuatkan...', filteredBy: 'Penapis:', colName: 'Nama', colPrice: 'Harga', colMarketCap: 'Kap. Pasaran', colVolume: 'Jumlah 24j', colExchanges: 'Bursa', prev: 'Sebelumnya', next: 'Seterusnya', showing: 'Memaparkan', of: 'daripada', coins: 'syiling', availableOn: 'Tersedia di', exchange: 'bursa', referralNote: '🎁 Pautan rujukan', register: 'Daftar', visit: 'Lawati', trustHigh: 'Kepercayaan Tinggi', trustMedium: 'Kepercayaan Sederhana', trustLow: 'Kepercayaan Rendah', volume: 'Jumlah', allNetworks: 'Semua Rangkaian', rank: 'Kedudukan', marketCap: 'Kap. Pasaran', price: 'Harga', change24h: 'Perubahan 24j', noExchanges: 'Tidak dijumpai', errorLoading: 'Ralat memuatkan', retry: 'Cuba semula', allLoaded: 'Semua Dimuat', loadMoreRemaining: 'Muat Lagi', oversold: 'Terlebih Jual', overbought: 'Terlebih Beli', bullish: 'Menaik', bearish: 'Menurun', nearBottom: 'Hampir Dasar', nearTop: 'Hampir Puncak', goldenCross: 'Golden Cross', deathCross: 'Death Cross', strongBuy: 'Beli Kuat', buy: 'Beli', sell: 'Jual', strongSell: 'Jual Kuat', coinsFound: 'dijumpai', trendingTitle: 'Trending', trendingSub: '100 syiling teratas mengikut jumlah 24j', altcoinIndex: 'Indeks Musim Altcoin', altcoinSeason: 'Musim Altcoin', btcDominance: 'Dominasi BTC', ethDominance: 'Dominasi ETH', totalMarketCap: 'Jumlah Kap. Pasaran', totalVolume24: 'Jumlah Keseluruhan 24j', fgHistory: 'Sejarah', now: 'Sekarang', yesterday: 'Semalam', lastWeek: 'Minggu Lepas', lastMonth: 'Bulan Lepas', entryExitTitle: 'Isyarat Masuk & Keluar - Bitcoin', entryZone: 'Zon Masuk', exitZone: 'Zon Keluar', currentPrice: 'Harga Semasa', entryNote: 'Pada tahap sokongan', exitNote: 'Pada tahap rintangan', volAnalysis: 'Analisis Jumlah', supportResistance: 'Sokongan/Rintangan', aiRecommendation: 'Cadangan', strongTrend: 'Trend Kuat', weakTrend: 'Trend Lemah', highVol: 'Jumlah Tinggi', lowVol: 'Jumlah Rendah', aboveAvg: 'Atas Purata', belowAvg: 'Bawah Purata', footerDesc: 'Platform lengkap anda untuk menjejaki 5000+ mata wang kripto dengan alat AI dan harga masa nyata.', quickLinks: 'Pautan Pantas', home: 'Utama', topExchanges: 'Bursa Teratas', disclaimer: 'Penafian', disclaimerText: 'Maklumat di laman web ini adalah untuk tujuan pendidikan sahaja dan bukan nasihat kewangan. Perdagangan kripto melibatkan risiko yang sangat tinggi.', allRights: 'Hak Cipta Terpelihara', btcSeason: 'Musim Bitcoin', holdEntry: 'Tunggu kemasukan lebih baik', goodEntry: 'Peluang kemasukan baik', riskHigh: 'Risiko Tinggi', support: 'Sokongan', yourName: 'Nama Anda', yourEmail: 'E-mel Anda', yourMessage: 'Mesej Anda...', sendMessage: 'Hantar', messageSent: 'Mesej berjaya dihantar!', languages: 'Bahasa', secure: 'Selamat', loading: 'Memuatkan...', tabCrypto: 'Mata Wang Kripto', tabExchanges: 'Semua Bursa', tabCommodities: 'Emas, Perak & Saham', allExchangesTitle: 'Semua Bursa Global', allExchangesSub: '102 bursa berlesen • Mengikut kepercayaan • Pautan dagangan terus', searchExchange: 'Cari bursa...', metalExTitle: 'Platform Logam Berharga', metalExSub: 'Semua bursa yang menyokong dagangan logam berharga', stocksTitle: 'Saham Utama & ETF', stocksSub: 'Saham token & ETF logam berharga • Data masa nyata daripada Yahoo Finance', colExchange2: 'Bursa', colPairs: 'Pasangan Dagangan', colRefPrice: 'Harga Ref.', colVol24h: 'Jumlah 24j', colTrade: 'Dagang', colStock: 'Saham' };
+      T.bn = { trustScore: 'বিশ্বাস', siteTitle: 'CryptoHub', exchanges: 'এক্সচেঞ্জ', recommendedExchanges: 'প্রস্তাবিত এক্সচেঞ্জ', live: 'লাইভ', fearGreedTitle: 'ভয় ও লোভ সূচক', fearGreedSub: 'বাজার সেন্টিমেন্ট - Binance থেকে', outOf100: '/ ১০০', extremeFear: 'চরম ভয়', fear: 'ভয়', neutral: 'নিরপেক্ষ', greed: 'লোভ', extremeGreed: 'চরম লোভ', aiTitle: 'AI বিশ্লেষণ', aiSub: 'AI-চালিত পূর্বাভাস', analyzing: 'বিশ্লেষণ হচ্ছে...', bullishSignals: 'ঊর্ধ্বমুখী সংকেত', bearishSignals: 'নিম্নমুখী সংকেত', bollingerBands: 'বলিঞ্জার', searchCoin: 'কয়েন খুঁজুন...', sortBy: 'সাজান', network: 'নেটওয়ার্ক', show: 'দেখান', loadMore: 'আরো লোড করুন', loadingData: 'লোড হচ্ছে...', filteredBy: 'ফিল্টার:', colName: 'নাম', colPrice: 'মূল্য', colMarketCap: 'মার্কেট ক্যাপ', colVolume: 'ভলিউম ২৪ঘ', colExchanges: 'এক্সচেঞ্জ', prev: 'আগের', next: 'পরের', showing: 'দেখানো হচ্ছে', of: 'এর', coins: 'কয়েন', availableOn: 'পাওয়া যায়', exchange: 'এক্সচেঞ্জে', referralNote: '🎁 রেফারেল লিংক', register: 'নিবন্ধন', visit: 'ভিজিট', trustHigh: 'উচ্চ বিশ্বাস', trustMedium: 'মাঝারি বিশ্বাস', trustLow: 'কম বিশ্বাস', volume: 'ভলিউম', allNetworks: 'সকল নেটওয়ার্ক', rank: 'র‍্যাংক', marketCap: 'মার্কেট ক্যাপ', price: 'মূল্য', change24h: 'পরিবর্তন ২৪ঘ', noExchanges: 'পাওয়া যায়নি', errorLoading: 'লোডিং ত্রুটি', retry: 'পুনরায় চেষ্টা', allLoaded: 'সব লোড হয়েছে', loadMoreRemaining: 'আরো লোড করুন', oversold: 'অতিবিক্রীত', overbought: 'অতিক্রীত', bullish: 'ঊর্ধ্বমুখী', bearish: 'নিম্নমুখী', nearBottom: 'তলদেশের কাছে', nearTop: 'শীর্ষের কাছে', goldenCross: 'গোল্ডেন ক্রস', deathCross: 'ডেথ ক্রস', strongBuy: 'শক্তিশালী ক্রয়', buy: 'কিনুন', sell: 'বিক্রি', strongSell: 'শক্তিশালী বিক্রি', coinsFound: 'পাওয়া গেছে', trendingTitle: 'ট্রেন্ডিং', trendingSub: '২৪ঘ ভলিউমে শীর্ষ ১০০', altcoinIndex: 'অল্টকয়েন সিজন সূচক', altcoinSeason: 'অল্টকয়েন সিজন', btcDominance: 'BTC আধিপত্য', ethDominance: 'ETH আধিপত্য', totalMarketCap: 'মোট মার্কেট ক্যাপ', totalVolume24: 'মোট ভলিউম ২৪ঘ', fgHistory: 'ইতিহাস', now: 'এখন', yesterday: 'গতকাল', lastWeek: 'গত সপ্তাহ', lastMonth: 'গত মাস', entryExitTitle: 'এন্ট্রি ও এক্সিট সিগন্যাল - Bitcoin', entryZone: 'এন্ট্রি জোন', exitZone: 'এক্সিট জোন', currentPrice: 'বর্তমান মূল্য', entryNote: 'সাপোর্ট লেভেলে', exitNote: 'রেজিস্ট্যান্স লেভেলে', volAnalysis: 'ভলিউম বিশ্লেষণ', supportResistance: 'সাপোর্ট/রেজিস্ট্যান্স', aiRecommendation: 'সুপারিশ', strongTrend: 'শক্তিশালী ট্রেন্ড', weakTrend: 'দুর্বল ট্রেন্ড', highVol: 'উচ্চ ভলিউম', lowVol: 'কম ভলিউম', aboveAvg: 'গড়ের উপরে', belowAvg: 'গড়ের নিচে', footerDesc: '৫০০০+ ক্রিপ্টোকারেন্সি ট্র্যাক করার জন্য AI বিশ্লেষণ ও রিয়েল-টাইম মূল্য সহ আপনার সম্পূর্ণ প্ল্যাটফর্ম।', quickLinks: 'দ্রুত লিংক', home: 'হোম', topExchanges: 'শীর্ষ এক্সচেঞ্জ', disclaimer: 'দায়মুক্তি', disclaimerText: 'এই সাইটের তথ্য শুধুমাত্র শিক্ষামূলক এবং আর্থিক পরামর্শ নয়। ক্রিপ্টো ট্রেডিংয়ে অত্যন্ত উচ্চ ঝুঁকি রয়েছে।', allRights: 'সর্বস্বত্ব সংরক্ষিত', btcSeason: 'বিটকয়েন সিজন', holdEntry: 'ভালো এন্ট্রির জন্য অপেক্ষা করুন', goodEntry: 'ভালো এন্ট্রি সুযোগ', riskHigh: 'উচ্চ ঝুঁকি', support: 'সহায়তা', yourName: 'আপনার নাম', yourEmail: 'আপনার ইমেইল', yourMessage: 'আপনার বার্তা...', sendMessage: 'পাঠান', messageSent: 'বার্তা সফলভাবে পাঠানো হয়েছে!', languages: 'ভাষা', secure: 'নিরাপদ', loading: 'লোড হচ্ছে...', tabCrypto: 'ক্রিপ্টোকারেন্সি', tabExchanges: 'সকল এক্সচেঞ্জ', tabCommodities: 'সোনা, রূপা ও স্টক', allExchangesTitle: 'সকল গ্লোবাল এক্সচেঞ্জ', allExchangesSub: '১০২টি লাইসেন্সপ্রাপ্ত এক্সচেঞ্জ • বিশ্বস্ততা অনুযায়ী • সরাসরি ট্রেডিং লিংক', searchExchange: 'এক্সচেঞ্জ খুঁজুন...', metalExTitle: 'মূল্যবান ধাতু প্ল্যাটফর্ম', metalExSub: 'মূল্যবান ধাতু ট্রেডিং সমর্থনকারী সকল এক্সচেঞ্জ', stocksTitle: 'প্রধান স্টক ও ETF', stocksSub: 'টোকেনাইজড স্টক ও মূল্যবান ধাতু ETF • Yahoo Finance রিয়েল-টাইম ডেটা', colExchange2: 'এক্সচেঞ্জ', colPairs: 'ট্রেডিং পেয়ার', colRefPrice: 'রেফ. মূল্য', colVol24h: 'ভলিউম ২৪ঘ', colTrade: 'ট্রেড', colStock: 'স্টক' };
+      T.sw = { trustScore: 'Uaminifu', siteTitle: 'CryptoHub', exchanges: 'Masoko', recommendedExchanges: 'Masoko Yaliyopendekezwa', live: 'Moja kwa Moja', fearGreedTitle: 'Fahirisi ya Hofu na Tamaa', fearGreedSub: 'Hali ya Soko - kutoka Binance', outOf100: 'kati ya 100', extremeFear: 'Hofu Kali', fear: 'Hofu', neutral: 'Wastani', greed: 'Tamaa', extremeGreed: 'Tamaa Kali', aiTitle: 'Uchambuzi wa AI', aiSub: 'Utabiri unaodhibitiwa na AI', analyzing: 'Inachambua...', bullishSignals: 'Ishara za Kupanda', bearishSignals: 'Ishara za Kushuka', bollingerBands: 'Bollinger', searchCoin: 'Tafuta sarafu...', sortBy: 'Panga kwa', network: 'Mtandao', show: 'Onyesha', loadMore: 'Pakia Zaidi', loadingData: 'Inapakia...', filteredBy: 'Chuja:', colName: 'Jina', colPrice: 'Bei', colMarketCap: 'Thamani ya Soko', colVolume: 'Kiasi 24s', colExchanges: 'Masoko', prev: 'Iliyotangulia', next: 'Inayofuata', showing: 'Inaonyesha', of: 'ya', coins: 'sarafu', availableOn: 'Inapatikana', exchange: 'masoko', referralNote: '🎁 Viungo vya rufaa', register: 'Jiandikishe', visit: 'Tembelea', trustHigh: 'Imani Kubwa', trustMedium: 'Imani ya Kati', trustLow: 'Imani Ndogo', volume: 'Kiasi', allNetworks: 'Mitandao Yote', rank: 'Nafasi', marketCap: 'Thamani ya Soko', price: 'Bei', change24h: 'Mabadiliko 24s', noExchanges: 'Haijapatikana', errorLoading: 'Hitilafu ya kupakia', retry: 'Jaribu tena', allLoaded: 'Yote Yamepakiwa', loadMoreRemaining: 'Pakia Zaidi', oversold: 'Kuuzwa kupita kiasi', overbought: 'Kununuliwa kupita kiasi', bullish: 'Kupanda', bearish: 'Kushuka', nearBottom: 'Karibu na Chini', nearTop: 'Karibu na Juu', goldenCross: 'Msalaba wa Dhahabu', deathCross: 'Msalaba wa Kifo', strongBuy: 'Nunua Sana', buy: 'Nunua', sell: 'Uza', strongSell: 'Uza Sana', coinsFound: 'zimepatikana', trendingTitle: 'Zinazovuma', trendingSub: 'Sarafu 100 bora kwa kiasi cha 24s', altcoinIndex: 'Fahirisi ya Msimu wa Altcoin', altcoinSeason: 'Msimu wa Altcoin', btcDominance: 'Utawala wa BTC', ethDominance: 'Utawala wa ETH', totalMarketCap: 'Thamani Jumla', totalVolume24: 'Kiasi Jumla 24s', fgHistory: 'Historia', now: 'Sasa', yesterday: 'Jana', lastWeek: 'Wiki Iliyopita', lastMonth: 'Mwezi Uliopita', entryExitTitle: 'Ishara za Kuingia na Kutoka - Bitcoin', entryZone: 'Eneo la Kuingia', exitZone: 'Eneo la Kutoka', currentPrice: 'Bei ya Sasa', entryNote: 'Katika kiwango cha msaada', exitNote: 'Katika kiwango cha upinzani', volAnalysis: 'Uchambuzi wa Kiasi', supportResistance: 'Msaada/Upinzani', aiRecommendation: 'Mapendekezo', strongTrend: 'Mwelekeo Mkali', weakTrend: 'Mwelekeo Dhaifu', highVol: 'Kiasi Kikubwa', lowVol: 'Kiasi Kidogo', aboveAvg: 'Juu ya Wastani', belowAvg: 'Chini ya Wastani', footerDesc: 'Jukwaa lako kamili la kufuatilia sarafu 5000+ za kripto na zana za AI na bei za wakati halisi.', quickLinks: 'Viungo vya Haraka', home: 'Nyumbani', topExchanges: 'Masoko Bora', disclaimer: 'Kanusho', disclaimerText: 'Taarifa kwenye tovuti hii ni kwa madhumuni ya elimu tu na si ushauri wa kifedha. Biashara ya kripto ina hatari kubwa sana.', allRights: 'Haki Zote Zimehifadhiwa', btcSeason: 'Msimu wa Bitcoin', holdEntry: 'Subiri kuingia bora', goodEntry: 'Fursa nzuri ya kuingia', riskHigh: 'Hatari Kubwa', support: 'Msaada', yourName: 'Jina Lako', yourEmail: 'Barua Pepe Yako', yourMessage: 'Ujumbe Wako...', sendMessage: 'Tuma', messageSent: 'Ujumbe umetumwa!', languages: 'Lugha', secure: 'Salama', loading: 'Inapakia...', tabCrypto: 'Sarafu za Kripto', tabExchanges: 'Masoko Yote', tabCommodities: 'Dhahabu, Fedha na Hisa', allExchangesTitle: 'Masoko Yote ya Dunia', allExchangesSub: 'Masoko 102 yenye leseni • Kwa uaminifu • Viungo vya moja kwa moja', searchExchange: 'Tafuta soko...', metalExTitle: 'Majukwaa ya Madini ya Thamani', metalExSub: 'Masoko yote yanayounga mkono biashara ya madini ya thamani', stocksTitle: 'Hisa Kuu na ETF', stocksSub: 'Hisa za tokeni na ETF za madini ya thamani • Data ya wakati halisi kutoka Yahoo Finance', colExchange2: 'Soko', colPairs: 'Jozi za Biashara', colRefPrice: 'Bei ya Ref.', colVol24h: 'Kiasi 24s', colTrade: 'Fanya Biashara', colStock: 'Hisa' };
     }, 5000);
     // Fill any remaining languages from English base
     const analyzerLangs = {
-      ar: { cryptoAnalyzer: 'محلل السيولة', cryptoAnalyzerDesc: 'تحليل متقدم للسيولة والعملات', cryptoArbitrage: 'ماسح الفروقات', cryptoArbitrageDesc: 'مقارنة الأسعار بين 100 منصة' },
-      en: { cryptoAnalyzer: 'Liquidity Analyzer', cryptoAnalyzerDesc: 'Advanced crypto liquidity analysis', cryptoArbitrage: 'Arbitrage Scanner', cryptoArbitrageDesc: 'Price comparison across 100+ exchanges' },
-      zh: { cryptoAnalyzer: '流动性分析仪', cryptoAnalyzerDesc: '高级流动性及代币分析', cryptoArbitrage: '套利扫描器', cryptoArbitrageDesc: '跨100+交易所价格比较' },
-      es: { cryptoAnalyzer: 'Analizador de Liquidez', cryptoAnalyzerDesc: 'Análisis avanzado de liquidez criptográfica', cryptoArbitrage: 'Escáner de Arbitraje', cryptoArbitrageDesc: 'Comparación de precios en 100+ exchanges' },
-      pt: { cryptoAnalyzer: 'Analisador de Liquidez', cryptoAnalyzerDesc: 'Análise avançada de liquidez de criptomoedas', cryptoArbitrage: 'Scanner de Arbitragem', cryptoArbitrageDesc: 'Comparação de preços em 100+ exchanges' },
-      fr: { cryptoAnalyzer: 'Analyseur de Liquidité', cryptoAnalyzerDesc: 'Analyse avancée de la liquidité crypto', cryptoArbitrage: 'Scanner d\'Arbitrage', cryptoArbitrageDesc: 'Comparaison des prix sur 100+ plateformes' },
-      de: { cryptoAnalyzer: 'Liquiditätsanalysator', cryptoAnalyzerDesc: 'Erweiterte Krypto-Liquiditätsanalyse', cryptoArbitrage: 'Arbitrage-Scanner', cryptoArbitrageDesc: 'Preisvergleich auf 100+ Börsen' },
-      it: { cryptoAnalyzer: 'Analizzatore di Liquidità', cryptoAnalyzerDesc: 'Analisi avanzata della liquidità crypto', cryptoArbitrage: 'Scanner di Arbitraggio', cryptoArbitrageDesc: 'Confronto prezzi su 100+ exchange' },
-      ru: { cryptoAnalyzer: 'Анализатор Ликвидности', cryptoAnalyzerDesc: 'Продвинутый анализ криптовалютной ликвидности', cryptoArbitrage: 'Арбитражный Сканер', cryptoArbitrageDesc: 'Сравнение цен на 100+ биржах' },
-      tr: { cryptoAnalyzer: 'Likidite Analizörü', cryptoAnalyzerDesc: 'Gelişmiş kripto likidite analizi', cryptoArbitrage: 'Arbitraj Tarayıcı', cryptoArbitrageDesc: '100+ borsada fiyat karşılaştırması' },
-      ja: { cryptoAnalyzer: '流動性アナライザー', cryptoAnalyzerDesc: '高度な暗号資産の流動性分析', cryptoArbitrage: 'アービトラージスキャナー', cryptoArbitrageDesc: '100以上の取引所で価格比較' },
-      ko: { cryptoAnalyzer: '유동성 분석기', cryptoAnalyzerDesc: '고급 암호화폐 유동성 분석', cryptoArbitrage: '차익 거래 스캐너', cryptoArbitrageDesc: '100개 이상의 거래소 가격 비교' },
-      hi: { cryptoAnalyzer: 'तरलता विश्लेषक', cryptoAnalyzerDesc: 'उन्नत क्रिप्टो तरलता विश्लेषण', cryptoArbitrage: 'आर्बिट्रेज स्कैनर', cryptoArbitrageDesc: '100+ एक्सचेंजों में मूल्य तुलना' },
-      nl: { cryptoAnalyzer: 'Liquiditeitsanalysator', cryptoAnalyzerDesc: 'Geavanceerde crypto-liquiditeitsanalyse', cryptoArbitrage: 'Arbitrage Scanner', cryptoArbitrageDesc: 'Prijsvergelijking over 100+ beurzen' },
-      pl: { cryptoAnalyzer: 'Analizator Płynności', cryptoAnalyzerDesc: 'Zaawansowana analiza płynności kryptowalut', cryptoArbitrage: 'Skaner Arbitrażowy', cryptoArbitrageDesc: 'Porównanie cen na 100+ giełdach' },
-      th: { cryptoAnalyzer: 'เครื่องวิเคราะห์สภาพคล่อง', cryptoAnalyzerDesc: 'การวิเคราะห์สภาพคล่องของคริปโตขั้นสูง', cryptoArbitrage: 'สแกนเนอร์อาร์บิทราจ', cryptoArbitrageDesc: 'เปรียบเทียบราคาในกว่า 100 แพลตฟอร์ม' },
-      vi: { cryptoAnalyzer: 'Trình Phân Tích Thanh Khoản', cryptoAnalyzerDesc: 'Phân tích thanh khoản tiền điện tử nâng cao', cryptoArbitrage: 'Máy Quét Chênh Lệch Giá', cryptoArbitrageDesc: 'So sánh giá trên 100+ sàn giao dịch' },
-      id: { cryptoAnalyzer: 'Penganalisis Likuiditas', cryptoAnalyzerDesc: 'Analisis likuiditas kripto tingkat lanjut', cryptoArbitrage: 'Pemindai Arbitrase', cryptoArbitrageDesc: 'Perbandingan harga di 100+ bursa' },
-      uk: { cryptoAnalyzer: 'Аналізатор Ліквідності', cryptoAnalyzerDesc: 'Розширений аналіз криптовалютної ліквідності', cryptoArbitrage: 'Арбітражний Сканер', cryptoArbitrageDesc: 'Порівняння цін на 100+ біржах' },
-      fa: { cryptoAnalyzer: 'تحلیلگر نقدینگی', cryptoAnalyzerDesc: 'تحلیل پیشرفته نقدینگی ارزهای دیجیتال', cryptoArbitrage: 'اسکنر آربیتراژ', cryptoArbitrageDesc: 'مقایسه قیمت در بیش از ۱۰۰ صرافی' },
-      he: { cryptoAnalyzer: 'נתח נזילות', cryptoAnalyzerDesc: 'ניתוח נזילות קריפטו מתקדם', cryptoArbitrage: 'סורק ארביטראז\'', cryptoArbitrageDesc: 'השוואת מחירים ב-100+ בורסות' },
-      fi: { cryptoAnalyzer: 'Likviditeettianalysaattori', cryptoAnalyzerDesc: 'Edistynyt kryptojen likviditeettianalyysi', cryptoArbitrage: 'Arbitraasiskanneri', cryptoArbitrageDesc: 'Hintavertailu yli 100 pörssissä' },
-      ro: { cryptoAnalyzer: 'Analizor de Lichiditate', cryptoAnalyzerDesc: 'Analiza avansată a lichidității', cryptoArbitrage: 'Scanner de Arbitraj', cryptoArbitrageDesc: 'Comparare prețuri pe 100+ burse' },
-      el: { cryptoAnalyzer: 'Αναλυτής Ρευστότητας', cryptoAnalyzerDesc: 'Προηγμένη ανάλυση ρευστότητας κρυπτονομισμάτων', cryptoArbitrage: 'Σαρωτής Αρμπιτράζ', cryptoArbitrageDesc: 'Σύγκριση τιμών σε 100+ ανταλλακτήρια' },
-      hu: { cryptoAnalyzer: 'Likviditás Elemző', cryptoAnalyzerDesc: 'Fejlett kripto likviditás elemzés', cryptoArbitrage: 'Arbitrázs Szkenner', cryptoArbitrageDesc: 'Árösszehasonlítás 100+ tőzsdén' },
-      sv: { cryptoAnalyzer: 'Likviditetsanalysator', cryptoAnalyzerDesc: 'Avancerad krypto likviditetsanalys', cryptoArbitrage: 'Arbitrageskanner', cryptoArbitrageDesc: 'Prisjämförelse på 100+ börser' },
-      cs: { cryptoAnalyzer: 'Analyzátor Likvidity', cryptoAnalyzerDesc: 'Pokročilá analýza krypto likvidity', cryptoArbitrage: 'Arbitrážní Skener', cryptoArbitrageDesc: 'Porovnání cen na 100+ burzách' },
-      ms: { cryptoAnalyzer: 'Penganalisis Kecairan', cryptoAnalyzerDesc: 'Analisis kecairan kripto lanjutan', cryptoArbitrage: 'Pengimbas Arbitraj', cryptoArbitrageDesc: 'Perbandingan harga di 100+ bursa' },
-      bn: { cryptoAnalyzer: 'তারল্য বিশ্লেষক', cryptoAnalyzerDesc: 'উন্নত ক্রিপ্টো তারল্য বিশ্লেষণ', cryptoArbitrage: 'আর্বিট্রেজ স্ক্যানার', cryptoArbitrageDesc: '১০০+ এক্সচেঞ্জে মূল্য তুলনা' },
-      sw: { cryptoAnalyzer: 'Mchambuzi wa Ukwasi', cryptoAnalyzerDesc: 'Uchambuzi wa hali ya juu wa ukwasi wa crypto', cryptoArbitrage: 'Kichunguzi cha Arbitrage', cryptoArbitrageDesc: 'Ulinganisho wa bei katika masoko 100+' }
+      ar: { cryptoAnalyzer: 'محلل السيولة', cryptoAnalyzerDesc: 'تحليل متقدم للسيولة والعملات', cryptoArbitrage: 'ماسح الفروقات', cryptoArbitrageDesc: 'مقارنة الأسعار بين 100 منصة', forexAnalyzer: 'محلل الفوركس', forexAnalyzerDesc: 'تحليل أزواج العملات الأجنبية' },
+      en: { cryptoAnalyzer: 'Liquidity Analyzer', cryptoAnalyzerDesc: 'Advanced crypto liquidity analysis', cryptoArbitrage: 'Arbitrage Scanner', cryptoArbitrageDesc: 'Price comparison across 100+ exchanges', forexAnalyzer: 'Forex Analyzer', forexAnalyzerDesc: 'Currency pair analysis & signals' },
+      zh: { cryptoAnalyzer: '流动性分析仪', cryptoAnalyzerDesc: '高级流动性及代币分析', cryptoArbitrage: '套利扫描器', cryptoArbitrageDesc: '跨100+交易所价格比较', forexAnalyzer: '外汇分析仪', forexAnalyzerDesc: '货币对分析与信号' },
+      es: { cryptoAnalyzer: 'Analizador de Liquidez', cryptoAnalyzerDesc: 'Análisis avanzado de liquidez criptográfica', cryptoArbitrage: 'Escáner de Arbitraje', cryptoArbitrageDesc: 'Comparación de precios en 100+ exchanges', forexAnalyzer: 'Analizador Forex', forexAnalyzerDesc: 'Análisis de pares de divisas y señales' },
+      pt: { cryptoAnalyzer: 'Analisador de Liquidez', cryptoAnalyzerDesc: 'Análise avançada de liquidez de criptomoedas', cryptoArbitrage: 'Scanner de Arbitragem', cryptoArbitrageDesc: 'Comparação de preços em 100+ exchanges', forexAnalyzer: 'Analisador Forex', forexAnalyzerDesc: 'Análise de pares de moedas e sinais' },
+      fr: { cryptoAnalyzer: 'Analyseur de Liquidité', cryptoAnalyzerDesc: 'Analyse avancée de la liquidité crypto', cryptoArbitrage: 'Scanner d\'Arbitrage', cryptoArbitrageDesc: 'Comparaison des prix sur 100+ plateformes', forexAnalyzer: 'Analyseur Forex', forexAnalyzerDesc: 'Analyse des paires de devises et signaux' },
+      de: { cryptoAnalyzer: 'Liquiditätsanalysator', cryptoAnalyzerDesc: 'Erweiterte Krypto-Liquiditätsanalyse', cryptoArbitrage: 'Arbitrage-Scanner', cryptoArbitrageDesc: 'Preisvergleich auf 100+ Börsen', forexAnalyzer: 'Forex-Analysator', forexAnalyzerDesc: 'Währungspaaranalyse und Signale' },
+      it: { cryptoAnalyzer: 'Analizzatore di Liquidità', cryptoAnalyzerDesc: 'Analisi avanzata della liquidità crypto', cryptoArbitrage: 'Scanner di Arbitraggio', cryptoArbitrageDesc: 'Confronto prezzi su 100+ exchange', forexAnalyzer: 'Analizzatore Forex', forexAnalyzerDesc: 'Analisi coppie valutarie e segnali' },
+      ru: { cryptoAnalyzer: 'Анализатор Ликвидности', cryptoAnalyzerDesc: 'Продвинутый анализ криптовалютной ликвидности', cryptoArbitrage: 'Арбитражный Сканер', cryptoArbitrageDesc: 'Сравнение цен на 100+ биржах', forexAnalyzer: 'Форекс Анализатор', forexAnalyzerDesc: 'Анализ валютных пар и сигналы' },
+      tr: { cryptoAnalyzer: 'Likidite Analizörü', cryptoAnalyzerDesc: 'Gelişmiş kripto likidite analizi', cryptoArbitrage: 'Arbitraj Tarayıcı', cryptoArbitrageDesc: '100+ borsada fiyat karşılaştırması', forexAnalyzer: 'Forex Analizörü', forexAnalyzerDesc: 'Döviz çifti analizi ve sinyaller' },
+      ja: { cryptoAnalyzer: '流動性アナライザー', cryptoAnalyzerDesc: '高度な暗号資産の流動性分析', cryptoArbitrage: 'アービトラージスキャナー', cryptoArbitrageDesc: '100以上の取引所で価格比較', forexAnalyzer: 'FXアナライザー', forexAnalyzerDesc: '通貨ペア分析とシグナル' },
+      ko: { cryptoAnalyzer: '유동성 분석기', cryptoAnalyzerDesc: '고급 암호화폐 유동성 분석', cryptoArbitrage: '차익 거래 스캐너', cryptoArbitrageDesc: '100개 이상의 거래소 가격 비교', forexAnalyzer: '외환 분석기', forexAnalyzerDesc: '통화쌍 분석 및 신호' },
+      hi: { cryptoAnalyzer: 'तरलता विश्लेषक', cryptoAnalyzerDesc: 'उन्नत क्रिप्टो तरलता विश्लेषण', cryptoArbitrage: 'आर्बिट्रेज स्कैनर', cryptoArbitrageDesc: '100+ एक्सचेंजों में मूल्य तुलना', forexAnalyzer: 'फॉरेक्स विश्लेषक', forexAnalyzerDesc: 'मुद्रा जोड़ी विश्लेषण और संकेत' },
+      nl: { cryptoAnalyzer: 'Liquiditeitsanalysator', cryptoAnalyzerDesc: 'Geavanceerde crypto-liquiditeitsanalyse', cryptoArbitrage: 'Arbitrage Scanner', cryptoArbitrageDesc: 'Prijsvergelijking over 100+ beurzen', forexAnalyzer: 'Forex Analysator', forexAnalyzerDesc: 'Valutapaaranalyse en signalen' },
+      pl: { cryptoAnalyzer: 'Analizator Płynności', cryptoAnalyzerDesc: 'Zaawansowana analiza płynności kryptowalut', cryptoArbitrage: 'Skaner Arbitrażowy', cryptoArbitrageDesc: 'Porównanie cen na 100+ giełdach', forexAnalyzer: 'Analizator Forex', forexAnalyzerDesc: 'Analiza par walutowych i sygnały' },
+      th: { cryptoAnalyzer: 'เครื่องวิเคราะห์สภาพคล่อง', cryptoAnalyzerDesc: 'การวิเคราะห์สภาพคล่องของคริปโตขั้นสูง', cryptoArbitrage: 'สแกนเนอร์อาร์บิทราจ', cryptoArbitrageDesc: 'เปรียบเทียบราคาในกว่า 100 แพลตฟอร์ม', forexAnalyzer: 'วิเคราะห์ฟอเร็กซ์', forexAnalyzerDesc: 'วิเคราะห์คู่สกุลเงินและสัญญาณ' },
+      vi: { cryptoAnalyzer: 'Trình Phân Tích Thanh Khoản', cryptoAnalyzerDesc: 'Phân tích thanh khoản tiền điện tử nâng cao', cryptoArbitrage: 'Máy Quét Chênh Lệch Giá', cryptoArbitrageDesc: 'So sánh giá trên 100+ sàn giao dịch', forexAnalyzer: 'Phân Tích Forex', forexAnalyzerDesc: 'Phân tích cặp tiền tệ và tín hiệu' },
+      id: { cryptoAnalyzer: 'Penganalisis Likuiditas', cryptoAnalyzerDesc: 'Analisis likuiditas kripto tingkat lanjut', cryptoArbitrage: 'Pemindai Arbitrase', cryptoArbitrageDesc: 'Perbandingan harga di 100+ bursa', forexAnalyzer: 'Penganalisis Forex', forexAnalyzerDesc: 'Analisis pasangan mata uang dan sinyal' },
+      uk: { cryptoAnalyzer: 'Аналізатор Ліквідності', cryptoAnalyzerDesc: 'Розширений аналіз криптовалютної ліквідності', cryptoArbitrage: 'Арбітражний Сканер', cryptoArbitrageDesc: 'Порівняння цін на 100+ біржах', forexAnalyzer: 'Аналізатор Форекс', forexAnalyzerDesc: 'Аналіз валютних пар і сигнали' },
+      fa: { cryptoAnalyzer: 'تحلیلگر نقدینگی', cryptoAnalyzerDesc: 'تحلیل پیشرفته نقدینگی ارزهای دیجیتال', cryptoArbitrage: 'اسکنر آربیتراژ', cryptoArbitrageDesc: 'مقایسه قیمت در بیش از ۱۰۰ صرافی', forexAnalyzer: 'تحلیلگر فارکس', forexAnalyzerDesc: 'تحلیل جفت ارزها و سیگنال‌ها' },
+      he: { cryptoAnalyzer: 'נתח נזילות', cryptoAnalyzerDesc: 'ניתוח נזילות קריפטו מתקדם', cryptoArbitrage: 'סורק ארביטראז\'', cryptoArbitrageDesc: 'השוואת מחירים ב-100+ בורסות', forexAnalyzer: 'מנתח פורקס', forexAnalyzerDesc: 'ניתוח זוגות מטבע ואותות' },
+      fi: { cryptoAnalyzer: 'Likviditeettianalysaattori', cryptoAnalyzerDesc: 'Edistynyt kryptojen likviditeettianalyysi', cryptoArbitrage: 'Arbitraasiskanneri', cryptoArbitrageDesc: 'Hintavertailu yli 100 pörssissä', forexAnalyzer: 'Forex-analysaattori', forexAnalyzerDesc: 'Valuuttaparien analyysi ja signaalit' },
+      ro: { cryptoAnalyzer: 'Analizor de Lichiditate', cryptoAnalyzerDesc: 'Analiza avansată a lichidității', cryptoArbitrage: 'Scanner de Arbitraj', cryptoArbitrageDesc: 'Comparare prețuri pe 100+ burse', forexAnalyzer: 'Analizor Forex', forexAnalyzerDesc: 'Analiză perechi valutare și semnale' },
+      el: { cryptoAnalyzer: 'Αναλυτής Ρευστότητας', cryptoAnalyzerDesc: 'Προηγμένη ανάλυση ρευστότητας κρυπτονομισμάτων', cryptoArbitrage: 'Σαρωτής Αρμπιτράζ', cryptoArbitrageDesc: 'Σύγκριση τιμών σε 100+ ανταλλακτήρια', forexAnalyzer: 'Αναλυτής Forex', forexAnalyzerDesc: 'Ανάλυση ζευγών νομισμάτων και σήματα' },
+      hu: { cryptoAnalyzer: 'Likviditás Elemző', cryptoAnalyzerDesc: 'Fejlett kripto likviditás elemzés', cryptoArbitrage: 'Arbitrázs Szkenner', cryptoArbitrageDesc: 'Árösszehasonlítás 100+ tőzsdén', forexAnalyzer: 'Forex Elemző', forexAnalyzerDesc: 'Devizapár elemzés és jelzések' },
+      sv: { cryptoAnalyzer: 'Likviditetsanalysator', cryptoAnalyzerDesc: 'Avancerad krypto likviditetsanalys', cryptoArbitrage: 'Arbitrageskanner', cryptoArbitrageDesc: 'Prisjämförelse på 100+ börser', forexAnalyzer: 'Forex-analysator', forexAnalyzerDesc: 'Valutaparanalys och signaler' },
+      cs: { cryptoAnalyzer: 'Analyzátor Likvidity', cryptoAnalyzerDesc: 'Pokročilá analýza krypto likvidity', cryptoArbitrage: 'Arbitrážní Skener', cryptoArbitrageDesc: 'Porovnání cen na 100+ burzách', forexAnalyzer: 'Forex Analyzátor', forexAnalyzerDesc: 'Analýza měnových párů a signály' },
+      ms: { cryptoAnalyzer: 'Penganalisis Kecairan', cryptoAnalyzerDesc: 'Analisis kecairan kripto lanjutan', cryptoArbitrage: 'Pengimbas Arbitraj', cryptoArbitrageDesc: 'Perbandingan harga di 100+ bursa', forexAnalyzer: 'Penganalisis Forex', forexAnalyzerDesc: 'Analisis pasangan mata wang dan isyarat' },
+      bn: { cryptoAnalyzer: 'তারল্য বিশ্লেষক', cryptoAnalyzerDesc: 'উন্নত ক্রিপ্টো তারল্য বিশ্লেষণ', cryptoArbitrage: 'আর্বিট্রেজ স্ক্যানার', cryptoArbitrageDesc: '১০০+ এক্সচেঞ্জে মূল্য তুলনা', forexAnalyzer: 'ফরেক্স বিশ্লেষক', forexAnalyzerDesc: 'মুদ্রা জোড়া বিশ্লেষণ ও সংকেত' },
+      sw: { cryptoAnalyzer: 'Mchambuzi wa Ukwasi', cryptoAnalyzerDesc: 'Uchambuzi wa hali ya juu wa ukwasi wa crypto', cryptoArbitrage: 'Kichunguzi cha Arbitrage', cryptoArbitrageDesc: 'Ulinganisho wa bei katika masoko 100+', forexAnalyzer: 'Mchambuzi wa Forex', forexAnalyzerDesc: 'Uchambuzi wa jozi za sarafu na ishara' }
     };
     for (let k in T) {
       Object.assign(T[k], analyzerLangs[k] || analyzerLangs.en);
@@ -6899,8 +7119,8 @@
     function setLang(c) { cLang = c; localStorage.setItem('lang', c); closeDD(); applyLang() }
     function buildLM() { $('lMenu').innerHTML = LANGS.map(l => `<div class="ddi ${l.c === cLang ? 'active' : ''}" data-lang="${l.c}" onclick="setLang('${l.c}')"><span class="flag">${l.f}</span><span>${l.l}</span><i class="fas fa-check ck"></i></div>`).join('') }
     function buildNS() { $('netSel').innerHTML = `<option value="all">${t('allNetworks')}</option>` + NETS.map(n => `<option value="${n.id}">${n.i} ${n.n}</option>`).join('') }
-    function toggleDD(id) { const dd = $(id); const m = dd.querySelector('.ddm') || dd.querySelector('.stats-panel'); if (!m) return; const w = m.classList.contains('active'); closeDD(); if (!w) { m.classList.add('active'); if(id==='statsDd'){const hb=dd.querySelector('.nav-hamburger');if(hb)hb.classList.add('active');} } }
-    function closeDD() { document.querySelectorAll('.ddm,.stats-panel').forEach(m => m.classList.remove('active')); document.querySelectorAll('.nav-hamburger').forEach(h=>h.classList.remove('active')) }
+    function toggleDD(id) { const dd = $(id); const m = dd.querySelector('.ddm') || dd.querySelector('.stats-panel'); if (!m) return; const w = m.classList.contains('active'); closeDD(); if (!w) { m.classList.add('active'); if (id === 'statsDd') { const hb = dd.querySelector('.nav-hamburger'); if (hb) hb.classList.add('active'); } } }
+    function closeDD() { document.querySelectorAll('.ddm,.stats-panel').forEach(m => m.classList.remove('active')); document.querySelectorAll('.nav-hamburger').forEach(h => h.classList.remove('active')) }
     function navTo(section) { closeDD(); swTab(section); setTimeout(() => { const el = $('tab_' + section); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 100); if (section === 'crypto' && $('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length ? allC.length.toLocaleString() : '--' }
     document.addEventListener('click', e => { if (!e.target.closest('.dropdown')) closeDD() });
     document.addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSrch() } if (e.key === 'Escape') { closeSrch(); closeDD(); closeMod(); document.querySelectorAll('.legal-modal.active').forEach(m => m.classList.remove('active')) } });
@@ -8439,12 +8659,12 @@
           gsw.style.background = 'var(--bg1)';
           gsw.style.borderBottom = '1px solid var(--bc)';
           gsw.style.zIndex = '9998';
-          if(btn) btn.classList.add('active-search');
+          if (btn) btn.classList.add('active-search');
           $('gsInput').focus();
         } else {
           gsw.classList.add('hidden');
           gsw.removeAttribute('style');
-          if(btn) btn.classList.remove('active-search');
+          if (btn) btn.classList.remove('active-search');
         }
       }
     }
@@ -8463,7 +8683,7 @@
           e.preventDefault();
           const gsi = $('gsInput');
           if (gsi) {
-              if (document.querySelector('.gs-wrap').classList.contains('hidden')) {
+            if (document.querySelector('.gs-wrap').classList.contains('hidden')) {
               toggleMobileSearch();
             } else {
               gsi.focus();
@@ -8481,7 +8701,7 @@
           closeSrch();
           gsw.classList.add('hidden');
           gsw.removeAttribute('style');
-          if(searchBtn) searchBtn.classList.remove('active-search');
+          if (searchBtn) searchBtn.classList.remove('active-search');
         }
       });
     });

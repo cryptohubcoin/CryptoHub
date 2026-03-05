@@ -4,57 +4,72 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
   <url>
-    <loc>https://cryptohubcoin.com/</loc>
+    <loc>https://www.cryptohubcoin.com/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cryptohubcoin.com/"/>
-    <xhtml:link rel="alternate" hreflang="ar"        href="https://cryptohubcoin.com/?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="zh"        href="https://cryptohubcoin.com/"/>
-    <xhtml:link rel="alternate" hreflang="es"        href="https://cryptohubcoin.com/"/>
-    <xhtml:link rel="alternate" hreflang="fr"        href="https://cryptohubcoin.com/"/>
-    <xhtml:link rel="alternate" hreflang="de"        href="https://cryptohubcoin.com/"/>
-    <xhtml:link rel="alternate" hreflang="ru"        href="https://cryptohubcoin.com/"/>
-    <xhtml:link rel="alternate" hreflang="tr"        href="https://cryptohubcoin.com/"/>
-    <xhtml:link rel="alternate" hreflang="ja"        href="https://cryptohubcoin.com/"/>
-    <xhtml:link rel="alternate" hreflang="ko"        href="https://cryptohubcoin.com/"/>
-    <xhtml:link rel="alternate" hreflang="pt"        href="https://cryptohubcoin.com/"/>
-    <xhtml:link rel="alternate" hreflang="hi"        href="https://cryptohubcoin.com/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://www.cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://www.cryptohubcoin.com/?lang=ar"/>
+    <xhtml:link rel="alternate" hreflang="zh"        href="https://www.cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="es"        href="https://www.cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr"        href="https://www.cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="de"        href="https://www.cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="ru"        href="https://www.cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="tr"        href="https://www.cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="ja"        href="https://www.cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="ko"        href="https://www.cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="pt"        href="https://www.cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="hi"        href="https://www.cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cryptohubcoin.com/"/>
     <image:image>
-      <image:loc>https://cryptohubcoin.com/logo.png</image:loc>
+      <image:loc>https://www.cryptohubcoin.com/logo.png</image:loc>
       <image:title>CryptoHub - Cryptocurrency Tracker</image:title>
       <image:caption>Free real-time crypto tracker for 5000+ coins with AI analysis</image:caption>
     </image:image>
   </url>
 
   <url>
-    <loc>https://cryptohubcoin.com/crypto-analyzer</loc>
+    <loc>https://www.cryptohubcoin.com/crypto-analyzer</loc>
     <lastmod>2026-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cryptohubcoin.com/crypto-analyzer"/>
-    <xhtml:link rel="alternate" hreflang="ar"        href="https://cryptohubcoin.com/crypto-analyzer?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://cryptohubcoin.com/crypto-analyzer"/>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://www.cryptohubcoin.com/crypto-analyzer"/>
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://www.cryptohubcoin.com/crypto-analyzer?lang=ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cryptohubcoin.com/crypto-analyzer"/>
     <image:image>
-      <image:loc>https://cryptohubcoin.com/logo.png</image:loc>
+      <image:loc>https://www.cryptohubcoin.com/logo.png</image:loc>
       <image:title>CryptoHub AI Crypto Analyzer</image:title>
       <image:caption>محلل الكريبتو بالذكاء الاصطناعي - AI-powered crypto analysis tool</image:caption>
     </image:image>
   </url>
 
   <url>
-    <loc>https://cryptohubcoin.com/crypto-arbitrage</loc>
+    <loc>https://www.cryptohubcoin.com/crypto-arbitrage</loc>
     <lastmod>2026-02-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cryptohubcoin.com/crypto-arbitrage"/>
-    <xhtml:link rel="alternate" hreflang="ar"        href="https://cryptohubcoin.com/crypto-arbitrage?lang=ar"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://cryptohubcoin.com/crypto-arbitrage"/>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://www.cryptohubcoin.com/crypto-arbitrage"/>
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://www.cryptohubcoin.com/crypto-arbitrage?lang=ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cryptohubcoin.com/crypto-arbitrage"/>
     <image:image>
-      <image:loc>https://cryptohubcoin.com/logo.png</image:loc>
+      <image:loc>https://www.cryptohubcoin.com/logo.png</image:loc>
       <image:title>CryptoHub Crypto Arbitrage Scanner</image:title>
       <image:caption>ماسح الآربيتراج - Real-time crypto arbitrage scanner across 100+ exchanges</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://www.cryptohubcoin.com/forex-analyzer</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en"        href="https://www.cryptohubcoin.com/forex-analyzer"/>
+    <xhtml:link rel="alternate" hreflang="ar"        href="https://www.cryptohubcoin.com/forex-analyzer?lang=ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cryptohubcoin.com/forex-analyzer"/>
+    <image:image>
+      <image:loc>https://www.cryptohubcoin.com/logo.png</image:loc>
+      <image:title>CryptoHub Forex AI Analyzer</image:title>
+      <image:caption>محلل فوركس بالذكاء الاصطناعي - AI-powered forex analysis for currency pairs, gold and oil</image:caption>
     </image:image>
   </url>
 

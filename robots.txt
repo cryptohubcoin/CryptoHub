@@ -1,9 +1,10 @@
 # robots.txt - CryptoHub
-# https://cryptohubcoin.com/
+# https://www.cryptohubcoin.com/
 
 User-agent: *
 Allow: /
 Disallow: /cdn-cgi/
+Disallow: /*.json$
 Crawl-delay: 1
 
 # Google
@@ -46,4 +47,4 @@ User-agent: MJ12bot
 Disallow: /
 
 # Sitemap
-Sitemap: https://cryptohubcoin.com/sitemap.xml
+Sitemap: https://www.cryptohubcoin.com/sitemap.xml

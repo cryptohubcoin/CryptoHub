@@ -31,36 +31,7 @@
     .nav-links a{color:var(--t2);text-decoration:none;font-size:13px;font-weight:600;padding:7px 12px;border-radius:8px;transition:all .2s}
     .nav-links a:hover{background:var(--bg2);color:var(--t1)}
     
-    /* Lang dropdown */
-    .nav-lang-wrap { position:relative; }
-    .nav-lang-btn {
-      display:flex; align-items:center; gap:5px;
-      background:var(--bg2); border:1px solid var(--bc);
-      border-radius:9px; padding:6px 11px; cursor:pointer;
-      color:var(--t1); font-family:inherit; font-size:13px; font-weight:700;
-      transition:border-color .2s;
-    }
-    .nav-lang-btn:hover { border-color:var(--ac); }
-    .ddm {
-      position:absolute; top:calc(100% + 8px); left:0;
-      background:var(--bg2); border:1px solid var(--bc);
-      border-radius:12px; min-width:185px; z-index:300;
-      box-shadow:0 8px 32px #00000070;
-      max-height:300px; overflow-y:auto; padding:6px;
-      display:none;
-    }
-    .nav-lang-wrap.open .ddm { display:block; }
-    .ddi {
-      display:flex; align-items:center; gap:9px;
-      padding:8px 11px; border-radius:8px;
-      cursor:pointer; font-size:13px; color:var(--t2); transition:all .15s;
-    }
-    .ddi:hover { background:var(--bg3); color:var(--t1); }
-    .ddi.active { color:var(--ac); font-weight:700; }
-    .flag { font-size:15px; }
-    .ck { margin-right:auto; opacity:0; font-size:10px; color:var(--ac); }
-    .ddi.active .ck { opacity:1; }
-
+    
     .article-wrap{max-width:800px;margin:0 auto;padding:48px 24px 80px}
     .article-tag{display:inline-flex;align-items:center;gap:6px;background:#22c55e20;color:#22c55e;border:1px solid #22c55e30;border-radius:20px;padding:4px 14px;font-size:12px;font-weight:700;text-transform:uppercase;margin-bottom:20px}
     h1{font-size:clamp(24px,4vw,42px);font-weight:900;line-height:1.2;margin-bottom:16px;color:var(--t1)}
@@ -111,11 +82,7 @@
       <a href="/glossary" data-i18n="glossaryNav">Glossary</a>
       <a href="/about" data-i18n="aboutNav">About</a>
     </div>
-    <div class="nav-lang-wrap" id="langDd" onclick="this.classList.toggle('open');event.stopPropagation()">
-          <button class="nav-lang-btn"><span id="cFlag">🇬🇧</span><span id="cCode" style="font-size:10px;font-weight:700">EN</span><i class="fas fa-chevron-down" style="font-size:8px;opacity:.6"></i></button>
-          <div class="ddm" id="lMenu"></div>
-        </div>
-  </nav>
+    </nav>
 
   <div class="article-wrap">
     <div class="article-tag"><i class="fas fa-university"></i> DeFi</div>
@@ -210,8 +177,9 @@
     <p data-i18n="disclaimer">© 2025 CryptoHub — Not financial advice. Always do your own research (DYOR).</p>
   </footer>
 
+
 <script>
-    // ── CryptoHub i18n (same system as main site) ──────────────────────
+    // ── CryptoHub i18n — auto-sync with main site language ──────────────
     const LANGS = [{ c: 'ar', f: '🇸🇦', l: 'العربية', d: 'rtl' }, { c: 'en', f: '🇬🇧', l: 'English', d: 'ltr' }, { c: 'zh', f: '🇨🇳', l: '中文', d: 'ltr' }, { c: 'es', f: '🇪🇸', l: 'Español', d: 'ltr' }, { c: 'pt', f: '🇧🇷', l: 'Português', d: 'ltr' }, { c: 'fr', f: '🇫🇷', l: 'Français', d: 'ltr' }, { c: 'de', f: '🇩🇪', l: 'Deutsch', d: 'ltr' }, { c: 'it', f: '🇮🇹', l: 'Italiano', d: 'ltr' }, { c: 'ru', f: '🇷🇺', l: 'Русский', d: 'ltr' }, { c: 'tr', f: '🇹🇷', l: 'Türkçe', d: 'ltr' }, { c: 'ja', f: '🇯🇵', l: '日本語', d: 'ltr' }, { c: 'ko', f: '🇰🇷', l: '한국어', d: 'ltr' }, { c: 'hi', f: '🇮🇳', l: 'हिन्दी', d: 'ltr' }, { c: 'nl', f: '🇳🇱', l: 'Nederlands', d: 'ltr' }, { c: 'pl', f: '🇵🇱', l: 'Polski', d: 'ltr' }, { c: 'th', f: '🇹🇭', l: 'ไทย', d: 'ltr' }, { c: 'vi', f: '🇻🇳', l: 'Tiếng Việt', d: 'ltr' }, { c: 'id', f: '🇮🇩', l: 'Bahasa Indonesia', d: 'ltr' }, { c: 'uk', f: '🇺🇦', l: 'Українська', d: 'ltr' }, { c: 'cs', f: '🇨🇿', l: 'Čeština', d: 'ltr' }, { c: 'ro', f: '🇷🇴', l: 'Română', d: 'ltr' }, { c: 'el', f: '🇬🇷', l: 'Ελληνικά', d: 'ltr' }, { c: 'sv', f: '🇸🇪', l: 'Svenska', d: 'ltr' }, { c: 'da', f: '🇩🇰', l: 'Dansk', d: 'ltr' }, { c: 'fi', f: '🇫🇮', l: 'Suomi', d: 'ltr' }, { c: 'ms', f: '🇲🇾', l: 'Bahasa Melayu', d: 'ltr' }, { c: 'fa', f: '🇮🇷', l: 'فارسی', d: 'rtl' }, { c: 'bn', f: '🇧🇩', l: 'বাংলা', d: 'ltr' }, { c: 'sw', f: '🇰🇪', l: 'Kiswahili', d: 'ltr' }];
     const _itI18n = {
       ar: { itAbout: 'عن المنصة', itLearn: 'تعلم الكريبتو', itFaq: 'الأسئلة الشائعة', itContact: 'تواصل معنا', itAboutTitle: 'CryptoHub — منصتك الشاملة للعملات الرقمية', itAboutDesc: 'منصة مجانية تُقدّم بيانات لحظية لأكثر من 5000 عملة رقمية، مدعومة بأدوات تحليل ذكية وواجهة متعددة اللغات. هدفنا توفير معلومات دقيقة تساعدك على اتخاذ قرارات مستنيرة في سوق الكريبتو.', itF1Title: 'بيانات لحظية موثوقة', itF1Desc: 'من Binance وBybit وMEXC والمزيد في الوقت الفعلي', itF2Title: 'تحليل بالذكاء الاصطناعي', itF2Desc: 'مساعد "Ask" يحلل السوق ويجيب عن استفساراتك فوراً', itF3Title: 'المعادن والأسهم', itF3Desc: 'الذهب والفضة والبلاتين والأسهم وETF في مكان واحد', itF4Title: '30+ لغة', itF4Desc: 'واجهة متعددة اللغات تدعم العربية والإنجليزية والمزيد', itLearnTitle: 'دليلك التعليمي في عالم الكريبتو', itTagBeginner: 'مبتدئ', itTagAnalysis: 'تحليل', itTagAdvanced: 'متقدم', itTagExchanges: 'منصات', itTagInvest: 'استثمار', itTagSecurity: 'أمان', itA1Title: 'ما هو البيتكوين؟', itA1Body: 'البيتكوين (BTC) أول عملة رقمية لامركزية، أُطلقت 2009. يعتمد على البلوكتشين لتسجيل المعاملات بأمان وشفافية. حده الأقصى 21 مليون وحدة مما يجعله أصلاً نادراً ذا قيمة متنامية.', itA2Title: 'مؤشر الخوف والجشع', itA2Body: 'يقيس مشاعر المتداولين من 0 (خوف شديد) إلى 100 (جشع شديد). القيم المنخفضة تشير لفرص شراء محتملة، والمرتفعة تستوجب الحذر. استخدمه مع مؤشرات أخرى لاتخاذ قرارات أفضل.', itA3Title: 'موسم الألتكوين', itA3Body: 'فترة تتفوق فيها العملات البديلة على البيتكوين في الأداء. يُقاس بمؤشر يحسب نسبة العملات التي تجاوزت BTC خلال 90 يوماً. فوق 75 = موسم ألتكوين، دون 25 = موسم بيتكوين.', itA4Title: 'اختيار منصة التداول', itA4Body: 'قيّم المنصة بناءً على: الأمان والترخيص، رسوم التداول، تنوع العملات، سهولة الاستخدام، وجودة الدعم. Binance الأكبر عالمياً، وBybit وMEXC ممتازتان للمتداولين المتقدمين.', itA5Title: 'الذهب مقابل البيتكوين', itA5Body: 'الذهب الملاذ الكلاسيكي الآمن بتاريخ آلاف السنين. البيتكوين "الذهب الرقمي" الحديث بعرض محدود ولامركزية تامة. كلاهما يُكمّل الآخر في المحفظة الاستثمارية المتوازنة.', itA6Title: 'حماية عملاتك الرقمية', itA6Body: 'استخدم محافظ باردة للمبالغ الكبيرة، فعّل المصادقة الثنائية (2FA)، لا تشارك مفاتيحك الخاصة أبداً، وتحقق دائماً من عناوين المواقع قبل إدخال بياناتك.', itFaqTitle: 'الأسئلة الشائعة', itQ1: 'هل بيانات الأسعار دقيقة ومحدّثة؟', itA1Faq: 'نعم، نحصل على البيانات مباشرة من Binance وBybit وMEXC وGate.io وOKX وتتحدث كل ثوانٍ. قد تظهر فروقات بسيطة بين المنصات بسبب اختلاف السيولة.', itQ2: 'هل يمكنني التداول مباشرة من الموقع؟', itA2Faq: 'لا، CryptoHub منصة تتبع وتحليل فقط. للتداول الفعلي افتح حساباً في Binance أو Bybit أو MEXC عبر روابطنا المباشرة في قسم المنصات.', itQ3: 'كم عدد العملات المتاحة؟', itA3Faq: 'أكثر من 5000 عملة رقمية، بالإضافة إلى المعادن الثمينة (ذهب، فضة، بلاتين، بلاديوم) والأسهم وصناديق ETF. القائمة تُحدَّث باستمرار.', itQ4: 'هل الموقع مجاني ويحتاج تسجيل؟', itA4Faq: 'مجاني بالكامل ولا يحتاج تسجيل. كل الميزات متاحة فور فتح الموقع: أسعار لحظية، تحليلات، مؤشرات السوق، والمساعد الذكي.', itQ5: 'كيف أتواصل مع فريق الدعم؟', itA5Faq: 'تواصل معنا عبر تيليغرام: <a href="https://t.me/cryptoHubcrypto1" target="_blank" rel="noopener" style="color:var(--ac);font-weight:700">@cryptoHubcrypto1</a>', itContactTitle: 'تواصل مع فريق CryptoHub', itContactDesc: 'سؤال، اقتراح، أو مشكلة تقنية؟ فريقنا جاهز لمساعدتك.', itContactTg: 'تيليغرام', itContactWeb: 'الموقع', itContactNote: 'ملاحظة: CryptoHub منصة مستقلة لتتبع الأسعار وليست منصة تداول. لا تشارك بيانات محفظتك أو مفاتيحك الخاصة مع أي جهة.' },
@@ -383,43 +351,56 @@
       es: { itAbout: 'Acerca de', itLearn: 'Aprende Crypto', itFaq: 'Preguntas Frecuentes', itContact: 'Contáctanos', itAboutTitle: 'CryptoHub — Tu Plataforma Cripto Completa', itAboutDesc: 'Plataforma gratuita con datos en tiempo real de 5000+ criptomonedas, potenciada con herramientas de análisis inteligentes e interfaz multilingüe. Nuestro objetivo es ofrecerte información precisa para decisiones informadas.', itF1Title: 'Datos en Tiempo Real', itF1Desc: 'De Binance, Bybit, MEXC y más en tiempo real', itF2Title: 'Análisis con IA', itF2Desc: 'El asistente "Ask" analiza el mercado y responde tus preguntas al instante', itF3Title: 'Metales y Acciones', itF3Desc: 'Oro, plata, platino, acciones y ETFs en un solo lugar', itF4Title: '30+ Idiomas', itF4Desc: 'Interfaz multilingüe que soporta árabe, inglés, español y más', itLearnTitle: 'Tu Guía de Aprendizaje Cripto', itTagBeginner: 'Principiante', itTagAnalysis: 'Análisis', itTagAdvanced: 'Avanzado', itTagExchanges: 'Exchanges', itTagInvest: 'Inversión', itTagSecurity: 'Seguridad', itA1Title: '¿Qué es Bitcoin?', itA1Body: 'Bitcoin (BTC) es la primera moneda digital descentralizada, lanzada en 2009. Usa blockchain para registrar transacciones de forma segura. Con un límite de 21 millones de unidades, es un activo escaso y apreciado.', itA2Title: 'Índice Miedo y Codicia', itA2Body: 'Mide el sentimiento de los traders de 0 (miedo extremo) a 100 (codicia extrema). Valores bajos pueden señalar oportunidades de compra; altos sugieren precaución. Úsalo con otros indicadores.', itA3Title: 'Temporada Altcoin', itA3Body: 'Período en que las altcoins superan a Bitcoin. Se mide por cuántas monedas top superaron a BTC en 90 días. Por encima de 75 = Temporada Altcoin, debajo de 25 = Temporada Bitcoin.', itA4Title: 'Elegir Exchange', itA4Body: 'Evalúa por: seguridad y licencia, comisiones, variedad de monedas, facilidad de uso y calidad de soporte. Binance es la mayor; Bybit y MEXC son excelentes para traders avanzados.', itA5Title: 'Oro vs Bitcoin', itA5Body: 'El oro es el refugio seguro clásico con milenios de historia. Bitcoin es el moderno "oro digital" con oferta fija y total descentralización. Ambos se complementan en una cartera equilibrada.', itA6Title: 'Protege tu Cripto', itA6Body: 'Usa hardware wallets para grandes cantidades, activa 2FA, nunca compartas claves privadas y siempre verifica las URLs antes de ingresar datos.', itFaqTitle: 'Preguntas Frecuentes', itQ1: '¿Son precisos y actualizados los datos de precios?', itA1Faq: 'Sí, datos directamente de Binance, Bybit, MEXC, Gate.io y OKX, actualizados cada pocos segundos. Las pequeñas diferencias entre plataformas son normales por la liquidez.', itQ2: '¿Puedo operar directamente desde el sitio?', itA2Faq: 'No, CryptoHub es solo una plataforma de seguimiento y análisis. Para operar, abre cuenta en Binance, Bybit o MEXC mediante nuestros enlaces directos.', itQ3: '¿Cuántas monedas están disponibles?', itA3Faq: 'Más de 5000 criptomonedas, más metales preciosos (oro, plata, platino, paladio), acciones y ETFs. La lista se actualiza continuamente.', itQ4: '¿Es gratuito y necesita registro?', itA4Faq: 'Completamente gratuito sin registro. Todas las funciones disponibles de inmediato: precios en vivo, análisis, indicadores de mercado y asistente de IA.', itQ5: '¿Cómo contacto al soporte?', itA5Faq: 'Contáctanos por Telegram: <a href="https://t.me/cryptoHubcrypto1" target="_blank" rel="noopener" style="color:var(--ac);font-weight:700">@cryptoHubcrypto1</a>', itContactTitle: 'Contacta al Equipo CryptoHub', itContactDesc: '¿Pregunta, sugerencia o problema técnico? Nuestro equipo está listo para ayudarte.', itContactTg: 'Telegram', itContactWeb: 'Sitio Web', itContactNote: 'Nota: CryptoHub es una plataforma independiente de seguimiento de precios, no un exchange. Nunca compartas tus datos de billetera o claves privadas con nadie.' }
     }
 
-    let cLang = localStorage.getItem('lang') || 'en';
+    (function() {
+      // Read language set by main site — default to 'en'
+      var cLang = localStorage.getItem('lang') || 'en';
 
-    function t(k) { return (T[cLang] && T[cLang][k]) || T.en[k] || k }
+      function t(k) { return (T[cLang] && T[cLang][k]) || T.en[k] || k; }
 
-    function applyLang() {
-      // Merge _itI18n and analyzerLangs into T (same as main site)
-      if (typeof T !== 'undefined') {
-        Object.keys(T).forEach(l => { Object.assign(T[l], _itI18n[l] || _itI18n.en); });
-        Object.keys(T).forEach(l => { Object.assign(T[l], analyzerLangs[l] || analyzerLangs.en); });
+      function applyLang() {
+        // Merge extra translation sets (same as main site)
+        Object.keys(T).forEach(function(l) {
+          Object.assign(T[l], _itI18n[l] || _itI18n.en);
+          Object.assign(T[l], analyzerLangs[l] || analyzerLangs.en);
+        });
+
+        var l = LANGS.find(function(x){ return x.c === cLang; }) || LANGS[1];
+        document.documentElement.lang = l.c;
+        document.documentElement.dir  = l.d;
+
+        // Translate all data-i18n elements
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          var v = t(el.getAttribute('data-i18n'));
+          if (!v || v === el.getAttribute('data-i18n')) return;
+          if (el.childElementCount > 0) {
+            for (var i = 0; i < el.childNodes.length; i++) {
+              var n = el.childNodes[i];
+              if (n.nodeType === 3 && n.textContent.trim()) { n.textContent = v; break; }
+            }
+          } else { el.textContent = v; }
+        });
+
+        document.querySelectorAll('[data-i18n-ph]').forEach(function(el) {
+          var v = t(el.getAttribute('data-i18n-ph')); if(v) el.placeholder = v;
+        });
+
+        document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+          var v = t(el.getAttribute('data-i18n-html')); if(v) el.innerHTML = v;
+        });
       }
-      const l = LANGS.find(x => x.c === cLang) || LANGS[1];
-      document.documentElement.lang = l.c;
-      document.documentElement.dir = l.d;
-      // Apply text translations
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const v = t(el.getAttribute('data-i18n'));
-        if (!v || v === el.getAttribute('data-i18n')) return;
-        if (el.childElementCount > 0) {
-          for (const n of el.childNodes) { if (n.nodeType === 3 && n.textContent.trim()) { n.textContent = v; break; } }
-        } else { el.textContent = v; }
+
+      // Apply on DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', applyLang);
+      } else {
+        applyLang();
+      }
+
+      // Listen for lang changes from main site (cross-tab)
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'lang') { cLang = e.newValue || 'en'; applyLang(); }
       });
-      document.querySelectorAll('[data-i18n-ph]').forEach(el => { const v = t(el.getAttribute('data-i18n-ph')); if(v) el.placeholder = v; });
-      document.querySelectorAll('[data-i18n-html]').forEach(el => { const v = t(el.getAttribute('data-i18n-html')); if(v) el.innerHTML = v; });
-      // Update lang button
-      const fl = document.getElementById('cFlag'); if(fl) fl.textContent = l.f;
-      const cd = document.getElementById('cCode'); if(cd) cd.textContent = l.c.toUpperCase();
-      document.querySelectorAll('#lMenu .ddi').forEach(i => i.classList.toggle('active', i.dataset.lang === cLang));
-    }
-
-    function setLang(c) { cLang = c; localStorage.setItem('lang', c); applyLang(); const dd = document.getElementById('langDd'); if(dd) dd.classList.remove('open'); }
-
-    function buildLM() {
-      const m = document.getElementById('lMenu'); if(!m) return;
-      m.innerHTML = LANGS.map(l => `<div class="ddi ${l.c===cLang?'active':''}" data-lang="${l.c}" onclick="setLang('${l.c}')"><span class="flag">${l.f}</span><span>${l.l}</span><i class="fas fa-check ck"></i></div>`).join('');
-    }
-
-    document.addEventListener('DOMContentLoaded', () => { buildLM(); applyLang(); });
+    })();
     // ────────────────────────────────────────────────────────────────────
     </script>
 </body>

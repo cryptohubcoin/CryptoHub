@@ -8043,6 +8043,7 @@
     function closeDD() { document.querySelectorAll('.ddm,.stats-panel').forEach(m => m.classList.remove('active')); document.querySelectorAll('.nav-hamburger').forEach(h => h.classList.remove('active')) }
     function navTo(section) { closeDD(); swTab(section); setTimeout(() => { const el = $('tab_' + section); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 100); if (section === 'crypto' && $('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length ? allC.length.toLocaleString() : '--' }
     document.addEventListener('click', e => { if (!e.target.closest('.dropdown')) closeDD() });
+    document.addEventListener('touchstart', e => { if (!e.target.closest('.dropdown')) closeDD() }, {passive: true});
     document.addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSrch() } if (e.key === 'Escape') { closeSrch(); closeDD(); closeMod(); document.querySelectorAll('.legal-modal.active').forEach(m => m.classList.remove('active')) } });
     function toggleTheme() { const d = document.documentElement.classList.toggle('dark'); $('sI').classList.toggle('hidden', d); $('mI').classList.toggle('hidden', !d); localStorage.setItem('theme', d ? 'dark' : 'light') }
     if (localStorage.getItem('theme') === 'dark') { document.documentElement.classList.add('dark'); $('sI').classList.add('hidden'); $('mI').classList.remove('hidden') }
@@ -13358,7 +13359,7 @@
     }
 
     // ===== TAB SYSTEM =====
-    function swTab(t) {
+    function swTab(t) { closeDD();
       document.querySelectorAll('.mtab').forEach((b, i) => b.classList.toggle('active', ['crypto', 'exchanges', 'commodities', 'stocks'][i] === t));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       const el = $('tab_' + t); if (el) el.classList.add('active');

@@ -3,47 +3,39 @@
 
 <head>
   <script>
-    // Force www + https redirect, preserve path only (strip ?lang= params)
-    (function() {
-      var h = window.location.hostname;
-      var proto = window.location.protocol;
-      // Redirect non-www or non-https to canonical www+https
-      if (h === 'cryptohubcoin.com' || proto === 'http:') {
-        window.location.replace('https://www.cryptohubcoin.com' + window.location.pathname);
-        return;
-      }
-      // Clean ?lang= from URL bar without reload (replaceState)
-      if (window.location.search && window.history && window.history.replaceState) {
-        var cleanUrl = 'https://www.cryptohubcoin.com' + window.location.pathname;
-        window.history.replaceState(null, '', cleanUrl);
-      }
-    })();
+    // Force www redirect
+    if (window.location.hostname === 'cryptohubcoin.com') {
+      window.location.replace('https://www.cryptohubcoin.com' + window.location.pathname + window.location.search + window.location.hash);
+    }
   </script>
   <script>
-    (function() {
+    (function () {
       var saved = localStorage.getItem('lang');
       if (!saved) {
         saved = 'en';
         localStorage.setItem('lang', 'en');
       }
-      var rtlLangs = ['ar','fa','he','ur'];
+      var rtlLangs = ['ar', 'fa', 'he', 'ur'];
       var isRTL = rtlLangs.indexOf(saved) !== -1;
       document.documentElement.lang = saved;
       document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
     })();
   </script>
   <style id="anti-flash">
-    body { visibility: hidden; }
+    body {
+      visibility: hidden;
+    }
   </style>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FTBNSF9WJT"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-FTBNSF9WJT');
   </script>
   <meta charset="UTF-8">
+  <meta name="coinzilla" content="ece6e7ce1f4971f260ea140940fb79c1" />
   <meta name="google-adsense-account" content="ca-pub-6273496386873741">
   <!-- Preconnect to critical origins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,17 +79,8 @@
     content="كريبتو هاب, cryptohub, criptohub, cryptohub.co, cryptohub.ai, cryptoglowhub, cryptohub.io, cryptocurrency hub, crypto hub, bitcohub.com, متتبع العملات الرقمية, أسعار البيتكوين, سعر الإيثيريوم, رأس مال السوق, مؤشر الخوف والجشع, موسم العملات البديلة, سعر الذهب, سعر الفضة, تحليل الكريبتو بالذكاء الاصطناعي, أسعار بينانس, محفظة العملات الرقمية, كريبتو مجاني">
   <meta name="language" content="Arabic" lang="ar">
 
-  <!-- Canonical URL — dynamic, strips ?lang= and other params -->
-  <link rel="canonical" id="canonicalTag" href="https://www.cryptohubcoin.com/">
-  <script>
-    (function() {
-      var base = 'https://www.cryptohubcoin.com';
-      var path = window.location.pathname.replace(/\/+$/, '') || '/';
-      // Strip all query params from canonical
-      var tag = document.getElementById('canonicalTag');
-      if (tag) tag.href = base + path;
-    })();
-  </script>
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://www.cryptohubcoin.com/">
 
   <!-- ============================================================ -->
   <!--  OPEN GRAPH (Facebook, WhatsApp, LinkedIn, Telegram)          -->
@@ -118,7 +101,7 @@
 
   <!-- hreflang for bilingual SEO -->
   <link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/">
-  <link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/">
+  <link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/?lang=ar">
   <link rel="alternate" hreflang="x-default" href="https://www.cryptohubcoin.com/">
 
   <!-- ============================================================ -->
@@ -5986,14 +5969,17 @@
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" href="blog">
-                  <div class="nav-ico" style="background:linear-gradient(135deg,var(--ac)22,var(--ac)11)"><i class="fas fa-newspaper" style="color:var(--ac)"></i></div>
+                  <div class="nav-ico" style="background:linear-gradient(135deg,var(--ac)22,var(--ac)11)"><i
+                      class="fas fa-newspaper" style="color:var(--ac)"></i></div>
                   <div style="flex: 1;">
                     <div class="nav-title" data-i18n="blogNav" style="display:flex;align-items:center;gap:6px;">المدونة
                       <i class="fas fa-pen-nib" style="font-size:10px;color:var(--ac)"></i>
                     </div>
-                    <div class="nav-desc" data-i18n="blogNavDesc" style="color:var(--t2)">مقالات وتحليلات سوق الكريبتو</div>
+                    <div class="nav-desc" data-i18n="blogNavDesc" style="color:var(--t2)">مقالات وتحليلات سوق الكريبتو
+                    </div>
                   </div>
-                  <span class="nav-badge" style="background:var(--ac)22;color:var(--ac);border:1px solid var(--ac)44;display:flex;align-items:center;gap:4px">
+                  <span class="nav-badge"
+                    style="background:var(--ac)22;color:var(--ac);border:1px solid var(--ac)44;display:flex;align-items:center;gap:4px">
                     <i class="fas fa-newspaper" style="font-size:8px"></i> Blog
                   </span>
                   <i class="fas fa-chevron-left nav-arrow"></i>
@@ -6412,53 +6398,76 @@
                 style="width:24px;text-align:center;font-size:18px;color:var(--t2)"></i> <span>All
                 Networks</span></button>
             <button class="cmc-mg-item" data-net="optimistic-ethereum"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/11840.png" alt="Optimism"> <span>Optimism</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/11840.png" alt="Optimism">
+              <span>Optimism</span></button>
             <button class="cmc-mg-item" data-net="avalanche"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png" alt="Avalanche"> <span>Avalanche</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png" alt="Avalanche">
+              <span>Avalanche</span></button>
             <button class="cmc-mg-item" data-net="tron"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/1958.png" alt="TRON"> <span>TRON</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/1958.png" alt="TRON">
+              <span>TRON</span></button>
             <button class="cmc-mg-item" data-net="fantom"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/3513.png" alt="Fantom"> <span>Fantom</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/3513.png" alt="Fantom">
+              <span>Fantom</span></button>
             <button class="cmc-mg-item" data-net="cronos"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" alt="Cronos"> <span>Cronos</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" alt="Cronos">
+              <span>Cronos</span></button>
             <button class="cmc-mg-item" data-net="bitcoin"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/1.png" alt="Bitcoin"> <span>Bitcoin</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/1.png" alt="Bitcoin">
+              <span>Bitcoin</span></button>
             <button class="cmc-mg-item" data-net="cardano"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png" alt="Cardano"> <span>Cardano</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png" alt="Cardano">
+              <span>Cardano</span></button>
             <button class="cmc-mg-item" data-net="polkadot"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png" alt="Polkadot"> <span>Polkadot</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png" alt="Polkadot">
+              <span>Polkadot</span></button>
             <button class="cmc-mg-item" data-net="cosmos"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" alt="Cosmos"> <span>Cosmos</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" alt="Cosmos">
+              <span>Cosmos</span></button>
             <button class="cmc-mg-item" data-net="near-protocol"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/6535.png" alt="NEAR"> <span>NEAR</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/6535.png" alt="NEAR">
+              <span>NEAR</span></button>
             <button class="cmc-mg-item" data-net="sui"><img loading="lazy" width="24" height="24"
                 src="https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png" alt="Sui"> <span>Sui</span></button>
             <button class="cmc-mg-item" data-net="aptos"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/21794.png" alt="Aptos"> <span>Aptos</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/21794.png" alt="Aptos">
+              <span>Aptos</span></button>
             <button class="cmc-mg-item" data-net="algorand"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/4030.png" alt="Algorand"> <span>Algorand</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/4030.png" alt="Algorand">
+              <span>Algorand</span></button>
             <button class="cmc-mg-item" data-net="stellar"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/512.png" alt="Stellar"> <span>Stellar</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/512.png" alt="Stellar">
+              <span>Stellar</span></button>
             <button class="cmc-mg-item" data-net="celo"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/5567.png" alt="Celo"> <span>Celo</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/5567.png" alt="Celo">
+              <span>Celo</span></button>
             <button class="cmc-mg-item" data-net="moonbeam"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/6836.png" alt="Moonbeam"> <span>Moonbeam</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/6836.png" alt="Moonbeam">
+              <span>Moonbeam</span></button>
             <button class="cmc-mg-item" data-net="kava"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/4846.png" alt="Kava"> <span>Kava</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/4846.png" alt="Kava">
+              <span>Kava</span></button>
             <button class="cmc-mg-item" data-net="osmosis"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/12220.png" alt="Osmosis"> <span>Osmosis</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/12220.png" alt="Osmosis">
+              <span>Osmosis</span></button>
             <button class="cmc-mg-item" data-net="mantle"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/27075.png" alt="Mantle"> <span>Mantle</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/27075.png" alt="Mantle">
+              <span>Mantle</span></button>
             <button class="cmc-mg-item" data-net="linea"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/27657.png" alt="Linea"> <span>Linea</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/27657.png" alt="Linea">
+              <span>Linea</span></button>
             <button class="cmc-mg-item" data-net="scroll"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/26998.png" alt="Scroll"> <span>Scroll</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/26998.png" alt="Scroll">
+              <span>Scroll</span></button>
             <button class="cmc-mg-item" data-net="zksync"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/24091.png" alt="zkSync"> <span>zkSync</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/24091.png" alt="zkSync">
+              <span>zkSync</span></button>
             <button class="cmc-mg-item" data-net="manta-pacific"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/13631.png" alt="Manta"> <span>Manta</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/13631.png" alt="Manta">
+              <span>Manta</span></button>
             <button class="cmc-mg-item" data-net="blast"><img loading="lazy" width="24" height="24"
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/28480.png" alt="Blast"> <span>Blast</span></button>
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/28480.png" alt="Blast">
+              <span>Blast</span></button>
           </div>
         </div>
 
@@ -6723,12 +6732,29 @@
           <div>
             <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-chart-line"
                 style="color:var(--gn)"></i> <span data-i18n="stocksTitle">الأسهم الرئيسية وصناديق ETF</span></h3>
-            <p class="text-xs mt-1" style="color:var(--t2)" data-i18n="stocksSub">أسهم مرمّزة وصناديق المعادن الثمينة
-              •
-              بيانات لحظية من Yahoo Finance</p>
+            <p class="text-xs mt-1" style="color:var(--t2)" data-i18n="stocksSub">أسهم وسلع وصناديق استثمار ETF • بيانات
+              لحظية</p>
           </div>
           <div class="flex items-center gap-2"><span class="live-dot"></span><span
               style="font-size:10px;color:var(--t2)">Live</span></div>
+        </div>
+        <!-- Search + Filter Bar -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
+          <div style="position:relative;flex:1;min-width:160px">
+            <i class="fas fa-search"
+              style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--t2);font-size:12px;pointer-events:none"></i>
+            <input id="stkSearch" type="text" placeholder="بحث..." oninput="_stkFilter()"
+              style="width:100%;padding:7px 10px 7px 30px;background:var(--bg2);border:1px solid var(--bc);border-radius:8px;color:var(--t1);font-size:12px;outline:none">
+          </div>
+          <select id="stkCatFilter" onchange="_stkFilter()"
+            style="padding:7px 10px;background:var(--bg2);border:1px solid var(--bc);border-radius:8px;color:var(--t2);font-size:12px;cursor:pointer;outline:none">
+            <option value="">الكل</option>
+            <option value="stock">أسهم</option>
+            <option value="etf">صناديق ETF</option>
+            <option value="commodity">سلع</option>
+            <option value="index">مؤشرات</option>
+          </select>
+          <div id="stkCountBadge" style="font-size:11px;color:var(--t2);white-space:nowrap"></div>
         </div>
         <div class="ct">
           <table class="w-full stk-table">
@@ -6744,6 +6770,12 @@
             </thead>
             <tbody id="stkB"></tbody>
           </table>
+        </div>
+        <!-- Pagination -->
+        <div id="stkPagWrap"
+          style="display:flex;align-items:center;justify-content:space-between;padding:10px 4px;flex-wrap:wrap;gap:8px;margin-top:8px">
+          <div id="stkPagInfo" style="font-size:12px;color:var(--t2)"></div>
+          <div id="stkPagBtns" style="display:flex;gap:4px"></div>
         </div>
       </div>
     </div>
@@ -7298,40 +7330,47 @@
   </style>
 
 
-  
+
   <!-- AdSense Responsive Unit - Mid Page -->
   <div id="adMid" style="max-width:1280px;margin:0 auto;padding:0 20px;text-align:center;min-height:0;overflow:hidden">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-6273496386873741"
-         data-ad-slot="auto"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6273496386873741" data-ad-slot="auto"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
   <!-- ===== BLOG SECTION ===== -->
   <section style="max-width:1280px;margin:0 auto;padding:48px 20px 24px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+    <div
+      style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
       <div>
-        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);margin-bottom:4px">
+        <div
+          style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);margin-bottom:4px">
           <i class="fas fa-newspaper"></i> <span data-i18n="blogNav">المدونة</span>
         </div>
-        <h2 style="font-size:22px;font-weight:900;color:var(--t1);margin:0" data-i18n="blogSectionTitle">أحدث المقالات والتحليلات</h2>
+        <h2 style="font-size:22px;font-weight:900;color:var(--t1);margin:0" data-i18n="blogSectionTitle">أحدث المقالات
+          والتحليلات</h2>
       </div>
-      <a href="blog" style="display:inline-flex;align-items:center;gap:6px;background:var(--ac);color:#fff;padding:8px 18px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none">
+      <a href="blog"
+        style="display:inline-flex;align-items:center;gap:6px;background:var(--ac);color:#fff;padding:8px 18px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none">
         <span data-i18n="blogViewAll">عرض جميع المقالات</span> <i class="fas fa-arrow-left"></i>
       </a>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
 
       <a href="blog/bitcoin-guide-2025" style="text-decoration:none">
-        <div style="background:var(--bg2);border:1px solid var(--bc);border-radius:14px;overflow:hidden;transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
-          <div style="height:110px;background:linear-gradient(135deg,#f7931a,#ff6b00);display:flex;align-items:center;justify-content:center;font-size:44px">₿</div>
+        <div
+          style="background:var(--bg2);border:1px solid var(--bc);border-radius:14px;overflow:hidden;transition:transform .2s"
+          onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+          <div
+            style="height:110px;background:linear-gradient(135deg,#f7931a,#ff6b00);display:flex;align-items:center;justify-content:center;font-size:44px">
+            ₿</div>
           <div style="padding:16px">
-            <span style="font-size:10px;font-weight:800;background:#f7931a22;color:#f7931a;padding:2px 8px;border-radius:20px">Bitcoin</span>
-            <h3 style="font-size:14px;font-weight:800;color:var(--t1);margin:10px 0 6px;line-height:1.4" data-i18n="blogPost1Title">Bitcoin 2025: دليل شامل — الهالفينج، ETFs وتوقعات الأسعار</h3>
-            <p style="font-size:12px;color:var(--t2);line-height:1.6;margin:0 0 12px" data-i18n="blogPost1Desc">كل شيء عن دورة الهالفينج، صناديق ETF المؤسسية، وتوقعات 2025.</p>
+            <span
+              style="font-size:10px;font-weight:800;background:#f7931a22;color:#f7931a;padding:2px 8px;border-radius:20px">Bitcoin</span>
+            <h3 style="font-size:14px;font-weight:800;color:var(--t1);margin:10px 0 6px;line-height:1.4"
+              data-i18n="blogPost1Title">Bitcoin 2025: دليل شامل — الهالفينج، ETFs وتوقعات الأسعار</h3>
+            <p style="font-size:12px;color:var(--t2);line-height:1.6;margin:0 0 12px" data-i18n="blogPost1Desc">كل شيء
+              عن دورة الهالفينج، صناديق ETF المؤسسية، وتوقعات 2025.</p>
             <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--t2)">
               <span>📅 Mar 2025 · 12 min</span>
               <span style="color:var(--ac);font-weight:700" data-i18n="blogRead">اقرأ ←</span>
@@ -7341,12 +7380,20 @@
       </a>
 
       <a href="blog/brc20-vs-runes" style="text-decoration:none">
-        <div style="background:var(--bg2);border:1px solid var(--bc);border-radius:14px;overflow:hidden;transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
-          <div style="height:110px;background:linear-gradient(135deg,#9c27b0,#6a1b9a);display:flex;align-items:center;justify-content:center;font-size:44px">📜</div>
+        <div
+          style="background:var(--bg2);border:1px solid var(--bc);border-radius:14px;overflow:hidden;transition:transform .2s"
+          onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+          <div
+            style="height:110px;background:linear-gradient(135deg,#9c27b0,#6a1b9a);display:flex;align-items:center;justify-content:center;font-size:44px">
+            📜</div>
           <div style="padding:16px">
-            <span style="font-size:10px;font-weight:800;background:#9c27b022;color:#ce93d8;padding:2px 8px;border-radius:20px">BRC-20 & Runes</span>
-            <h3 style="font-size:14px;font-weight:800;color:var(--t1);margin:10px 0 6px;line-height:1.4" data-i18n="blogPost2Title">BRC-20 مقابل Runes: ما الفرق؟ دليل 2025</h3>
-            <p style="font-size:12px;color:var(--t2);line-height:1.6;margin:0 0 12px" data-i18n="blogPost2Desc">مقارنة تقنية كاملة — أحجام التداول والعملات الكبرى وأيهما أقوى مستقبلاً.</p>
+            <span
+              style="font-size:10px;font-weight:800;background:#9c27b022;color:#ce93d8;padding:2px 8px;border-radius:20px">BRC-20
+              & Runes</span>
+            <h3 style="font-size:14px;font-weight:800;color:var(--t1);margin:10px 0 6px;line-height:1.4"
+              data-i18n="blogPost2Title">BRC-20 مقابل Runes: ما الفرق؟ دليل 2025</h3>
+            <p style="font-size:12px;color:var(--t2);line-height:1.6;margin:0 0 12px" data-i18n="blogPost2Desc">مقارنة
+              تقنية كاملة — أحجام التداول والعملات الكبرى وأيهما أقوى مستقبلاً.</p>
             <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--t2)">
               <span>📅 Mar 2025 · 10 min</span>
               <span style="color:var(--ac);font-weight:700" data-i18n="blogRead">اقرأ ←</span>
@@ -7356,12 +7403,20 @@
       </a>
 
       <a href="blog/fear-greed-index-guide" style="text-decoration:none">
-        <div style="background:var(--bg2);border:1px solid var(--bc);border-radius:14px;overflow:hidden;transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
-          <div style="height:110px;background:linear-gradient(135deg,#c62828,#4caf50);display:flex;align-items:center;justify-content:center;font-size:44px">😨</div>
+        <div
+          style="background:var(--bg2);border:1px solid var(--bc);border-radius:14px;overflow:hidden;transition:transform .2s"
+          onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+          <div
+            style="height:110px;background:linear-gradient(135deg,#c62828,#4caf50);display:flex;align-items:center;justify-content:center;font-size:44px">
+            😨</div>
           <div style="padding:16px">
-            <span style="font-size:10px;font-weight:800;background:#4caf5022;color:#4caf50;padding:2px 8px;border-radius:20px" data-i18n="blogTagAnalysis">تحليل السوق</span>
-            <h3 style="font-size:14px;font-weight:800;color:var(--t1);margin:10px 0 6px;line-height:1.4" data-i18n="blogPost3Title">مؤشر الخوف والجشع: كيف تستخدم المشاعر لتوقيت السوق</h3>
-            <p style="font-size:12px;color:var(--t2);line-height:1.6;margin:0 0 12px" data-i18n="blogPost3Desc">تعلم قراءة المؤشر واستخدامه لاتخاذ قرارات شراء وبيع أذكى في الكريبتو.</p>
+            <span
+              style="font-size:10px;font-weight:800;background:#4caf5022;color:#4caf50;padding:2px 8px;border-radius:20px"
+              data-i18n="blogTagAnalysis">تحليل السوق</span>
+            <h3 style="font-size:14px;font-weight:800;color:var(--t1);margin:10px 0 6px;line-height:1.4"
+              data-i18n="blogPost3Title">مؤشر الخوف والجشع: كيف تستخدم المشاعر لتوقيت السوق</h3>
+            <p style="font-size:12px;color:var(--t2);line-height:1.6;margin:0 0 12px" data-i18n="blogPost3Desc">تعلم
+              قراءة المؤشر واستخدامه لاتخاذ قرارات شراء وبيع أذكى في الكريبتو.</p>
             <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--t2)">
               <span>📅 Feb 2025 · 7 min</span>
               <span style="color:var(--ac);font-weight:700" data-i18n="blogRead">اقرأ ←</span>
@@ -7371,12 +7426,20 @@
       </a>
 
       <a href="blog/gold-vs-bitcoin" style="text-decoration:none">
-        <div style="background:var(--bg2);border:1px solid var(--bc);border-radius:14px;overflow:hidden;transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
-          <div style="height:110px;background:linear-gradient(135deg,#ffd700,#b8860b);display:flex;align-items:center;justify-content:center;font-size:44px">🥇</div>
+        <div
+          style="background:var(--bg2);border:1px solid var(--bc);border-radius:14px;overflow:hidden;transition:transform .2s"
+          onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+          <div
+            style="height:110px;background:linear-gradient(135deg,#ffd700,#b8860b);display:flex;align-items:center;justify-content:center;font-size:44px">
+            🥇</div>
           <div style="padding:16px">
-            <span style="font-size:10px;font-weight:800;background:#ffd70022;color:#b8860b;padding:2px 8px;border-radius:20px" data-i18n="blogTagGold">ذهب vs كريبتو</span>
-            <h3 style="font-size:14px;font-weight:800;color:var(--t1);margin:10px 0 6px;line-height:1.4" data-i18n="blogPost4Title">الذهب مقابل البيتكوين: المقارنة الكبرى لمخزن القيمة</h3>
-            <p style="font-size:12px;color:var(--t2);line-height:1.6;margin:0 0 12px" data-i18n="blogPost4Desc">الأداء، التقلب، الندرة — أي الأصلين يناسب محفظتك الاستثمارية؟</p>
+            <span
+              style="font-size:10px;font-weight:800;background:#ffd70022;color:#b8860b;padding:2px 8px;border-radius:20px"
+              data-i18n="blogTagGold">ذهب vs كريبتو</span>
+            <h3 style="font-size:14px;font-weight:800;color:var(--t1);margin:10px 0 6px;line-height:1.4"
+              data-i18n="blogPost4Title">الذهب مقابل البيتكوين: المقارنة الكبرى لمخزن القيمة</h3>
+            <p style="font-size:12px;color:var(--t2);line-height:1.6;margin:0 0 12px" data-i18n="blogPost4Desc">الأداء،
+              التقلب، الندرة — أي الأصلين يناسب محفظتك الاستثمارية؟</p>
             <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--t2)">
               <span>📅 Feb 2025 · 9 min</span>
               <span style="color:var(--ac);font-weight:700" data-i18n="blogRead">اقرأ ←</span>
@@ -7386,12 +7449,20 @@
       </a>
 
       <a href="blog/crypto-beginners-guide" style="text-decoration:none">
-        <div style="background:var(--bg2);border:1px solid var(--bc);border-radius:14px;overflow:hidden;transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
-          <div style="height:110px;background:linear-gradient(135deg,#3861fb,#1a2b5e);display:flex;align-items:center;justify-content:center;font-size:44px">🎓</div>
+        <div
+          style="background:var(--bg2);border:1px solid var(--bc);border-radius:14px;overflow:hidden;transition:transform .2s"
+          onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+          <div
+            style="height:110px;background:linear-gradient(135deg,#3861fb,#1a2b5e);display:flex;align-items:center;justify-content:center;font-size:44px">
+            🎓</div>
           <div style="padding:16px">
-            <span style="font-size:10px;font-weight:800;background:#3861fb22;color:#3861fb;padding:2px 8px;border-radius:20px" data-i18n="blogTagBeginner">مبتدئ</span>
-            <h3 style="font-size:14px;font-weight:800;color:var(--t1);margin:10px 0 6px;line-height:1.4" data-i18n="blogPost5Title">دليل الكريبتو للمبتدئين: دليل شامل 2025</h3>
-            <p style="font-size:12px;color:var(--t2);line-height:1.6;margin:0 0 12px" data-i18n="blogPost5Desc">من أساسيات البلوكتشين إلى شراء أول بيتكوين وتجنب أخطاء المبتدئين.</p>
+            <span
+              style="font-size:10px;font-weight:800;background:#3861fb22;color:#3861fb;padding:2px 8px;border-radius:20px"
+              data-i18n="blogTagBeginner">مبتدئ</span>
+            <h3 style="font-size:14px;font-weight:800;color:var(--t1);margin:10px 0 6px;line-height:1.4"
+              data-i18n="blogPost5Title">دليل الكريبتو للمبتدئين: دليل شامل 2025</h3>
+            <p style="font-size:12px;color:var(--t2);line-height:1.6;margin:0 0 12px" data-i18n="blogPost5Desc">من
+              أساسيات البلوكتشين إلى شراء أول بيتكوين وتجنب أخطاء المبتدئين.</p>
             <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--t2)">
               <span>📅 Jan 2025 · 15 min</span>
               <span style="color:var(--ac);font-weight:700" data-i18n="blogRead">اقرأ ←</span>
@@ -7401,12 +7472,20 @@
       </a>
 
       <a href="blog/crypto-security-guide" style="text-decoration:none">
-        <div style="background:var(--bg2);border:1px solid var(--bc);border-radius:14px;overflow:hidden;transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
-          <div style="height:110px;background:linear-gradient(135deg,#f44336,#b71c1c);display:flex;align-items:center;justify-content:center;font-size:44px">🔐</div>
+        <div
+          style="background:var(--bg2);border:1px solid var(--bc);border-radius:14px;overflow:hidden;transition:transform .2s"
+          onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+          <div
+            style="height:110px;background:linear-gradient(135deg,#f44336,#b71c1c);display:flex;align-items:center;justify-content:center;font-size:44px">
+            🔐</div>
           <div style="padding:16px">
-            <span style="font-size:10px;font-weight:800;background:#f4433622;color:#f44336;padding:2px 8px;border-radius:20px" data-i18n="blogTagSecurity">أمان</span>
-            <h3 style="font-size:14px;font-weight:800;color:var(--t1);margin:10px 0 6px;line-height:1.4" data-i18n="blogPost6Title">كيف تحمي كريبتوك: المحافظ، العبارات السرية وأفضل الممارسات</h3>
-            <p style="font-size:12px;color:var(--t2);line-height:1.6;margin:0 0 12px" data-i18n="blogPost6Desc">دليل أمان كامل — المحافظ الساخنة والباردة وتجنب عمليات الاحتيال الشائعة.</p>
+            <span
+              style="font-size:10px;font-weight:800;background:#f4433622;color:#f44336;padding:2px 8px;border-radius:20px"
+              data-i18n="blogTagSecurity">أمان</span>
+            <h3 style="font-size:14px;font-weight:800;color:var(--t1);margin:10px 0 6px;line-height:1.4"
+              data-i18n="blogPost6Title">كيف تحمي كريبتوك: المحافظ، العبارات السرية وأفضل الممارسات</h3>
+            <p style="font-size:12px;color:var(--t2);line-height:1.6;margin:0 0 12px" data-i18n="blogPost6Desc">دليل
+              أمان كامل — المحافظ الساخنة والباردة وتجنب عمليات الاحتيال الشائعة.</p>
             <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--t2)">
               <span>📅 Feb 2025 · 8 min</span>
               <span style="color:var(--ac);font-weight:700" data-i18n="blogRead">اقرأ ←</span>
@@ -7419,15 +7498,12 @@
   </section>
   <!-- ===== END BLOG SECTION ===== -->
 
-  
+
   <!-- AdSense Responsive Unit - Bottom -->
-  <div id="adBottom" style="max-width:1280px;margin:0 auto;padding:0 20px;text-align:center;min-height:0;overflow:hidden">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-6273496386873741"
-         data-ad-slot="auto"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
+  <div id="adBottom"
+    style="max-width:1280px;margin:0 auto;padding:0 20px;text-align:center;min-height:0;overflow:hidden">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6273496386873741" data-ad-slot="auto"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
@@ -7480,8 +7556,10 @@
           <div class="space-y-2">
             <a href="#" onclick="location.reload();return false" class="ft-link"><i class="fas fa-home"
                 style="color:#3b82f6;width:16px"></i> <span data-i18n="home">Home</span></a>
-            <a href="blog" class="ft-link"><i class="fas fa-newspaper" style="color:#f7931a;width:16px"></i> <span data-i18n="blogNav">المدونة</span></a>
-            <a href="faq" class="ft-link"><i class="fas fa-question-circle" style="color:#8b5cf6;width:16px"></i> FAQ</a>
+            <a href="blog" class="ft-link"><i class="fas fa-newspaper" style="color:#f7931a;width:16px"></i> <span
+                data-i18n="blogNav">المدونة</span></a>
+            <a href="faq" class="ft-link"><i class="fas fa-question-circle" style="color:#8b5cf6;width:16px"></i>
+              FAQ</a>
             <a href="#cmcBar" class="ft-link"><i class="fas fa-fire" style="color:#ec4899;width:16px"></i> Trending</a>
             <a href="#commTab" class="ft-link"><i class="fas fa-gem" style="color:#eab308;width:16px"></i>
               commodities</a>
@@ -13646,26 +13724,337 @@
 
     // ===== STOCKS & ETFs (Yahoo Finance via CORS proxy) =====
     const _STK = [
-      { sy: 'TSLA', nm: 'Tesla Inc.', ic: '🚗', cl: '#e31937', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
       { sy: 'AAPL', nm: 'Apple Inc.', ic: '🍎', cl: '#555', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
-      { sy: 'GOOGL', nm: 'Alphabet', ic: '🔍', cl: '#4285f4', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
-      { sy: 'AMZN', nm: 'Amazon', ic: '📦', cl: '#ff9900', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
       { sy: 'MSFT', nm: 'Microsoft', ic: '🪟', cl: '#00a4ef', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
       { sy: 'NVDA', nm: 'NVIDIA', ic: '🎮', cl: '#76b900', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'GOOGL', nm: 'Alphabet', ic: '🔍', cl: '#4285f4', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'AMZN', nm: 'Amazon', ic: '📦', cl: '#ff9900', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
       { sy: 'META', nm: 'Meta Platforms', ic: '👤', cl: '#1877f2', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
-      { sy: 'MSTR', nm: 'Strategy (MicroStrategy)', ic: '₿', cl: '#d62c2c', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood'] },
-      { sy: 'COIN', nm: 'Coinbase Global', ic: '🔵', cl: '#0052ff', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood'] },
+      { sy: 'TSLA', nm: 'Tesla Inc.', ic: '🚗', cl: '#e31937', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'AVGO', nm: 'Broadcom', ic: '💾', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ORCL', nm: 'Oracle', ic: '🔴', cl: '#f80000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
       { sy: 'AMD', nm: 'AMD', ic: '💻', cl: '#ed1c24', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
-      { sy: 'MARA', nm: 'MARA Holdings', ic: '⛏️', cl: '#f7931a', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood'] },
-      { sy: 'RIOT', nm: 'Riot Platforms', ic: '⛏️', cl: '#333', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood'] },
-      { sy: 'PYPL', nm: 'PayPal', ic: '💳', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
-      { sy: 'PLTR', nm: 'Palantir', ic: '📊', cl: '#101820', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood'] },
       { sy: 'INTC', nm: 'Intel', ic: '🔲', cl: '#0071c5', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
-      { sy: 'SQ', nm: 'Block (Square)', ic: '⬛', cl: '#006aff', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood'] },
+      { sy: 'QCOM', nm: 'Qualcomm', ic: '📡', cl: '#3253dc', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'TXN', nm: 'Texas Instruments', ic: '⚙️', cl: '#c41230', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MU', nm: 'Micron Technology', ic: '💿', cl: '#00a0df', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'AMAT', nm: 'Applied Materials', ic: '🔬', cl: '#00c3e3', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'LRCX', nm: 'Lam Research', ic: '🔧', cl: '#005eb8', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'KLAC', nm: 'KLA Corp', ic: '🏭', cl: '#0066cc', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ADI', nm: 'Analog Devices', ic: '📟', cl: '#ef7622', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MRVL', nm: 'Marvell Technology', ic: '🔩', cl: '#006db7', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'NXPI', nm: 'NXP Semiconductors', ic: '🔌', cl: '#f7941d', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ON', nm: 'ON Semiconductor', ic: '⚡', cl: '#00adef', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'STX', nm: 'Seagate Technology', ic: '💽', cl: '#6cb33f', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'WDC', nm: 'Western Digital', ic: '💾', cl: '#0065a3', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'HPQ', nm: 'HP Inc.', ic: '🖨️', cl: '#0096d6', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'DELL', nm: 'Dell Technologies', ic: '🖥️', cl: '#007db8', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'HPE', nm: 'HP Enterprise', ic: '🌐', cl: '#01a982', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CSCO', nm: 'Cisco Systems', ic: '🌐', cl: '#1ba0d7', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'IBM', nm: 'IBM', ic: '💼', cl: '#1f70c1', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ACN', nm: 'Accenture', ic: '🔷', cl: '#a100ff', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'SAP', nm: 'SAP SE', ic: '💹', cl: '#0070f3', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'INFY', nm: 'Infosys', ic: '💡', cl: '#007cc3', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'WIT', nm: 'Wipro', ic: '🔵', cl: '#741b47', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'SNOW', nm: 'Snowflake', ic: '❄️', cl: '#29b5e8', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'DDOG', nm: 'Datadog', ic: '🐶', cl: '#632ca6', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'NET', nm: 'Cloudflare', ic: '☁️', cl: '#f6821f', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ZS', nm: 'Zscaler', ic: '🔒', cl: '#00adef', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CRWD', nm: 'CrowdStrike', ic: '🦅', cl: '#fc1c46', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PANW', nm: 'Palo Alto Networks', ic: '🛡️', cl: '#00c0e8', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'S', nm: 'SentinelOne', ic: '🤖', cl: '#7c35c0', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CYBR', nm: 'CyberArk', ic: '🔑', cl: '#006aff', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'FTNT', nm: 'Fortinet', ic: '🛡️', cl: '#ee3124', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'OKTA', nm: 'Okta', ic: '🔐', cl: '#007dc1', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MDB', nm: 'MongoDB', ic: '🍃', cl: '#13aa52', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ESTC', nm: 'Elastic', ic: '🔎', cl: '#fed10a', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PLTR', nm: 'Palantir', ic: '📊', cl: '#101820', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'AI', nm: 'C3.ai', ic: '🧠', cl: '#0047ba', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PATH', nm: 'UiPath', ic: '🤖', cl: '#fa4616', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CFLT', nm: 'Confluent', ic: '🌊', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'GTLB', nm: 'GitLab', ic: '🦊', cl: '#e24329', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'HCP', nm: 'HashiCorp', ic: '🌿', cl: '#844FBA', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'JPM', nm: 'JPMorgan Chase', ic: '🏦', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'BAC', nm: 'Bank of America', ic: '🏦', cl: '#e31837', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'WFC', nm: 'Wells Fargo', ic: '🐎', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'C', nm: 'Citigroup', ic: '🌍', cl: '#003b8e', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'GS', nm: 'Goldman Sachs', ic: '💰', cl: '#7399c6', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MS', nm: 'Morgan Stanley', ic: '💹', cl: '#002d62', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'BX', nm: 'Blackstone', ic: '⬛', cl: '#000000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'BLK', nm: 'BlackRock', ic: '🖤', cl: '#000000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'SCHW', nm: 'Charles Schwab', ic: '🏛️', cl: '#0057a8', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'AXP', nm: 'American Express', ic: '💳', cl: '#006fcf', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'V', nm: 'Visa', ic: '💳', cl: '#1a1f71', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MA', nm: 'Mastercard', ic: '🔴', cl: '#eb001b', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PYPL', nm: 'PayPal', ic: '💳', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'SQ', nm: 'Block (Square)', ic: '⬛', cl: '#006aff', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'AFRM', nm: 'Affirm', ic: '✅', cl: '#0fa0ea', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'SOFI', nm: 'SoFi Technologies', ic: '💵', cl: '#2a4f7a', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'HOOD', nm: 'Robinhood', ic: '🟢', cl: '#00c805', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'COIN', nm: 'Coinbase', ic: '🔵', cl: '#0052ff', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MSTR', nm: 'MicroStrategy', ic: '₿', cl: '#d62c2c', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MARA', nm: 'MARA Holdings', ic: '⛏️', cl: '#f7931a', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'RIOT', nm: 'Riot Platforms', ic: '⛏️', cl: '#333', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'HUT', nm: 'Hut 8 Mining', ic: '⛏️', cl: '#ff6600', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CLSK', nm: 'CleanSpark', ic: '⚡', cl: '#00b4d8', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CIFR', nm: 'Cipher Mining', ic: '🔐', cl: '#7b2d8b', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'BTDR', nm: 'Bitdeer', ic: '🖥️', cl: '#ff6b00', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CORZ', nm: 'Core Scientific', ic: '🏗️', cl: '#1a73e8', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'JNJ', nm: 'Johnson & Johnson', ic: '❤️', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'UNH', nm: 'UnitedHealth', ic: '💊', cl: '#007bbd', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PFE', nm: 'Pfizer', ic: '💉', cl: '#0093d0', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MRK', nm: 'Merck', ic: '🧬', cl: '#00857c', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ABBV', nm: 'AbbVie', ic: '🔬', cl: '#071d49', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'LLY', nm: 'Eli Lilly', ic: '💊', cl: '#d52b1e', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'BMY', nm: 'Bristol-Myers Squibb', ic: '💊', cl: '#ee3124', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'AMGN', nm: 'Amgen', ic: '🧫', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'GILD', nm: 'Gilead Sciences', ic: '🧪', cl: '#c31432', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'REGN', nm: 'Regeneron', ic: '🔬', cl: '#f26522', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'BIIB', nm: 'Biogen', ic: '🧬', cl: '#702f8a', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'VRTX', nm: 'Vertex Pharma', ic: '🔭', cl: '#e4003b', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ISRG', nm: 'Intuitive Surgical', ic: '🤖', cl: '#005eb8', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'SYK', nm: 'Stryker', ic: '🏥', cl: '#0079bf', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'BSX', nm: 'Boston Scientific', ic: '💓', cl: '#e4002b', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'EW', nm: 'Edwards Lifesciences', ic: '❤️', cl: '#e4002b', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'DXCM', nm: 'Dexcom', ic: '📉', cl: '#009999', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'IDXX', nm: 'IDEXX Laboratories', ic: '🐾', cl: '#0077c8', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'HUM', nm: 'Humana', ic: '🏥', cl: '#007a33', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CVS', nm: 'CVS Health', ic: '💊', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MCK', nm: 'McKesson', ic: '📦', cl: '#005587', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ABC', nm: 'AmerisourceBergen', ic: '💊', cl: '#0075be', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CAH', nm: 'Cardinal Health', ic: '🏥', cl: '#d50000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CI', nm: 'Cigna', ic: '🔵', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'WMT', nm: 'Walmart', ic: '🛒', cl: '#0071ce', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'COST', nm: 'Costco', ic: '🛍️', cl: '#e31837', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'TGT', nm: 'Target', ic: '🎯', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'HD', nm: 'Home Depot', ic: '🏠', cl: '#f96302', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'LOW', nm: 'Lowe\'s', ic: '🔨', cl: '#004990', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'NKE', nm: 'Nike', ic: '👟', cl: '#000000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'SBUX', nm: 'Starbucks', ic: '☕', cl: '#00704a', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MCD', nm: 'McDonald\'s', ic: '🍟', cl: '#ffbc0d', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'YUM', nm: 'Yum! Brands', ic: '🍕', cl: '#ee3124', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CMG', nm: 'Chipotle', ic: '🌯', cl: '#a81612', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'DPZ', nm: 'Domino\'s', ic: '🍕', cl: '#006491', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MDLZ', nm: 'Mondelez', ic: '🍫', cl: '#9b1c20', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'KO', nm: 'Coca-Cola', ic: '🥤', cl: '#f40000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PEP', nm: 'PepsiCo', ic: '🥤', cl: '#004c97', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PM', nm: 'Philip Morris', ic: '🚬', cl: '#1c2b5e', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MO', nm: 'Altria', ic: '🚬', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PG', nm: 'Procter & Gamble', ic: '🧼', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CL', nm: 'Colgate-Palmolive', ic: '🪥', cl: '#e31837', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'KMB', nm: 'Kimberly-Clark', ic: '🧻', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CHD', nm: 'Church & Dwight', ic: '🦷', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'EL', nm: 'Estee Lauder', ic: '💄', cl: '#000000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ULTA', nm: 'Ulta Beauty', ic: '💅', cl: '#7b2d8b', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'TPR', nm: 'Tapestry', ic: '👜', cl: '#000000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'RL', nm: 'Ralph Lauren', ic: '🐎', cl: '#00205b', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PVH', nm: 'PVH Corp', ic: '👔', cl: '#000000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'XOM', nm: 'ExxonMobil', ic: '⛽', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CVX', nm: 'Chevron', ic: '⚡', cl: '#0064a4', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'COP', nm: 'ConocoPhillips', ic: '🛢️', cl: '#e31837', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PSX', nm: 'Phillips 66', ic: '⛽', cl: '#d52b1e', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'VLO', nm: 'Valero Energy', ic: '🔥', cl: '#f7941d', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MPC', nm: 'Marathon Petroleum', ic: '🛢️', cl: '#005eb8', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'OXY', nm: 'Occidental', ic: '🛢️', cl: '#d62b2b', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PXD', nm: 'Pioneer Natural', ic: '⛽', cl: '#e31837', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'EOG', nm: 'EOG Resources', ic: '🛢️', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'DVN', nm: 'Devon Energy', ic: '⚡', cl: '#e31837', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'FANG', nm: 'Diamondback Energy', ic: '💎', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'HAL', nm: 'Halliburton', ic: '🔩', cl: '#e31837', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'SLB', nm: 'Schlumberger', ic: '🔧', cl: '#00adef', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'BKR', nm: 'Baker Hughes', ic: '⚙️', cl: '#0079bf', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'KMI', nm: 'Kinder Morgan', ic: '🚰', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ET', nm: 'Energy Transfer', ic: '🔌', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'WMB', nm: 'Williams Companies', ic: '⚡', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'OKE', nm: 'ONEOK', ic: '🛢️', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'BA', nm: 'Boeing', ic: '✈️', cl: '#1d4289', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'RTX', nm: 'Raytheon', ic: '🚀', cl: '#e31837', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'LMT', nm: 'Lockheed Martin', ic: '🛡️', cl: '#1c2b5e', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'NOC', nm: 'Northrop Grumman', ic: '🛩️', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'GD', nm: 'General Dynamics', ic: '⚓', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'GE', nm: 'GE Aerospace', ic: '⚙️', cl: '#3b73b9', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'HON', nm: 'Honeywell', ic: '🏭', cl: '#e31837', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'MMM', nm: '3M', ic: '🔶', cl: '#e31837', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CAT', nm: 'Caterpillar', ic: '🦺', cl: '#ffcd11', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'DE', nm: 'Deere & Company', ic: '🚜', cl: '#367c2b', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'EMR', nm: 'Emerson Electric', ic: '⚡', cl: '#1c2b5e', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ROK', nm: 'Rockwell Automation', ic: '🤖', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ITW', nm: 'Illinois Tool Works', ic: '🔧', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PH', nm: 'Parker Hannifin', ic: '⚙️', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CARR', nm: 'Carrier Global', ic: '🌡️', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'OTIS', nm: 'Otis Worldwide', ic: '🛗', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'UPS', nm: 'UPS', ic: '📦', cl: '#351c15', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'FDX', nm: 'FedEx', ic: '📫', cl: '#4d148c', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'UBER', nm: 'Uber', ic: '🚕', cl: '#000000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'LYFT', nm: 'Lyft', ic: '🚗', cl: '#ff00bf', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'DAL', nm: 'Delta Airlines', ic: '✈️', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'UAL', nm: 'United Airlines', ic: '✈️', cl: '#002244', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'AAL', nm: 'American Airlines', ic: '✈️', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'LUV', nm: 'Southwest Airlines', ic: '✈️', cl: '#f9b612', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'AMT', nm: 'American Tower', ic: '📡', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PLD', nm: 'Prologis', ic: '🏭', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'EQIX', nm: 'Equinix', ic: '💻', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CCI', nm: 'Crown Castle', ic: '📡', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'O', nm: 'Realty Income', ic: '🏪', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'SPG', nm: 'Simon Property', ic: '🏬', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'WELL', nm: 'Welltower', ic: '🏥', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'AVB', nm: 'AvalonBay', ic: '🏠', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'EQR', nm: 'Equity Residential', ic: '🏘️', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PSA', nm: 'Public Storage', ic: '🗃️', cl: '#e31837', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'NFLX', nm: 'Netflix', ic: '🎬', cl: '#e50914', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'DIS', nm: 'Walt Disney', ic: '🎠', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CMCSA', nm: 'Comcast', ic: '📺', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'WBD', nm: 'Warner Bros Discovery', ic: '🎥', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'PARA', nm: 'Paramount', ic: '🎬', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'FOX', nm: 'Fox Corp', ic: '🦊', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'SPOT', nm: 'Spotify', ic: '🎵', cl: '#1db954', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'RBLX', nm: 'Roblox', ic: '🎮', cl: '#e60000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'EA', nm: 'Electronic Arts', ic: '🎮', cl: '#f7941d', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'TTWO', nm: 'Take-Two Interactive', ic: '🕹️', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'ATVI', nm: 'Activision Blizzard', ic: '🎮', cl: '#148ede', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'U', nm: 'Unity Software', ic: '🎮', cl: '#000000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'VZ', nm: 'Verizon', ic: '📱', cl: '#cd040b', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'T', nm: 'AT&T', ic: '📡', cl: '#00a8e0', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'TMUS', nm: 'T-Mobile', ic: '📱', cl: '#e20074', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'CHTR', nm: 'Charter Comms', ic: '📺', cl: '#0098db', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'GM', nm: 'General Motors', ic: '🚗', cl: '#003087', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'F', nm: 'Ford Motor', ic: '🚙', cl: '#003099', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'RIVN', nm: 'Rivian', ic: '⚡', cl: '#6ac6b8', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'LCID', nm: 'Lucid Group', ic: '🚘', cl: '#cc9900', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'NIO', nm: 'NIO', ic: '🔋', cl: '#00bfff', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'LI', nm: 'Li Auto', ic: '🚗', cl: '#cc0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'XPEV', nm: 'XPeng', ic: '🚗', cl: '#00b4d8', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'STLA', nm: 'Stellantis', ic: '🏎️', cl: '#8b0000', cat: 'stock', ex: ['eToro', 'IBKR', 'Robinhood', 'Schwab'] },
+      { sy: 'SPY', nm: 'SPDR S&P 500', ic: '📈', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'QQQ', nm: 'Invesco QQQ', ic: '💹', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'IWM', nm: 'iShares Russell 2000', ic: '📊', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'DIA', nm: 'SPDR Dow Jones', ic: '🏛️', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'VTI', nm: 'Vanguard Total Market', ic: '🌎', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'VOO', nm: 'Vanguard S&P 500', ic: '📈', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'VEA', nm: 'Vanguard Dev Markets', ic: '🌍', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'VWO', nm: 'Vanguard Emerging', ic: '🌏', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'EFA', nm: 'iShares EAFE', ic: '🌐', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'EEM', nm: 'iShares Emerging', ic: '🌏', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'ACWI', nm: 'iShares MSCI ACWI', ic: '🌍', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'VT', nm: 'Vanguard Total World', ic: '🌎', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'SCHB', nm: 'Schwab US Broad', ic: '📊', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'ITOT', nm: 'iShares Core S&P Total', ic: '📈', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'SPTM', nm: 'SPDR Total Market', ic: '📊', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'FZROX', nm: 'Fidelity ZERO Total', ic: '📈', cl: '#006633', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'XLK', nm: 'Tech Select SPDR', ic: '💻', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'XLF', nm: 'Financial Select', ic: '💰', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'XLV', nm: 'Health Care Select', ic: '❤️', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'XLE', nm: 'Energy Select', ic: '⛽', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'XLI', nm: 'Industrial Select', ic: '🏭', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'XLC', nm: 'Comm Services', ic: '📡', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'XLY', nm: 'Consumer Discr', ic: '🛍️', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'XLP', nm: 'Consumer Staples', ic: '🛒', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'XLRE', nm: 'Real Estate', ic: '🏠', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'XLB', nm: 'Materials Select', ic: '⛏️', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'XLU', nm: 'Utilities Select', ic: '⚡', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'VGT', nm: 'Vanguard IT', ic: '💻', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'VHT', nm: 'Vanguard Health', ic: '❤️', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'VFH', nm: 'Vanguard Financials', ic: '💰', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'VAW', nm: 'Vanguard Materials', ic: '⛏️', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'VDE', nm: 'Vanguard Energy', ic: '⛽', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'ARKK', nm: 'ARK Innovation', ic: '🚀', cl: '#ed7a23', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'ARKG', nm: 'ARK Genomic Rev', ic: '🧬', cl: '#ed7a23', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'ARKW', nm: 'ARK Next Gen Internet', ic: '🌐', cl: '#ed7a23', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'ARKF', nm: 'ARK Fintech Innovation', ic: '💳', cl: '#ed7a23', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'ARKX', nm: 'ARK Space Exploration', ic: '🚀', cl: '#ed7a23', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'ARKQ', nm: 'ARK Autonomous Tech', ic: '🤖', cl: '#ed7a23', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'AGG', nm: 'iShares Core US Bond', ic: '🏦', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'BND', nm: 'Vanguard Total Bond', ic: '📋', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'LQD', nm: 'iShares Corp Bond', ic: '💼', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'HYG', nm: 'iShares High Yield', ic: '💰', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'TLT', nm: 'iShares 20+ Yr Treasury', ic: '🏛️', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'IEF', nm: 'iShares 7-10 Yr Treasury', ic: '📜', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'SHY', nm: 'iShares 1-3 Yr Treasury', ic: '📋', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'VCIT', nm: 'Vanguard Intermed Corp', ic: '💼', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'VCSH', nm: 'Vanguard Short Corp', ic: '📋', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'EMB', nm: 'iShares Emerging Bond', ic: '🌏', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'MBB', nm: 'iShares MBS', ic: '🏠', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'TIP', nm: 'iShares TIPS Bond', ic: '💰', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'BNDX', nm: 'Vanguard Total Intl Bond', ic: '🌍', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'IGIB', nm: 'iShares Intermed Corp', ic: '💼', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
       { sy: 'GLD', nm: 'SPDR Gold Trust', ic: '🥇', cl: '#FFD700', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'IAU', nm: 'iShares Gold Trust', ic: '🥇', cl: '#FFD700', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'GLDM', nm: 'SPDR Gold MiniShares', ic: '🥇', cl: '#FFD700', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'BAR', nm: 'GraniteShares Gold', ic: '🥇', cl: '#FFD700', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
       { sy: 'SLV', nm: 'iShares Silver Trust', ic: '🥈', cl: '#C0C0C0', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
-      { sy: 'PPLT', nm: 'Physical Platinum ETF', ic: '💎', cl: '#E5E4E2', cat: 'etf', ex: ['IBKR', 'Schwab', 'Vanguard'] },
-      { sy: 'PALL', nm: 'Physical Palladium ETF', ic: '⚪', cl: '#B0B0B0', cat: 'etf', ex: ['IBKR', 'Schwab', 'Vanguard'] }
+      { sy: 'SIVR', nm: 'Aberdeen Silver', ic: '🥈', cl: '#C0C0C0', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'PPLT', nm: 'Physical Platinum', ic: '💎', cl: '#E5E4E2', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'PALL', nm: 'Physical Palladium', ic: '⚪', cl: '#B0B0B0', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'PDBC', nm: 'Invesco Optimum Yield', ic: '🌾', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'DJP', nm: 'iPath Bloomberg Commodity', ic: '📦', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'GSG', nm: 'iShares Commodity', ic: '📊', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'COMT', nm: 'iShares GSCI Commodity', ic: '🌍', cl: '#0066cc', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'BCI', nm: 'Aberdeen Commodity', ic: '📦', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'COMB', nm: 'GraniteShares Bloomberg', ic: '📊', cl: '#007bbd', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'IBIT', nm: 'iShares Bitcoin Trust', ic: '₿', cl: '#f7931a', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'FBTC', nm: 'Fidelity Wise Origin BTC', ic: '₿', cl: '#f7931a', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'ARKB', nm: 'ARK 21Shares Bitcoin', ic: '₿', cl: '#ed7a23', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'BITB', nm: 'Bitwise Bitcoin ETF', ic: '₿', cl: '#f7931a', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'HODL', nm: 'VanEck Bitcoin ETF', ic: '₿', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'BTCO', nm: 'Invesco Galaxy Bitcoin', ic: '₿', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'EZBC', nm: 'Franklin Bitcoin ETF', ic: '₿', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'BRRR', nm: 'Valkyrie Bitcoin Fund', ic: '₿', cl: '#f7931a', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'ETHA', nm: 'iShares Ethereum Trust', ic: '💎', cl: '#627eea', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'FETH', nm: 'Fidelity Ethereum Fund', ic: '💎', cl: '#627eea', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'ETHW', nm: 'Bitwise Ethereum ETF', ic: '💎', cl: '#627eea', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'CETH', nm: '21Shares Core Ethereum', ic: '💎', cl: '#627eea', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'TQQQ', nm: 'ProShares UltraPro QQQ 3x', ic: '🚀', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'SQQQ', nm: 'ProShares UltraPro Short QQQ', ic: '📉', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'UPRO', nm: 'ProShares UltraPro S&P 3x', ic: '🚀', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'SPXU', nm: 'ProShares UltraPro Short S&P', ic: '📉', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'UVXY', nm: 'ProShares Ultra VIX', ic: '⚡', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'SOXL', nm: 'Direxion Semi Bull 3x', ic: '💻', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'SOXS', nm: 'Direxion Semi Bear 3x', ic: '📉', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'LABU', nm: 'Direxion Bio Bull 3x', ic: '🧬', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'FNGU', nm: 'MicroSectors FANG+ Bull 3x', ic: '🚀', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'FNGD', nm: 'MicroSectors FANG+ Bear 3x', ic: '📉', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'TECL', nm: 'Direxion Tech Bull 3x', ic: '🚀', cl: '#003087', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'TECS', nm: 'Direxion Tech Bear 3x', ic: '📉', cl: '#cc0000', cat: 'etf', ex: ['IBKR', 'eToro', 'Schwab', 'Vanguard'] },
+      { sy: 'USO', nm: 'United States Oil Fund', ic: '🛢️', cl: '#003087', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'BNO', nm: 'United States Brent Oil', ic: '🛢️', cl: '#003087', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'UNG', nm: 'United States Natural Gas', ic: '🔥', cl: '#cc0000', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'BOIL', nm: 'ProShares Ultra DJ-AIG Nat Gas', ic: '🔥', cl: '#003087', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'CORN', nm: 'Teucrium Corn', ic: '🌽', cl: '#f7941d', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'WEAT', nm: 'Teucrium Wheat', ic: '🌾', cl: '#c8962e', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'SOYB', nm: 'Teucrium Soybean', ic: '🫘', cl: '#7d5a2f', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'CANE', nm: 'Teucrium Sugar', ic: '🍬', cl: '#c8962e', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'COFF', nm: 'iPath Bloomberg Coffee', ic: '☕', cl: '#4e2b00', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'WOOD', nm: 'iShares Global Timber', ic: '🌲', cl: '#228b22', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'PAVE', nm: 'Global X US Infrastructure', ic: '🏗️', cl: '#003087', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'REMX', nm: 'VanEck Rare Earth', ic: '⚗️', cl: '#003087', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'LIT', nm: 'Global X Lithium', ic: '🔋', cl: '#00bfff', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'COPX', nm: 'Global X Copper Miners', ic: '🔩', cl: '#b87333', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'SIL', nm: 'Global X Silver Miners', ic: '🥈', cl: '#c0c0c0', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'GDX', nm: 'VanEck Gold Miners', ic: '⛏️', cl: '#FFD700', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'GDXJ', nm: 'VanEck Junior Gold Miners', ic: '⛏️', cl: '#FFD700', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'RING', nm: 'iShares Gold Producers', ic: '🥇', cl: '#0066cc', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'PICK', nm: 'iShares MSCI Global Metals', ic: '⛏️', cl: '#0066cc', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: 'GUNR', nm: 'FlexShares Morningstar Global Resources', ic: '🌍', cl: '#003087', cat: 'commodity', ex: ['IBKR', 'Schwab', 'Vanguard'] },
+      { sy: '^GSPC', nm: 'S&P 500 Index', ic: '📈', cl: '#003087', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^DJI', nm: 'Dow Jones', ic: '📊', cl: '#1c2b5e', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^IXIC', nm: 'NASDAQ Composite', ic: '💻', cl: '#4285f4', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^RUT', nm: 'Russell 2000', ic: '📊', cl: '#003087', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^VIX', nm: 'CBOE Volatility', ic: '⚡', cl: '#cc0000', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^TNX', nm: '10-Year Treasury Yield', ic: '📋', cl: '#003087', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^TYX', nm: '30-Year Treasury Yield', ic: '🏛️', cl: '#003087', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^IRX', nm: '13-Week T-Bill', ic: '💵', cl: '#003087', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^FTSE', nm: 'FTSE 100', ic: '🇬🇧', cl: '#003087', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^GDAXI', nm: 'DAX', ic: '🇩🇪', cl: '#003087', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^FCHI', nm: 'CAC 40', ic: '🇫🇷', cl: '#003087', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^N225', nm: 'Nikkei 225', ic: '🇯🇵', cl: '#cc0000', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^HSI', nm: 'Hang Seng', ic: '🇭🇰', cl: '#cc0000', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^BSESN', nm: 'BSE Sensex', ic: '🇮🇳', cl: '#ff9900', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^BVSP', nm: 'Bovespa', ic: '🇧🇷', cl: '#009c3b', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^MXX', nm: 'IPC Mexico', ic: '🇲🇽', cl: '#006847', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^AORD', nm: 'ASX All Ordinaries', ic: '🇦🇺', cl: '#003087', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^STOXX50E', nm: 'Euro Stoxx 50', ic: '🇪🇺', cl: '#003087', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: 'DX-Y.NYB', nm: 'US Dollar Index', ic: '💵', cl: '#003087', cat: 'index', ex: ['IBKR', 'Schwab'] },
+      { sy: '^XAU', nm: 'Philadelphia Gold/Silver', ic: '🥇', cl: '#FFD700', cat: 'index', ex: ['IBKR', 'Schwab'] },
     ];
     let _stkP = {};
     let _stkCacheTs = 0;
@@ -13674,84 +14063,110 @@
     // ── FAST PARALLEL STOCK FETCHER ──
     async function _fetchAllStocks() {
       const syms = _STK.map(s => s.sy);
+      const symsStr = syms.join(',');
 
-      // ── Try Yahoo Finance via multiple CORS proxies ──
-      const yUrl = `https://query1.finance.yahoo.com/v8/finance/spark?symbols=${syms.join(',')}&range=1d&interval=5m`;
-      const yQuote = `https://query2.finance.yahoo.com/v7/finance/quote?symbols=${syms.join(',')}&fields=regularMarketPrice,regularMarketChangePercent,regularMarketVolume,regularMarketDayHigh,regularMarketDayLow,fiftyTwoWeekHigh,fiftyTwoWeekLow,previousClose,regularMarketTime`;
+      // ── Source A: Yahoo Finance v7 multi-symbol (1 request) ──
+      const yQuoteUrl = `https://query2.finance.yahoo.com/v7/finance/quote?symbols=${symsStr}&fields=regularMarketPrice,regularMarketChangePercent,regularMarketVolume,regularMarketDayHigh,regularMarketDayLow,fiftyTwoWeekHigh,fiftyTwoWeekLow,previousClose,regularMarketTime,longName,currency`;
+      const yQuoteUrl1 = yQuoteUrl.replace('query2', 'query1');
 
-      const proxies = [
-        u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-        u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-        u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
-        u => `https://thingproxy.freeboard.io/fetch/${u}`,
-        u => `https://cors-anywhere.herokuapp.com/${u}`,
-        u => `https://crossorigin.me/${u}`,
-      ];
+      // ── Source B: Yahoo Finance spark (compact, very fast) ──
+      const ySparkUrl = `https://query1.finance.yahoo.com/v7/finance/spark?symbols=${symsStr}&range=1d&interval=5m`;
 
-      for (const proxy of proxies) {
-        try {
-          const r = await fetch(proxy(yQuote), { signal: AbortSignal.timeout(5000) });
-          if (!r.ok) continue;
-          const j = await r.json();
-          const results = j?.quoteResponse?.result;
-          if (results && results.length >= 3) {
-            _parseYahooQuote(results);
-            console.log('[STK] Yahoo OK');
-            return true;
-          }
-        } catch(e) {}
-      }
-
-      // ── Fallback: Stooq CSV per symbol ──
-      console.log('[STK] Trying Stooq fallback...');
-      async function stooqOne(sym) {
+      // ── Source C: Stooq CSV for individual stocks (reliable, no key) ──
+      async function _stooqOne(sym) {
         const url = `https://stooq.com/q/l/?s=${sym.toLowerCase()}.us&f=sd2t2ohlcv&h&e=csv`;
-        for (const proxy of proxies.slice(0,3)) {
+        const proxies = [
+          `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+          `https://corsproxy.io/?${encodeURIComponent(url)}`
+        ];
+        for (const p of proxies) {
           try {
-            const r = await fetch(proxy(url), { signal: AbortSignal.timeout(4000) });
+            const r = await fetch(p, { signal: AbortSignal.timeout(4000) });
             if (!r.ok) continue;
             const txt = await r.text();
             const lines = txt.trim().split('\n');
             if (lines.length < 2) continue;
-            const cols = lines[1].split(',');
-            const pr = parseFloat(cols[6]), o = parseFloat(cols[3]);
+            const [, date, time, open, hi, lo, close, vol] = lines[1].split(',');
+            const pr = parseFloat(close), o = parseFloat(open);
             if (!pr || pr <= 0) continue;
-            return { pr, chg: o>0?(pr-o)/o*100:0, hi:parseFloat(cols[4])||0, lo:parseFloat(cols[5])||0, vol:parseInt(cols[7])||0, prevClose:o, closes:[o,pr], mktTime:null, w52h:0, w52l:0, currency:'USD', name:sym };
-          } catch(e) {}
+            const chg = o > 0 ? (pr - o) / o * 100 : 0;
+            return { pr, chg, hi: parseFloat(hi) || 0, lo: parseFloat(lo) || 0, vol: parseInt(vol) || 0, prevClose: o, closes: [o, pr], mktTime: null, w52h: 0, w52l: 0, currency: 'USD', name: '' };
+          } catch (e) { }
         }
         return null;
       }
 
-      const results = await Promise.allSettled(syms.map(s => stooqOne(s)));
+      // ── Try Yahoo multi-symbol first (fastest - 1 request) ──
+      const yhProxies = [
+        u => u,                                                    // direct
+        u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+        u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+        u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+        u => `https://thingproxy.freeboard.io/fetch/${u}`
+      ];
+
+      for (const makeUrl of [() => yQuoteUrl, () => yQuoteUrl1]) {
+        // Race the first 2 proxies simultaneously, then try others sequentially
+        const url = makeUrl();
+        const tryProxy = async (proxyFn) => {
+          try {
+            const pUrl = proxyFn(url);
+            const r = await fetch(pUrl, {
+              signal: AbortSignal.timeout(4500),
+              headers: pUrl === url ? { 'User-Agent': 'Mozilla/5.0' } : {}
+            });
+            if (!r.ok) return null;
+            const j = await r.json();
+            const results = j?.quoteResponse?.result;
+            return (results?.length >= 3) ? results : null;
+          } catch (e) { return null; }
+        };
+
+        // Try direct + first proxy in parallel (race)
+        const raceResult = await Promise.any([
+          tryProxy(yhProxies[0]),
+          tryProxy(yhProxies[1])
+        ]).catch(() => null);
+
+        if (raceResult) {
+          _parseYahooQuote(raceResult);
+          console.log('[STK] Yahoo OK (race)');
+          return true;
+        }
+
+        // Try remaining proxies sequentially
+        for (let i = 2; i < yhProxies.length; i++) {
+          const res = await tryProxy(yhProxies[i]);
+          if (res) { _parseYahooQuote(res); return true; }
+        }
+      }
+
+      // ── Fallback: Stooq CSV for each symbol in parallel (reliable) ──
+      console.log('[STK] Falling back to Stooq parallel fetch');
+      const results = await Promise.allSettled(syms.map(s => _stooqOne(s)));
       let count = 0;
-      results.forEach((r, i) => { if (r.status === 'fulfilled' && r.value) { _stkP[syms[i]] = r.value; count++; } });
-      if (count > 0) { console.log(`[STK] Stooq got ${count}/${syms.length}`); return true; }
+      results.forEach((r, i) => {
+        if (r.status === 'fulfilled' && r.value) {
+          _stkP[syms[i]] = r.value;
+          count++;
+        }
+      });
+      if (count > 0) {
+        console.log(`[STK] Stooq got ${count}/${syms.length} symbols`);
+        return true;
+      }
 
       // ── Last resort: FMP demo ──
       try {
-        const r = await fetch(`https://financialmodelingprep.com/api/v3/quote/${syms.join(',')}?apikey=demo`, { signal: AbortSignal.timeout(5000) });
-        if (r.ok) { const j = await r.json(); if (Array.isArray(j) && j.length) { _parseFMPQuote(j); return true; } }
-      } catch(e) {}
-
-      // ── Ultimate fallback: static realistic prices ──
-      console.log('[STK] Using static fallback prices');
-      const staticPrices = {
-        TSLA:{pr:248.5,chg:2.3},AAPL:{pr:214.2,chg:0.8},GOOGL:{pr:172.4,chg:1.1},
-        AMZN:{pr:203.7,chg:1.5},MSFT:{pr:415.8,chg:0.6},NVDA:{pr:878.4,chg:3.2},
-        META:{pr:582.1,chg:1.9},MSTR:{pr:328.6,chg:4.5},COIN:{pr:198.3,chg:3.8},
-        AMD:{pr:168.9,chg:1.4},MARA:{pr:15.8,chg:5.2},RIOT:{pr:9.4,chg:4.8},
-        PYPL:{pr:71.2,chg:0.9},INTC:{pr:22.1,chg:-0.5},NFLX:{pr:945.3,chg:1.2},
-        SPY:{pr:562.4,chg:0.7},QQQ:{pr:486.2,chg:0.9},GLD:{pr:238.7,chg:0.4},
-        SLV:{pr:30.1,chg:0.6},ARKK:{pr:48.3,chg:1.8}
-      };
-      syms.forEach(sym => {
-        const sp = staticPrices[sym];
-        if (sp) {
-          const pr = sp.pr, chg = sp.chg;
-          _stkP[sym] = { pr, chg, hi: pr*1.02, lo: pr*0.98, vol: Math.floor(Math.random()*50+10)*1000000, prevClose: pr/(1+chg/100), closes:[pr/(1+chg/100),pr], mktTime: new Date(), w52h: pr*1.35, w52l: pr*0.65, currency:'USD', name:sym };
+        const fmpUrl = `https://financialmodelingprep.com/api/v3/quote/${symsStr}?apikey=demo`;
+        const r = await fetch(fmpUrl, { signal: AbortSignal.timeout(5000) });
+        if (r.ok) {
+          const j = await r.json();
+          if (Array.isArray(j) && j.length) { _parseFMPQuote(j); return true; }
         }
-      });
-      return true;
+      } catch (e) { }
+
+      return false;
     }
 
     function _parseYahooQuote(results) {
@@ -13799,6 +14214,7 @@
     }
 
     async function _loadStk() {
+      _stkFiltered = [..._STK]; // init filtered list
       // Use cache if fresh
       if (_stkCacheTs && Date.now() - _stkCacheTs < _STK_CACHE_TTL && Object.keys(_stkP).length > 0) {
         _renderStk(); return;
@@ -13817,8 +14233,37 @@
       return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="display:block"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
     }
     function _renderStk() {
+      _stkFilter();
+    }
+
+    let _stkPage = 1;
+    const _STK_PER_PAGE = 50;
+    let _stkFiltered = [];
+
+    function _stkFilter() {
+      const q = (document.getElementById('stkSearch')?.value || '').toLowerCase();
+      const cat = document.getElementById('stkCatFilter')?.value || '';
+      _stkFiltered = _STK.filter(s => {
+        if (cat && s.cat !== cat) return false;
+        if (q && !s.nm.toLowerCase().includes(q) && !s.sy.toLowerCase().includes(q)) return false;
+        return true;
+      });
+      _stkPage = 1;
+      _stkRenderPage();
+    }
+
+    function _stkRenderPage() {
       const tb = $('stkB'); if (!tb) return;
-      tb.innerHTML = _STK.map((s, i) => {
+      const total = _stkFiltered.length;
+      const start = (_stkPage - 1) * _STK_PER_PAGE;
+      const end = Math.min(start + _STK_PER_PAGE, total);
+      const page = _stkFiltered.slice(start, end);
+
+      // Update count badge
+      const badge = document.getElementById('stkCountBadge');
+      if (badge) badge.textContent = total + ' نتيجة';
+
+      tb.innerHTML = page.map((s, i) => {
         const d = _stkP[s.sy];
         const pr = d && d.pr > 0 ? '$' + d.pr.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '<span class="stk-loading"><i class="fas fa-spinner fa-spin"></i></span>';
         const chg = d ? d.chg : null;
@@ -13828,17 +14273,47 @@
         const spark = d ? _miniSparkSVG(d.closes, chg >= 0 ? '#16c784' : '#ea3943') : '';
         const hiLo = d && d.hi > 0 && d.lo > 0 ? `<div class="stk-hl"><span>H $${d.hi.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span><span>L $${d.lo.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>` : '';
         const w52 = d && d.w52h > 0 ? _w52Bar(d.pr, d.w52l, d.w52h) : '';
-        const catBadge = s.cat === 'etf' ? '<span class="stk-badge etf">ETF</span>' : '<span class="stk-badge stock">Stock</span>';
+        const catColors = { stock: '#3b82f6', etf: '#10b981', commodity: '#f59e0b', index: '#8b5cf6' };
+        const catBadge = `<span class="stk-badge" style="background:${catColors[s.cat] || '#666'}20;color:${catColors[s.cat] || '#666'};border:1px solid ${catColors[s.cat] || '#666'}40;font-size:9px;padding:1px 6px;border-radius:4px;font-weight:700">${s.cat.toUpperCase()}</span>`;
         const tsStr = d && d.mktTime ? d.mktTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+        const exHtml = s.ex && s.ex.length ? `<div class="flex flex-wrap gap-1">${s.ex.slice(0, 3).map(e => `<span style="font-size:10px;background:var(--bg2);border:1px solid var(--bc);padding:1px 5px;border-radius:4px;color:var(--t2)">${e}</span>`).join('')}${s.ex.length > 3 ? `<span style="font-size:10px;color:var(--t2)">+${s.ex.length - 3}</span>` : ''}</div>` : '';
         return `<tr class="stk-row">
 <td class="text-start"><div class="flex items-center gap-2"><div class="stico" style="background:${s.cl}15;color:${s.cl}">${s.ic}</div><div><div class="font-semibold text-sm flex items-center gap-1.5">${s.nm} ${catBadge}</div><span class="text-xs" style="color:var(--t2)">${s.sy}${tsStr ? ' · ' + tsStr : ''}</span></div></div></td>
 <td><div class="font-bold">${pr}</div>${hiLo}</td>
 <td><span style="color:${cc};font-weight:700"><i class="fas ${ic}"></i> ${chg !== null ? ((chg >= 0 ? '+' : '') + chg.toFixed(2) + '%') : '--'}</span></td>
 <td><div style="color:var(--t2);font-size:12px;font-weight:600">${vol}</div>${spark}</td>
 <td>${w52}</td>
-<td><div class="flex flex-wrap gap-1 justify-center">${s.ex.slice(0, 3).map(e => `<span class="stk-ex">${e}</span>`).join('')}${s.ex.length > 3 ? `<span class="text-xs" style="color:var(--t2)">+${s.ex.length - 3}</span>` : ''}</div></td>
-</tr>`}).join('')
+<td>${exHtml}</td>
+</tr>`;
+      }).join('');
+
+      // Render pagination
+      const pgWrap = document.getElementById('stkPagWrap');
+      const pgInfo = document.getElementById('stkPagInfo');
+      const pgBtns = document.getElementById('stkPagBtns');
+      if (!pgWrap) return;
+      if (total <= _STK_PER_PAGE) { pgWrap.style.display = 'none'; return; }
+      pgWrap.style.display = 'flex';
+      if (pgInfo) pgInfo.textContent = `${start + 1}–${end} من ${total}`;
+      const totalPg = Math.ceil(total / _STK_PER_PAGE);
+      if (pgBtns) {
+        let html = `<button onclick="_stkGoPage(${_stkPage - 1})" ${_stkPage === 1 ? 'disabled' : ''} style="padding:4px 10px;border-radius:6px;border:1px solid var(--bc);background:var(--bg2);color:var(--t2);font-size:12px;cursor:pointer">←</button>`;
+        for (let p = Math.max(1, _stkPage - 2); p <= Math.min(totalPg, _stkPage + 2); p++) {
+          html += `<button onclick="_stkGoPage(${p})" style="padding:4px 10px;border-radius:6px;border:1px solid ${p === _stkPage ? 'var(--ac)' : 'var(--bc)'};background:${p === _stkPage ? 'var(--ac)' : 'var(--bg2)'};color:${p === _stkPage ? '#fff' : 'var(--t2)'};font-size:12px;cursor:pointer">${p}</button>`;
+        }
+        html += `<button onclick="_stkGoPage(${_stkPage + 1})" ${_stkPage === totalPg ? 'disabled' : ''} style="padding:4px 10px;border-radius:6px;border:1px solid var(--bc);background:var(--bg2);color:var(--t2);font-size:12px;cursor:pointer">→</button>`;
+        pgBtns.innerHTML = html;
+      }
     }
+
+    function _stkGoPage(p) {
+      const totalPg = Math.ceil(_stkFiltered.length / _STK_PER_PAGE);
+      if (p < 1 || p > totalPg) return;
+      _stkPage = p;
+      _stkRenderPage();
+      document.getElementById('tab_stocks')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     function _fVol(n) { if (!n || isNaN(n) || n === 0) return '--'; if (n >= 1e12) return '$' + (n / 1e12).toFixed(2) + 'T'; if (n >= 1e9) return '$' + (n / 1e9).toFixed(2) + 'B'; if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M'; if (n >= 1e3) return '$' + (n / 1e3).toFixed(0) + 'K'; return n.toFixed(0) }
     function _w52Bar(cur, lo, hi) {
       if (!cur || !lo || !hi || hi <= lo) return '';
@@ -14903,9 +15378,9 @@
 
   <script>
     // Collapse AdSense units when empty (no ad loaded)
-    window.addEventListener('load', function() {
-      setTimeout(function() {
-        ['adMid','adBottom'].forEach(function(id) {
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        ['adMid', 'adBottom'].forEach(function (id) {
           var el = document.getElementById(id);
           if (!el) return;
           var ins = el.querySelector('ins.adsbygoogle');

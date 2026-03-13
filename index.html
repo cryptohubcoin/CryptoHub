@@ -357,7 +357,7 @@
     }
 
     .cd-tbl-wrap {
-      min-height: 600px;
+      min-height: 0;
     }
 
     /* Prevent font-related CLS */
@@ -3206,8 +3206,8 @@
       transition: background .15s
     }
 
-    .mtlex-row:hover {
-      background: var(--hv)
+    .mtlex-row:hover td {
+      background: var(--hv) !important
     }
 
     .mtlex-logo {
@@ -3309,6 +3309,28 @@
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(56, 97, 251, .3);
       filter: brightness(1.1)
+    }
+
+    .mtlex-expand-row td {
+      border-bottom: 1px solid var(--bc);
+    }
+
+    .mtlex-expand-row > td > div {
+      animation: mtlExpIn .22s ease;
+    }
+
+    @keyframes mtlExpIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .mtlex-row.active-row {
+      background: var(--bg2);
+    }
+
+    .mtlex-chevron {
+      display: inline-block;
+      transition: transform .25s ease;
     }
 
     .tsrch {
@@ -5320,7 +5342,7 @@
       height: auto;
       overflow: visible;
       padding-bottom: 20px;
-      min-height: 600px;
+      min-height: 0;
       /* Prevent CLS - reserve space for table */
     }
 
@@ -6711,14 +6733,17 @@
               style="font-size:10px;color:var(--t2)">Live</span></div>
         </div>
         <div class="ct" style="overflow-x: auto; width: 100%; display: block;">
-          <table class="w-full" style="min-width: 600px;">
+          <table class="w-full" style="min-width: 860px;border-collapse:collapse">
             <thead>
               <tr style="border-bottom: 2px solid var(--bc);">
-                <th class="text-start" data-i18n="colExchange2" style="padding: 10px 16px;">المنصة</th>
-                <th style="padding: 10px 16px;">المعادن</th>
-                <th data-i18n="colPairs" style="padding: 10px 16px;">أزواج التداول</th>
-                <th data-i18n="colRefPrice" style="padding: 10px 16px;">السعر المرجعي</th>
-                <th data-i18n="colVol24h" style="padding: 10px 16px;">الحجم 24 ساعة</th>
+                <th class="text-start" style="padding:10px 16px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap">المنصة</th>
+                <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap">المعدن</th>
+                <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap">PRICE</th>
+                <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap">1H%</th>
+                <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap">24H%</th>
+                <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap">7D%</th>
+                <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap">MARKET CAP</th>
+                <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap">VOLUME 24H</th>
               </tr>
             </thead>
             <tbody id="mtlExB"></tbody>
@@ -7967,7 +7992,7 @@
             </table>
           </div>
           <div id="exPaginationBar"
-            style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 14px;background:var(--bg2);border-top:1px solid var(--bc)">
+            style="display:none;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 14px;background:var(--bg2);border-top:1px solid var(--bc)">
             <div id="exShowingInfo" style="font-size:12px;color:var(--t2);font-weight:500;min-width:100px"></div>
             <div id="exPagination" style="display:flex;align-items:center;justify-content:center;gap:4px;flex:1"></div>
             <div style="min-width:100px"></div>
@@ -13028,6 +13053,9 @@
     }
 
     async function loadExchangesForCoin(cid, cn, cs) {
+      // BTC exchange IDs (184 centralized exchanges)
+      const BTC_IDS = ["binance", "gate", "gdax", "bybit_spot", "okex", "kraken", "bitget", "mxc", "kucoin", "crypto_com", "bullish_com", "bingx", "huobi", "bitfinex", "bitstamp", "hashkey_exchange", "gemini", "cex", "backpack_exchange", "bitmart", "coinw", "lbank", "coinstore", "tapbit", "weex", "toobit", "digifinex", "ourbit", "whitebit", "hibt", "upbit", "phemex", "bitunix", "bitrue", "cryptology", "coinex", "nonkyc_io", "levex", "bitbank", "coinspro", "bitcointry_exchange", "valr", "bybit-eu", "deribit_spot", "bitso", "binance_us", "luno", "indodax", "bitlo", "hashkey-global", "gate_us", "pionex", "biconomy", "xt", "kcex", "orangex", "hotcoin_global", "p2pb2b", "bitvenus_spot", "bitmax", "blofin_spot", "bitdelta", "bitcastle", "zoomex", "bithumb", "bitvavo", "bydfi", "bitbaby-exchange", "dextrade", "aivora-exchange", "hyperliquid-spot", "bitkan", "cointr", "btse", "bitflyer", "exmo", "pointpay", "ondo_global_markets", "korbit", "bitopro", "max_maicoin", "foxbit", "huobi_japan", "bitpanda", "earnbit", "wootrade", "nami_exchange", "young-platform", "inx_one", "coinup", "azbit", "grovex", "bigone", "trubit", "latoken", "deepcoin", "qmall", "bitcoin_com", "humidifi", "bitci", "project-x", "native", "subnet-tokens", "supernova-cl", "gmo_japan", "okcoin-japan", "figure_markets", "cetus", "bitstorage", "near-intents", "bluefin", "bitazza", "itbit", "hyperion", "bittime", "grxswap", "independent_reserve", "aster-spot", "coin_metro", "btcmarkets", "lighter-spot", "byte-exchange", "mercado_bitcoin", "byreal", "first-ledger", "native-bsc", "momentum", "o2", "lcx", "magma-finance", "sodex", "hydrex-integral", "etherex", "kumbaya", "honeypop-dex", "nest", "coinzoom", "kinesis_money", "native-base", "emirex", "sailfish", "metalx", "capricorn-monad", "dswap", "fastex", "fullsail-finance", "minswap", "cryptal", "w-dex-polygon", "delta_spot", "dnax", "nbx", "bitmex_spot", "inex", "miaswap", "zkswap-finance", "gt3", "cube", "gliquid", "zkswap-finance-stableswap", "websea", "poloniex", "difx", "bit2me", "coinone", "paribu", "coincheck", "bilaxy", "icrypex", "koinpark", "tokpie", "xbo_com", "merchant-moe-liquidity-book-mantle", "toko_crypto", "kanga", "novadax", "turbos-finance", "sologenic", "coinjar", "vvs", "gopax", "cypher", "bitzy", "valiant", "prism-megaeth", "lithos", "atlantis-monad", "wazirx", "hata", "saucerswap", "paymium", "kayen", "tiktokfun", "nostra", "etherex-legacy", "tigris", "yuzu", "kongswap", "dooar-polygon", "xflows", "beam-swap", "mute", "zkswap-finance", "ruji-trade", "bex", "meridian", "balanced_network", "10kswap-starknet-alpha", "upheaval-finance", "pools-finance", "jaine", "dyorswap-x-layer", "everyswap", "arbswap_arbitrum_one", "sonex", "invariant_eclipse", "melegaswap", "story-hunt", "fluxion", "zuno", "obsidian-finance", "dragonswap", "machinex", "winnieswap", "alcor", "dooar_bsc", "apertureswap", "eddyfinance", "steam-exchange-rails-network", "inkyswap", "thirdfy", "rooster-protocol", "comet-swap", "ubeswap", "sega", "chainex"];
+
       try {
         const sym = cs.toUpperCase();
         const results = [];
@@ -13050,13 +13078,38 @@
           nameMap.set(nn, idx);
         }
 
+        // ── STEP 1: For BTC, pre-fill ALL exchanges immediately (before any API calls) ──
+        if (cid === 'bitcoin') {
+          const btcCoin = allC.find(c => c.id === 'bitcoin');
+          // Get price from multiple sources
+          const bp = btcCoin?.pr || parseFloat($('cdPrice')?.textContent?.replace(/[^0-9.]/g,'')) || 83000;
+          const bv = btcCoin?.vol || 14000000000;
+          console.log('[BTC] Pre-filling', BTC_IDS.length, 'exchanges, base price:', bp);
+          BTC_IDS.forEach(eid => {
+            const dbEx = EX_DB.find(e => e.id === eid);
+            if (!dbEx) return;
+            const hash = dbEx.n.split('').reduce((a,ch) => a + ch.charCodeAt(0), 0);
+            const pr = bp > 0 ? bp * (1 + (hash%20-10)/10000) : bp || 83000;
+            const vol = bv * Math.pow(dbEx.t/10, 2.2) * 0.032 * ((hash%40+80)/100);
+            const idx = results.length;
+            results.push({ n: dbEx.n, eid, pair: 'BTC/USDT', pr, vol, isSim: true });
+            eidMap.set(eid, idx);
+            nameMap.set(normN(dbEx.n), idx);
+          });
+          // Render immediately so user sees all exchanges right away
+          const tmpFinal = [...results].sort((a,b) => b.vol - a.vol);
+          exData = tmpFinal; exPage = 1;
+          $('exCt').textContent = tmpFinal.length;
+          renderExLst();
+        }
+
+        // ── STEP 2: Fetch real data — will OVERRIDE estimates via addResult ──
         const slug = cid.toLowerCase();
         const [ccR, cgR] = await Promise.all([
-          fetchJSON(`https://api.coincap.io/v2/assets/${slug}/markets?limit=150`).catch(() => null),
+          fetchJSON(`https://api.coincap.io/v2/assets/${slug}/markets?limit=200`).catch(() => null),
           fetchJSON(`https://api.coingecko.com/api/v3/coins/${slug}/tickers?depth=false&order=volume_desc&per_page=100`).catch(() => null)
         ]);
 
-        // CoinGecko first (higher quality)
         if (cgR && cgR.tickers) {
           cgR.tickers.forEach(tk => {
             const eid = mapEid(tk.market?.identifier || '');
@@ -13064,7 +13117,6 @@
             addResult(eid, tk.market?.name || eid, tk.base + '/' + tk.target, tk.converted_last?.usd || 0, tk.converted_volume?.usd || 0);
           });
         }
-        // CoinCap fills gaps
         if (ccR && ccR.data) {
           ccR.data.forEach(m => addResult(mapEid(m.exchangeId), m.exchangeId, m.baseSymbol + '/' + m.quoteSymbol, parseFloat(m.priceUsd) || 0, parseFloat(m.volumeUsd24Hr) || 0));
         }
@@ -13083,26 +13135,30 @@
         if (bybitR?.result?.list?.[0]) addResult('bybit', 'Bybit', sym + '/USDT', parseFloat(bybitR.result.list[0].lastPrice), parseFloat(bybitR.result.list[0].turnover24h) || 0);
         if (okxR?.data?.[0]) { const o = okxR.data[0]; addResult('okx', 'OKX', sym + '/USDT', parseFloat(o.last), parseFloat(o.vol24h) * parseFloat(o.last) || 0); }
 
-        // Only simulate for trust ≥ 7 exchanges (avoids clutter)
-        const cd = allC.find(c => c.id === cid);
-        const basePrice = cd ? cd.pr : 0;
-        const baseVol = cd && cd.vol > 0 ? cd.vol : 1000000;
-        EX_DB.filter(e => e.t >= 7).forEach(dbEx => {
-          if (eidMap.has(dbEx.id)) return;
-          const trust = dbEx.t, hash = dbEx.n.split('').reduce((a, ch) => a + ch.charCodeAt(0), 0);
-          const varPr = (hash % 20 - 10) / 10000;
-          const pr = basePrice > 0 ? basePrice * (1 + varPr) : 0;
-          const vol = baseVol > 0 ? baseVol * Math.pow(trust / 10, 2) * 0.08 * ((hash % 30 + 85) / 100) : 0;
-          addResult(dbEx.id, dbEx.n, sym + '/USDT', pr, vol, true);
-        });
+        // ── STEP 3: For non-BTC coins, simulate trust≥7 exchanges ──
+        if (cid !== 'bitcoin') {
+          const cd = allC.find(c => c.id === cid);
+          const basePrice = cd ? cd.pr : 0;
+          const baseVol = cd && cd.vol > 0 ? cd.vol : 1000000;
+          EX_DB.filter(e => e.t >= 7).forEach(dbEx => {
+            if (eidMap.has(dbEx.id)) return;
+            const trust = dbEx.t, hash = dbEx.n.split('').reduce((a, ch) => a + ch.charCodeAt(0), 0);
+            const pr = basePrice > 0 ? basePrice * (1 + (hash%20-10)/10000) : 0;
+            const vol = baseVol > 0 ? baseVol * Math.pow(trust/10, 2) * 0.08 * ((hash%30+85)/100) : 0;
+            addResult(dbEx.id, dbEx.n, sym + '/USDT', pr, vol, true);
+          });
+        }
 
-        // Real data first, then simulated — both sorted by volume desc
+        // Mark real data
+        results.forEach(r => { if (r.vol > 0 && !r.isSim) r.isSim = false; });
+
         const realData = results.filter(r => !r.isSim && r.vol > 0).sort((a, b) => b.vol - a.vol);
         const simData = results.filter(r => r.isSim && r.vol > 0).sort((a, b) => b.vol - a.vol);
         const final = [...realData, ...simData];
         const totalVol = final.reduce((s, r) => s + (r.vol > 0 ? r.vol : 0), 0);
 
         exData = final; exPage = 1;
+        console.log('[CryptoHub] exchanges loaded:', final.length, '| real:', realData.length, '| estimated:', simData.length, '| coin:', cid);
         $('exCt').textContent = final.length;
         $('exTotVol').innerHTML = totalVol > 0 ? `💰 Total Volume: <b>$${fN(totalVol)}</b>` : '';
 
@@ -13141,12 +13197,19 @@
       const tot = Math.ceil(exData.length / exIPP);
       const p = $('exPagination');
       const si = $('exShowingInfo');
+      const bar = $('exPaginationBar');
+      if (tot <= 1) {
+        if (p) p.innerHTML = '';
+        if (si) si.textContent = '';
+        if (bar) bar.style.display = 'none';
+        return;
+      }
+      if (bar) bar.style.display = 'flex';
       if (si) {
         const from = (exPage - 1) * exIPP + 1;
         const to = Math.min(exPage * exIPP, exData.length);
         si.textContent = `Showing ${from}–${to} of ${exData.length}`;
       }
-      if (tot <= 1) { if (p) p.innerHTML = ''; return; }
       const btnS = (active, disabled) => {
         let s = 'display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;padding:0 6px;border-radius:8px;border:1px solid var(--bc);background:var(--bg1);color:var(--t1);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;';
         if (disabled) return s + 'opacity:.35;cursor:default;pointer-events:none;';
@@ -13683,59 +13746,182 @@
       if (_mt.pdChg !== 0) fChg(_mt.pdChg, $('mPdC')); else if (_mt.pd > 0 && $('mPdC')) $('mPdC').innerHTML = '<span style="color:var(--ac)">Live \u2713</span>';
       if (_mt.g > 0 && _mt.pd > 0 && $('mPdHL')) $('mPdHL').textContent = 'Au/Pd ' + (_mt.g / _mt.pd).toFixed(2);
       if (_mt.lastUpd) { const ts = new Date(_mt.lastUpd).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });['mGT', 'mST', 'mPtT', 'mPdT'].forEach(id => { if ($(id)) $(id).textContent = ts }) }
+      _updMtlExPrices();
     }
 
     // ===== METAL EXCHANGES TABLE =====
     const _MTL_EX = [
-      { n: 'Binance', p: ['PAXG/USDT', 'PAXG/BTC'], u: 'https://www.binance.com/trade/PAXG_USDT', l: 'https://bin.bnbstatic.com/static/images/common/favicon.ico', t: 10, tp: 'crypto', m: ['Au'] },
-      { n: 'Bybit', p: ['PAXG/USDT'], u: 'https://www.bybit.com/trade/spot/PAXG/USDT', l: 'https://www.bybit.com/favicon.ico', t: 10, tp: 'crypto', m: ['Au'] },
-      { n: 'OKX', p: ['PAXG/USDT'], u: 'https://www.okx.com/trade-spot/paxg-usdt', l: 'https://static.okx.com/cdn/assets/imgs/226/favicon.ico', t: 10, tp: 'crypto', m: ['Au'] },
-      { n: 'Kraken', p: ['XAU/USD', 'XAG/USD', 'PAXG/USD'], u: 'https://www.kraken.com/prices/paxg', l: 'https://www.kraken.com/favicon.ico', t: 10, tp: 'crypto', m: ['Au', 'Ag'] },
-      { n: 'KuCoin', p: ['PAXG/USDT'], u: 'https://www.kucoin.com/trade/PAXG-USDT', l: 'https://assets.staticimg.com/cms/media/1lB3PkckFDyfxz6VudCEACGaQoJ.png', t: 9, tp: 'crypto', m: ['Au'] },
-      { n: 'Gate.io', p: ['PAXG/USDT'], u: 'https://www.gate.io/trade/PAXG_USDT', l: 'https://www.gate.io/favicon.ico', t: 9, tp: 'crypto', m: ['Au'] },
-      { n: 'Bitget', p: ['PAXG/USDT'], u: 'https://www.bitget.com/spot/PAXGUSDT', l: 'https://www.bitget.com/favicon.ico', t: 9, tp: 'crypto', m: ['Au'] },
-      { n: 'Bitfinex', p: ['XAUt/USD', 'PAXG/USD'], u: 'https://www.bitfinex.com/t/XAUT:USD', l: 'https://www.bitfinex.com/favicon.ico', t: 9, tp: 'crypto', m: ['Au'] },
-      { n: 'MEXC', p: ['PAXG/USDT'], u: 'https://www.mexc.com/exchange/PAXG_USDT', l: 'https://www.mexc.com/favicon.ico', t: 8, tp: 'crypto', m: ['Au'] },
-      { n: 'HTX', p: ['PAXG/USDT'], u: 'https://www.htx.com/trade/paxg_usdt', l: 'https://www.htx.com/favicon.ico', t: 8, tp: 'crypto', m: ['Au'] },
-      { n: 'OANDA', p: ['XAU/USD', 'XAG/USD', 'XPT/USD', 'XPD/USD'], u: 'https://www.oanda.com', l: 'https://www.oanda.com/favicon.ico', t: 10, tp: 'forex', m: ['Au', 'Ag', 'Pt', 'Pd'] },
-      { n: 'Interactive Brokers', p: ['GLD', 'SLV', 'XAUUSD', 'PPLT', 'PALL'], u: 'https://www.interactivebrokers.com', l: 'https://www.interactivebrokers.com/favicon.ico', t: 10, tp: 'broker', m: ['Au', 'Ag', 'Pt', 'Pd'] },
-      { n: 'eToro', p: ['Gold', 'Silver', 'Platinum'], u: 'https://www.etoro.com', l: 'https://www.etoro.com/favicon.ico', t: 9, tp: 'broker', m: ['Au', 'Ag', 'Pt'] },
-      { n: 'IC Markets', p: ['XAUUSD', 'XAGUSD'], u: 'https://www.icmarkets.com', l: 'https://www.icmarkets.com/favicon.ico', t: 9, tp: 'forex', m: ['Au', 'Ag'] },
-      { n: 'Pepperstone', p: ['XAUUSD', 'XAGUSD', 'XPTUSD'], u: 'https://www.pepperstone.com', l: 'https://www.pepperstone.com/favicon.ico', t: 9, tp: 'forex', m: ['Au', 'Ag', 'Pt'] },
-      { n: 'Exness', p: ['XAUUSD', 'XAGUSD'], u: 'https://www.exness.com', l: 'https://www.exness.com/favicon.ico', t: 8, tp: 'forex', m: ['Au', 'Ag'] },
-      { n: 'XM', p: ['XAUUSD', 'XAGUSD', 'PALL'], u: 'https://www.xm.com', l: 'https://www.xm.com/favicon.ico', t: 8, tp: 'forex', m: ['Au', 'Ag', 'Pd'] },
-      { n: 'Tether Gold', p: ['XAUt/USDT'], u: 'https://gold.tether.to', l: 'https://gold.tether.to/favicon.ico', t: 8, tp: 'crypto', m: ['Au'] }
+      // ── Crypto Exchanges ──
+      { n: 'Binance', p: ['PAXG/USDT', 'PAXG/BTC', 'XAUUSDT'], u: 'https://www.binance.com/trade/PAXG_USDT', l: 'https://bin.bnbstatic.com/static/images/common/favicon.ico', t: 10, tp: 'crypto', m: ['Au'], md: { Au: { pair: 'PAXG/USDT', note: 'PAX Gold Token — 1 PAXG = 1 troy oz gold' } } },
+      { n: 'Bybit', p: ['PAXG/USDT', 'PAXG/USDC'], u: 'https://www.bybit.com/trade/spot/PAXG/USDT', l: 'https://www.bybit.com/favicon.ico', t: 10, tp: 'crypto', m: ['Au'], md: { Au: { pair: 'PAXG/USDT', note: 'Spot & Derivatives' } } },
+      { n: 'OKX', p: ['PAXG/USDT', 'PAXG/USDC', 'XAUt/USDT'], u: 'https://www.okx.com/trade-spot/paxg-usdt', l: 'https://static.okx.com/cdn/assets/imgs/226/favicon.ico', t: 10, tp: 'crypto', m: ['Au'], md: { Au: { pair: 'PAXG/USDT', note: 'Tokenized Gold' } } },
+      { n: 'Kraken', p: ['XAU/USD', 'XAG/USD', 'PAXG/USD', 'PAXG/EUR'], u: 'https://www.kraken.com/prices/paxg', l: 'https://www.kraken.com/favicon.ico', t: 10, tp: 'crypto', m: ['Au', 'Ag'], md: { Au: { pair: 'XAU/USD', note: 'Spot Gold & PAXG' }, Ag: { pair: 'XAG/USD', note: 'Spot Silver' } } },
+      { n: 'KuCoin', p: ['PAXG/USDT', 'PAXG/BTC'], u: 'https://www.kucoin.com/trade/PAXG-USDT', l: 'https://assets.staticimg.com/cms/media/1lB3PkckFDyfxz6VudCEACGaQoJ.png', t: 9, tp: 'crypto', m: ['Au'], md: { Au: { pair: 'PAXG/USDT', note: 'Tokenized Gold' } } },
+      { n: 'Gate.io', p: ['PAXG/USDT', 'XAUUSDT'], u: 'https://www.gate.io/trade/PAXG_USDT', l: 'https://www.gate.io/favicon.ico', t: 9, tp: 'crypto', m: ['Au'], md: { Au: { pair: 'PAXG/USDT', note: 'Gold Token' } } },
+      { n: 'Bitget', p: ['PAXG/USDT', 'PAXG/USDC'], u: 'https://www.bitget.com/spot/PAXGUSDT', l: 'https://www.bitget.com/favicon.ico', t: 9, tp: 'crypto', m: ['Au'], md: { Au: { pair: 'PAXG/USDT', note: 'Gold-backed Token' } } },
+      { n: 'Bitfinex', p: ['XAUt/USD', 'XAUt/USDT', 'PAXG/USD'], u: 'https://www.bitfinex.com/t/XAUT:USD', l: 'https://www.bitfinex.com/favicon.ico', t: 9, tp: 'crypto', m: ['Au'], md: { Au: { pair: 'XAUt/USD', note: 'Tether Gold — 1 XAUt = 1 fine troy oz' } } },
+      { n: 'MEXC', p: ['PAXG/USDT', 'XAUUSDT'], u: 'https://www.mexc.com/exchange/PAXG_USDT', l: 'https://www.mexc.com/favicon.ico', t: 8, tp: 'crypto', m: ['Au'], md: { Au: { pair: 'PAXG/USDT', note: 'Tokenized Gold' } } },
+      { n: 'HTX', p: ['PAXG/USDT'], u: 'https://www.htx.com/trade/paxg_usdt', l: 'https://www.htx.com/favicon.ico', t: 8, tp: 'crypto', m: ['Au'], md: { Au: { pair: 'PAXG/USDT', note: 'Gold Token' } } },
+      { n: 'Tether Gold', p: ['XAUt/USDT', 'XAUt/USD', 'XAUt/BTC'], u: 'https://gold.tether.to', l: 'https://gold.tether.to/favicon.ico', t: 8, tp: 'crypto', m: ['Au'], md: { Au: { pair: 'XAUt/USDT', note: 'Physical gold on Ethereum & Tron' } } },
+      { n: 'Paxos (PAXG)', p: ['PAXG/USD', 'PAXG/USDC'], u: 'https://paxos.com/paxgold/', l: 'https://paxos.com/favicon.ico', t: 9, tp: 'crypto', m: ['Au'], md: { Au: { pair: 'PAXG/USD', note: 'Regulated tokenized gold by Paxos' } } },
+      { n: 'Bitpanda', p: ['Gold/EUR', 'Silver/EUR', 'Gold/USD', 'Silver/USD'], u: 'https://www.bitpanda.com/metals', l: 'https://www.bitpanda.com/favicon.ico', t: 8, tp: 'crypto', m: ['Au', 'Ag'], md: { Au: { pair: 'Gold/EUR', note: 'Fractional gold ownership' }, Ag: { pair: 'Silver/EUR', note: 'Fractional silver ownership' } } },
+      // ── Forex Brokers ──
+      { n: 'OANDA', p: ['XAU/USD', 'XAG/USD', 'XPT/USD', 'XPD/USD'], u: 'https://www.oanda.com/forex-trading/markets/current/xauusd/', l: 'https://www.oanda.com/favicon.ico', t: 10, tp: 'forex', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'XAU/USD', note: 'CFD — tight spreads' }, Ag: { pair: 'XAG/USD', note: 'CFD Silver' }, Pt: { pair: 'XPT/USD', note: 'CFD Platinum' }, Pd: { pair: 'XPD/USD', note: 'CFD Palladium' } } },
+      { n: 'IC Markets', p: ['XAUUSD', 'XAGUSD', 'XPTUSD', 'XPDUSD'], u: 'https://www.icmarkets.com/forex-trading/trading-instruments/gold/', l: 'https://www.icmarkets.com/favicon.ico', t: 9, tp: 'forex', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'XAUUSD', note: 'ECN — low spread from $0.07' }, Ag: { pair: 'XAGUSD', note: 'Silver CFD' }, Pt: { pair: 'XPTUSD', note: 'Platinum CFD' }, Pd: { pair: 'XPDUSD', note: 'Palladium CFD' } } },
+      { n: 'Pepperstone', p: ['XAUUSD', 'XAGUSD', 'XPTUSD', 'XPDUSD'], u: 'https://www.pepperstone.com/trade-cfds/precious-metals/', l: 'https://www.pepperstone.com/favicon.ico', t: 9, tp: 'forex', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'XAUUSD', note: 'CFD — razor spread' }, Ag: { pair: 'XAGUSD', note: 'Silver CFD' }, Pt: { pair: 'XPTUSD', note: 'Platinum CFD' }, Pd: { pair: 'XPDUSD', note: 'Palladium CFD' } } },
+      { n: 'Exness', p: ['XAUUSD', 'XAGUSD', 'XPTUSD', 'XPDUSD'], u: 'https://www.exness.com/trading/instruments/metals/', l: 'https://www.exness.com/favicon.ico', t: 8, tp: 'forex', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'XAUUSD', note: 'CFD Gold' }, Ag: { pair: 'XAGUSD', note: 'CFD Silver' }, Pt: { pair: 'XPTUSD', note: 'CFD Platinum' }, Pd: { pair: 'XPDUSD', note: 'CFD Palladium' } } },
+      { n: 'XM', p: ['XAUUSD', 'XAGUSD', 'XPTUSD', 'XPDUSD'], u: 'https://www.xm.com/trading/precious-metals', l: 'https://www.xm.com/favicon.ico', t: 8, tp: 'forex', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'XAUUSD', note: 'CFD Gold' }, Ag: { pair: 'XAGUSD', note: 'CFD Silver' }, Pt: { pair: 'XPTUSD', note: 'CFD Platinum' }, Pd: { pair: 'XPDUSD', note: 'CFD Palladium' } } },
+      { n: 'AvaTrade', p: ['XAUUSD', 'XAGUSD', 'XPTUSD', 'XPDUSD'], u: 'https://www.avatrade.com/trading/commodities/metals/', l: 'https://www.avatrade.com/favicon.ico', t: 9, tp: 'forex', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'XAUUSD', note: 'CFD Gold' }, Ag: { pair: 'XAGUSD', note: 'CFD Silver' }, Pt: { pair: 'XPTUSD', note: 'CFD Platinum' }, Pd: { pair: 'XPDUSD', note: 'CFD Palladium' } } },
+      { n: 'Plus500', p: ['XAUUSD', 'XAGUSD', 'XPTUSD', 'XPDUSD'], u: 'https://www.plus500.com/en/instruments/xauusd', l: 'https://www.plus500.com/favicon.ico', t: 9, tp: 'forex', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'XAUUSD', note: 'CFD Gold' }, Ag: { pair: 'XAGUSD', note: 'CFD Silver' }, Pt: { pair: 'XPTUSD', note: 'CFD Platinum' }, Pd: { pair: 'XPDUSD', note: 'CFD Palladium' } } },
+      { n: 'CMC Markets', p: ['XAUUSD', 'XAGUSD', 'XPTUSD', 'XPDUSD', 'XRHUSD'], u: 'https://www.cmcmarkets.com/en/financial-instruments/gold', l: 'https://www.cmcmarkets.com/favicon.ico', t: 9, tp: 'forex', m: ['Au', 'Ag', 'Pt', 'Pd', 'Rh'], md: { Au: { pair: 'XAUUSD', note: 'CFD Gold' }, Ag: { pair: 'XAGUSD', note: 'CFD Silver' }, Pt: { pair: 'XPTUSD', note: 'CFD Platinum' }, Pd: { pair: 'XPDUSD', note: 'CFD Palladium' }, Rh: { pair: 'XRHUSD', note: 'CFD Rhodium' } } },
+      { n: 'Saxo Bank', p: ['XAUUSD', 'XAGUSD', 'XPTUSD', 'XPDUSD'], u: 'https://www.home.saxo/rates-and-conditions/commodities/precious-metals', l: 'https://www.home.saxo/favicon.ico', t: 10, tp: 'forex', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'XAUUSD', note: 'Spot & Futures' }, Ag: { pair: 'XAGUSD', note: 'Spot & Futures' }, Pt: { pair: 'XPTUSD', note: 'Spot Gold' }, Pd: { pair: 'XPDUSD', note: 'Spot Palladium' } } },
+      { n: 'FXCM', p: ['XAUUSD', 'XAGUSD'], u: 'https://www.fxcm.com/uk/forex/precious-metals/', l: 'https://www.fxcm.com/favicon.ico', t: 8, tp: 'forex', m: ['Au', 'Ag'], md: { Au: { pair: 'XAUUSD', note: 'CFD Gold' }, Ag: { pair: 'XAGUSD', note: 'CFD Silver' } } },
+      { n: 'Swissquote', p: ['XAUUSD', 'XAGUSD', 'XPTUSD'], u: 'https://www.swissquote.com/trading/precious-metals/', l: 'https://www.swissquote.com/favicon.ico', t: 9, tp: 'forex', m: ['Au', 'Ag', 'Pt'], md: { Au: { pair: 'XAUUSD', note: 'CFD Gold' }, Ag: { pair: 'XAGUSD', note: 'CFD Silver' }, Pt: { pair: 'XPTUSD', note: 'CFD Platinum' } } },
+      { n: 'FP Markets', p: ['XAUUSD', 'XAGUSD', 'XPTUSD', 'XPDUSD'], u: 'https://www.fpmarkets.com/commodities/', l: 'https://www.fpmarkets.com/favicon.ico', t: 8, tp: 'forex', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'XAUUSD', note: 'ECN Gold' }, Ag: { pair: 'XAGUSD', note: 'ECN Silver' }, Pt: { pair: 'XPTUSD', note: 'Platinum CFD' }, Pd: { pair: 'XPDUSD', note: 'Palladium CFD' } } },
+      { n: 'HFM (HotForex)', p: ['XAUUSD', 'XAGUSD', 'XPTUSD'], u: 'https://www.hfm.com/trading-conditions/precious-metals/', l: 'https://www.hfm.com/favicon.ico', t: 8, tp: 'forex', m: ['Au', 'Ag', 'Pt'], md: { Au: { pair: 'XAUUSD', note: 'CFD Gold' }, Ag: { pair: 'XAGUSD', note: 'CFD Silver' }, Pt: { pair: 'XPTUSD', note: 'CFD Platinum' } } },
+      { n: 'Tickmill', p: ['XAUUSD', 'XAGUSD'], u: 'https://www.tickmill.com/trading/commodities/', l: 'https://www.tickmill.com/favicon.ico', t: 8, tp: 'forex', m: ['Au', 'Ag'], md: { Au: { pair: 'XAUUSD', note: 'CFD Gold' }, Ag: { pair: 'XAGUSD', note: 'CFD Silver' } } },
+      { n: 'FxPro', p: ['XAUUSD', 'XAGUSD', 'XPTUSD', 'XPDUSD'], u: 'https://www.fxpro.com/trading/commodity/precious-metals/', l: 'https://www.fxpro.com/favicon.ico', t: 8, tp: 'forex', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'XAUUSD', note: 'CFD Gold' }, Ag: { pair: 'XAGUSD', note: 'CFD Silver' }, Pt: { pair: 'XPTUSD', note: 'CFD Platinum' }, Pd: { pair: 'XPDUSD', note: 'CFD Palladium' } } },
+      // ── Stock Brokers ──
+      { n: 'Interactive Brokers', p: ['GLD', 'SLV', 'IAU', 'XAUUSD', 'PPLT', 'PALL', 'SIVR'], u: 'https://www.interactivebrokers.com/en/trading/precious-metals.php', l: 'https://www.interactivebrokers.com/favicon.ico', t: 10, tp: 'broker', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'GLD / IAU', note: 'ETF + Spot Gold Futures (XAUUSD)' }, Ag: { pair: 'SLV / SIVR', note: 'Silver ETF + Spot' }, Pt: { pair: 'PPLT', note: 'Aberdeen Platinum ETF' }, Pd: { pair: 'PALL', note: 'Aberdeen Palladium ETF' } } },
+      { n: 'eToro', p: ['Gold', 'Silver', 'Platinum', 'Palladium'], u: 'https://www.etoro.com/markets/gold', l: 'https://www.etoro.com/favicon.ico', t: 9, tp: 'broker', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'Gold CFD', note: 'Social trading + fractional' }, Ag: { pair: 'Silver CFD', note: 'CFD Silver' }, Pt: { pair: 'Platinum CFD', note: 'CFD Platinum' }, Pd: { pair: 'Palladium CFD', note: 'CFD Palladium' } } },
+      { n: 'Charles Schwab', p: ['GLD', 'SLV', 'IAU', 'PPLT', 'PALL', 'SGOL'], u: 'https://www.schwab.com/etfs/precious-metals', l: 'https://www.schwab.com/favicon.ico', t: 10, tp: 'broker', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'GLD / IAU / SGOL', note: 'Gold ETFs — $0 commission' }, Ag: { pair: 'SLV', note: 'iShares Silver ETF' }, Pt: { pair: 'PPLT', note: 'Platinum ETF' }, Pd: { pair: 'PALL', note: 'Palladium ETF' } } },
+      { n: 'Fidelity', p: ['GLD', 'SLV', 'IAU', 'FGLD', 'SGOL'], u: 'https://www.fidelity.com/insights/investing-ideas/investing-in-gold', l: 'https://www.fidelity.com/favicon.ico', t: 10, tp: 'broker', m: ['Au', 'Ag'], md: { Au: { pair: 'GLD / IAU / FGLD', note: 'Gold ETFs + Fidelity Gold Fund' }, Ag: { pair: 'SLV / SGOL', note: 'Silver ETFs' } } },
+      { n: 'TD Ameritrade / Schwab', p: ['GLD', 'SLV', 'IAU', 'PPLT', 'PALL'], u: 'https://www.tdameritrade.com/investment-products/etf-investing.html', l: 'https://www.tdameritrade.com/favicon.ico', t: 9, tp: 'broker', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'GLD / IAU', note: 'Gold ETFs' }, Ag: { pair: 'SLV', note: 'Silver ETF' }, Pt: { pair: 'PPLT', note: 'Platinum ETF' }, Pd: { pair: 'PALL', note: 'Palladium ETF' } } },
+      { n: 'Robinhood', p: ['GLD', 'SLV', 'IAU', 'SGOL', 'SIVR'], u: 'https://robinhood.com/lists/precious-metals', l: 'https://robinhood.com/favicon.ico', t: 8, tp: 'broker', m: ['Au', 'Ag'], md: { Au: { pair: 'GLD / IAU / SGOL', note: 'Commission-free Gold ETFs' }, Ag: { pair: 'SLV / SIVR', note: 'Commission-free Silver ETFs' } } },
+      { n: 'Webull', p: ['GLD', 'SLV', 'IAU', 'SGOL', 'PPLT'], u: 'https://www.webull.com/commodity', l: 'https://www.webull.com/favicon.ico', t: 8, tp: 'broker', m: ['Au', 'Ag', 'Pt'], md: { Au: { pair: 'GLD / IAU', note: 'Gold ETFs' }, Ag: { pair: 'SLV', note: 'Silver ETF' }, Pt: { pair: 'PPLT', note: 'Platinum ETF' } } },
+      { n: 'Alpaca', p: ['GLD', 'SLV', 'IAU'], u: 'https://alpaca.markets', l: 'https://alpaca.markets/favicon.ico', t: 7, tp: 'broker', m: ['Au', 'Ag'], md: { Au: { pair: 'GLD / IAU', note: 'API-first Gold ETFs' }, Ag: { pair: 'SLV', note: 'Silver ETF via API' } } },
+      { n: 'Revolut', p: ['Gold/GBP', 'Gold/EUR', 'Silver/GBP', 'Silver/EUR'], u: 'https://www.revolut.com/commodity-trading/', l: 'https://www.revolut.com/favicon.ico', t: 8, tp: 'broker', m: ['Au', 'Ag'], md: { Au: { pair: 'Gold/EUR', note: 'Fractional gold — in-app' }, Ag: { pair: 'Silver/EUR', note: 'Fractional silver — in-app' } } },
+      // ── Physical / Bullion ──
+      { n: 'Goldmoney', p: ['Physical Gold', 'Physical Silver', 'Physical Platinum', 'Physical Palladium'], u: 'https://www.goldmoney.com', l: 'https://www.goldmoney.com/favicon.ico', t: 9, tp: 'physical', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'Physical Gold', note: 'Allocated gold in vaults (Canada/UK/HK)' }, Ag: { pair: 'Physical Silver', note: 'Allocated silver bars' }, Pt: { pair: 'Physical Platinum', note: 'Allocated platinum' }, Pd: { pair: 'Physical Palladium', note: 'Allocated palladium' } } },
+      { n: 'BullionVault', p: ['Gold/USD', 'Silver/USD', 'Platinum/USD', 'Gold/EUR', 'Gold/GBP'], u: 'https://www.bullionvault.com', l: 'https://www.bullionvault.com/favicon.ico', t: 9, tp: 'physical', m: ['Au', 'Ag', 'Pt'], md: { Au: { pair: 'Gold/USD', note: 'Peer-to-peer gold market, lowest cost' }, Ag: { pair: 'Silver/USD', note: 'Professional-grade silver bars' }, Pt: { pair: 'Platinum/USD', note: 'Physical platinum' } } },
+      { n: 'Kitco', p: ['Gold', 'Silver', 'Platinum', 'Palladium', 'Rhodium'], u: 'https://www.kitco.com/buy-gold-silver/', l: 'https://www.kitco.com/favicon.ico', t: 9, tp: 'physical', m: ['Au', 'Ag', 'Pt', 'Pd', 'Rh'], md: { Au: { pair: 'Gold Bars & Coins', note: 'LBMA-approved bars' }, Ag: { pair: 'Silver Bars & Coins', note: 'Physical silver' }, Pt: { pair: 'Platinum Coins', note: 'Physical platinum' }, Pd: { pair: 'Palladium Bars', note: 'Physical palladium' }, Rh: { pair: 'Rhodium Bars', note: 'Rare — very limited supply' } } },
+      { n: 'APMEX', p: ['Gold Coins', 'Gold Bars', 'Silver Coins', 'Silver Bars', 'Platinum', 'Palladium'], u: 'https://www.apmex.com', l: 'https://www.apmex.com/favicon.ico', t: 9, tp: 'physical', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'Gold Coins/Bars', note: 'Largest US bullion dealer' }, Ag: { pair: 'Silver Coins/Bars', note: 'American Eagles, Maples' }, Pt: { pair: 'Platinum Coins', note: 'Physical platinum' }, Pd: { pair: 'Palladium Bars', note: 'Physical palladium' } } },
+      { n: 'JM Bullion', p: ['Gold Coins', 'Gold Bars', 'Silver Coins', 'Silver Bars', 'Platinum', 'Palladium'], u: 'https://www.jmbullion.com', l: 'https://www.jmbullion.com/favicon.ico', t: 9, tp: 'physical', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'Gold Coins/Bars', note: 'Low premiums, free shipping $199+' }, Ag: { pair: 'Silver Coins/Bars', note: 'Huge selection' }, Pt: { pair: 'Platinum Coins', note: 'Physical platinum' }, Pd: { pair: 'Palladium Bars', note: 'Physical palladium' } } },
+      { n: 'Monex', p: ['Gold', 'Silver', 'Platinum', 'Palladium'], u: 'https://www.monex.com', l: 'https://www.monex.com/favicon.ico', t: 8, tp: 'physical', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'Gold Bars', note: 'Atlas IRA-approved gold' }, Ag: { pair: 'Silver Bars', note: 'IRA-approved silver' }, Pt: { pair: 'Platinum Bars', note: 'IRA-approved platinum' }, Pd: { pair: 'Palladium Bars', note: 'IRA palladium' } } },
+      { n: 'Sprott Asset Mgmt', p: ['PHYS', 'PSLV', 'SPPP', 'SGDM'], u: 'https://sprott.com/investment-strategies/physical-bullion-trusts/', l: 'https://sprott.com/favicon.ico', t: 9, tp: 'physical', m: ['Au', 'Ag', 'Pt'], md: { Au: { pair: 'PHYS / SGDM', note: 'Sprott Physical Gold Trust (NYSE)' }, Ag: { pair: 'PSLV', note: 'Sprott Physical Silver Trust' }, Pt: { pair: 'SPPP', note: 'Sprott Physical Platinum & Palladium Trust' } } },
+      { n: 'Aberdeen (abrdn)', p: ['SGOL', 'SIVR', 'PPLT', 'PALL'], u: 'https://www.aberdeenstandard.com/en-us/us/intermediary/tools-and-resources/etf/precious-metals', l: 'https://www.aberdeenstandard.com/favicon.ico', t: 9, tp: 'physical', m: ['Au', 'Ag', 'Pt', 'Pd'], md: { Au: { pair: 'SGOL', note: 'Gold stored in Switzerland' }, Ag: { pair: 'SIVR', note: 'Silver Trust' }, Pt: { pair: 'PPLT', note: 'Platinum Trust' }, Pd: { pair: 'PALL', note: 'Palladium Trust' } } },
+      { n: 'VanEck', p: ['GDX', 'GDXJ', 'MELT', 'NUGT'], u: 'https://www.vaneck.com/us/en/investments/gold-miners-etf-gdx/', l: 'https://www.vaneck.com/favicon.ico', t: 9, tp: 'physical', m: ['Au', 'Ag'], md: { Au: { pair: 'GDX / GDXJ', note: 'Gold Miners ETF — equity exposure' }, Ag: { pair: 'MELT', note: 'VanEck Merk Gold ETF' } } }
     ];
     function _buildMtlEx() {
       const tb = $('mtlExB'); if (!tb) return;
-      const _mtlIcons = { Au: '🥇', Ag: '🥈', Pt: '💎', Pd: '⚪' };
-      const _mtlColors = { Au: '#FFD700', Ag: '#C0C0C0', Pt: '#E5E4E2', Pd: '#B0B0B0' };
-      const _tpLabels = { crypto: 'Crypto', forex: 'Forex', broker: 'Broker' };
-      const _tpColors = { crypto: ['#3861fb', 'rgba(56,97,251,.12)'], forex: ['#16c784', 'rgba(22,199,132,.12)'], broker: ['#f7931a', 'rgba(247,147,26,.12)'] };
-      function _mtlRefPrice(metals) {
-        const prices = [];
-        if (metals.includes('Au') && _mt.g > 0) prices.push('<span style="color:#FFD700">Au $' + _mt.g.toLocaleString('en', { maximumFractionDigits: 0 }) + '</span>');
-        if (metals.includes('Ag') && _mt.s > 0) prices.push('<span style="color:#B0B0B0">Ag $' + _mt.s.toFixed(2) + '</span>');
-        if (metals.includes('Pt') && _mt.pt > 0) prices.push('<span style="color:#E5E4E2">Pt $' + _mt.pt.toLocaleString('en', { maximumFractionDigits: 0 }) + '</span>');
-        if (metals.includes('Pd') && _mt.pd > 0) prices.push('<span style="color:#9A9A9A">Pd $' + _mt.pd.toLocaleString('en', { maximumFractionDigits: 0 }) + '</span>');
-        return prices.length ? prices.join('<br>') : '--';
+      const _mtlIcons  = { Au:'🥇', Ag:'🥈', Pt:'💎', Pd:'⚪', Rh:'🔮' };
+      const _mtlNames  = { Au:'Gold', Ag:'Silver', Pt:'Platinum', Pd:'Palladium', Rh:'Rhodium' };
+      // distinctive, vivid colors per metal
+      const _mtlColors = { Au:'#F0B429', Ag:'#A8B8CC', Pt:'#63B3ED', Pd:'#4ADE80', Rh:'#B794F4' };
+      const _mtlBg     = { Au:'rgba(240,180,41,.15)', Ag:'rgba(203,213,224,.12)', Pt:'rgba(99,179,237,.13)', Pd:'rgba(104,211,145,.12)', Rh:'rgba(183,148,244,.13)' };
+      const _mtlBorder = { Au:'rgba(240,180,41,.35)', Ag:'rgba(203,213,224,.3)',  Pt:'rgba(99,179,237,.3)',  Pd:'rgba(104,211,145,.28)', Rh:'rgba(183,148,244,.3)' };
+      const _tpLabels  = { crypto:'Crypto', forex:'Forex', broker:'Broker', physical:'Physical' };
+      const _tpColors  = { crypto:['#3861fb','rgba(56,97,251,.13)'], forex:['#16c784','rgba(22,199,132,.13)'], broker:['#f7931a','rgba(247,147,26,.13)'], physical:['#e5b84a','rgba(229,184,74,.13)'] };
+      const _mtlData = {
+        Au: { price:()=>_mt.g,  ch1:0.12,  ch24:()=>_mt.gChg||0,  ch7:0.85,  mcap:'$17.9T', sym:'XAU/USD' },
+        Ag: { price:()=>_mt.s,  ch1:-0.08, ch24:()=>_mt.sChg||0,  ch7:1.20,  mcap:'$1.6T',  sym:'XAG/USD' },
+        Pt: { price:()=>_mt.pt, ch1:0.05,  ch24:()=>_mt.ptChg||0, ch7:-0.40, mcap:'$230B',  sym:'XPT/USD' },
+        Pd: { price:()=>_mt.pd, ch1:-0.15, ch24:()=>_mt.pdChg||0, ch7:-1.10, mcap:'$52B',   sym:'XPD/USD' },
+        Rh: { price:()=>5000,   ch1:0,     ch24:()=>0,             ch7:0,     mcap:'$12B',   sym:'XRH/USD' }
+      };
+      function _fPrice(sym) {
+        const d=_mtlData[sym]; if(!d) return '--';
+        const v=d.price(); if(!v||v<=0) return '--';
+        return sym==='Ag' ? '$'+v.toFixed(2) : '$'+v.toLocaleString('en',{maximumFractionDigits:0});
       }
-      tb.innerHTML = _MTL_EX.map((ex, i) => {
-        const ref = getRef(ex.n, ex.u); const hasPAXG = ex.p.some(x => x.includes('PAXG'));
-        const tCol = _tpColors[ex.tp] || _tpColors.crypto;
-        const trustGrad = ex.t >= 9 ? 'linear-gradient(135deg,#16c784,#0d9f63)' : ex.t >= 8 ? 'linear-gradient(135deg,#3861fb,#6c5ce7)' : 'linear-gradient(135deg,#eab308,#f59e0b)';
-        const trustTxt = ex.t >= 9 ? 'var(--gn)' : ex.t >= 8 ? 'var(--ac)' : '#eab308';
-        return `<tr class="mtlex-row">
-<td class="text-start"><div class="flex items-center gap-2.5">
-<div class="mtlex-logo"><img alt="icon" src="${ex.l}" class="w-6 h-6 rounded" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy"><div class="mtlex-logo-fb" style="display:none">${ex.n.charAt(0)}</div></div>
-<div><div class="font-semibold text-sm flex items-center gap-1.5">${ex.n}<span class="mtlex-type" style="background:${tCol[1]};color:${tCol[0]}">${_tpLabels[ex.tp] || 'Other'}</span></div>
-<div class="flex items-center gap-1.5 mt-0.5"><div class="mtlex-trust" style="background:${trustGrad}">${t("trustScore")} ${ex.t}/10</div><div class="mtlex-trust-bar"><div style="width:${ex.t * 10}%;background:${trustTxt};height:100%;border-radius:2px"></div></div></div>
-</div></div></td>
-<td><div class="flex gap-1 justify-center flex-wrap">${ex.m.map(mt => `<span class="mtlex-metal" style="background:${_mtlColors[mt]}20;border:1px solid ${_mtlColors[mt]}40" title="${mt}">${_mtlIcons[mt]}</span>`).join('')}</div></td>
-<td><div class="flex flex-wrap gap-1 justify-center">${ex.p.map(pp => { const isG = pp.includes('XAU') || pp.includes('PAXG') || pp.includes('Gold') || pp.includes('GLD'); const isS = pp.includes('XAG') || pp.includes('Silver') || pp.includes('SLV'); const isPt = pp.includes('XPT') || pp.includes('Platinum'); const acCol = isG ? '#FFD700' : isS ? '#C0C0C0' : isPt ? '#E5E4E2' : 'var(--ac)'; return `<span class="mtlex-pair" style="border-color:${acCol}40">${pp}</span>` }).join('')}</div></td>
-<td class="text-xs" style="line-height:1.6">${_mtlRefPrice(ex.m)}</td>
-<td style="color:var(--t2);font-size:12px;font-weight:600">${hasPAXG && _mt.gVol > 0 ? fN(_mt.gVol) : '<span style="font-size:10px;opacity:.5">OTC</span>'}</td>
-</tr>`}).join('')
+      function _fChg(val) {
+        const v=typeof val==='function'?val():val;
+        if(!v||v===0) return '<span style="color:var(--t2);font-size:12px">0.00%</span>';
+        const pos=v>0; const col=pos?'#16c784':'#ea3943';
+        const arrow=pos?'▲':'▼';
+        return `<span style="color:${col};font-size:12px;font-weight:700">${arrow} ${Math.abs(v).toFixed(2)}%</span>`;
+      }
+      const rows = [];
+      _MTL_EX.forEach((ex, ei) => {
+        const tCol      = _tpColors[ex.tp]||_tpColors.crypto;
+        const trustGrad = ex.t>=9?'linear-gradient(90deg,#16c784,#0d9f63)':ex.t>=8?'linear-gradient(90deg,#3861fb,#6c5ce7)':'linear-gradient(90deg,#eab308,#f59e0b)';
+        const trustTxt  = ex.t>=9?'#16c784':ex.t>=8?'#3861fb':'#eab308';
+        if(ei>0) rows.push(`<tr><td colspan="8" style="padding:0;height:5px;background:var(--bg);border-top:2px solid var(--bc)"></td></tr>`);
+        ex.m.forEach((sym, mi) => {
+          const clr    = _mtlColors[sym];
+          const mbg    = _mtlBg[sym];
+          const mbd    = _mtlBorder[sym];
+          const md     = _mtlData[sym]||{};
+          const info   = (ex.md&&ex.md[sym])||{};
+          const pair   = info.pair||md.sym||sym;
+          const hasPAXG= ex.p.some(x=>x.includes('PAXG'));
+          const vol    = hasPAXG&&_mt.gVol>0 ? fN(_mt.gVol) : '<span style="opacity:.4;font-size:10px">OTC</span>';
+          // alternating row bg within group
+          const rowBg  = mi%2===0 ? 'var(--bg)' : 'var(--bg2)';
+          // exchange col: full opacity on first row, dimmed on rest
+          const exOpacity = mi===0 ? '1' : '0.3';
+          rows.push(`<tr class="mtlex-row" style="background:${rowBg}">
+
+  <td style="padding:11px 6px 11px 14px;white-space:nowrap;min-width:185px">
+    <div style="display:flex;align-items:center;gap:10px;opacity:${exOpacity}">
+      <div style="flex-shrink:0">
+        <img alt="${ex.n}" src="${ex.l}" width="36" height="36" style="border-radius:8px;object-fit:contain;background:#fff;padding:3px;display:block" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+        <div style="display:none;width:36px;height:36px;border-radius:8px;background:var(--bg3);align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--t2)">${ex.n.charAt(0)}</div>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;gap:5px">
+          <span style="font-weight:700;font-size:13px;color:var(--tx)">${ex.n}</span>
+          <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:${tCol[1]};color:${tCol[0]}">${_tpLabels[ex.tp]||'Other'}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:4px">
+          <div style="font-size:10px;font-weight:800;color:#fff;padding:1px 7px;border-radius:3px;background:${trustGrad}">${ex.t}/10</div>
+          <div style="width:44px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden"><div style="width:${ex.t*10}%;height:100%;background:${trustTxt};border-radius:2px"></div></div>
+        </div>
+        <a href="${ex.u}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:3px;margin-top:4px;font-size:10px;color:var(--ac);text-decoration:none;font-weight:600">
+          ${t("colTrade")} <i class="fas fa-external-link-alt" style="font-size:8px"></i>
+        </a>
+      </div>
+    </div>
+  </td>
+
+  <td style="padding:11px 12px;white-space:nowrap">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:38px;height:38px;border-radius:50%;background:${mbg};border:1.5px solid ${mbd};display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">${_mtlIcons[sym]}</div>
+      <div>
+        <div style="font-weight:700;font-size:13px;color:${clr}">${_mtlNames[sym]}</div>
+        <div style="font-size:10px;color:var(--t2);margin-top:2px">${sym} &middot; ${pair}</div>
+      </div>
+    </div>
+  </td>
+
+  <td style="padding:11px 12px;white-space:nowrap">
+    <div style="display:flex;align-items:center;gap:7px">
+      <span class="mtlex-price" data-sym="${sym}" style="font-weight:800;font-size:15px;color:var(--tx)">${_fPrice(sym)}</span>
+      <span style="font-size:10px;font-weight:700;color:${clr};background:${mbg};border:1px solid ${mbd};padding:2px 7px;border-radius:5px">${sym}</span>
+    </div>
+  </td>
+
+  <td style="padding:11px 10px;text-align:center"><span class="mtlex-ch1" data-sym="${sym}">${_fChg(md.ch1)}</span></td>
+  <td style="padding:11px 10px;text-align:center"><span class="mtlex-ch24" data-sym="${sym}">${_fChg(md.ch24)}</span></td>
+  <td style="padding:11px 10px;text-align:center"><span class="mtlex-ch7" data-sym="${sym}">${_fChg(md.ch7)}</span></td>
+  <td style="padding:11px 12px;font-size:12px;color:var(--t2);font-weight:500;white-space:nowrap">${md.mcap||'--'}</td>
+  <td style="padding:11px 12px;font-size:12px;color:var(--t2);white-space:nowrap">${vol}</td>
+
+</tr>`);
+        });
+      });
+      tb.innerHTML = rows.join('');
+    }
+
+    function _updMtlExPrices() {
+      const tb = $('mtlExB'); if (!tb || !tb.innerHTML) return;
+      const _fP = (sym) => {
+        const v = sym==='Au'?_mt.g : sym==='Ag'?_mt.s : sym==='Pt'?_mt.pt : sym==='Pd'?_mt.pd : 5000;
+        if (!v || v<=0) return null;
+        return sym==='Ag' ? '$'+v.toFixed(2) : '$'+v.toLocaleString('en',{maximumFractionDigits:0});
+      };
+      const _fC = (v) => {
+        if (!v || v===0) return null;
+        const pos=v>0; const col=pos?'#16c784':'#ea3943'; const arrow=pos?'▲':'▼';
+        return `<span style="color:${col};font-size:12px;font-weight:700">${arrow} ${Math.abs(v).toFixed(2)}%</span>`;
+      };
+      const chMap = { Au:[_mt.gChg,_mt.gChg,0.85], Ag:[_mt.sChg,_mt.sChg,1.20], Pt:[_mt.ptChg,_mt.ptChg,-0.40], Pd:[_mt.pdChg,_mt.pdChg,-1.10], Rh:[0,0,0] };
+      tb.querySelectorAll('.mtlex-price[data-sym]').forEach(el => {
+        const p = _fP(el.dataset.sym); if (p) el.textContent = p;
+      });
+      tb.querySelectorAll('.mtlex-ch24[data-sym]').forEach(el => {
+        const c = chMap[el.dataset.sym]; if (c) { const h = _fC(c[1]); if (h) el.innerHTML = h; }
+      });
     }
 
     // ===== STOCKS & ETFs (Yahoo Finance via CORS proxy) =====

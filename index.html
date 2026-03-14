@@ -14995,35 +14995,42 @@
       _loadStaticPrices();
       _renderStk();
 
-      // ── Step 1b: Fetch live prices via Cloudflare Worker ────────
+      // ── Step 1b: Fetch live prices via Cloudflare Worker (Stooq) ──
       (async () => {
         const WORKER = 'https://lingering-mouse-0244.hamdysaedmoh1989.workers.dev';
-        const allSyms = _STK.map(s => s.sy);
+        // Get all stock symbols (skip indices ^ and futures =F)
+        const allSyms = _STK
+          .filter(s => !s.sy.startsWith('^') && !s.sy.includes('='))
+          .map(s => s.sy);
+
+        // Fetch in batches of 50
         const batches = [];
-        for (let i = 0; i < allSyms.length; i += 100) batches.push(allSyms.slice(i, i+100));
+        for (let i = 0; i < allSyms.length; i += 50) batches.push(allSyms.slice(i, i+50));
 
         let total = 0;
         await Promise.allSettled(batches.map(async batch => {
           try {
-            const yUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${batch.join(',')}&fields=regularMarketPrice,regularMarketChangePercent,regularMarketDayHigh,regularMarketDayLow,regularMarketVolume,previousClose,fiftyTwoWeekHigh,fiftyTwoWeekLow`;
-            const r = await fetch(`${WORKER}?url=${encodeURIComponent(yUrl)}`, {signal: AbortSignal.timeout(10000)});
+            const r = await fetch(
+              `${WORKER}?symbols=${batch.join(',')}`,
+              {signal: AbortSignal.timeout(12000)}
+            );
             if (!r.ok) return;
-            const j = await r.json();
-            const res = j?.quoteResponse?.result;
-            if (!res?.length) return;
-            res.forEach(q => {
-              const pr = q.regularMarketPrice || 0; if (!pr) return;
-              _stkP[q.symbol] = {
-                pr, chg: q.regularMarketChangePercent || 0,
-                hi: q.regularMarketDayHigh || pr,
-                lo: q.regularMarketDayLow || pr,
-                vol: q.regularMarketVolume || 0,
-                prevClose: q.previousClose || pr,
-                closes: [q.previousClose || pr, pr],
-                w52h: q.fiftyTwoWeekHigh || pr*1.4,
-                w52l: q.fiftyTwoWeekLow || pr*0.6,
-                currency: q.currency || 'USD',
-                mktTime: new Date(), src: 'Live'
+            const data = await r.json();
+            Object.entries(data).forEach(([sym, q]) => {
+              if (!q?.price || q.price <= 0) return;
+              _stkP[sym] = {
+                pr: q.price,
+                chg: q.change || 0,
+                hi: q.high || q.price,
+                lo: q.low || q.price,
+                vol: q.volume || 0,
+                prevClose: q.prev || q.price,
+                closes: [q.prev || q.price, q.price],
+                w52h: q.price * 1.4,
+                w52l: q.price * 0.6,
+                currency: 'USD',
+                mktTime: new Date(),
+                src: 'Live'
               };
               total++;
             });
@@ -15031,10 +15038,8 @@
         }));
 
         if (total > 0) {
-          console.log('[STK] Worker Live ✓', total, 'symbols');
+          console.log('[STK] Stooq Live ✓', total, 'symbols');
           _renderStk();
-        } else {
-          console.log('[STK] Worker failed — using static prices');
         }
       })();
 
@@ -15045,9 +15050,9 @@
         const syms = Object.values(_MX);
         // corsproxy.io confirmed working
         const PROXIES = [
-          u => `https://lingering-mouse-0244.hamdysaedmoh1989.workers.dev?url=${encodeURIComponent(u)}`,
           u => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
           u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+          u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
         ];
 
         // Fetch all symbols in one request
@@ -15104,9 +15109,9 @@
         for (let i = 0; i < all.length; i += 80) batches.push(all.slice(i, i+80));
         const FIELDS = 'regularMarketPrice,regularMarketChangePercent,regularMarketVolume,regularMarketDayHigh,regularMarketDayLow,fiftyTwoWeekHigh,fiftyTwoWeekLow,previousClose';
         const PX = u => [
-          `https://lingering-mouse-0244.hamdysaedmoh1989.workers.dev?url=${encodeURIComponent(u)}`,
           `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
           `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+          `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
         ];
         let n = 0;
         await Promise.allSettled(batches.map(async batch => {

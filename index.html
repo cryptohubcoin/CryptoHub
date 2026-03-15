@@ -15015,9 +15015,7 @@
       (async () => {
         const WORKER = 'https://lingering-mouse-0244.hamdysaedmoh1989.workers.dev';
         // Get all stock symbols (skip indices ^ and futures =F)
-        const allSyms = _STK
-          .filter(s => !s.sy.startsWith('^') && !s.sy.includes('='))
-          .map(s => s.sy);
+        const allSyms = _STK.map(s => s.sy);
 
         // Fetch in batches of 50
         const batches = [];
@@ -15256,16 +15254,16 @@
     function _loadStaticPrices() {
       const SP = {
         // Major Stocks — Updated March 2026
-        AAPL:{pr:250.12,chg:-2.1},MSFT:{pr:395.55,chg:-1.36},NVDA:{pr:180.25,chg:-2.53},
+        AAPL:{pr:250.12,chg:-2.1},MSFT:{pr:395.55,chg:-1.36},NVDA:{pr:118.52,chg:-3.1},
         GOOGL:{pr:175.84,chg:-1.2},GOOG:{pr:175.42,chg:-1.2},AMZN:{pr:215.76,chg:-1.4},
-        META:{pr:612.38,chg:-0.9},TSLA:{pr:391.2,chg:-2.0},AVGO:{pr:54.62,chg:0.1},
-        ORCL:{pr:185.62,chg:0.6},AMD:{pr:112.84,chg:-2.1},INTC:{pr:78.44,chg:0.1},
+        META:{pr:612.38,chg:-0.9},TSLA:{pr:238.62,chg:-4.2},AVGO:{pr:198.44,chg:-1.2},
+        ORCL:{pr:185.62,chg:0.6},AMD:{pr:112.84,chg:-2.1},INTC:{pr:23.42,chg:-1.4},
         QCOM:{pr:158.36,chg:-0.8},TXN:{pr:178.92,chg:0.3},MU:{pr:98.44,chg:-2.2},
-        AMAT:{pr:158.62,chg:-2.0},LRCX:{pr:688.44,chg:-1.6},KLAC:{pr:78.44,chg:0.1},
+        AMAT:{pr:158.62,chg:-2.0},LRCX:{pr:688.44,chg:-1.6},KLAC:{pr:712.38,chg:-1.4},
         ADI:{pr:205.62,chg:-0.6},MRVL:{pr:72.38,chg:-2.2},NXPI:{pr:192.44,chg:-0.4},
-        ASML:{pr:712.38,chg:-1.2},TSM:{pr:178.62,chg:-0.6},CSCO:{pr:54.62,chg:0.1},
-        IBM:{pr:268.44,chg:0.3},SNOW:{pr:998.44,chg:1.6},DDOG:{pr:122.38,chg:-1.6},
-        NET:{pr:19.38,chg:0.4},ZS:{pr:192.62,chg:-1.0},CRWD:{pr:368.44,chg:1.6},
+        ASML:{pr:712.38,chg:-1.2},TSM:{pr:178.62,chg:-0.6},CSCO:{pr:62.44,chg:0.4},
+        IBM:{pr:268.44,chg:0.3},SNOW:{pr:158.62,chg:-1.8},DDOG:{pr:122.38,chg:-1.6},
+        NET:{pr:118.44,chg:1.2},ZS:{pr:192.62,chg:-1.0},CRWD:{pr:368.44,chg:1.6},
         PANW:{pr:178.62,chg:-0.6},FTNT:{pr:102.38,chg:0.4},OKTA:{pr:62.44,chg:-2.2},
         PLTR:{pr:88.62,chg:-2.8},CRM:{pr:295.44,chg:-1.2},ADBE:{pr:378.62,chg:-2.8},
         NOW:{pr:998.44,chg:1.6},WDAY:{pr:235.62,chg:-0.6},HUBS:{pr:512.38,chg:0.2},
@@ -15274,7 +15272,7 @@
         BKNG:{pr:5125.44,chg:0.6},UBER:{pr:85.62,chg:-1.6},LYFT:{pr:12.38,chg:-3.4},
         EBAY:{pr:55.44,chg:0.2},ETSY:{pr:46.62,chg:-2.2},
         // Finance
-        JPM:{pr:272.38,chg:-0.4},BAC:{pr:78.44,chg:0.1},WFC:{pr:78.44,chg:0.1},
+        JPM:{pr:272.38,chg:-0.4},BAC:{pr:46.62,chg:-0.6},WFC:{pr:82.38,chg:-0.4},
         C:{pr:78.44,chg:0.1},GS:{pr:612.62,chg:-0.2},MS:{pr:125.38,chg:-0.2},
         BX:{pr:162.44,chg:-1.0},BLK:{pr:1042.62,chg:0.2},SCHW:{pr:82.38,chg:-1.6},
         AXP:{pr:285.44,chg:-0.4},V:{pr:348.62,chg:-0.2},MA:{pr:542.38,chg:-0.4},
@@ -15282,7 +15280,7 @@
         MSTR:{pr:298.44,chg:-4.8},MARA:{pr:16.62,chg:-5.2},RIOT:{pr:9.38,chg:-4.8},
         USB:{pr:46.44,chg:-0.4},TFC:{pr:42.62,chg:-0.6},PNC:{pr:182.38,chg:-0.2},
         COF:{pr:175.44,chg:-1.0},ICE:{pr:165.62,chg:0.1},CME:{pr:225.38,chg:0.2},
-        SPGI:{pr:478.44,chg:0.1},MCO:{pr:54.62,chg:0.1},
+        SPGI:{pr:478.44,chg:0.1},MCO:{pr:415.62,chg:0.2},
         // Healthcare
         JNJ:{pr:162.38,chg:-0.2},UNH:{pr:482.44,chg:-1.6},PFE:{pr:27.62,chg:-1.2},
         MRK:{pr:98.38,chg:-1.0},ABBV:{pr:185.44,chg:0.4},LLY:{pr:842.62,chg:1.2},
@@ -15292,9 +15290,9 @@
         // Consumer
         WMT:{pr:102.38,chg:0.2},COST:{pr:985.44,chg:0.4},TGT:{pr:105.62,chg:-3.2},
         HD:{pr:395.38,chg:-0.6},LOW:{pr:238.44,chg:-0.4},NKE:{pr:72.62,chg:-1.2},
-        SBUX:{pr:95.38,chg:-1.2},MCD:{pr:298.44,chg:-0.1},KO:{pr:54.62,chg:0.1},
+        SBUX:{pr:95.38,chg:-1.2},MCD:{pr:298.44,chg:-0.1},KO:{pr:68.62,chg:0.1},
         PEP:{pr:148.38,chg:-0.2},PG:{pr:168.44,chg:0.1},
-        BABA:{pr:178.62,chg:-1.6},MELI:{pr:2085.38,chg:-1.0},LULU:{pr:312.44,chg:-1.2},
+        BABA:{pr:142.62,chg:0.6},MELI:{pr:2085.38,chg:-1.0},LULU:{pr:312.44,chg:-1.2},
         // Energy
         XOM:{pr:112.62,chg:-0.6},CVX:{pr:158.38,chg:-1.0},COP:{pr:108.44,chg:-1.2},
         OXY:{pr:46.62,chg:-1.6},HAL:{pr:28.38,chg:-2.2},SLB:{pr:40.44,chg:-1.6},
@@ -15309,11 +15307,11 @@
         AMT:{pr:195.62,chg:-0.2},PLD:{pr:112.38,chg:-0.6},EQIX:{pr:812.44,chg:-0.4},
         O:{pr:54.62,chg:0.1},SPG:{pr:155.38,chg:0.2},PSA:{pr:295.44,chg:-0.4},
         // Media/Telecom
-        NFLX:{pr:985.44,chg:1.2},DIS:{pr:108.24,chg:-1.4},SPOT:{pr:618.2,chg:1.4},
+        NFLX:{pr:978.4,chg:1.2},DIS:{pr:108.24,chg:-1.4},SPOT:{pr:618.2,chg:1.4},
         VZ:{pr:42.28,chg:0.4},T:{pr:22.46,chg:0.6},TMUS:{pr:228.24,chg:0.8},
         // Auto
-        TSLA:{pr:391.2,chg:-2.0},GM:{pr:52.38,chg:0.2},F:{pr:10.88,chg:-1.6},
-        RIVN:{pr:11.2,chg:-3.4},NIO:{pr:54.62,chg:0.1},TM:{pr:168.46,chg:-0.8},
+        TSLA:{pr:238.62,chg:-4.2},GM:{pr:52.38,chg:0.2},F:{pr:10.88,chg:-1.6},
+        RIVN:{pr:11.2,chg:-3.4},NIO:{pr:4.82,chg:-3.8},TM:{pr:168.46,chg:-0.8},
         RACE:{pr:422.24,chg:0.6},
         // ETFs
         SPY:{pr:562.4,chg:-0.6},QQQ:{pr:482.6,chg:-0.9},IWM:{pr:205.38,chg:-1.2},
@@ -15331,12 +15329,12 @@
         TQQQ:{pr:62.44,chg:-3.8},SQQQ:{pr:7.62,chg:3.8},SOXL:{pr:19.38,chg:-5.8},
         UPRO:{pr:75.44,chg:-2.4},SPXU:{pr:5.62,chg:2.4},UVXY:{pr:24.38,chg:14.2},
         // Commodities
-        USO:{pr:54.62,chg:0.1},BNO:{pr:54.62,chg:0.1},UNG:{pr:12.46,chg:-2.8},
+        USO:{pr:72.46,chg:-1.4},BNO:{pr:18.28,chg:-1.2},UNG:{pr:12.46,chg:-2.8},
         CORN:{pr:20.28,chg:-0.8},WEAT:{pr:5.46,chg:-1.2},SOYB:{pr:20.28,chg:-0.6},
         LIT:{pr:18.46,chg:-2.4},COPX:{pr:34.28,chg:-1.8},REMX:{pr:16.46,chg:-1.4},
         URA:{pr:26.28,chg:-2.4},URNM:{pr:38.46,chg:-2.8},CCJ:{pr:44.28,chg:-1.8},
-        DBC:{pr:78.44,chg:0.1},PDBC:{pr:78.44,chg:0.1},GSG:{pr:16.46,chg:-1.2},
-        DBA:{pr:178.62,chg:-1.6},MOO:{pr:54.62,chg:0.1},
+        DBC:{pr:20.46,chg:-1.2},PDBC:{pr:12.28,chg:-1.4},GSG:{pr:16.46,chg:-1.2},
+        DBA:{pr:20.28,chg:-0.4},MOO:{pr:78.46,chg:-0.8},
         // Indices — static only (Yahoo proxies reject ^ symbols)
         '^GSPC':{pr:5614.8,chg:-0.8},'^DJI':{pr:41892.4,chg:-0.4},
         '^IXIC':{pr:17682.46,chg:-1.4},'^RUT':{pr:1982.24,chg:-1.8},
@@ -15364,11 +15362,11 @@
         CHWY:{pr:24.46,chg:-1.8},W:{pr:44.28,chg:-2.8},CVNA:{pr:268.46,chg:2.4},
         VTRS:{pr:12.4,chg:-1.2},OGN:{pr:14.3,chg:-0.8},VRNS:{pr:48.4,chg:-1.4},
         TENB:{pr:32.46,chg:-2.4},QLYS:{pr:148.2,chg:-0.6},SAIL:{pr:10.28,chg:-2.4},
-        RDWR:{pr:24.46,chg:-1.2},FSLY:{pr:6.28,chg:-3.8},NCNO:{pr:54.62,chg:0.1},
+        RDWR:{pr:24.46,chg:-1.2},FSLY:{pr:6.28,chg:-3.8},NCNO:{pr:18.46,chg:-2.2},
         ENFN:{pr:11.28,chg:-1.8},TOST:{pr:24.46,chg:-1.4},RELY:{pr:14.28,chg:-2.8},
         FLYW:{pr:18.46,chg:-1.6},BILL:{pr:42.28,chg:-3.2},BLZE:{pr:6.46,chg:-4.8},
         NRDY:{pr:3.28,chg:-3.4},LMND:{pr:18.46,chg:-2.8},ROOT:{pr:12.28,chg:-1.4},
-        LBRDA:{pr:78.46,chg:0.4},FWONK:{pr:64.28,chg:0.8},LSXMA:{pr:542.38,chg:-0.4},
+        LBRDA:{pr:78.46,chg:0.4},FWONK:{pr:64.28,chg:0.8},LSXMA:{pr:498.46,chg:0.6},
         'ON':{pr:52.4,chg:-2.8},
         'STX':{pr:98.2,chg:-1.2},
         'WDC':{pr:58.4,chg:-1.8},

@@ -15015,11 +15015,13 @@
       (async () => {
         const WORKER = 'https://lingering-mouse-0244.hamdysaedmoh1989.workers.dev';
         // Get all stock symbols (skip indices ^ and futures =F)
-        const allSyms = _STK.map(s => s.sy);
+        const allSyms = _STK
+          .filter(s => !s.sy.startsWith('^') && !s.sy.includes('='))
+          .map(s => s.sy);
 
         // Fetch in batches of 50
         const batches = [];
-        for (let i = 0; i < allSyms.length; i += 50) batches.push(allSyms.slice(i, i+50));
+        for (let i = 0; i < allSyms.length; i += 80) batches.push(allSyms.slice(i, i+80));
 
         let total = 0;
         await Promise.allSettled(batches.map(async batch => {
@@ -15061,7 +15063,13 @@
 
       // ── Step 2b: Fetch MEXC REST ─────────────────────────────────
       const _fetchMEXCNow = async () => {
-        const syms = Object.values(_MX);
+        // Only use MEXC for crypto-related stocks (miners etc), not tokenized regular stocks
+        const MEXC_ONLY = ['MARA','RIOT','CLSK','WULF','IREN','BITF','CIFR','HUT','CORZ'];
+        const syms = Object.values(_MX).filter(v => {
+          const sym = _MXr[v];
+          return MEXC_ONLY.includes(sym);
+        });
+        if (!syms.length) return false;
         // corsproxy.io confirmed working
         const PROXIES = [
           u => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
@@ -15112,13 +15120,14 @@
         return false;
       };
 
-      // ── Step 3: Yahoo Finance for ETFs/Indices/Commodities ──────────
+      // ── Step 3: Yahoo Finance — fallback for symbols Worker missed ──
       const _fetchYahooNow = async () => {
-        const nonMX = _STK.filter(s =>
-          !_MX[s.sy] && !s.sy.startsWith('^') && !s.sy.includes('=F')
-        ).map(s => s.sy);
-        const special = _STK.filter(s => s.sy.startsWith('^') || s.sy.includes('=F')).map(s => s.sy);
-        const all = [...nonMX, ...special];
+        // Only fetch what Worker hasn't got yet
+        const all = _STK
+          .filter(s => !_stkP[s.sy] || _stkP[s.sy].pr <= 0)
+          .map(s => s.sy);
+        if (all.length === 0) { console.log('[STK] Yahoo skipped — Worker got all'); return; }
+        console.log('[STK] Yahoo fallback for', all.length, 'missing symbols');
         const batches = [];
         for (let i = 0; i < all.length; i += 80) batches.push(all.slice(i, i+80));
         const FIELDS = 'regularMarketPrice,regularMarketChangePercent,regularMarketVolume,regularMarketDayHigh,regularMarketDayLow,fiftyTwoWeekHigh,fiftyTwoWeekLow,previousClose';
@@ -15208,6 +15217,9 @@
             const pr = parseFloat(d.c); if (!pr || pr <= 0) return;
             const op = parseFloat(d.o) || pr;
             const chg = op > 0 ? (pr-op)/op*100 : 0;
+            // Only update from WS if price is realistic (within 50% of current)
+            const existingPr = _stkP[sy]?.pr || 0;
+            if (existingPr > 0 && (pr > existingPr * 1.5 || pr < existingPr * 0.5)) return; // suspicious price
             const prev = _stkP[sy]?.prevClose || op;
             _stkP[sy] = {
               ..._stkP[sy], pr, chg,

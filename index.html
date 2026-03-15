@@ -5288,7 +5288,9 @@
       align-items: center;
       padding: 7px 0;
       border-bottom: 1px solid var(--bc);
-      font-size: 12px
+      font-size: 12px;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .cd-st:last-child {
@@ -6371,8 +6373,14 @@
     <div class="tab-content active" id="tab_crypto">
       <!-- Top Gainers Orbital -->
       <div class="tg-section" id="tickerWrap" style="min-height:110px">
-        <div class="tg-hdr"><i class="fas fa-fire" style="color:#f97316"></i> <span>Top 100 Gainers</span> <span
-            class="tg-live"><span class="ld" style="width:5px;height:5px"></span> LIVE</span></div>
+        <div class="tg-hdr">
+          <div style="display:flex;align-items:center;gap:8px">
+            <i class="fas fa-fire" style="color:#f97316"></i>
+            <span>Top 100 Gainers</span>
+            <span class="tg-live"><span class="ld" style="width:5px;height:5px"></span> LIVE</span>
+          </div>
+          <button onclick="document.getElementById('tickerWrap').style.display='none';sessionStorage.setItem('hideGainers','1');" style="background:none;border:none;cursor:pointer;color:var(--t2);font-size:16px;padding:4px 8px;border-radius:6px;line-height:1" title="Hide">✕</button>
+        </div>
         <div class="tg-belt">
           <div class="tg-track" id="tickerContent"></div>
         </div>
@@ -6380,6 +6388,7 @@
 
 
       <!-- Hidden select for backward compat -->
+      <script>if(sessionStorage.getItem('hideGainers')==='1'){var tw=document.getElementById('tickerWrap');if(tw)tw.style.display='none';}</script>
       <select id="netSel" style="display:none">
         <option value="all">All</option>
       </select>
@@ -7933,7 +7942,7 @@
             <div class="cd-st"><span>Total supply</span><span id="cdTotal">--</span></div>
             <div class="cd-st"><span>Max. supply</span><span id="cdMax">--</span></div>
           </div>
-          <div style="margin-top:12px">
+          <div style="margin-top:12px;user-select:none;-webkit-user-select:none">
             <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t2);margin-bottom:4px">
               <span>Circulating</span><span id="cdCircPct">--%</span>
             </div>

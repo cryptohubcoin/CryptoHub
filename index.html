@@ -14995,51 +14995,39 @@
       _loadStaticPrices();
       _renderStk();
 
-      // ── Step 1b: Fetch live prices via Cloudflare Worker (Stooq) ──
-      (async () => {
+      // ── Step 1b: Fetch live prices via Cloudflare Worker ──
+      const _fetchWorkerPrices = async () => {
         const WORKER = 'https://lingering-mouse-0244.hamdysaedmoh1989.workers.dev';
-        // Get all stock symbols (skip indices ^ and futures =F)
         const allSyms = _STK.map(s => s.sy);
-
-        // Fetch in batches of 50
         const batches = [];
         for (let i = 0; i < allSyms.length; i += 80) batches.push(allSyms.slice(i, i+80));
-
         let total = 0;
         await Promise.allSettled(batches.map(async batch => {
           try {
             const r = await fetch(
-              `${WORKER}?symbols=${batch.join(',')}`,
-              {signal: AbortSignal.timeout(12000)}
+              `${WORKER}?symbols=${encodeURIComponent(batch.join(','))}`,
+              {signal: AbortSignal.timeout(15000)}
             );
             if (!r.ok) return;
             const data = await r.json();
             Object.entries(data).forEach(([sym, q]) => {
               if (!q?.price || q.price <= 0) return;
               _stkP[sym] = {
-                pr: q.price,
-                chg: q.change || 0,
-                hi: q.high || q.price,
-                lo: q.low || q.price,
-                vol: q.volume || 0,
-                prevClose: q.prev || q.price,
+                pr: q.price, chg: q.change || 0,
+                hi: q.high || q.price, lo: q.low || q.price,
+                vol: q.volume || 0, prevClose: q.prev || q.price,
                 closes: [q.prev || q.price, q.price],
-                w52h: q.price * 1.4,
-                w52l: q.price * 0.6,
-                currency: 'USD',
-                mktTime: new Date(),
-                src: 'Live'
+                w52h: q.price * 1.4, w52l: q.price * 0.6,
+                currency: 'USD', mktTime: new Date(), src: 'Live'
               };
               total++;
             });
-          } catch(e) {}
+          } catch(e) { console.warn('[Worker] batch failed:', e.message); }
         }));
-
-        if (total > 0) {
-          console.log('[STK] Stooq Live ✓', total, 'symbols');
-          _renderStk();
-        }
-      })();
+        if (total > 0) { console.log('[STK] Worker Live ✓', total, 'symbols'); _renderStk(); }
+        return total;
+      };
+      await _fetchWorkerPrices();
 
       // ── Step 2a: skipped — MEXC handles all tokenized stocks ────
 
@@ -15145,30 +15133,7 @@
         window._mexcInterval = setInterval(async () => {
           if (!_stkTabD) return;
           // Refresh Worker prices + MEXC miners
-          const allSyms = _STK.map(s => s.sy);
-          const batches = [];
-          for (let i = 0; i < allSyms.length; i += 80) batches.push(allSyms.slice(i, i+80));
-          const WORKER = 'https://lingering-mouse-0244.hamdysaedmoh1989.workers.dev';
-          let total = 0;
-          await Promise.allSettled(batches.map(async batch => {
-            try {
-              const r = await fetch(`${WORKER}?symbols=${batch.join(',')}`, {signal:AbortSignal.timeout(12000)});
-              if (!r.ok) return;
-              const data = await r.json();
-              Object.entries(data).forEach(([sym, q]) => {
-                if (!q?.price || q.price <= 0) return;
-                _stkP[sym] = {
-                  pr:q.price, chg:q.change||0,
-                  hi:q.high||q.price, lo:q.low||q.price,
-                  vol:q.volume||0, prevClose:q.prev||q.price,
-                  closes:[q.prev||q.price,q.price],
-                  currency:'USD', mktTime:new Date(), src:'Live'
-                };
-                total++;
-              });
-            } catch(e) {}
-          }));
-          if (total > 0) { console.log('[STK] Auto-refresh ✓', total); _renderStk(); }
+          await _fetchWorkerPrices();
           await _fetchMEXCNow();
         }, 60000);
       }
@@ -15269,7 +15234,7 @@
         // Major Stocks — Updated March 2026
         AAPL:{pr:250.12,chg:-2.1},MSFT:{pr:395.55,chg:-1.36},NVDA:{pr:118.52,chg:-3.1},
         GOOGL:{pr:175.84,chg:-1.2},GOOG:{pr:175.42,chg:-1.2},AMZN:{pr:215.76,chg:-1.4},
-        META:{pr:612.38,chg:-0.9},TSLA:{pr:238.62,chg:-4.2},AVGO:{pr:198.44,chg:-1.2},
+        META:{pr:612.38,chg:-0.9},TSLA:{pr:391.2,chg:-2.0},AVGO:{pr:198.44,chg:-1.2},
         ORCL:{pr:185.62,chg:0.6},AMD:{pr:112.84,chg:-2.1},INTC:{pr:23.42,chg:-1.4},
         QCOM:{pr:158.36,chg:-0.8},TXN:{pr:178.92,chg:0.3},MU:{pr:98.44,chg:-2.2},
         AMAT:{pr:158.62,chg:-2.0},LRCX:{pr:688.44,chg:-1.6},KLAC:{pr:712.38,chg:-1.4},
@@ -15323,7 +15288,7 @@
         NFLX:{pr:978.4,chg:1.2},DIS:{pr:108.24,chg:-1.4},SPOT:{pr:618.2,chg:1.4},
         VZ:{pr:42.28,chg:0.4},T:{pr:22.46,chg:0.6},TMUS:{pr:228.24,chg:0.8},
         // Auto
-        TSLA:{pr:238.62,chg:-4.2},GM:{pr:52.38,chg:0.2},F:{pr:10.88,chg:-1.6},
+        TSLA:{pr:391.2,chg:-2.0},GM:{pr:52.38,chg:0.2},F:{pr:10.88,chg:-1.6},
         RIVN:{pr:11.2,chg:-3.4},NIO:{pr:4.82,chg:-3.8},TM:{pr:168.46,chg:-0.8},
         RACE:{pr:422.24,chg:0.6},
         // ETFs

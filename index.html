@@ -14999,9 +14999,7 @@
       (async () => {
         const WORKER = 'https://lingering-mouse-0244.hamdysaedmoh1989.workers.dev';
         // Get all stock symbols (skip indices ^ and futures =F)
-        const allSyms = _STK
-          .filter(s => !s.sy.startsWith('^') && !s.sy.includes('='))
-          .map(s => s.sy);
+        const allSyms = _STK.map(s => s.sy);
 
         // Fetch in batches of 50
         const batches = [];

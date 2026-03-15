@@ -14998,15 +14998,22 @@
       // ── Step 1b: Fetch live prices via Cloudflare Worker ──
       const _fetchWorkerPrices = async () => {
         const WORKER = 'https://lingering-mouse-0244.hamdysaedmoh1989.workers.dev';
-        const allSyms = _STK.map(s => s.sy);
+        // Priority: fetch important stocks first, rest in background
+        const PRIORITY = ['AAPL','MSFT','NVDA','TSLA','AMZN','META','GOOGL','AMD',
+          'SPY','QQQ','GLD','BTC=F','ETH=F','GC=F','CL=F','^GSPC','^DJI','^IXIC',
+          'JPM','V','MA','COIN','MSTR','PLTR','NFLX','UBER','BABA'];
+        const allSyms = [
+          ...PRIORITY,
+          ..._STK.map(s=>s.sy).filter(s=>!PRIORITY.includes(s))
+        ];
         const batches = [];
-        for (let i = 0; i < allSyms.length; i += 80) batches.push(allSyms.slice(i, i+80));
+        for (let i = 0; i < allSyms.length; i += 30) batches.push(allSyms.slice(i, i+30));
         let total = 0;
         await Promise.allSettled(batches.map(async batch => {
           try {
             const r = await fetch(
-              `${WORKER}?symbols=${encodeURIComponent(batch.join(','))}`,
-              {signal: AbortSignal.timeout(15000)}
+              `${WORKER}?symbols=${batch.join(',')}`,
+              {signal: AbortSignal.timeout(10000)}
             );
             if (!r.ok) return;
             const data = await r.json();
@@ -15024,7 +15031,9 @@
             });
           } catch(e) { console.warn('[Worker] batch failed:', e.message); }
         }));
-        if (total > 0) { console.log('[STK] Worker Live ✓', total, 'symbols'); _renderStk(); }
+        console.log('[STK] Worker returned', total, 'symbols');
+        if (total > 0) { _renderStk(); }
+        else { console.warn('[STK] Worker returned 0 — check Worker logs'); }
         return total;
       };
       await _fetchWorkerPrices();
@@ -15135,6 +15144,7 @@
           // Refresh Worker prices + MEXC miners
           await _fetchWorkerPrices();
           await _fetchMEXCNow();
+          console.log('[STK] Auto-refresh done');
         }, 60000);
       }
 

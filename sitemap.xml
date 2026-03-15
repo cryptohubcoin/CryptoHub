@@ -57,6 +57,13 @@
     <priority>0.5</priority>
   </url>
 
+  <url>
+    <loc>https://www.cryptohubcoin.com/crypto-prediction</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <!-- Blog -->
   <url>
     <loc>https://www.cryptohubcoin.com/blog</loc>

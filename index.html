@@ -14983,26 +14983,10 @@
     async function _fetchAllStocks() {
       // ── MEXC Symbol Map (Perpetual Futures — tokenized stocks) ──
       const _MX = {
+        // Crypto miners only — regular stocks fetched via Worker (Stooq/Yahoo)
         'MARA':'MARAUSDT','RIOT':'RIOTUSDT','CLSK':'CLSKUSDT',
         'WULF':'WULFUSDT','IREN':'IRENUSDT','BITF':'BITFUSDT',
         'CIFR':'CIFRUSDT','HUT':'HUTUSDT','CORZ':'CORUSDT',
-        'AAPL':'AAPLUSDT','MSFT':'MSFTUSDT','NVDA':'NVDAUSDT',
-        'TSLA':'TSLAUSDT','AMZN':'AMZNUSDT','META':'METAUSDT',
-        'GOOGL':'GOOGLUSDT','AMD':'AMDUSDT','INTC':'INTCUSDT',
-        'NFLX':'NFLXUSDT','ORCL':'ORCLUSDT','COIN':'COINUSDT',
-        'HOOD':'HOODUSDT','SOFI':'SOFIUSDT','SQ':'SQUSDT',
-        'PYPL':'PAYLUSDT','MSTR':'MSTRUSDT','PLTR':'PLTRUSDT',
-        'APP':'APPUSDT','SOUN':'SOUNUSDT','BBAI':'BBAIUSDT',
-        'IONQ':'IONQUSDT','RGTI':'RGTIUSDT','QUBT':'QUBTUSDT',
-        'PATH':'PATHUSDT','AI':'AIUSDT','RIVN':'RIVNUSDT',
-        'LCID':'LCIDUSDT','UBER':'UBERUSDT','NIO':'NIOUSDT',
-        'XPEV':'XPEVUSDT','LI':'LIUSDT','BABA':'BABAUSDT',
-        'JD':'JDUSDT','BILI':'BILIUSDT','SE':'SEUSDT','PDD':'PDDUSDT',
-        'SNAP':'SNAPUSDT','ABNB':'ABNBUSDT','PINS':'PINSUSDT',
-        'RBLX':'RBLXUSDT','SPOT':'SPOTUSDT','DKNG':'DKNGUSDT',
-        'MRNA':'MRNAUSDT','IBM':'IBMUSDT','NKE':'NKEUSDT',
-        'GS':'GSUSDT','JPM':'JPMUSDT','AVGO':'AVGO1USDT',
-        'QCOM':'QCOMUSDT','V':'VUSDT','MA':'MAUSDT'
       };
       const _MXr = {};
       Object.entries(_MX).forEach(([k,v]) => _MXr[v] = k);
@@ -15063,13 +15047,7 @@
 
       // ── Step 2b: Fetch MEXC REST ─────────────────────────────────
       const _fetchMEXCNow = async () => {
-        // Only use MEXC for crypto-related stocks (miners etc), not tokenized regular stocks
-        const MEXC_ONLY = ['MARA','RIOT','CLSK','WULF','IREN','BITF','CIFR','HUT','CORZ'];
-        const syms = Object.values(_MX).filter(v => {
-          const sym = _MXr[v];
-          return MEXC_ONLY.includes(sym);
-        });
-        if (!syms.length) return false;
+        const syms = Object.values(_MX);
         // corsproxy.io confirmed working
         const PROXIES = [
           u => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
@@ -15164,11 +15142,36 @@
       _loadStaticPrices(); // fill any gaps
       _renderStk();
 
-      // ── Step 5: Auto-refresh MEXC REST every 60s (WebSocket fallback) ──
+      // ── Step 5: Auto-refresh every 60s ──
       if (!window._mexcInterval) {
         window._mexcInterval = setInterval(async () => {
-          if (!_stkTabD) return; // only when stocks tab is open
-          await Promise.all([_fetchMEXCNow()]);
+          if (!_stkTabD) return;
+          // Refresh Worker prices + MEXC miners
+          const allSyms = _STK.map(s => s.sy);
+          const batches = [];
+          for (let i = 0; i < allSyms.length; i += 80) batches.push(allSyms.slice(i, i+80));
+          const WORKER = 'https://lingering-mouse-0244.hamdysaedmoh1989.workers.dev';
+          let total = 0;
+          await Promise.allSettled(batches.map(async batch => {
+            try {
+              const r = await fetch(`${WORKER}?symbols=${batch.join(',')}`, {signal:AbortSignal.timeout(12000)});
+              if (!r.ok) return;
+              const data = await r.json();
+              Object.entries(data).forEach(([sym, q]) => {
+                if (!q?.price || q.price <= 0) return;
+                _stkP[sym] = {
+                  pr:q.price, chg:q.change||0,
+                  hi:q.high||q.price, lo:q.low||q.price,
+                  vol:q.volume||0, prevClose:q.prev||q.price,
+                  closes:[q.prev||q.price,q.price],
+                  currency:'USD', mktTime:new Date(), src:'Live'
+                };
+                total++;
+              });
+            } catch(e) {}
+          }));
+          if (total > 0) { console.log('[STK] Auto-refresh ✓', total); _renderStk(); }
+          await _fetchMEXCNow();
         }, 60000);
       }
 

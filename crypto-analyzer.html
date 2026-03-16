@@ -263,18 +263,16 @@
 
     /* AUTOCOMPLETE DROPDOWN */
     .coin-suggestions {
-      position: absolute;
-      top: calc(100% + 6px);
-      left: 0;
-      right: 0;
+      position: fixed;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
-      z-index: 999;
-      max-height: 260px;
+      z-index: 9999;
+      max-height: 280px;
       overflow-y: auto;
       display: none;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+      min-width: 300px;
     }
     .coin-suggestions.show { display: block; }
     .sug-item {
@@ -919,7 +917,6 @@
         <div class="coin-input-wrap" style="position:relative;width:100%">
           <span class="search-icon">🔍</span>
           <input type="text" id="coinInput" placeholder="ابحث عن عملة... مثال: BTC أو bitcoin" autocomplete="off" />
-          <div class="coin-suggestions" id="coinSuggestions"></div>
         </div>
       </div>
       <button class="btn-analyze" id="analyzeBtn" onclick="analyze()">تحليل الآن</button>
@@ -1165,61 +1162,94 @@
 <script>
 /* ─── SPEED BOOST ─── */
 (function() {
-  const CACHE_TTL = 5 * 60 * 1000; // 5 minutes cache
+  const CACHE_TTL = 5 * 60 * 1000;
+
+  // Proxy list - tried in order
+  const PROXIES = [
+    url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+    url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+    url => `https://thingproxy.freeboard.io/fetch/${url}`,
+  ];
+
   const _origFetch = window.fetch;
 
-  window.fetch = function(url, opts = {}) {
-    const urlStr = typeof url === 'string' ? url : url.toString();
-    
-    // Add 5s timeout to all requests if not already set
-    if (!opts.signal) {
-      opts.signal = AbortSignal.timeout(5000);
+  async function fetchWithProxies(urlStr, opts) {
+    // Try direct first (works on localhost / some hosts)
+    try {
+      const r = await _origFetch(urlStr, { ...opts, signal: AbortSignal.timeout(4000) });
+      if (r.ok || r.status === 429) return r;
+    } catch(e) {}
+
+    // Try each proxy
+    for (const makeProxy of PROXIES) {
+      try {
+        const proxyUrl = makeProxy(urlStr);
+        const r = await _origFetch(proxyUrl, { signal: AbortSignal.timeout(6000) });
+        if (r.ok) return r;
+      } catch(e) {}
     }
-    
-    // Cache CoinGecko coin data responses
-    if (urlStr.includes('coingecko.com/api/v3/coins/') && urlStr.includes('market_data=true')) {
-      const cacheKey = 'ca_' + urlStr.substring(urlStr.indexOf('/coins/'), urlStr.indexOf('?') + 1 || undefined);
-      const cached = sessionStorage.getItem(cacheKey);
-      if (cached) {
-        try {
-          const { data, ts } = JSON.parse(cached);
-          if (Date.now() - ts < CACHE_TTL) {
-            return Promise.resolve(new Response(JSON.stringify(data), {
-              status: 200, headers: { 'Content-Type': 'application/json' }
-            }));
-          }
-        } catch(e) {}
-      }
-      return _origFetch(url, opts).then(async r => {
-        if (r.ok) {
-          try {
-            const clone = r.clone();
-            const data = await clone.json();
-            sessionStorage.setItem(cacheKey, JSON.stringify({ data, ts: Date.now() }));
-          } catch(e) {}
-        }
-        return r;
-      });
+    throw new Error('All proxies failed');
+  }
+
+  window.fetch = function(url, opts = {}) {
+    const urlStr = typeof url === 'string' ? url : (url?.url || url?.toString() || '');
+
+    if (!opts.signal) {
+      opts.signal = AbortSignal.timeout(8000);
     }
 
-    // Cache Fear & Greed (changes once daily)
-    if (urlStr.includes('alternative.me/fng')) {
-      const fngCache = sessionStorage.getItem('ca_fng');
-      if (fngCache) {
+    // Intercept CoinGecko API calls
+    if (urlStr.includes('coingecko.com/api/v3/')) {
+
+      // Cache coin market data (5 min)
+      if (urlStr.includes('/coins/') && urlStr.includes('market_data=true')) {
+        const cacheKey = 'ca_' + urlStr.slice(urlStr.indexOf('/coins/'), urlStr.indexOf('?') || undefined);
         try {
-          const { data, ts } = JSON.parse(fngCache);
-          if (Date.now() - ts < 30 * 60 * 1000) { // 30 min TTL
+          const cached = sessionStorage.getItem(cacheKey);
+          if (cached) {
+            const { data, ts } = JSON.parse(cached);
+            if (Date.now() - ts < CACHE_TTL) {
+              return Promise.resolve(new Response(JSON.stringify(data), {
+                status: 200, headers: { 'Content-Type': 'application/json' }
+              }));
+            }
+          }
+        } catch(e) {}
+
+        return fetchWithProxies(urlStr, opts).then(async r => {
+          if (r.ok) {
+            try {
+              const clone = r.clone();
+              const data = await clone.json();
+              sessionStorage.setItem(cacheKey, JSON.stringify({ data, ts: Date.now() }));
+            } catch(e) {}
+          }
+          return r;
+        });
+      }
+
+      // OHLC and search endpoints
+      return fetchWithProxies(urlStr, opts);
+    }
+
+    // Fear & Greed - cache 30 min
+    if (urlStr.includes('alternative.me/fng') || urlStr.includes('alternative.me/api')) {
+      try {
+        const cached = sessionStorage.getItem('ca_fng');
+        if (cached) {
+          const { data, ts } = JSON.parse(cached);
+          if (Date.now() - ts < 30 * 60 * 1000) {
             return Promise.resolve(new Response(JSON.stringify(data), {
               status: 200, headers: { 'Content-Type': 'application/json' }
             }));
           }
-        } catch(e) {}
-      }
-      return _origFetch(url, opts).then(async r => {
+        }
+      } catch(e) {}
+      return fetchWithProxies(urlStr, opts).then(async r => {
         if (r.ok) {
           try {
-            const clone = r.clone();
-            const data = await clone.json();
+            const data = await r.clone().json();
             sessionStorage.setItem('ca_fng', JSON.stringify({ data, ts: Date.now() }));
           } catch(e) {}
         }
@@ -1232,8 +1262,8 @@
 
   // Pre-warm Fear & Greed in background
   setTimeout(() => {
-    fetch('https://api.alternative.me/fng/').catch(()=>{});
-  }, 300);
+    fetch('https://api.alternative.me/fng/').catch(() => {});
+  }, 500);
 })();
 /* ─── END SPEED BOOST ─── */
 </script>
@@ -1293,6 +1323,14 @@
   function showSuggestions(coins) {
     const el = document.getElementById('coinSuggestions');
     if (!el || !coins.length) { hideSuggestions(); return; }
+    // Position dropdown below the input using fixed coords
+    const input = document.getElementById('coinInput');
+    if (input) {
+      const rect = input.getBoundingClientRect();
+      el.style.top = (rect.bottom + 6) + 'px';
+      el.style.left = rect.left + 'px';
+      el.style.width = rect.width + 'px';
+    }
     el.innerHTML = coins.map(c => `
       <div class="sug-item" onclick="selectSugCoin('${c.id}','${c.name}','${(c.symbol||'').toUpperCase()}','${c.thumb||''}')">
         <img src="${c.thumb||''}" onerror="this.style.display='none'" width="28" height="28" style="border-radius:50%;flex-shrink:0">
@@ -1325,6 +1363,20 @@
     document.addEventListener('click', e => {
       if (!e.target.closest('.coin-input-wrap') && !e.target.closest('.search-wrapper')) hideSuggestions();
     });
+    // Reposition on scroll or resize
+    window.addEventListener('scroll', () => {
+      const el = document.getElementById('coinSuggestions');
+      if (el && el.classList.contains('show')) {
+        const input = document.getElementById('coinInput');
+        if (input) {
+          const rect = input.getBoundingClientRect();
+          el.style.top = (rect.bottom + 6) + 'px';
+          el.style.left = rect.left + 'px';
+          el.style.width = rect.width + 'px';
+        }
+      }
+    }, true);
+    window.addEventListener('resize', () => hideSuggestions());
   });
 })();
 /* ─── END AUTOCOMPLETE ─── */
@@ -1332,22 +1384,12 @@
 
 <script>
 function openPrediction() {
-  const coinId = currentCoinId;
-  const coinName = document.getElementById('coinName').textContent;
-  const coinSymbol = document.getElementById('coinSymbol').textContent;
-  
-  if (!coinId && !coinName) return;
-  
-  // Use coinId first (best match), fallback to name or symbol
-  const query = coinId || coinName || coinSymbol;
-  
-  // Build URL - prediction page is at /crypto-prediction
-  const baseUrl = window.location.href.replace(/\/[^\/]*$/, '/').replace('crypto-analyzer', '');
-  const predUrl = baseUrl + 'crypto-prediction?coin=' + encodeURIComponent(query);
-  
-  window.open(predUrl, '_blank');
+  const baseUrl = window.location.origin;
+  window.open(baseUrl + '/crypto-prediction', '_blank');
 }
 </script>
+  <!-- AUTOCOMPLETE DROPDOWN - outside all containers -->
+  <div class="coin-suggestions" id="coinSuggestions"></div>
 </body>
 
 </html>

@@ -1229,7 +1229,59 @@
         });
       }
 
-      // OHLC and search endpoints
+      // Cache OHLC data per timeframe
+      if (urlStr.includes('/ohlc')) {
+        // TTL based on timeframe: 15m→2min, 1h→5min, 4h→15min, 1d→30min
+        const days = urlStr.match(/days=(\d+)/)?.[1] || '1';
+        const ohlcTtl = days === '1' ? 3*60*1000 : days <= '7' ? 8*60*1000 : 20*60*1000;
+        const ohlcKey = 'ca_ohlc_' + urlStr.slice(urlStr.indexOf('/coins/'));
+        try {
+          const cached = sessionStorage.getItem(ohlcKey);
+          if (cached) {
+            const { data, ts } = JSON.parse(cached);
+            if (Date.now() - ts < ohlcTtl) {
+              return Promise.resolve(new Response(JSON.stringify(data), {
+                status: 200, headers: { 'Content-Type': 'application/json' }
+              }));
+            }
+          }
+        } catch(e) {}
+        return fetchWithProxies(urlStr, opts).then(async r => {
+          if (r.ok) {
+            try {
+              const data = await r.clone().json();
+              sessionStorage.setItem(ohlcKey, JSON.stringify({ data, ts: Date.now() }));
+            } catch(e) {}
+          }
+          return r;
+        });
+      }
+
+      // Search endpoint — cache 10 min
+      if (urlStr.includes('/search')) {
+        const searchKey = 'ca_srch_' + encodeURIComponent(urlStr.slice(urlStr.indexOf('query=')));
+        try {
+          const cached = sessionStorage.getItem(searchKey);
+          if (cached) {
+            const { data, ts } = JSON.parse(cached);
+            if (Date.now() - ts < 10*60*1000) {
+              return Promise.resolve(new Response(JSON.stringify(data), {
+                status: 200, headers: { 'Content-Type': 'application/json' }
+              }));
+            }
+          }
+        } catch(e) {}
+        return fetchWithProxies(urlStr, opts).then(async r => {
+          if (r.ok) {
+            try {
+              const data = await r.clone().json();
+              sessionStorage.setItem(searchKey, JSON.stringify({ data, ts: Date.now() }));
+            } catch(e) {}
+          }
+          return r;
+        });
+      }
+
       return fetchWithProxies(urlStr, opts);
     }
 
@@ -1264,6 +1316,42 @@
   setTimeout(() => {
     fetch('https://api.alternative.me/fng/').catch(() => {});
   }, 500);
+
+  // Pre-fetch all OHLC timeframes in background after coin is analyzed
+  // Maps timeframe to CoinGecko days param
+  const TF_DAYS = { '15m':'1', '30m':'1', '1h':'1', '2h':'1', '4h':'1', '8h':'1',
+                    '7d':'7', '14d':'14', '30d':'30', '60d':'60' };
+
+  window._prefetchAllOHLC = function(coinId) {
+    if (!coinId) return;
+    // Decode CoinGecko base URL from obfuscated code
+    const cgBase = atob('aHR0cHM6Ly9hcGkuY29pbmdlY2tvLmNvbS9hcGkvdjM=');
+    const daysSet = new Set(Object.values(TF_DAYS)); // unique days values
+    let delay = 800;
+    daysSet.forEach(days => {
+      setTimeout(() => {
+        const url = `${cgBase}/coins/${coinId}/ohlc?vs_currency=usd&days=${days}`;
+        fetch(url).catch(() => {});
+      }, delay);
+      delay += 600; // stagger requests to avoid rate limiting
+    });
+  };
+
+  // Hook into renderData completion by watching results div visibility
+  const _observer = new MutationObserver(() => {
+    const results = document.getElementById('results');
+    if (results && results.classList.contains('active')) {
+      const coinId = window.currentCoinId;
+      if (coinId && coinId !== window._lastPrefetchedCoin) {
+        window._lastPrefetchedCoin = coinId;
+        setTimeout(() => window._prefetchAllOHLC(coinId), 1000);
+      }
+    }
+  });
+  document.addEventListener('DOMContentLoaded', () => {
+    const results = document.getElementById('results');
+    if (results) _observer.observe(results, { attributes: true, attributeFilter: ['class'] });
+  });
 })();
 /* ─── END SPEED BOOST ─── */
 </script>
@@ -1349,10 +1437,17 @@
   window.selectSugCoin = function(id, name, sym, img) {
     _selectedCoinId = id;
     const input = document.getElementById('coinInput');
-    if (input) { input.value = name; }
+    if (input) {
+      // Put the coin ID in the input — the analyze() function fetches by ID directly from CoinGecko
+      input.value = id;
+    }
     hideSuggestions();
-    // Trigger analysis with the exact coin ID
-    if (typeof analyze === 'function') analyze(false);
+    // Small delay so input value is set before analyze() reads it
+    setTimeout(() => {
+      if (typeof analyze === 'function') analyze(false);
+      // After analysis starts, restore display name in input
+      setTimeout(() => { if (input) input.value = name; }, 800);
+    }, 50);
   };
 
   // Init listeners after DOM ready

@@ -9,6 +9,12 @@ Disallow: /cdn-cgi/
 Disallow: /*.json$
 Disallow: /*?lang=
 Disallow: /*?q=
+Disallow: /*?ag=
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?search=
+Disallow: /*?page=
+Disallow: /*?utm_
 Crawl-delay: 1
 
 # Google - أولوية عالية
@@ -18,6 +24,11 @@ Disallow: /admin/
 Disallow: /private/
 Disallow: /*?lang=
 Disallow: /*?q=
+Disallow: /*?ag=
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?search=
+Disallow: /*?utm_
 Crawl-delay: 0
 
 User-agent: Googlebot-Image
@@ -31,6 +42,11 @@ Disallow: /admin/
 Disallow: /private/
 Disallow: /*?lang=
 Disallow: /*?q=
+Disallow: /*?ag=
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?search=
+Disallow: /*?utm_
 Crawl-delay: 1
 
 # Social crawlers - اسمح لهم بالكامل
@@ -49,6 +65,9 @@ Allow: /
 User-agent: Telegram
 Allow: /
 
+User-agent: Pinterest
+Allow: /
+
 # SEO tools - حد من الزحف الثقيل
 User-agent: AhrefsBot
 Crawl-delay: 10
@@ -61,6 +80,9 @@ Disallow: /
 
 User-agent: DotBot
 Crawl-delay: 10
+
+User-agent: YandexBot
+Crawl-delay: 5
 
 # Sitemap
 Sitemap: https://www.cryptohubcoin.com/sitemap.xml

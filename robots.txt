@@ -5,11 +5,15 @@ User-agent: *
 Allow: /
 Disallow: /cdn-cgi/
 Disallow: /*.json$
+Disallow: /*?lang=
+Disallow: /*?q=
 Crawl-delay: 1
 
 # Google
 User-agent: Googlebot
 Allow: /
+Disallow: /*?lang=
+Disallow: /*?q=
 Crawl-delay: 0
 
 User-agent: Googlebot-Image

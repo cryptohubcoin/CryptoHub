@@ -9257,27 +9257,58 @@
       allC.forEach(function(c) { symSet.add(c.sy.toUpperCase()); symIdx.set(c.sy.toUpperCase(), c); });
       var added = 0;
       
-      function addOrEnrich(sy, nm, pr, c24, mc, vol, img, sup) {
+      function addOrEnrich(sy, nm, pr, c24, mc, vol, img, sup, c1, c7, nmp) {
         sy = sy.toUpperCase();
         var existing = symIdx.get(sy);
         if (existing) {
-          // Enrich existing coin — fill gaps only
           if (pr > 0 && (!existing.pr || existing.pr === 0)) existing.pr = pr;
           if (mc > 0 && (!existing.mc || existing.mc === 0)) existing.mc = mc;
           if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
           if (c24 && existing.c24 === 0) existing.c24 = c24;
+          if (c1 && existing.c1 === 0) existing.c1 = c1;
+          if (c7 && existing.c7 === 0) existing.c7 = c7;
           if (sup > 0 && (!existing.sup || existing.sup === 0)) existing.sup = sup;
+          if (nmp > 0) existing.ex = nmp;
           if (img && img.length > 10 && (!existing.img || existing.img.includes('/0.png'))) existing.img = img;
           return;
         }
         symSet.add(sy);
-        var nc = { id: sy.toLowerCase(), rk: allC.length + 1, nm: nm, sy: sy, pr: pr, c1: 0, c4: 0, c24: c24, c7: 0, mc: mc, vol: vol, img: img || 'https://s2.coinmarketcap.com/static/img/coins/64x64/0.png', ex: 0, sup: sup || 0 };
+        var nc = { id: sy.toLowerCase(), rk: allC.length + 1, nm: nm, sy: sy, pr: pr, c1: c1||0, c4: 0, c24: c24||0, c7: c7||0, mc: mc, vol: vol, img: img || 'https://s2.coinmarketcap.com/static/img/coins/64x64/0.png', ex: nmp||0, sup: sup || 0 };
         allC.push(nc);
         symIdx.set(sy, nc);
         added++;
       }
 
-      // === SOURCE 1: CoinPaprika (free, no rate limit, ~2500 coins) ===
+      // === SOURCE 1 (PRIMARY): CMC Pro via your server proxy — 15,000 coins, no CORS ===
+      var proxyP = (async function() {
+        try {
+          for (var start = 1; start <= 15001; start += 5000) {
+            try {
+              var r = await Promise.race([
+                fetch('https://www.cryptohubcoin.com/cmc-proxy.php?start=' + start + '&limit=5000'),
+                new Promise(function(_, rej) { setTimeout(function() { rej(new Error('timeout')); }, 10000); })
+              ]);
+              if (!r.ok) continue;
+              var d = await r.json();
+              if (!d || !d.data) continue;
+              var list = Array.isArray(d.data) ? d.data : [];
+              list.forEach(function(coin) {
+                var qt = coin.quote && coin.quote.USD ? coin.quote.USD : null;
+                if (!qt) return;
+                addOrEnrich(coin.symbol, coin.name, qt.price||0, qt.percent_change_24h||0, qt.market_cap||0, qt.volume_24h||0, 'https://s2.coinmarketcap.com/static/img/coins/64x64/'+coin.id+'.png', coin.circulating_supply||0, qt.percent_change_1h||0, qt.percent_change_7d||0, coin.num_market_pairs||0);
+              });
+              console.log('[AutoLoad] CMC Proxy batch start=' + start + ' done. Total:', allC.length);
+            } catch(e) { console.log('[AutoLoad] CMC Proxy batch err:', e.message); }
+          }
+          // Update UI
+          reRank(); assignExCounts(); filtC = allC.slice(); render(); updateGlobalFromData();
+          if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
+          if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
+          console.log('[AutoLoad] CMC Proxy ALL done. Total:', allC.length);
+        } catch(e) { console.log('[AutoLoad] CMC Proxy err:', e.message); }
+      })();
+
+      // === SOURCE 2: CoinPaprika (free, no rate limit, ~2500 coins) ===
       var paprikaP = (async function() {
         try {
           var r = await fetch('https://api.coinpaprika.com/v1/tickers?quotes=USD');
@@ -9290,22 +9321,17 @@
             if (!sy || !qt) return;
             addOrEnrich(sy, c.name, qt.price || 0, qt.percent_change_24h || 0, qt.market_cap || 0, qt.volume_24h || 0, '', 0);
           });
-          console.log('[AutoLoad] CoinPaprika done. +' + added);
+          console.log('[AutoLoad] CoinPaprika done. Total:', allC.length);
         } catch(e) { console.log('[AutoLoad] CoinPaprika err:', e.message); }
       })();
 
-      // === SOURCE 2: CoinGecko (rate limited but high quality, sequential) ===
+      // === SOURCE 3: CoinGecko (sequential, fills gaps) ===
       var geckoP = (async function() {
-        var gAdded = 0;
         for (var page = 1; page <= 60; page++) {
           try {
             var r = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=' + page + '&sparkline=false');
             if (!r.ok) {
-              if (r.status === 429) {
-                await new Promise(function(w) { setTimeout(w, 65000); });
-                page--;
-                continue;
-              }
+              if (r.status === 429) { await new Promise(function(w) { setTimeout(w, 65000); }); page--; continue; }
               break;
             }
             var data = await r.json();
@@ -9313,63 +9339,22 @@
             data.forEach(function(c) {
               addOrEnrich((c.symbol||'').toUpperCase(), c.name, c.current_price||0, c.price_change_percentage_24h||0, c.market_cap||0, c.total_volume||0, c.image||'', c.circulating_supply||0);
             });
-            gAdded += data.length;
             if (page % 10 === 0) {
               reRank(); assignExCounts(); filtC = allC.slice(); render();
               if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
               if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
             }
             await new Promise(function(w) { setTimeout(w, 1200); });
-          } catch(e) {
-            await new Promise(function(w) { setTimeout(w, 5000); });
-          }
+          } catch(e) { await new Promise(function(w) { setTimeout(w, 5000); }); }
         }
-        console.log('[AutoLoad] CoinGecko done. Processed', gAdded);
+        console.log('[AutoLoad] CoinGecko done. Total:', allC.length);
       })();
 
-      // === SOURCE 3: CMC data-api via proxies (parallel batches) ===
-      var cmcP = (async function() {
-        try {
-          var reqs = [];
-          for (var start = 1; start <= 15001; start += 5000) {
-            reqs.push(fetchCMC('https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=' + start + '&limit=5000&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all', Math.floor(start/5000) % PROXIES.length));
-          }
-          var results = await Promise.allSettled(reqs);
-          results.forEach(function(r) {
-            if (r.status !== 'fulfilled' || !r.value) return;
-            var d = r.value;
-            if (!d || !d.data || !d.data.cryptoCurrencyList) return;
-            d.data.cryptoCurrencyList.forEach(function(coin) {
-              var qt = coin.quotes && coin.quotes.length ? coin.quotes.find(function(q){return q.name==='USD';}) : null;
-              if (!qt) return;
-              addOrEnrich(coin.symbol, coin.name, qt.price||0, qt.percentChange24h||0, qt.marketCap||0, qt.volume24h||0, 'https://s2.coinmarketcap.com/static/img/coins/64x64/'+coin.id+'.png', coin.circulatingSupply||0);
-              var ex = symIdx.get(coin.symbol.toUpperCase());
-              if (ex && coin.numMarketPairs > 0) ex.ex = coin.numMarketPairs;
-            });
-          });
-          console.log('[AutoLoad] CMC done');
-        } catch(e) { console.log('[AutoLoad] CMC err:', e.message); }
-      })();
-
-      // Wait for CoinPaprika (fastest) first, then update UI
+      // Wait for proxy (fastest, most complete)
+      await proxyP;
+      // Then paprika
       await paprikaP;
-      if (added > 0) {
-        reRank(); assignExCounts(); filtC = allC.slice(); render();
-        if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
-        if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
-        console.log('[AutoLoad] After CoinPaprika: Total', allC.length);
-      }
-
-      // Wait for CMC (medium speed)
-      await cmcP;
-      if (added > 0) {
-        reRank(); assignExCounts(); filtC = allC.slice(); render(); updateGlobalFromData();
-        if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
-        if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
-        console.log('[AutoLoad] After CMC: Total', allC.length);
-      }
-
-      // CoinGecko runs in background (slowest due to rate limits)
+      // Gecko runs in background
       await geckoP;
       
       // Final update

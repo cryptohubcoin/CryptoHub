@@ -5783,24 +5783,36 @@
       color: #fff;
     }
 
-    /* Responsive table */
-    @media (max-width: 1024px) {
-      .col-4h { display: none !important; }
-    }
+    /* Responsive table: sticky Name column + horizontal scroll for all data */
+    .ct { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .ct table { min-width: 780px; }
+    
     @media (max-width: 768px) {
-      .col-1h, .col-7d { display: none !important; }
-      .ct th { padding: 10px 6px; font-size: 10px; }
-      .ct td { padding: 8px 5px; font-size: 12px; }
-      .ct table { min-width: 0 !important; table-layout: auto !important; }
+      .ct table { min-width: 700px; }
+      .ct th, .ct td { padding: 8px 6px; font-size: 11px; }
+      
+      /* Sticky first column (Name) */
+      .ct th:first-child,
+      .ct td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 12;
+        background: var(--bg1);
+        box-shadow: 2px 0 4px rgba(0,0,0,0.06);
+      }
+      .ct th:first-child {
+        background: var(--bg2);
+        z-index: 13;
+      }
+      .dark .ct th:first-child { background: #0d121b; }
+      .dark .ct td:first-child { background: var(--bg1); }
     }
-    @media (max-width: 600px) {
-      .col-mcap { display: none !important; }
-    }
+    
     @media (max-width: 480px) {
-      .col-vol { display: none !important; }
-      .ct th { padding: 7px 4px; font-size: 9px; }
-      .ct td { padding: 6px 3px; font-size: 11px; }
-      .ct th#th_name { padding-left: 8px; }
+      .ct table { min-width: 620px; }
+      .ct th, .ct td { padding: 6px 4px; font-size: 10px; }
+      .ct th:first-child { padding-left: 6px; }
+      .col-4h { display: none !important; }
     }
 
   </style>
@@ -6572,22 +6584,22 @@
         <table class="w-full crypto-table" style="min-width:780px;table-layout:fixed">
           <thead>
             <tr>
-              <th onclick="doSort('name')" id="th_name" class="text-start"><span data-i18n="colName">الاسم</span>
+              <th onclick="doSort('name')" id="th_name" class="text-start" style="width:180px"><span data-i18n="colName">الاسم</span>
               </th>
-              <th onclick="doSort('price')" id="th_price"><span data-i18n="colPrice">السعر</span> <span
+              <th onclick="doSort('price')" id="th_price" style="width:90px"><span data-i18n="colPrice">السعر</span> <span
                   class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('change_1h')" id="th_change_1h" class="col-1h">1h% <span
+              <th onclick="doSort('change_1h')" id="th_change_1h" class="col-1h" style="width:62px">1h% <span
                   class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('change_4h')" id="th_change_4h" class="col-4h">4h% <span
+              <th onclick="doSort('change_4h')" id="th_change_4h" class="col-4h" style="width:62px">4h% <span
                   class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('change_24h')" id="th_change_24h">24h% <span class="sort-icon"><i
+              <th onclick="doSort('change_24h')" id="th_change_24h" style="width:65px">24h% <span class="sort-icon"><i
                     class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('change_7d')" id="th_change_7d" class="col-7d">7d% <span
+              <th onclick="doSort('change_7d')" id="th_change_7d" class="col-7d" style="width:62px">7d% <span
                   class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('market_cap')" id="th_market_cap" class="col-mcap"><span
+              <th onclick="doSort('market_cap')" id="th_market_cap" class="col-mcap" style="width:95px"><span
                   data-i18n="colMarketCap">القيمة السوقية</span> <span class="sort-icon"><i
                     class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('volume')" id="th_volume" class="col-vol"><span
+              <th onclick="doSort('volume')" id="th_volume" class="col-vol" style="width:95px"><span
                   data-i18n="colVolume">الحجم 24س</span> <span class="sort-icon"><i class="fas fa-caret-up"></i><i
                     class="fas fa-caret-down"></i></span></th>
             </tr>

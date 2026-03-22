@@ -5783,18 +5783,16 @@
       color: #fff;
     }
 
-    /* Responsive table: hide columns progressively, scroll for remaining */
-    @media (max-width: 900px) {
+    /* Responsive table: horizontal scroll handles most cases, hide only on very small */
+    @media (max-width: 768px) {
       .col-4h, .col-7d { display: none !important; }
+      .ct th { padding: 10px 8px; font-size: 10px; }
+      .ct td { padding: 8px 6px; font-size: 12px; }
     }
-    @media (max-width: 680px) {
-      .col-1h { display: none !important; }
-    }
-    @media (max-width: 520px) {
-      .col-mcap { display: none !important; }
-    }
-    @media (max-width: 420px) {
-      .col-vol { display: none !important; }
+    @media (max-width: 480px) {
+      .col-1h, .col-mcap { display: none !important; }
+      .ct th { padding: 8px 5px; }
+      .ct td { padding: 7px 4px; font-size: 11px; }
     }
 
   </style>
@@ -6453,7 +6451,7 @@
           style="color:var(--t2)"></span></div>
 
       <!-- Coins Section with integrated networks -->
-      <div class="ct mb-4" style="border-radius:14px;overflow:visible">
+      <div class="ct mb-4" style="border-radius:14px">
         <!-- CoinMarketCap-Style Horizontal Networks Bar -->
         <span id="ldSt" style="display:none"></span>
         <div class="cmc-net-bar">
@@ -6563,7 +6561,6 @@
         </div>
 
 
-        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;position:relative;scrollbar-width:thin">
         <table class="w-full" style="min-width:780px;table-layout:fixed">
           <thead>
             <tr>
@@ -6691,7 +6688,6 @@
             </tr>
           </tbody>
         </table>
-        </div>
       </div>
 
       <!-- CMC-Style Pagination -->

@@ -402,6 +402,36 @@
       min-height: 56px;
     }
   </style>
+  <!-- Critical Tailwind utilities fallback (works even if CDN is slow) -->
+  <style>
+    .fixed{position:fixed}.relative{position:relative}.absolute{position:absolute}
+    .w-full{width:100%}.h-full{height:100%}.max-w-7xl{max-width:80rem}
+    .flex{display:flex}.inline-flex{display:inline-flex}.hidden{display:none}.block{display:block}
+    .items-center{align-items:center}.items-start{align-items:flex-start}
+    .justify-between{justify-content:space-between}.justify-center{justify-content:center}
+    .gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-2\.5{gap:.625rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}
+    .mx-auto{margin-left:auto;margin-right:auto}
+    .px-2{padding-left:.5rem;padding-right:.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}
+    .py-1{padding-top:.25rem;padding-bottom:.25rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}
+    .p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}
+    .pl-5{padding-left:1.25rem}.pr-4{padding-right:1rem}
+    .mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}.mb-2{margin-bottom:.5rem}.mb-4{margin-bottom:1rem}
+    .text-xs{font-size:.75rem}.text-sm{font-size:.875rem}.text-base{font-size:1rem}.text-lg{font-size:1.125rem}.text-xl{font-size:1.25rem}.text-2xl{font-size:1.5rem}
+    .font-bold{font-weight:700}.font-semibold{font-weight:600}
+    .text-start{text-align:start}.text-end{text-align:end}.text-center{text-align:center}
+    .rounded{border-radius:.25rem}.rounded-lg{border-radius:.5rem}.rounded-full{border-radius:9999px}
+    .top-0{top:0}.z-10{z-index:10}
+    .border-b{border-bottom-width:1px}
+    .overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}
+    .no-underline{text-decoration:none}
+    .cursor-pointer{cursor:pointer}
+    .space-y-1>*+*{margin-top:.25rem}
+    .w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}
+    .flex-wrap{flex-wrap:wrap}
+    .flex-shrink-0{flex-shrink:0}
+    .whitespace-nowrap{white-space:nowrap}
+    @media(min-width:640px){.sm\:inline{display:inline}}
+  </style>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;600&display=swap"
     rel="stylesheet">
@@ -2296,12 +2326,20 @@
       }
 
       .tg-sym {
-        font-size: 10px !important;
+        font-size: 8px !important;
       }
 
       .tg-chg {
-        font-size: 10px !important;
+        font-size: 7px !important;
         padding: 1px 3px !important;
+      }
+      
+      .tg-pr {
+        display: none !important;
+      }
+      
+      .tg-rank {
+        font-size: 7px !important;
       }
     }
 
@@ -4809,16 +4847,16 @@
 
     .tg-card {
       flex-shrink: 0;
-      width: 110px;
-      padding: 12px 10px;
-      border-radius: 16px;
-      border: 1px solid rgba(128, 128, 128, 0.1);
-      background: rgba(255, 255, 255, 0.05);
+      width: 90px;
+      padding: 8px 6px;
+      border-radius: 12px;
+      border: 1px solid rgba(128, 128, 128, 0.08);
+      background: rgba(255, 255, 255, 0.03);
       backdrop-filter: blur(4px);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       cursor: pointer;
       transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
@@ -4826,28 +4864,28 @@
 
     .tg-card:hover {
       border-color: var(--ac);
-      transform: translateY(-6px);
+      transform: translateY(-4px);
       background: var(--bg1);
-      box-shadow: 0 12px 30px rgba(56, 97, 251, 0.2);
+      box-shadow: 0 8px 20px rgba(56, 97, 251, 0.15);
     }
 
     .tg-rank {
       position: absolute;
-      top: 6px;
-      right: 8px;
-      font-size: 10px;
+      top: 4px;
+      right: 5px;
+      font-size: 8px;
       font-weight: 800;
       color: var(--ac);
       background: rgba(56, 97, 251, 0.1);
-      padding: 2px 6px;
-      border-radius: 6px;
+      padding: 1px 4px;
+      border-radius: 4px;
     }
 
     .tg-card img {
-      width: 38px;
-      height: 38px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      border: 2px solid rgba(128, 128, 128, 0.1);
+      border: 1.5px solid rgba(128, 128, 128, 0.1);
       background: var(--bg3);
       transition: transform .3s;
     }
@@ -4857,43 +4895,36 @@
     }
 
     .tg-noimg {
-      width: 38px;
-      height: 38px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       background: var(--bg3);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 11px;
+      font-size: 9px;
       color: var(--t2);
-      border: 2px solid rgba(128, 128, 128, 0.1)
+      border: 1.5px solid rgba(128, 128, 128, 0.1)
     }
 
     .tg-sym {
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 800;
       color: var(--t1);
     }
 
     .tg-pr {
-      font-size: 11px;
+      font-size: 9px;
       font-weight: 600;
       color: var(--t2);
     }
 
     .tg-chg {
-      font-size: 11px;
+      font-size: 9px;
       font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 8px;
-    }
-
-    .tg-chg {
-      font-size: 10px;
-      font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 6px
+      padding: 2px 6px;
+      border-radius: 5px;
     }
 
     .tg-up {
@@ -4909,22 +4940,26 @@
     @media(max-width:640px) {
       .tg-card {
         width: 72px;
-        padding: 6px 4px
+        padding: 5px 3px
       }
 
       .tg-card img,
       .tg-noimg {
-        width: 26px;
-        height: 26px
+        width: 20px;
+        height: 20px
       }
 
       .tg-sym {
-        font-size: 9px
+        font-size: 8px
+      }
+      
+      .tg-pr {
+        font-size: 8px
       }
 
       .tg-chg {
-        font-size: 10px;
-        padding: 1px 5px
+        font-size: 8px;
+        padding: 1px 4px
       }
     }
 
@@ -5860,7 +5895,7 @@
 
 <body>
   <!-- Nav -->
-  <nav class="fixed w-full top-0 z-[9999] border-b" style="border-color:var(--bc)">
+  <nav class="fixed w-full top-0 border-b" style="border-color:var(--bc);z-index:9999">
     <div
       style="position:absolute;inset:0;z-index:-1;background:var(--bg1);border-bottom:1px solid var(--bc);backdrop-filter:blur(12px)">
     </div>
@@ -8169,36 +8204,110 @@
 
     // Network token mapping
     const NET_TOKENS = {
-      'ethereum': ['ETH', 'USDT', 'USDC', 'DAI', 'WBTC', 'STETH', 'WSTETH', 'LINK', 'UNI', 'AAVE', 'MKR', 'SNX', 'COMP', 'SUSHI', 'CRV', 'LDO', 'RPL', 'ENS', 'DYDX', '1INCH', 'GRT', 'FET', 'RNDR', 'IMX', 'MANA', 'SAND', 'AXS', 'APE', 'PEPE', 'SHIB', 'FLOKI', 'WLD', 'ARB', 'OP', 'BLUR', 'MASK', 'CHZ', 'BAT', 'ZRX', 'STORJ', 'ANKR', 'GNO', 'YFI', 'BAL', 'OCEAN', 'BAND', 'NMR', 'PERP', 'OMG', 'SKL', 'CELR', 'RLC', 'OXT', 'PAXG', 'FRAX', 'LUSD', 'PYUSD', 'AMPL', 'OHM', 'FXS', 'CVX', 'INDEX', 'DFI', 'REQ', 'POWR', 'KNC', 'ANT', 'ZIL', 'WOO', 'DODO', 'API3', 'BADGER', 'CREAM', 'ALPHA', 'PICKLE', 'IDEX', 'BNT', 'TORN', 'HOPR'],
-      'binance-smart-chain': ['BNB', 'CAKE', 'XVS', 'BAKE', 'BURGER', 'SFP', 'TWT', 'ALPHA', 'LINA', 'RAMP', 'DEGO', 'BELT', 'BUNNY', 'EPS', 'AUTO', 'MDX', 'BIFI', 'BABY', 'BTT', 'WIN', 'SHIB', 'BABYDOGE', 'NAOS', 'BSW', 'CHESS', 'DERI', 'FRONT', 'SWINGBY', 'MATH', 'O3', 'SKILL', 'MBOX', 'HERO', 'SANTOS', 'PSG', 'BAR', 'JUV', 'ACM', 'LAZIO', 'CITY', 'SPS', 'BFG', 'SFUND', 'MONI', 'LOOKS', 'GAL', 'DF', 'SOUL', 'NRV'],
-      'solana': ['SOL', 'RAY', 'SRM', 'STEP', 'ORCA', 'MNGO', 'FIDA', 'ATLAS', 'POLIS', 'JTO', 'JUP', 'PYTH', 'BONK', 'WIF', 'BOME', 'POPCAT', 'MEW', 'SLERF', 'JITO', 'MSOL', 'STSOL', 'GUAC', 'RENDER', 'HNT', 'MOBILE', 'IOT', 'SAMO', 'COPE', 'MAPS', 'LIKE', 'TULIP', 'PORT', 'SUNNY', 'LARIX', 'ROPE', 'MEDIA', 'KARMA', 'MER', 'KIN', 'GRAPE', 'SONAR', 'NOS', 'GOFX', 'SNY', 'UXD', 'USH', 'SBR', 'SLND'],
-      'polygon-pos': ['MATIC', 'POL', 'QUICK', 'GHST', 'BAL', 'AAVEGOTCHI', 'DG', 'NEXO', 'FISH', 'SPHERE', 'RELAY', 'PYR', 'REVV', 'TOWER', 'GAME', 'NFTL', 'GEL', 'ORBS', 'POLYDOGE', 'BICO', 'UMBR', 'INSUR', 'DFYN', 'AKRO', 'COMBO'],
-      'arbitrum-one': ['ARB', 'GMX', 'MAGIC', 'GNS', 'RDNT', 'PENDLE', 'GRAIL', 'WINR', 'FOREX', 'JONES', 'DPX', 'VSTA', 'SPA', 'HOP', 'PREMIA', 'FACTOR', 'FRXETH'],
-      'optimistic-ethereum': ['OP', 'VELO', 'THALES', 'LYRA', 'PERP', 'SONNE', 'KWENTA', 'SNX', 'AELIN', 'FRAX', 'LUSD'],
-      'avalanche': ['AVAX', 'JOE', 'PNG', 'QI', 'XAVA', 'COQ', 'BENQI', 'YAK', 'WOO', 'YYAVAX', 'SAVAX'],
-      'tron': ['TRX', 'JST', 'SUN', 'BTT', 'WIN', 'USDD', 'TUSD', 'USDT', 'WTRX', 'USDJ', 'JUST'],
-      'bitcoin': ['BTC', 'WBTC', 'RENBTC', 'HBTC', 'SBTC', 'TBTC', 'RUNE', 'STX', 'ORDI', 'SATS', 'RATS', 'MUBI'],
-      'cardano': ['ADA', 'SUNDAE', 'MIN', 'DJED', 'SHEN', 'LENFI', 'AGIX', 'MELD', 'WMT', 'HOSKY', 'ERG'],
-      'polkadot': ['DOT', 'GLMR', 'ASTR', 'ACA', 'PHA', 'LIT', 'CLV', 'KSM', 'MOVR', 'KINT', 'OTP', 'TUR', 'SDN'],
-      'cosmos': ['ATOM', 'OSMO', 'INJ', 'SEI', 'TIA', 'DYM', 'STARS', 'JUNO', 'EVMOS', 'SCRT', 'AKT', 'REGEN', 'DVPN', 'CMDX', 'IRIS', 'LUNA', 'LUNC', 'UMEE', 'HUAHUA', 'ROWAN', 'ION', 'RAW', 'NETA', 'MNTL'],
-      'near-protocol': ['NEAR', 'OCT', 'REF', 'AURORA', 'META', 'JUMBO', 'PARAS', 'BANANA', 'USN', 'CHEDDAR', 'LINEAR'],
-      'sui': ['SUI', 'NAVX', 'CETUS', 'TURBOS', 'AFTERMATH', 'MOVE', 'BLUEMOVE', 'SCALLOP'],
-      'aptos': ['APT', 'GUI', 'TORTUGA', 'DITTO', 'ABEL', 'PONTEM'],
-      'base': ['BRETT', 'DEGEN', 'AERO', 'TOSHI', 'BASED', 'NORMIE', 'MOCHI', 'ENJOY', 'CBETH', 'USDBC', 'BALD', 'TPOT', 'RDNT'],
-      'fantom': ['FTM', 'SPIRIT', 'BEETS', 'TAROT', 'REAPER', 'SCREAM', 'GEIST', 'LQDR', 'TOMB', 'TSHARE', 'FRAX', 'MULTI', 'WOO', 'BOO'],
-      'cronos': ['CRO', 'VVS', 'CRONA', 'SINGLE', 'MMF'],
-      'algorand': ['ALGO', 'USDC', 'YLDY', 'OPUL', 'TINY', 'PLANET'],
-      'stellar': ['XLM', 'USDC', 'AQUA', 'SHX'],
-      'celo': ['CELO', 'CUSD', 'CEUR', 'CREAL', 'MOBI', 'PACT'],
-      'mantle': ['MNT', 'WMNT', 'USDC', 'USDT', 'METH'],
-      'zksync': ['ETH', 'USDC', 'USDT', 'WBTC', 'MUTE', 'ZK'],
-      'blast': ['BLAST', 'USDB', 'ETH', 'WETH', 'RING', 'JUICE'],
-      'kava': ['KAVA', 'HARD', 'USDX', 'SWP'],
-      'osmosis': ['OSMO', 'ION', 'SCRT', 'REGEN', 'JUNO', 'STARS', 'AKT', 'DVPN', 'CMDX'],
-      'moonbeam': ['GLMR', 'USDC', 'USDT', 'XCKSM', 'XCDOT', 'WBTC']
+      'ethereum': ['ETH','USDT','USDC','DAI','WBTC','STETH','WSTETH','LINK','UNI','AAVE','MKR','SNX','COMP','SUSHI','CRV','LDO','RPL','ENS','DYDX','1INCH','GRT','FET','RNDR','IMX','MANA','SAND','AXS','APE','PEPE','SHIB','FLOKI','WLD','ARB','OP','BLUR','MASK','CHZ','BAT','ZRX','STORJ','ANKR','GNO','YFI','BAL','OCEAN','BAND','NMR','PERP','OMG','SKL','CELR','RLC','OXT','PAXG','FRAX','LUSD','PYUSD','AMPL','OHM','FXS','CVX','INDEX','REQ','POWR','KNC','ANT','WOO','DODO','API3','BADGER','ALPHA','IDEX','BNT','HOPR','ERC20','WETH','WEETH','RETH','CBETH','LIDO','PENDLE','SSV','EIGEN','ETHFI','ONDO','ENA','RSR','ACH','AGI','AGIX','AIOZ','ALEPH','ALICE','ALPHA','ALT','AMP','ANKR','APENFT','APE','ARPA','AUDIO','AVAX','BICO','BONE','BTCST','BTRST','BUSD','C98','CELR','CERE','CFX','CHESS','COMBO','COTI','CQT','CTSI','CVP','DENT','DESO','DEXT','DIA','DODO','DREP','DUSK','ELF','ERN','EURC','FET','FIDA','FLM','FLUX','FOR','FORTH','FTM','FUN','GAL','GHST','GLM','GODS','GTC','GRT','GTO','GUSD','HBAR','HIFI','HIGH','HOOK','HOT','IDEX','ILV','IMX','INJ','IOST','IOTX','JASMY','JOE','JST','KDA','KEY','KNC','LCX','LINA','LIT','LOKA','LOOKS','LPT','LRC','LUNC','LYXE','MAGIC','MANA','MCO2','MDT','METIS','MINA','MKR','MLN','MOB','MTL','MULTI','MYRIA','NKN','NMR','NU','OCEAN','OGN','OMG','ONE','ONT','OOE','ORAI','OXT','PAXG','PEOPLE','PERP','PHA','PHB','PLA','POLS','POND','PORTAL','PROM','PROS','PUNDIX','QKC','QNT','RARE','RBN','REN','REP','REQ','RIF','RLC','RNDR','RPL','RSR','SAND','SANTOS','SAR','SC','SCRT','SFP','SHIB','SKL','SLP','SNFT','SNT','SNX','SOC','SPELL','SRM','SSV','STARL','STEEM','STETH','STMX','STORJ','STX','SUKU','SUPER','SUSHI','SWFTC','SXP','SYLO','SYN','T','TLM','TOKEN','TOMO','TOWER','TROY','TRU','TVK','TWT','UFT','UMA','UNFI','UNI','USDD','UTK','VEGA','VIB','VIDT','VOXEL','WBTC','WETH','WLD','WOO','XCN','XEC','XLM','XVS','YFI','YGG','ZEC','ZEN','ZIL','ZRX'],
+      'binance-smart-chain': ['BNB','CAKE','XVS','BAKE','BURGER','SFP','TWT','ALPHA','LINA','RAMP','DEGO','BELT','BSW','CHESS','FRONT','MATH','SKILL','MBOX','HERO','SANTOS','PSG','BAR','JUV','ACM','LAZIO','CITY','SPS','SFUND','BABYDOGE','BTT','WIN','GAL','DF','HIGH','HOOK','EDU','ID','RDNT','ARKM','CYBER','SEI','MANTA','PIXEL','PORTAL','AEVO','W','BB','LISTA','REZ','IO','ZK','BANANA','NOT','DOGS','HMSTR','CATI','SCR','NEIRO','EIGEN','USUAL','PENGU','VANA','ME','MOVE','ORCA','BIO'],
+      'solana': ['SOL','RAY','SRM','STEP','ORCA','MNGO','FIDA','ATLAS','POLIS','JTO','JUP','PYTH','BONK','WIF','BOME','POPCAT','MEW','SLERF','MSOL','STSOL','HNT','MOBILE','IOT','SAMO','KIN','RENDER','NOS','W','DRIFT','TNSR','PARCL','TENSOR','HONEY','CROWN','AUDIT','GUAC','NOSANA','MARINADE','MEAN','TULIP','COPE','GRAPE','MANGO','SERUM','STAR','JTO','JUP','PYTH','BONK','WIF','BOME','POPCAT','MEW','SLERF','JITO','KMNO','CLOUD','ZEUS','DBR','PRCL','HAWK','MPLX','BLZE','LDO','DUAL','BSOL','JSOL','HXRO','PORT','SUNNY','MER','SBR','SLND','SNY','UXD','MNDE','LAINE','UXUY','WOOP','SHDW','MEAN','SYN'],
+      'polygon-pos': ['MATIC','POL','QUICK','GHST','BAL','DG','PYR','REVV','TOWER','GAME','GEL','ORBS','BICO','SAND','AAVE','LINK','UNI','SUSHI','CRV','COMP','MKR','SNX','GRT','1INCH','WBTC','USDC','USDT','DAI','FRAX','LDO','STG','DODO','VOXEL','PAXG','TEL','ANKR','CELR','MCB','DFYN','NABOX','IRON','DF','INST','GOVI','ROUTE','OM','KLIMA','MUST','COMBO','WOO','MANA'],
+      'arbitrum-one': ['ARB','GMX','MAGIC','GNS','RDNT','PENDLE','GRAIL','WINR','JONES','DPX','SPA','HOP','PREMIA','FACTOR','VELA','LODE','Y2K','MUX','DODO','STG','GRT','UNI','SUSHI','LINK','AAVE','CRV','1INCH','BAL','COMP','SNX','WBTC','USDC','USDT','DAI','FRAX','LDO','UMAMI','CAP','BFCAI','STFX','VESTA','MYCELIUM','DOPEX','TND','SYN','APEX','LYRA','THALES'],
+      'optimistic-ethereum': ['OP','VELO','THALES','LYRA','PERP','SONNE','KWENTA','SNX','AELIN','FRAX','LUSD','WLD','WBTC','USDC','USDT','DAI','UNI','SUSHI','AAVE','CRV','LDO','1INCH','LINK','BAL','STG','SYN','GRT','COMP','MKR'],
+      'avalanche': ['AVAX','JOE','PNG','QI','XAVA','COQ','YAK','WOO','SAVAX','GMX','AAVE','LINK','SUSHI','CRV','1INCH','UNI','WBTC','USDC','USDT','DAI','STG','PENDLE','BSGG','GRAPE','TIME','SPELL','MIM','BENQI','PLATYPUS'],
+      'tron': ['TRX','JST','SUN','BTT','WIN','USDD','TUSD','USDT','WTRX','USDJ','JUST','NFT','APENFT','USDC','LTC','ETH','WBTC'],
+      'bitcoin': ['BTC','WBTC','RENBTC','HBTC','SBTC','TBTC','RUNE','STX','ORDI','SATS','RATS','MUBI','DOG','PUPS','RSIC','ALEX','BSSB'],
+      'cardano': ['ADA','SUNDAE','MIN','DJED','SHEN','LENFI','AGIX','MELD','WMT','HOSKY','ERG','COPI','SNEK','IAG','BOOK','LIQWID','JPG','GENSX','OPTIM'],
+      'polkadot': ['DOT','GLMR','ASTR','ACA','PHA','LIT','CLV','KSM','MOVR','KINT','OTP','SDN','PARA','EQ','XRT','RING','NODL','CFG','HDX','BNC','MYTH'],
+      'cosmos': ['ATOM','OSMO','INJ','SEI','TIA','DYM','STARS','JUNO','EVMOS','SCRT','AKT','REGEN','DVPN','CMDX','IRIS','LUNA','LUNC','HUAHUA','ROWAN','ION','NETA','MNTL','KAVA','FET','BAND','CRO','HASH','KUJI','STRD','MARS','WHALE','NTRN','SAGA','OMNI','ARCH','PRYZM'],
+      'near-protocol': ['NEAR','OCT','REF','AURORA','META','JUMBO','PARAS','USN','LINEAR','BURROW','SWEAT','AURORA','PEMBROCK','SPIN','BRRR','PULSE'],
+      'sui': ['SUI','NAVX','CETUS','TURBOS','SCALLOP','DEEP','NS','BUCK','NAVI','HASUI','BLUE','MOVE','OCEAN','SSWP','FUD','SUIA'],
+      'aptos': ['APT','GUI','ABEL','TORTUGA','PONTEM','THALA','PROPS','MOJO','ERAGON','DITTO'],
+      'base': ['BRETT','DEGEN','AERO','TOSHI','BASED','NORMIE','MOCHI','ENJOY','CBETH','USDBC','BALD','RDNT','SEAMLESS','EXTRA','BSX','AXLE','BASIN','WETH','USDC','DAI','STG','AAVE','COMP','BAL','SUSHI','AERODROME','ALIEN','WELL','TYBG','KEYCAT'],
+      'fantom': ['FTM','SPIRIT','BEETS','TAROT','SCREAM','GEIST','LQDR','TOMB','FRAX','MULTI','WOO','BOO','EQUAL','BRUSH','PFTM','USDC','DAI','LINK','CRV','AAVE','SUSHI'],
+      'cronos': ['CRO','VVS','CRONA','SINGLE','MMF','FERRO','TONIC','BIFI','DRK'],
+      'algorand': ['ALGO','USDC','YLDY','OPUL','TINY','PLANET','DEFLY','GARD','SMILE','AKITA','CHIP','VEST','ALGX'],
+      'stellar': ['XLM','USDC','AQUA','SHX','EURC','yXLM','RMT','MOBI','SLT','SDEX'],
+      'celo': ['CELO','CUSD','CEUR','CREAL','MOBI','PACT'],
+      'mantle': ['MNT','WMNT','USDC','USDT','METH','PUFF','INIT','CLEO','AXL'],
+      'zksync': ['ETH','USDC','USDT','WBTC','MUTE','ZK','HOLD','SPACE','VC','RF','OT','ZKSWAP'],
+      'blast': ['BLAST','USDB','ETH','WETH','RING','JUICE','ORBIT','PAC','YES','ANDY','BAG'],
+      'linea': ['ETH','USDC','USDT','WBTC','LYNX','NILE','CROAK','FOXY','LXP'],
+      'scroll': ['ETH','USDC','USDT','WBTC','SCR','PAPER','NURI','GHO','AMBIENT'],
+      'kava': ['KAVA','HARD','USDX','SWP','ATOM','BNB','BTCB','USDT','USDC'],
+      'osmosis': ['OSMO','ION','SCRT','REGEN','JUNO','STARS','AKT','DVPN','CMDX','ATOM','CRO','LUNA','UST','EVMOS','INJ','HUAHUA','NETA','MNTL','STRD','MARS','WHALE','KUJI','NTRN']
     };
 
-    let cLang = 'en', allC = [], filtC = [], cPage = 1, iPP = 50,
+    // Dynamic: fetch network tokens from CoinGecko + scan loaded coins
+    const _netCache = {};
+    async function fetchNetTokens(netId) {
+      if (_netCache[netId]) return;
+      _netCache[netId] = true;
+      
+      // Step 1: Scan allC for coins with matching plat field (from CMC)
+      var tokens = NET_TOKENS[netId] || [];
+      allC.forEach(function(c) {
+        if (!c.sy) return;
+        var sy = c.sy.toUpperCase();
+        if (tokens.indexOf(sy) !== -1) return;
+        if (c.plat && (c.plat === netId || c.plat.includes(netId))) tokens.push(sy);
+        if (c.tags) {
+          if (c.tags.includes(netId) || c.tags.includes(netId + '-ecosystem')) tokens.push(sy);
+        }
+      });
+      NET_TOKENS[netId] = tokens;
+      if (cNet === netId) doFilter();
+      
+      // Step 2: Fetch from CoinGecko asset_platform coins list
+      var cgMap = {'ethereum':'ethereum','binance-smart-chain':'binance-smart-chain','solana':'solana','polygon-pos':'polygon-pos','arbitrum-one':'arbitrum-one','optimistic-ethereum':'optimistic-ethereum','avalanche':'avalanche','base':'base','fantom':'fantom','tron':'tron','sui':'sui','aptos':'aptos','near-protocol':'near-protocol','cronos':'cronos','zksync':'zksync','blast':'blast','linea':'linea','mantle':'mantle','scroll':'scroll'};
+      var cgPlatform = cgMap[netId];
+      if (!cgPlatform) return;
+      
+      try {
+        // Method 1: CoinGecko markets with category
+        for (var page = 1; page <= 20; page++) {
+          var r = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=' + cgPlatform + '-ecosystem&order=market_cap_desc&per_page=250&page=' + page + '&sparkline=false');
+          if (!r.ok) {
+            if (r.status === 429) { await new Promise(function(w){setTimeout(w,62000);}); page--; continue; }
+            break;
+          }
+          var data = await r.json();
+          if (!Array.isArray(data) || data.length === 0) break;
+          var beforeLen = tokens.length;
+          data.forEach(function(c) {
+            var sy = (c.symbol || '').toUpperCase();
+            if (sy && tokens.indexOf(sy) === -1) tokens.push(sy);
+          });
+          NET_TOKENS[netId] = tokens;
+          // Update filter every page
+          if (tokens.length > beforeLen && cNet === netId) doFilter();
+          if (data.length < 250) break;
+          await new Promise(function(w) { setTimeout(w, 1500); });
+        }
+      } catch(e) {}
+      
+      // Step 3: Also try CoinPaprika for this platform
+      try {
+        var papMap = {'ethereum':'eth-ethereum','binance-smart-chain':'bnb-binance-coin','solana':'sol-solana','tron':'trx-tron','polygon-pos':'matic-polygon','avalanche':'avax-avalanche','arbitrum-one':'arb-arbitrum','base':'base-base','sui':'sui-sui'};
+        var papId = papMap[netId];
+        if (papId) {
+          var r2 = await fetch('https://api.coinpaprika.com/v1/coins/' + papId + '/markets?quotes=USD');
+          if (r2.ok) {
+            var mkts = await r2.json();
+            if (Array.isArray(mkts)) {
+              mkts.forEach(function(m) {
+                if (m.pair) {
+                  var base = m.pair.split('/')[0];
+                  if (base && tokens.indexOf(base) === -1) tokens.push(base);
+                }
+              });
+              NET_TOKENS[netId] = tokens;
+              if (cNet === netId) doFilter();
+            }
+          }
+        }
+      } catch(e) {}
+      
+      console.log('[NetTokens] Total', tokens.length, 'tokens for', netId);
+    }
+
+    let cLang = 'en', allC = [], filtC = [], cPage = 1, iPP = 75,
       cSort = 'rank', sortDir = 'asc', cNet = 'all', bWs = null, uInt = null, isL = false, cBatch = 0, maxB = 40,
       exData = [], exPage = 1, exIPP = 10;
     /* iPP: always 50 */
@@ -8335,6 +8444,20 @@
       DAI:1,USDT:1,USDC:1,TUSD:1,BUSD:1,FRAX:1,LUSD:1,USDP:1,GUSD:1,PYUSD:1,USDD:1,FDUSD:1,CRVUSD:1,GHO:1,SUSD:1,
       WBTC:97000,STETH:3200,WSTETH:3700,RETH:3500,CBETH:3300,WETH:3200,WEETH:3400,PAXG:3000,TBTC:97000,HBTC:97000,RENBTC:97000,SBTC:97000
     };
+    // Approximate market caps (in billions) for correct initial ranking — updated periodically
+    const KNOWN_MCAP = {
+      BTC:1350e9,ETH:250e9,USDT:145e9,XRP:75e9,BNB:87e9,USDC:45e9,SOL:42e9,DOGE:13e9,ADA:12e9,TRX:11e9,
+      AVAX:9e9,LINK:9.5e9,DOT:6.5e9,SHIB:5e9,TON:8e9,UNI:4.5e9,LTC:5.5e9,BCH:7e9,NEAR:3.5e9,ATOM:3e9,
+      XLM:3e9,HBAR:3.5e9,APT:3e9,FIL:2e9,ARB:2e9,OP:2e9,SUI:3.5e9,SEI:1e9,INJ:1.5e9,FET:1.5e9,
+      RNDR:2e9,GRT:1.5e9,IMX:1.2e9,MKR:2e9,AAVE:2.5e9,PEPE:3.5e9,WIF:0.7e9,BONK:0.7e9,FLOKI:0.6e9,WLD:0.8e9,
+      STX:1.2e9,RUNE:1e9,ETC:3e9,ALGO:1.5e9,VET:1.5e9,FTM:1e9,MANA:0.5e9,SAND:0.5e9,AXS:0.5e9,
+      EOS:0.9e9,XTZ:0.7e9,NEO:0.5e9,THETA:0.8e9,IOTA:0.5e9,DASH:0.3e9,ZEC:0.4e9,
+      COMP:0.4e9,SNX:0.4e9,CRV:0.5e9,LDO:1.2e9,ENJ:0.2e9,CHZ:0.4e9,CAKE:0.5e9,
+      KAS:2.5e9,EGLD:0.4e9,DYDX:0.4e9,GMX:0.3e9,PENDLE:0.6e9,JUP:1e9,PYTH:0.8e9,TIA:1e9,
+      QNT:0.8e9,AR:0.6e9,DAI:5.3e9,WBTC:9e9,STETH:19e9,HYPE:5e9,TAO:2.5e9,
+      ONDO:2.5e9,ENA:1e9,EIGEN:0.4e9,RENDER:2e9,POL:1.5e9,CRO:1.5e9,LEO:9e9,
+      OKB:3e9,WSTETH:17e9,CBETH:2.5e9,WETH:5e9
+    };
     const _lastGood = {};
     function saveFallback(c) {
       if (c.pr > 0 || c.vol > 0 || c.mc > 0 || c.ex > 0) {
@@ -8355,11 +8478,14 @@
         if ((!c.mc || c.mc === 0) && fb.mc > 0) c.mc = fb.mc;
         if ((!c.ex || c.ex === 0) && fb.ex > 0) c.ex = fb.ex;
       }
-      // Then apply known baseline prices for stablecoins/wrapped tokens if still 0
+      // Apply known baseline prices for stablecoins/wrapped tokens
       if ((!c.pr || c.pr === 0) && KNOWN_PRICES[c.sy]) {
         c.pr = KNOWN_PRICES[c.sy];
-        // Estimate market cap from supply if available
         if ((!c.mc || c.mc === 0) && c.sup > 0) c.mc = c.sup * c.pr;
+      }
+      // Apply known market caps for correct ranking
+      if ((!c.mc || c.mc === 0) && KNOWN_MCAP[c.sy]) {
+        c.mc = KNOWN_MCAP[c.sy];
       }
     }
     // Save fallbacks to sessionStorage periodically
@@ -8530,88 +8656,91 @@
           isL = false; return;
         }
 
-        // ===== PHASE 1: CoinCap (fast, no CORS) → render immediately =====
-        const capCoins = [];
+        // ===== PHASE 1: CoinGecko top 250 + Binance in PARALLEL → correct ranking + live prices =====
         try {
-          const pages = await Promise.all([
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=0', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=1000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=1500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=2000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=2500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=3000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=3500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=4000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=4500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=5000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=5500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=6000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=6500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=7000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=7500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=8000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=8500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=9000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=9500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=10000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=10500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=11000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=11500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=12000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=12500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=13000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=13500', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=14000', 3000),
-            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=14500', 3000)
+          const [cgTop, bData] = await Promise.all([
+            Promise.race([fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false'), _tout(4000)]).then(r => r.ok ? r.json() : null).catch(() => null),
+            Promise.race([fetch('https://api.binance.com/api/v3/ticker/24hr'), _tout(3000)]).then(r => r.ok ? r.json() : null).catch(() => null)
           ]);
-          pages.forEach(data => {
-            if (!data || !data.data) return;
-            data.data.forEach(c => {
+          
+          // First: add CoinGecko top 250 (has market cap, images, correct names)
+          if (cgTop && Array.isArray(cgTop)) {
+            cgTop.forEach(c => {
+              const sy = (c.symbol || '').toUpperCase();
+              if (!sy || symMap.has(sy)) return;
+              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: c.price_change_percentage_1h_in_currency || 0, c4: 0, c24: c.price_change_percentage_24h || 0, c7: c.price_change_percentage_7d_in_currency || 0, mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
+              allC.push(coin); symMap.set(sy, coin);
+            });
+          }
+          
+          // Then: add Binance coins (live prices, more coins, no market cap)
+          const bMap = new Map();
+          if (bData && Array.isArray(bData)) {
+            bData.forEach(t => {
+              if (!t.symbol || !t.symbol.endsWith('USDT')) return;
+              const sy = t.symbol.replace('USDT', '');
+              const vol = parseFloat(t.quoteVolume) || 0;
+              const pr = parseFloat(t.lastPrice) || 0;
+              if (pr <= 0) return;
+              bMap.set(sy, t);
+              const existing = symMap.get(sy);
+              if (existing) {
+                // Update with Binance live price (more real-time)
+                existing.pr = pr;
+                if (existing.c24 === 0) existing.c24 = parseFloat(t.priceChangePercent) || 0;
+                if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
+                return;
+              }
+              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: pr, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
+              allC.push(coin); symMap.set(sy, coin);
+            });
+          }
+          
+          // FIRST RENDER — top 250 correctly ranked + 600 more from Binance!
+          if (allC.length > 0) { reRank(); assignExCounts(); filtC = [...allC]; render(); buildTrending(); buildTicker() }
+          console.log('Phase 1:', allC.length, 'coins - rendered!');
+        } catch(e) { console.log('Phase 1 err:', e); }
+
+        // ===== PHASE 1.5: CoinCap (fills market cap + more coins) =====
+        try {
+          const capPages = await Promise.allSettled([
+            fetchJSON('https://api.coincap.io/v2/assets?limit=2000&offset=0', 4000),
+            fetchJSON('https://api.coincap.io/v2/assets?limit=500&offset=2000', 4000)
+          ]);
+          capPages.forEach(r => {
+            if (r.status !== 'fulfilled' || !r.value || !r.value.data) return;
+            r.value.data.forEach(c => {
               const sym = c.symbol.toUpperCase();
-              if (symMap.has(sym)) return;
               const vol = parseFloat(c.volumeUsd24Hr) || 0;
               const pr = parseFloat(c.priceUsd) || 0;
               const sup = parseFloat(c.supply) || 0;
               let mc = parseFloat(c.marketCapUsd) || 0;
               if (!mc && sup > 0 && pr > 0) mc = sup * pr;
-              
-              const coin = { id: c.id, rk: parseInt(c.rank) || allC.length + 1, nm: c.name, sy: sym, pr: pr, c1: 0, c4: 0, c24: parseFloat(c.changePercent24Hr) || 0, c7: 0, mc: mc, vol: vol, img: `https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`, ex: 0, sup: sup };
+              const existing = symMap.get(sym);
+              if (existing) {
+                if (mc > 0 && (!existing.mc || existing.mc === 0)) existing.mc = mc;
+                if (sup > 0 && (!existing.sup || existing.sup === 0)) existing.sup = sup;
+                if (pr > 0 && (!existing.pr || existing.pr === 0)) existing.pr = pr;
+                if (!existing.img || existing.img.includes('/0.png')) existing.img = `https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`;
+                if (existing.nm === existing.sy && c.name) existing.nm = c.name;
+                return;
+              }
+              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sym, pr: pr, c1: 0, c4: 0, c24: parseFloat(c.changePercent24Hr) || 0, c7: 0, mc: mc, vol: vol, img: `https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`, ex: 0, sup: sup };
               allC.push(coin); symMap.set(sym, coin);
             });
           });
+          // Re-render with market cap data
+          if (allC.length > 0) { reRank(); filtC = [...allC]; render() }
         } catch (e) { }
-        $('pFill').style.width = '35%'; $('pTxt').textContent = t('loadingData') + ` (${allC.length})`;
-        // FIRST RENDER - user sees data fast!
-        if (allC.length > 0) { reRank(); assignExCounts(); filtC = [...allC]; render(); buildTrending(); buildTicker() }
-        console.log('Phase 1 CoinCap:', allC.length, 'coins - rendered!');
+        console.log('Phase 1.5 CoinCap:', allC.length, 'coins');
 
         // ===== PHASE 2: Binance + MEXC + Gate.io + OKX in PARALLEL =====
-        const [bData, mData, gData, okData] = await Promise.all([
-          fetchJSON('https://api.binance.com/api/v3/ticker/24hr', 3000),
+        // ===== PHASE 2: MEXC + Gate.io + OKX (Binance already loaded) =====
+        const [mData, gData, okData] = await Promise.allSettled([
           fetchJSON('https://api.mexc.com/api/v3/ticker/24hr', 3000),
           fetchJSON('https://api.gateio.ws/api/v4/spot/tickers', 3000),
           fetchJSON('https://www.okx.com/api/v5/market/tickers?instType=SPOT', 3000)
-        ]);
-        // Binance
-        if (bData && Array.isArray(bData)) {
-          bData.forEach(t => {
-            if (!t.symbol || !t.symbol.endsWith('USDT')) return;
-            const sy = t.symbol.replace('USDT', '');
-            const vol = parseFloat(t.quoteVolume) || 0;
-            const existing = symMap.get(sy);
-            if (existing) {// Update price (Binance is more real-time)
-              const bp = parseFloat(t.lastPrice); if (bp > 0) existing.pr = bp;
-              if (existing.c24 === 0) existing.c24 = parseFloat(t.priceChangePercent) || 0;
-              if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
-              if ((!existing.mc || existing.mc === 0) && existing.pr > 0 && existing.sup > 0) existing.mc = existing.pr * existing.sup;
-              return;
-            }
-            
-            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
-            allC.push(coin); symMap.set(sy, coin);
-          });
-        }
+        ]).then(r => r.map(x => x.status === 'fulfilled' ? x.value : null));
         // MEXC
         if (mData && Array.isArray(mData)) {
           mData.forEach(t => {
@@ -8917,6 +9046,9 @@
 
     // Common coin names for Binance fallback
     const COIN_NAMES = { DAI: 'Dai', USDT: 'Tether', USDC: 'USD Coin', BUSD: 'Binance USD', TUSD: 'TrueUSD', FRAX: 'Frax', LUSD: 'Liquity USD', USDP: 'Pax Dollar', GUSD: 'Gemini Dollar', PYUSD: 'PayPal USD', USDD: 'USDD', FDUSD: 'First Digital USD', WBTC: 'Wrapped Bitcoin', STETH: 'Lido Staked ETH', WSTETH: 'Wrapped stETH', RETH: 'Rocket Pool ETH', CBETH: 'Coinbase Wrapped ETH', WETH: 'Wrapped Ether', WEETH: 'Wrapped eETH', PAXG: 'PAX Gold', BTC: 'Bitcoin', ETH: 'Ethereum', BNB: 'BNB', SOL: 'Solana', XRP: 'XRP', DOGE: 'Dogecoin', ADA: 'Cardano', AVAX: 'Avalanche', DOT: 'Polkadot', LINK: 'Chainlink', MATIC: 'Polygon', UNI: 'Uniswap', SHIB: 'Shiba Inu', LTC: 'Litecoin', BCH: 'Bitcoin Cash', ATOM: 'Cosmos', FIL: 'Filecoin', APT: 'Aptos', ARB: 'Arbitrum', OP: 'Optimism', SUI: 'Sui', SEI: 'Sei', TIA: 'Celestia', INJ: 'Injective', JUP: 'Jupiter', NEAR: 'NEAR', ICP: 'Internet Computer', RNDR: 'Render', FET: 'Fetch.ai', GRT: 'The Graph', IMX: 'Immutable X', MKR: 'Maker', AAVE: 'Aave', SNX: 'Synthetix', CRV: 'Curve', LDO: 'Lido', RPL: 'Rocket Pool', ENS: 'ENS', SAND: 'The Sandbox', MANA: 'Decentraland', AXS: 'Axie Infinity', APE: 'ApeCoin', PEPE: 'Pepe', FLOKI: 'Floki', WLD: 'Worldcoin', BONK: 'Bonk', WIF: 'dogwifhat', TRX: 'TRON', ETC: 'Ethereum Classic', ALGO: 'Algorand', XLM: 'Stellar', VET: 'VeChain', HBAR: 'Hedera', THETA: 'Theta', EOS: 'EOS', XTZ: 'Tezos', FLOW: 'Flow', MINA: 'Mina', NEO: 'NEO', EGLD: 'MultiversX', KAVA: 'Kava', ONE: 'Harmony', ROSE: 'Oasis', FTM: 'Fantom', CKB: 'Nervos', KAS: 'Kaspa', TON: 'Toncoin', ORDI: 'ORDI', STX: 'Stacks', RUNE: 'THORChain', BLUR: 'Blur', GMX: 'GMX', PENDLE: 'Pendle', JTO: 'Jito', PYTH: 'Pyth', RAY: 'Raydium', CAKE: 'PancakeSwap', JASMY: 'JasmyCoin', CHZ: 'Chiliz', GMT: 'STEPN', GAL: 'Galxe', CFX: 'Conflux', ACH: 'Alchemy Pay', AGLD: 'Adventure Gold', AGIX: 'SingularityNET', AI: 'Sleepless AI', ALICE: 'My Neighbor Alice', ALPHA: 'Alpha Finance', ANKR: 'Ankr', ANT: 'Aragon', AR: 'Arweave', AUDIO: 'Audius', BAND: 'Band Protocol', BAT: 'Basic Attention', BOME: 'BOOK OF MEME', CELO: 'Celo', COMP: 'Compound', DASH: 'Dash', DYDX: 'dYdX', DYM: 'Dymension', ENJ: 'Enjin', GNO: 'Gnosis', ICX: 'ICON', IOTA: 'IOTA', LINA: 'Linear', MASK: 'Mask Network', OCEAN: 'Ocean Protocol', OMG: 'OMG Network', ONT: 'Ontology', QNT: 'Quant', QTUM: 'Qtum', SC: 'Siacoin', SKL: 'SKALE', STORJ: 'Storj', SUSHI: 'SushiSwap', SXP: 'Solar', YFI: 'yearn.finance', ZEC: 'Zcash', ZIL: 'Zilliqa', ZRX: '0x' };
+    // CMC coin IDs for image URLs
+    const CMC_IDS = {BTC:1,ETH:1027,USDT:825,BNB:1839,SOL:5426,XRP:52,USDC:3408,DOGE:74,ADA:2010,TRX:1958,AVAX:5805,LINK:1975,DOT:6636,SHIB:5994,TON:11419,UNI:7083,LTC:2,BCH:1831,NEAR:6535,ATOM:3794,XLM:512,HBAR:4642,APT:21794,FIL:2280,ARB:11841,OP:11840,SUI:20947,SEI:23149,INJ:7226,FET:5681,RNDR:5690,GRT:6719,IMX:10603,MKR:1518,AAVE:7278,PEPE:24478,WIF:28752,BONK:23095,FLOKI:10804,WLD:13502,STX:4847,RUNE:4157,ETC:1321,ALGO:4030,VET:3077,FTM:3513,MANA:1966,SAND:6210,AXS:6783,APE:18876,EOS:1765,XTZ:2011,NEO:1376,THETA:2416,IOTA:1720,DASH:131,ZEC:1437,COMP:5692,SNX:2586,CRV:6538,LDO:8000,ENJ:2130,CHZ:4066,GMT:18069,CAKE:7186,SUSHI:6758,YFI:5864,KAS:20396,EGLD:6892,DYDX:28324,GMX:11857,PENDLE:9481,JUP:29210,PYTH:28177,TIA:22861,QNT:3155,AR:5632,PAXG:4705,DAI:4943,WBTC:3717,STETH:8085,KCS:2087,CRO:3635,GALA:7080,FLOW:4558,MINA:8646,KAVA:4846,ONE:3945,ROSE:7653,CKB:4948,ORDI:25028,SXP:4279,BAT:1697,ZIL:2469,ICX:2099,ONT:2566,QTUM:1684,SC:1042,SKL:5765,STORJ:1772,ZRX:1896,ANKR:3783,BAND:4679,CELO:5567,CFX:7334,JASMY:8425,AUDIO:7455,GNO:1659,MASK:8536,OMG:1808,BLUR:23121,RAY:8526,ALICE:8766,BOME:29870,DYM:28932,ENS:13855,RPL:2943,ACH:6958,LINA:7102,AGLD:11568};
+    function cmcImg(sy) { var id = CMC_IDS[sy]; return id ? 'https://s2.coinmarketcap.com/static/img/coins/64x64/' + id + '.png' : ''; }
 
     async function loadMore1h7d() {
       // Symbol→coin map for O(1) lookup
@@ -9485,7 +9617,7 @@
         if (sorted.length < 5) return;
         if (_tgBuilt >= 2) return; _tgBuilt++;
         var h = sorted.map(function (c, i) {
-          var img = c.img ? '<img alt="icon" src="' + c.img + '" width="28" height="28" onerror="this.style.display=\'none\'" loading="lazy">' : '<div class="tg-noimg">' + c.sy.slice(0, 2) + '</div>';
+          var img = c.img ? '<img alt="icon" src="' + c.img + '" width="24" height="24" onerror="this.style.display=\'none\'" loading="lazy">' : '<div class="tg-noimg">' + c.sy.slice(0, 2) + '</div>';
           var pr = fN(c.pr);
           return `<div class="tg-card" onclick="showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}','${c.sy}','${c.img}')"><div class="tg-rank">#${i + 1}</div>${img}<span class="tg-sym">${c.sy}</span><span class="tg-pr">${pr}</span><span class="tg-chg tg-up">+${c.c24.toFixed(1)}%</span></div>`;
         }).join('');
@@ -9939,15 +10071,45 @@
 
     // Network filter — checks platform slug, tags, and known token list
     function chkNet(c, nid) {
-      if (c.plat === nid) return true;
-      if (c.plat && c.plat.includes(nid)) return true;
-      if (c.tags) {
-        if (c.tags.includes(nid) || c.tags.includes(nid + '-ecosystem')) return true;
-        if (nid === 'ethereum' && (c.tags.includes('erc-20') || c.tags.includes('ethereum-ecosystem'))) return true;
-        if (nid === 'binance-smart-chain' && (c.tags.includes('bep-20') || c.tags.includes('bnb-chain'))) return true;
-        if (nid === 'tron' && c.tags.includes('trc-20')) return true;
-        if (nid === 'solana' && (c.tags.includes('spl-token') || c.tags.includes('solana-ecosystem'))) return true;
+      // Check platform field from CMC
+      if (c.plat) {
+        if (c.plat === nid) return true;
+        if (c.plat.includes(nid)) return true;
+        // Aliases
+        if (nid === 'ethereum' && (c.plat === 'ethereum' || c.plat.includes('erc20') || c.plat.includes('eth'))) return true;
+        if (nid === 'binance-smart-chain' && (c.plat.includes('binance') || c.plat.includes('bsc') || c.plat.includes('bnb'))) return true;
+        if (nid === 'polygon-pos' && (c.plat.includes('polygon') || c.plat.includes('matic'))) return true;
+        if (nid === 'arbitrum-one' && c.plat.includes('arbitrum')) return true;
+        if (nid === 'optimistic-ethereum' && c.plat.includes('optimis')) return true;
+        if (nid === 'avalanche' && c.plat.includes('avalan')) return true;
+        if (nid === 'base' && c.plat === 'base') return true;
+        if (nid === 'fantom' && c.plat.includes('fantom')) return true;
+        if (nid === 'near-protocol' && c.plat.includes('near')) return true;
+        if (nid === 'cosmos' && (c.plat.includes('cosmos') || c.plat.includes('osmosis'))) return true;
+        if (nid === 'cronos' && c.plat.includes('cronos')) return true;
+        if (nid === 'mantle' && c.plat.includes('mantle')) return true;
+        if (nid === 'linea' && c.plat.includes('linea')) return true;
+        if (nid === 'scroll' && c.plat.includes('scroll')) return true;
+        if (nid === 'blast' && c.plat.includes('blast')) return true;
+        if (nid === 'zksync' && (c.plat.includes('zksync') || c.plat.includes('zk-sync'))) return true;
       }
+      // Check tags
+      if (c.tags && Array.isArray(c.tags)) {
+        if (c.tags.includes(nid) || c.tags.includes(nid + '-ecosystem')) return true;
+        if (nid === 'ethereum' && (c.tags.includes('erc-20') || c.tags.includes('ethereum-ecosystem') || c.tags.includes('defi') || c.tags.includes('ethereum'))) return true;
+        if (nid === 'binance-smart-chain' && (c.tags.includes('bep-20') || c.tags.includes('bnb-chain') || c.tags.includes('binance-smart-chain') || c.tags.includes('bsc-ecosystem'))) return true;
+        if (nid === 'tron' && (c.tags.includes('trc-20') || c.tags.includes('tron-ecosystem'))) return true;
+        if (nid === 'solana' && (c.tags.includes('spl-token') || c.tags.includes('solana-ecosystem') || c.tags.includes('solana'))) return true;
+        if (nid === 'polygon-pos' && (c.tags.includes('polygon-ecosystem') || c.tags.includes('polygon'))) return true;
+        if (nid === 'arbitrum-one' && (c.tags.includes('arbitrum-ecosystem') || c.tags.includes('arbitrum'))) return true;
+        if (nid === 'avalanche' && (c.tags.includes('avalanche-ecosystem') || c.tags.includes('avalanche'))) return true;
+        if (nid === 'base' && (c.tags.includes('base-ecosystem') || c.tags.includes('base'))) return true;
+        if (nid === 'cosmos' && (c.tags.includes('cosmos-ecosystem') || c.tags.includes('cosmos'))) return true;
+        if (nid === 'near-protocol' && c.tags.includes('near-protocol-ecosystem')) return true;
+        if (nid === 'sui' && (c.tags.includes('sui-ecosystem') || c.tags.includes('sui'))) return true;
+        if (nid === 'aptos' && (c.tags.includes('aptos-ecosystem') || c.tags.includes('aptos'))) return true;
+      }
+      // Check known token list
       const tokens = NET_TOKENS[nid];
       if (tokens && tokens.includes(c.sy.toUpperCase())) return true;
       return false;
@@ -14052,7 +14214,41 @@
     document.addEventListener('click', e => { if (e.target === $('exMod')) closeMod() });
     document.addEventListener('DOMContentLoaded', () => { $('exSrch')?.addEventListener('input', e => { const s = e.target.value.toLowerCase(); document.querySelectorAll('.ec-row').forEach(c => { c.style.display = c.textContent.toLowerCase().includes(s) ? 'table-row' : 'none' }) }) });
 
-    function reRank() { allC.sort((a, b) => (parseFloat(b.mc) || 0) - (parseFloat(a.mc) || 0) || (parseFloat(b.vol) || 0) - (parseFloat(a.vol) || 0)); allC.forEach((c, i) => c.rk = i + 1) }
+    function reRank() {
+      // Dedup: merge duplicate symbols into one entry with best data
+      var seen = new Map();
+      var clean = [];
+      allC.forEach(function(c) {
+        var sy = c.sy.toUpperCase();
+        var prev = seen.get(sy);
+        if (prev) {
+          // Merge: take best value from each field
+          if (c.pr > 0 && (!prev.pr || prev.pr === 0)) prev.pr = c.pr;
+          if (c.pr > 0 && prev.pr > 0 && c.pr !== prev.pr) {
+            // Take the more precise price (further from round number)
+            var cDec = (c.pr + '').split('.')[1]; var pDec = (prev.pr + '').split('.')[1];
+            if ((cDec ? cDec.length : 0) > (pDec ? pDec.length : 0)) prev.pr = c.pr;
+          }
+          if ((parseFloat(c.mc)||0) > (parseFloat(prev.mc)||0)) prev.mc = c.mc;
+          if ((parseFloat(c.vol)||0) > (parseFloat(prev.vol)||0)) prev.vol = c.vol;
+          if (c.c1 && !prev.c1) prev.c1 = c.c1;
+          if (c.c4 && !prev.c4) prev.c4 = c.c4;
+          if (c.c24 && !prev.c24) prev.c24 = c.c24;
+          if (c.c7 && !prev.c7) prev.c7 = c.c7;
+          if (c.sup > 0 && (!prev.sup || prev.sup === 0)) prev.sup = c.sup;
+          if (c.ex > 0 && (!prev.ex || prev.ex === 0)) prev.ex = c.ex;
+          if (c.img && c.img.length > 15 && (!prev.img || prev.img.includes('/0.png') || prev.img.length < 10)) prev.img = c.img;
+          if (c.nm && c.nm.length > prev.nm.length) prev.nm = c.nm;
+          return;
+        }
+        seen.set(sy, c);
+        clean.push(c);
+      });
+      allC.length = 0;
+      clean.forEach(function(c) { allC.push(c); });
+      allC.sort(function(a, b) { return (parseFloat(b.mc) || 0) - (parseFloat(a.mc) || 0) || (parseFloat(b.vol) || 0) - (parseFloat(a.vol) || 0); });
+      allC.forEach(function(c, i) { c.rk = i + 1; });
+    }
 
     // Filter/Sort/Render
     function doFilter() { const s = $('search').value.toLowerCase(); filtC = allC.filter(c => { const ms = c.nm.toLowerCase().includes(s) || c.sy.toLowerCase().includes(s); const mn = cNet === 'all' || chkNet(c, cNet); return ms && mn }); const af = $('aFilt'); if (cNet !== 'all') { af.classList.remove('hidden'); const net = NETS.find(n => n.id === cNet); $('aNetName').textContent = net ? `${net.i} ${net.n} ` : cNet; $('fCount').textContent = `(${filtC.length} ${t('coinsFound')})` } else af.classList.add('hidden'); doSortArr(); cPage = 1; render() }
@@ -14084,7 +14280,7 @@
         const prDisp = c.pr >= 1 ? c.pr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : (c.pr >= 0.0001 ? c.pr.toFixed(6).replace(/0+$/, '').replace(/\.$/, '.0') : parseFloat(c.pr.toFixed(8)));
 
         return `<tr onclick="showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}', '${c.sy}', '${c.img}')">
-<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><img alt="icon" src="${c.img}" class="w-6 h-6 rounded-full" width="24" height="24" onerror="this.style.display='none'" loading="lazy" style="flex-shrink:0"><span class="font-semibold text-sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
+<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><div style="position:relative;width:24px;height:24px;flex-shrink:0"><img alt="${c.sy}" src="${c.img}" class="w-6 h-6 rounded-full" width="24" height="24" onerror="this.style.display='none';this.nextSibling.style.display='flex'" loading="lazy" style="position:absolute;inset:0"><div style="display:none;width:24px;height:24px;border-radius:50%;background:var(--ac);color:#fff;font-size:9px;font-weight:700;align-items:center;justify-content:center">${c.sy.slice(0,2)}</div></div><span class="font-semibold text-sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
 <td class="font-bold text-end pr-4" style="white-space:nowrap">$${prDisp}</td>
 <td class="text-end pr-4 col-1h" style="white-space:nowrap">${mkChg(c.c1)}</td>
 <td class="text-end pr-4 col-4h" style="white-space:nowrap">${mkChg(c.c4)}</td>
@@ -14146,6 +14342,7 @@
           cNet = btn.getAttribute('data-net');
           $('netSel').value = cNet;
           doFilter();
+          if (cNet !== 'all') fetchNetTokens(cNet);
           if (mDrop) { mDrop.classList.remove('show'); if (mChev) mChev.style.transform = 'rotate(0)' }
         });
       });
@@ -14158,6 +14355,7 @@
           cNet = btn.getAttribute('data-net');
           $('netSel').value = cNet;
           doFilter();
+          if (cNet !== 'all') fetchNetTokens(cNet);
           if (mDrop) { mDrop.classList.remove('show'); if (mChev) mChev.style.transform = 'rotate(0)' }
         });
       });
@@ -17753,7 +17951,7 @@
             // Throttle AI polling by simulating idle time
             _aiLastAct = 0;
             // Reduce render batch size if not already minimal
-            if (iPP > 50) { iPP = 50; if (cPage === 1) render(); }
+            if (iPP > 50) { iPP = 75; if (cPage === 1) render(); }
           }
         });
         pObs.observe({ entryTypes: ['longtask'] });

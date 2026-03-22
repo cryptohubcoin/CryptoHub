@@ -1454,6 +1454,17 @@
       transition: width .3s
     }
 
+    .vol-badge-wrap .vol-tip {
+      display:none;position:absolute;top:50%;left:calc(100% + 8px);transform:translateY(-50%);
+      background:#1e293b;color:#e2e8f0;font-size:11px;font-weight:500;line-height:1.5;
+      padding:8px 12px;border-radius:8px;width:220px;text-align:center;z-index:999;
+      box-shadow:0 4px 12px rgba(0,0,0,.4);border:1px solid #334155;pointer-events:none;
+    }
+    .vol-badge-wrap .vol-tip::after {
+      content:'';position:absolute;top:50%;right:100%;transform:translateY(-50%);
+      border:5px solid transparent;border-right-color:#1e293b;
+    }
+    .vol-badge-wrap:hover .vol-tip { display:block; }
     .ib {
       display: inline-flex;
       align-items: center;
@@ -5771,6 +5782,21 @@
       background: #3861fb;
       color: #fff;
     }
+
+    /* Responsive table: hide columns progressively, scroll for remaining */
+    @media (max-width: 900px) {
+      .col-4h, .col-7d { display: none !important; }
+    }
+    @media (max-width: 680px) {
+      .col-1h { display: none !important; }
+    }
+    @media (max-width: 520px) {
+      .col-mcap { display: none !important; }
+    }
+    @media (max-width: 420px) {
+      .col-vol { display: none !important; }
+    }
+
   </style>
 
   <script type="application/ld+json">
@@ -6537,28 +6563,28 @@
         </div>
 
 
-        <table class="w-full">
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;position:relative;scrollbar-width:thin">
+        <table class="w-full" style="min-width:780px;table-layout:fixed">
           <thead>
             <tr>
-              <th onclick="doSort('name')" id="th_name" class="text-start"><span data-i18n="colName">الاسم</span>
+              <th onclick="doSort('name')" id="th_name" class="text-start" style="width:200px"><span data-i18n="colName">الاسم</span>
               </th>
-              <th onclick="doSort('price')" id="th_price"><span data-i18n="colPrice">السعر</span> <span
+              <th onclick="doSort('price')" id="th_price" style="width:95px"><span data-i18n="colPrice">السعر</span> <span
                   class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('change_1h')" id="th_change_1h" class="hidden sm:table-cell">1h% <span
+              <th onclick="doSort('change_1h')" id="th_change_1h" class="col-1h" style="width:68px">1h% <span
                   class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('change_4h')" id="th_change_4h" class="hidden sm:table-cell">4h% <span
+              <th onclick="doSort('change_4h')" id="th_change_4h" class="col-4h" style="width:68px">4h% <span
                   class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('change_24h')" id="th_change_24h">24h% <span class="sort-icon"><i
+              <th onclick="doSort('change_24h')" id="th_change_24h" style="width:68px">24h% <span class="sort-icon"><i
                     class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('change_7d')" id="th_change_7d" class="hidden md:table-cell">7d% <span
+              <th onclick="doSort('change_7d')" id="th_change_7d" class="col-7d" style="width:68px">7d% <span
                   class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('market_cap')" id="th_market_cap" class="hidden lg:table-cell"><span
+              <th onclick="doSort('market_cap')" id="th_market_cap" class="col-mcap" style="width:100px"><span
                   data-i18n="colMarketCap">القيمة السوقية</span> <span class="sort-icon"><i
                     class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('volume')" id="th_volume" class="hidden lg:table-cell"><span
+              <th onclick="doSort('volume')" id="th_volume" class="col-vol" style="width:100px"><span
                   data-i18n="colVolume">الحجم 24س</span> <span class="sort-icon"><i class="fas fa-caret-up"></i><i
                     class="fas fa-caret-down"></i></span></th>
-              <th class="hidden xl:table-cell"><span data-i18n="colExchanges">المنصات</span></th>
             </tr>
           </thead>
           <tbody id="tBody">
@@ -6566,105 +6592,106 @@
             <tr class="sk-row">
               <td><span class="sk-cell" style="width:140px"></span></td>
               <td><span class="sk-cell" style="width:70px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
               <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
             </tr>
             <tr class="sk-row">
               <td><span class="sk-cell" style="width:120px"></span></td>
               <td><span class="sk-cell" style="width:80px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
               <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
             </tr>
             <tr class="sk-row">
               <td><span class="sk-cell" style="width:150px"></span></td>
               <td><span class="sk-cell" style="width:65px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
               <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
             </tr>
             <tr class="sk-row">
               <td><span class="sk-cell" style="width:100px"></span></td>
               <td><span class="sk-cell" style="width:75px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
               <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
             </tr>
             <tr class="sk-row">
               <td><span class="sk-cell" style="width:130px"></span></td>
               <td><span class="sk-cell" style="width:72px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
               <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
             </tr>
             <tr class="sk-row">
               <td><span class="sk-cell" style="width:110px"></span></td>
               <td><span class="sk-cell" style="width:78px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
               <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
             </tr>
             <tr class="sk-row">
               <td><span class="sk-cell" style="width:145px"></span></td>
               <td><span class="sk-cell" style="width:68px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
               <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
             </tr>
             <tr class="sk-row">
               <td><span class="sk-cell" style="width:125px"></span></td>
               <td><span class="sk-cell" style="width:82px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
               <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
             </tr>
             <tr class="sk-row">
               <td><span class="sk-cell" style="width:115px"></span></td>
               <td><span class="sk-cell" style="width:76px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
               <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
             </tr>
             <tr class="sk-row">
               <td><span class="sk-cell" style="width:135px"></span></td>
               <td><span class="sk-cell" style="width:73px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden sm:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
               <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden md:table-cell"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              <td class="hidden lg:table-cell"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+              <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
+              <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
             </tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <!-- CMC-Style Pagination -->
@@ -8156,12 +8183,12 @@
       'moonbeam': ['GLMR', 'USDC', 'USDT', 'XCKSM', 'XCDOT', 'WBTC']
     };
 
-    let cLang = 'en', allC = [], filtC = [], cPage = 1, iPP = window.innerWidth <= 768 ? 50 : 100,
-      cSort = 'rank', sortDir = 'asc', cNet = 'all', bWs = null, uInt = null, isL = false, cBatch = 0, maxB = 20,
+    let cLang = 'en', allC = [], filtC = [], cPage = 1, iPP = 50,
+      cSort = 'rank', sortDir = 'asc', cNet = 'all', bWs = null, uInt = null, isL = false, cBatch = 0, maxB = 40,
       exData = [], exPage = 1, exIPP = 10;
-    /* iPP: 50 on mobile, 100 on desktop */
+    /* iPP: always 50 */
     // Clear old truncated cache (v2 upgrade)
-    try { const ov = sessionStorage.getItem('cryptohub_v'); if (ov !== '3') { sessionStorage.removeItem('cryptohub_coins'); sessionStorage.setItem('cryptohub_v', '3') } } catch (e) { }
+    try { const ov = sessionStorage.getItem('cryptohub_v'); if (ov !== '13') { sessionStorage.removeItem('cryptohub_coins'); sessionStorage.removeItem('ch_fallback'); sessionStorage.setItem('cryptohub_v', '13') } } catch (e) { }
 
     function $(id) { return document.getElementById(id) }
     function t(k) { return (T[cLang] && T[cLang][k]) || T.en[k] || k }
@@ -8224,21 +8251,24 @@
     if (localStorage.getItem('theme') === 'dark') { document.documentElement.classList.add('dark'); $('sI').classList.add('hidden'); $('mI').classList.remove('hidden') }
 
     // ===== DATA LOADING - Optimized for Speed =====
+    function _tout(ms) { return new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms)); }
     async function fetchJSON(url, tm = 6000) {
       for (let i = 0; i < 2; i++) {
         try {
-          const r = await fetch(url, { signal: AbortSignal.timeout(tm + (i * 2000)) });
+          const r = await Promise.race([fetch(url), _tout(tm + (i * 2000))]);
           if (r.ok) return await r.json();
           if (r.status === 429) { await new Promise(w => setTimeout(w, 2000 * (i + 1))); continue }
           console.warn(`fetchJSON error ${r.status} for ${url}`);
         } catch (e) {
-          console.error(`fetchJSON fail for ${url}`, e);
+          console.error(`fetchJSON fail for ${url}`, e.message || e);
           if (i === 0) await new Promise(w => setTimeout(w, 1000));
         }
       };
       return null;
     }
 
+
+    function _ato(ms) { const ac = new AbortController(); setTimeout(() => ac.abort(), ms); return ac.signal; }
     // CORS proxy chain (multiple fallbacks)
     const PROXIES = [
       u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
@@ -8252,12 +8282,79 @@
       for (let i = 0; i < len; i++) {
         const proxy = PROXIES[(proxyOffset + i) % len];
         try {
-          const r = await fetch(proxy(url), { signal: AbortSignal.timeout(6000) });
+          const r = await Promise.race([fetch(proxy(url)), _tout(6000)]);
           if (r.ok) { const d = await r.json(); if (d && d.data) return d }
         } catch (e) { }
       }
       return null;
     }
+
+    // ── CMC Pro API with user key ──
+    const CMC_PRO_KEY = '3eace7af-382d-4470-b27c-7337f06dcae3';
+    async function fetchCMCPro(endpoint) {
+      const url = `https://pro-api.coinmarketcap.com${endpoint}`;
+      const fullUrl = url + (url.includes('?') ? '&' : '?') + 'CMC_PRO_API_KEY=' + CMC_PRO_KEY;
+      // Try direct first (works if server has CORS headers)
+      try {
+        const r = await Promise.race([fetch(fullUrl), _tout(4000)]);
+        if (r.ok) { const d = await r.json(); if (d && d.data) return d; }
+      } catch(e) {}
+      // Fallback: try first 2 proxies only (fast ones)
+      for (let i = 0; i < Math.min(2, PROXIES.length); i++) {
+        try {
+          const proxyUrl = PROXIES[i](fullUrl);
+          const r = await Promise.race([fetch(proxyUrl), _tout(5000)]);
+          if (r.ok) { const d = await r.json(); if (d && d.data) return d; }
+        } catch(e) {}
+      }
+      return null;
+    }
+
+    // ── Price/Vol fallback cache — stores last known good values ──
+    // Known stablecoin & wrapped token baseline prices (never show $0 for these)
+    const KNOWN_PRICES = {
+      DAI:1,USDT:1,USDC:1,TUSD:1,BUSD:1,FRAX:1,LUSD:1,USDP:1,GUSD:1,PYUSD:1,USDD:1,FDUSD:1,CRVUSD:1,GHO:1,SUSD:1,
+      WBTC:97000,STETH:3200,WSTETH:3700,RETH:3500,CBETH:3300,WETH:3200,WEETH:3400,PAXG:3000,TBTC:97000,HBTC:97000,RENBTC:97000,SBTC:97000
+    };
+    const _lastGood = {};
+    function saveFallback(c) {
+      if (c.pr > 0 || c.vol > 0 || c.mc > 0 || c.ex > 0) {
+        _lastGood[c.sy] = { 
+          pr: c.pr || _lastGood[c.sy]?.pr || 0, 
+          vol: c.vol || _lastGood[c.sy]?.vol || 0, 
+          mc: c.mc || _lastGood[c.sy]?.mc || 0,
+          ex: (c.ex > 0 && !KNOWN_EX_COUNTS[c.sy]) ? c.ex : (_lastGood[c.sy]?.ex || 0)
+        };
+      }
+    }
+    function applyFallback(c) {
+      // First try sessionStorage fallback
+      const fb = _lastGood[c.sy];
+      if (fb) {
+        if ((!c.pr || c.pr === 0) && fb.pr > 0) c.pr = fb.pr;
+        if ((!c.vol || c.vol === 0) && fb.vol > 0) c.vol = fb.vol;
+        if ((!c.mc || c.mc === 0) && fb.mc > 0) c.mc = fb.mc;
+        if ((!c.ex || c.ex === 0) && fb.ex > 0) c.ex = fb.ex;
+      }
+      // Then apply known baseline prices for stablecoins/wrapped tokens if still 0
+      if ((!c.pr || c.pr === 0) && KNOWN_PRICES[c.sy]) {
+        c.pr = KNOWN_PRICES[c.sy];
+        // Estimate market cap from supply if available
+        if ((!c.mc || c.mc === 0) && c.sup > 0) c.mc = c.sup * c.pr;
+      }
+    }
+    // Save fallbacks to sessionStorage periodically
+    function persistFallbacks() {
+      try {
+        allC.forEach(c => saveFallback(c));
+        sessionStorage.setItem('ch_fallback', JSON.stringify(_lastGood));
+      } catch(e) {}
+    }
+    // Load fallbacks from sessionStorage on startup
+    try {
+      const fb = sessionStorage.getItem('ch_fallback');
+      if (fb) { const parsed = JSON.parse(fb); Object.assign(_lastGood, parsed); }
+    } catch(e) {}
 
     // ── Hard-coded supply facts — these ALWAYS override API data ──────────────
     // Format: { SYM: [total_supply, max_supply] }
@@ -8356,7 +8453,7 @@
           // Fix any bad supply data in cache immediately
           applyKnownSupply(allC);
           $('pFill').style.width = '100%';
-          cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
+          assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
           $('lProg').classList.add('hidden');
           if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
           if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
@@ -8364,14 +8461,16 @@
           updateGlobalFromData(); initWS();
           setTimeout(refreshPrices, 1000);
           setTimeout(loadMore1h7d, 6000);
+          setTimeout(enrichFromCMCPro, 20000);
+          setTimeout(persistFallbacks, 25000);
           console.log('Loaded from cache:', allC.length);
           // Still run CMC enrichment in background to get MORE coins beyond cache
           setTimeout(() => {
             (async () => {
               try {
-                for (let startBatch = 1; startBatch <= 10001; startBatch += 2000) {
+                for (let startBatch = 1; startBatch <= 20001; startBatch += 2000) {
                   const reqs = [];
-                  for (let j = 0; j < 4 && (startBatch + j * 500) <= 10001; j++) {
+                  for (let j = 0; j < 4 && (startBatch + j * 500) <= 20001; j++) {
                     const start = startBatch + j * 500;
                     reqs.push(fetchCMC(`https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=${start}&limit=500&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all`));
                   }
@@ -8386,15 +8485,19 @@
                       const existing = symMap.get(sym);
                       if (existing) {
                         if (qt.marketCap > 0 && (!existing.mc || existing.mc === 0)) existing.mc = qt.marketCap;
+                        if (qt.volume24h > 0 && (!existing.vol || existing.vol === 0)) existing.vol = qt.volume24h;
+                        if (qt.price > 0 && (!existing.pr || existing.pr === 0)) existing.pr = qt.price;
                         if (qt.percentChange1h && existing.c1 === 0) existing.c1 = qt.percentChange1h;
                         if (qt.percentChange7d && existing.c7 === 0) existing.c7 = qt.percentChange7d;
                         if (coin.circulatingSupply && (!existing.sup || existing.sup === 0)) existing.sup = coin.circulatingSupply;
+                        if (coin.numMarketPairs > 0) existing.ex = coin.numMarketPairs;
                         if (!existing.img || existing.img.includes('/0.png')) existing.img = `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`;
+                        saveFallback(existing);
                         return;
                       }
                       const vol = qt.volume24h || 0; const mc = qt.marketCap || 0;
-                      if (vol < MIN_VOL && mc <= 0 && allC.length > 9500) return;
-                      const nc = { id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: Math.floor(Math.random() * 50) + 10, sup: coin.circulatingSupply || 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
+                      
+                      const nc = { id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: coin.numMarketPairs || 0, sup: coin.circulatingSupply || 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
                       allC.push(nc); symMap.set(sym, nc); added++;
                     });
                   });
@@ -8404,7 +8507,7 @@
               } catch (e) { }
               allC.sort((a, b) => (b.mc || 0) - (a.mc || 0) || (b.vol || 0) - (a.vol || 0));
               allC.forEach((c, i) => c.rk = i + 1);
-              filtC = [...allC]; render(); buildTicker(); updateGlobalFromData();
+              assignExCounts(); filtC = [...allC]; render(); buildTicker(); updateGlobalFromData();
               cacheSet('cryptohub_coins', allC);
               console.log('Cache+CMC enrichment done. Total:', allC.length);
             })();
@@ -8457,15 +8560,15 @@
               const sup = parseFloat(c.supply) || 0;
               let mc = parseFloat(c.marketCapUsd) || 0;
               if (!mc && sup > 0 && pr > 0) mc = sup * pr;
-              if (vol < MIN_VOL && allC.length > 15000) return;
-              const coin = { id: c.id, rk: parseInt(c.rank) || allC.length + 1, nm: c.name, sy: sym, pr: pr, c1: 0, c4: 0, c24: parseFloat(c.changePercent24Hr) || 0, c7: 0, mc: mc, vol: vol, img: `https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`, ex: Math.floor(Math.random() * 50) + 10, sup: sup };
+              
+              const coin = { id: c.id, rk: parseInt(c.rank) || allC.length + 1, nm: c.name, sy: sym, pr: pr, c1: 0, c4: 0, c24: parseFloat(c.changePercent24Hr) || 0, c7: 0, mc: mc, vol: vol, img: `https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`, ex: 0, sup: sup };
               allC.push(coin); symMap.set(sym, coin);
             });
           });
         } catch (e) { }
         $('pFill').style.width = '35%'; $('pTxt').textContent = t('loadingData') + ` (${allC.length})`;
         // FIRST RENDER - user sees data fast!
-        if (allC.length > 0) { reRank(); filtC = [...allC]; render(); buildTrending(); buildTicker() }
+        if (allC.length > 0) { reRank(); assignExCounts(); filtC = [...allC]; render(); buildTrending(); buildTicker() }
         console.log('Phase 1 CoinCap:', allC.length, 'coins - rendered!');
 
         // ===== PHASE 2: Binance + MEXC + Gate.io + OKX in PARALLEL =====
@@ -8485,10 +8588,12 @@
             if (existing) {// Update price (Binance is more real-time)
               const bp = parseFloat(t.lastPrice); if (bp > 0) existing.pr = bp;
               if (existing.c24 === 0) existing.c24 = parseFloat(t.priceChangePercent) || 0;
+              if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
+              if ((!existing.mc || existing.mc === 0) && existing.pr > 0 && existing.sup > 0) existing.mc = existing.pr * existing.sup;
               return;
             }
-            if (vol < MIN_VOL && allC.length > 15000) return;
-            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: Math.floor(Math.random() * 50) + 10, sup: 0 };
+            
+            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
             allC.push(coin); symMap.set(sy, coin);
           });
         }
@@ -8497,9 +8602,14 @@
           mData.forEach(t => {
             if (!t.symbol || !t.symbol.endsWith('USDT')) return;
             const sy = t.symbol.replace('USDT', '');
-            if (symMap.has(sy)) return;
-            const vol = parseFloat(t.quoteVolume) || 0; if (vol < MIN_VOL && allC.length > 15000) return;
-            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: Math.floor(Math.random() * 50) + 10, sup: 0 };
+            const vol = parseFloat(t.quoteVolume) || 0;
+            const existing = symMap.get(sy);
+            if (existing) {
+              if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
+              if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.lastPrice) || 0; if (p > 0) existing.pr = p; }
+              return;
+            }
+            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
             allC.push(coin); symMap.set(sy, coin);
           });
         }
@@ -8508,9 +8618,14 @@
           gData.forEach(t => {
             if (!t.currency_pair || !t.currency_pair.endsWith('_USDT')) return;
             const sy = t.currency_pair.replace('_USDT', '').toUpperCase();
-            if (symMap.has(sy)) return;
-            const vol = parseFloat(t.quote_volume) || 0; if (vol < MIN_VOL && allC.length > 15000) return;
-            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: parseFloat(t.change_percentage) || 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: Math.floor(Math.random() * 50) + 10, sup: 0 };
+            const vol = parseFloat(t.quote_volume) || 0;
+            const existing = symMap.get(sy);
+            if (existing) {
+              if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
+              if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.last) || 0; if (p > 0) existing.pr = p; }
+              return;
+            }
+            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: parseFloat(t.change_percentage) || 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
             allC.push(coin); symMap.set(sy, coin);
           });
         }
@@ -8519,22 +8634,137 @@
           okData.data.forEach(t => {
             if (!t.instId || !t.instId.endsWith('-USDT')) return;
             const sy = t.instId.replace('-USDT', '').toUpperCase();
-            if (symMap.has(sy)) return;
-            const vol = parseFloat(t.volCcy24h) || 0; if (vol < MIN_VOL && allC.length > 15000) return;
-            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: t.open24h > 0 ? ((parseFloat(t.last) - parseFloat(t.open24h)) / parseFloat(t.open24h) * 100) : 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: Math.floor(Math.random() * 50) + 10, sup: 0 };
+            const vol = parseFloat(t.volCcy24h) || 0;
+            const existing = symMap.get(sy);
+            if (existing) {
+              if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
+              if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.last) || 0; if (p > 0) existing.pr = p; }
+              return;
+            }
+            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: t.open24h > 0 ? ((parseFloat(t.last) - parseFloat(t.open24h)) / parseFloat(t.open24h) * 100) : 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
             allC.push(coin); symMap.set(sy, coin);
           });
         }
+        // Bybit
+        try {
+          const byData = await fetchJSON('https://api.bybit.com/v5/market/tickers?category=spot', 3000);
+          if (byData && byData.result && byData.result.list) {
+            byData.result.list.forEach(t => {
+              if (!t.symbol || !t.symbol.endsWith('USDT')) return;
+              const sy = t.symbol.replace('USDT', '');
+              const vol = parseFloat(t.turnover24h) || 0;
+              const existing = symMap.get(sy);
+              if (existing) {
+                if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
+                if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.lastPrice) || 0; if (p > 0) existing.pr = p; }
+                return;
+              }
+              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.price24hPcnt) ? parseFloat(t.price24hPcnt) * 100 : 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
+              allC.push(coin); symMap.set(sy, coin);
+            });
+          }
+        } catch(e) {}
+        // Bybit
+        try {
+          const byData = await fetchJSON('https://api.bybit.com/v5/market/tickers?category=spot', 3000);
+          if (byData && byData.result && byData.result.list) {
+            byData.result.list.forEach(t => {
+              if (!t.symbol || !t.symbol.endsWith('USDT')) return;
+              const sy = t.symbol.replace('USDT', '');
+              const vol = parseFloat(t.turnover24h) || 0;
+              const existing = symMap.get(sy);
+              if (existing) {
+                if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
+                if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.lastPrice) || 0; if (p > 0) existing.pr = p; }
+                return;
+              }
+              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.price24hPcnt) ? parseFloat(t.price24hPcnt) * 100 : 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
+              allC.push(coin); symMap.set(sy, coin);
+            });
+          }
+        } catch(e) {}
+        // KuCoin
+        try {
+          const kuData = await fetchJSON('https://api.kucoin.com/api/v1/market/allTickers', 3000);
+          if (kuData && kuData.data && kuData.data.ticker) {
+            kuData.data.ticker.forEach(t => {
+              if (!t.symbol || !t.symbol.endsWith('-USDT')) return;
+              const sy = t.symbol.replace('-USDT', '').toUpperCase();
+              const vol = parseFloat(t.volValue) || 0;
+              const existing = symMap.get(sy);
+              if (existing) {
+                if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
+                if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.last) || 0; if (p > 0) existing.pr = p; }
+                return;
+              }
+              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: parseFloat(t.changeRate) ? parseFloat(t.changeRate) * 100 : 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
+              allC.push(coin); symMap.set(sy, coin);
+            });
+          }
+        } catch(e) {}
+        // Binance BTC pairs (coins not available in USDT)
+        try {
+          if (bData && Array.isArray(bData)) {
+            const btcPrice = allC.find(c => c.sy === 'BTC')?.pr || 0;
+            if (btcPrice > 0) {
+              bData.forEach(t => {
+                if (!t.symbol || !t.symbol.endsWith('BTC') || t.symbol === 'USDTBTC') return;
+                const sy = t.symbol.replace('BTC', '');
+                if (symMap.has(sy)) return;
+                const prBtc = parseFloat(t.lastPrice) || 0;
+                const vol = (parseFloat(t.quoteVolume) || 0) * btcPrice;
+                const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: prBtc * btcPrice, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
+                allC.push(coin); symMap.set(sy, coin);
+              });
+            }
+          }
+        } catch(e) {}
         $('pFill').style.width = '70%'; $('pTxt').textContent = t('loadingData') + ` (${allC.length})`;
         console.log('Phase 2 Exchanges:', allC.length, 'coins');
+
+        // ===== PHASE 2.5: CoinGecko extra pages (to fill gaps) =====
+        try {
+          // Load in waves to avoid rate limits: wave 1 (pages 1-15), wave 2 (pages 16-40)
+          const cgPages1 = [];
+          for (let p = 1; p <= 15; p++) {
+            cgPages1.push(fetchJSON(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${p}&sparkline=false`, 5000));
+          }
+          const cgResults1 = await Promise.allSettled(cgPages1);
+          cgResults1.forEach(r => {
+            if (r.status !== 'fulfilled' || !r.value || !Array.isArray(r.value)) return;
+            r.value.forEach(c => {
+              const sy = (c.symbol || '').toUpperCase();
+              if (!sy || symMap.has(sy)) return;
+              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: 0, c4: 0, c24: c.price_change_percentage_24h || 0, c7: 0, mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
+              allC.push(coin); symMap.set(sy, coin);
+            });
+          });
+          // Wave 2 after short delay
+          await new Promise(r => setTimeout(r, 2000));
+          const cgPages2 = [];
+          for (let p = 16; p <= 55; p++) {
+            cgPages2.push(fetchJSON(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${p}&sparkline=false`, 5000));
+          }
+          const cgResults2 = await Promise.allSettled(cgPages2);
+          cgResults2.forEach(r => {
+            if (r.status !== 'fulfilled' || !r.value || !Array.isArray(r.value)) return;
+            r.value.forEach(c => {
+              const sy = (c.symbol || '').toUpperCase();
+              if (!sy || symMap.has(sy)) return;
+              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: 0, c4: 0, c24: c.price_change_percentage_24h || 0, c7: 0, mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
+              allC.push(coin); symMap.set(sy, coin);
+            });
+          });
+          console.log('Phase 2.5 CoinGecko:', allC.length, 'coins');
+        } catch (e) { console.log('CoinGecko extra err:', e) }
 
         // Re-rank + re-render
         allC.sort((a, b) => (b.mc || 0) - (a.mc || 0) || (b.vol || 0) - (a.vol || 0));
         allC.forEach((c, i) => c.rk = i + 1);
-        filtC = [...allC]; render(); buildTrending(); buildTicker();
+        assignExCounts(); filtC = [...allC]; render(); buildTrending(); buildTicker();
 
         // ===== PHASE 3: CoinMarketCap background enrichment (non-blocking & smart) =====
-        // Runs after user already sees data - enriches mc, c1, c7
+        // Runs after user already sees data - enriches mc, c1, c7 AND adds new coins
         $('pFill').style.width = '80%'; $('pTxt').textContent = t('loadingData') + ` (${allC.length})`;
         const smartDelay = ms => new Promise(r => {
           if (window.requestIdleCallback) window.requestIdleCallback(() => r(), { timeout: ms + 100 });
@@ -8543,16 +8773,19 @@
 
         (async () => {
           try {
-            for (let startBatch = 1; startBatch <= 10001; startBatch += 2000) {
-              await smartDelay(150);
+            let totalAdded = 0;
+            for (let startBatch = 1; startBatch <= 20001; startBatch += 2000) {
+              await smartDelay(200);
               const reqs = [];
-              for (let j = 0; j < 4 && (startBatch + j * 500) <= 10001; j++) {
+              for (let j = 0; j < 4 && (startBatch + j * 500) <= 20001; j++) {
                 const start = startBatch + j * 500;
                 reqs.push(fetchCMC(`https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=${start}&limit=500&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all`, j));
               }
-              const results = await Promise.all(reqs);
+              const results = await Promise.allSettled(reqs);
               let added = 0;
-              results.forEach(d => {
+              results.forEach(r => {
+                if (r.status !== 'fulfilled' || !r.value) return;
+                const d = r.value;
                 if (!d || !d.data || !d.data.cryptoCurrencyList) return;
                 d.data.cryptoCurrencyList.forEach(coin => {
                   const qt = coin.quotes && coin.quotes.length ? coin.quotes.find(q => q.name === 'USD') : null;
@@ -8560,38 +8793,43 @@
                   const sym = coin.symbol;
                   const existing = symMap.get(sym);
                   if (existing) {
-                    // Enrich existing coin with CMC data
                     if (qt.marketCap > 0 && (!existing.mc || existing.mc === 0)) existing.mc = qt.marketCap;
+                    if (qt.volume24h > 0 && (!existing.vol || existing.vol === 0)) existing.vol = qt.volume24h;
+                    if (qt.price > 0 && (!existing.pr || existing.pr === 0)) existing.pr = qt.price;
                     if (qt.percentChange1h && existing.c1 === 0) existing.c1 = qt.percentChange1h;
                     if (qt.percentChange7d && existing.c7 === 0) existing.c7 = qt.percentChange7d;
                     if (coin.circulatingSupply && (!existing.sup || existing.sup === 0)) existing.sup = coin.circulatingSupply;
+                    if (coin.numMarketPairs > 0) existing.ex = coin.numMarketPairs;
                     if (!existing.img || existing.img.includes('/0.png')) existing.img = `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`;
+                    saveFallback(existing);
                     return;
                   }
-                  // New coin from CMC not in any exchange
                   const vol = qt.volume24h || 0; const mc = qt.marketCap || 0;
-                  if (vol < MIN_VOL && mc <= 0 && allC.length > 9500) return;
-                  const nc = { id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: Math.floor(Math.random() * 50) + 10, sup: coin.circulatingSupply || 0, ts: 0, ms: 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
+                  const nc = { id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: coin.numMarketPairs || 0, sup: coin.circulatingSupply || 0, ts: 0, ms: 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
                   allC.push(nc); symMap.set(sym, nc); added++;
                 });
               });
+              totalAdded += added;
               if (added > 0) {
+                allC.sort((a, b) => (b.mc || 0) - (a.mc || 0) || (b.vol || 0) - (a.vol || 0));
+                allC.forEach((c, i) => c.rk = i + 1);
+                filtC = [...allC]; doFilter();
                 if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
                 if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
+                console.log('CMC batch added', added, 'coins. Total:', allC.length);
               }
             }
-          } catch (e) { }
-          // Re-rank final
+          } catch (e) { console.log('CMC enrichment err:', e) }
           allC.sort((a, b) => (b.mc || 0) - (a.mc || 0) || (b.vol || 0) - (a.vol || 0));
           allC.forEach((c, i) => c.rk = i + 1);
-          filtC = [...allC]; render(); buildTicker(); updateGlobalFromData();
-          // Cache for fast reloads
+          assignExCounts(); filtC = [...allC]; render(); buildTicker(); updateGlobalFromData();
           cacheSet('cryptohub_coins', allC);
+          persistFallbacks();
           console.log('CMC enrichment done. Total:', allC.length);
         })();
 
         $('pFill').style.width = '100%';
-        cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
+        assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
         $('lProg').classList.add('hidden');
         if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
         if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
@@ -8600,6 +8838,8 @@
         initWS();
         setTimeout(loadMore1h7d, 6000);
         setTimeout(enrichMarketCap, 8000);
+        setTimeout(enrichFromCMCPro, 25000);
+        setTimeout(persistFallbacks, 30000);
         console.log('Visible coins:', allC.length);
       } catch (e) {
         console.error('Load err:', e);
@@ -8610,18 +8850,84 @@
     // Quick price refresh (for cached loads)
     async function refreshPrices() {
       try {
-        const bData = await fetchJSON('https://api.binance.com/api/v3/ticker/24hr');
-        if (!bData || !Array.isArray(bData)) return;
-        const bMap = new Map(); bData.forEach(t => { if (t.symbol && t.symbol.endsWith('USDT')) bMap.set(t.symbol.replace('USDT', ''), t) });
+        const [bData, mData, gData, byData] = await Promise.all([
+          fetchJSON('https://api.binance.com/api/v3/ticker/24hr', 3000),
+          fetchJSON('https://api.mexc.com/api/v3/ticker/24hr', 3000),
+          fetchJSON('https://api.gateio.ws/api/v4/spot/tickers', 3000),
+          fetchJSON('https://api.bybit.com/v5/market/tickers?category=spot', 3000)
+        ]);
+        // Build volume/price maps from all exchanges
+        const volMap = new Map(); // sy -> total volume across exchanges
+        const prMap = new Map();  // sy -> best price (Binance priority)
+        const chgMap = new Map(); // sy -> 24h change
+        // Binance (highest priority for price)
+        if (bData && Array.isArray(bData)) {
+          bData.forEach(t => {
+            if (!t.symbol || !t.symbol.endsWith('USDT')) return;
+            const sy = t.symbol.replace('USDT', '');
+            const vol = parseFloat(t.quoteVolume) || 0;
+            const pr = parseFloat(t.lastPrice) || 0;
+            if (pr > 0) prMap.set(sy, pr);
+            if (vol > 0) volMap.set(sy, (volMap.get(sy) || 0) + vol);
+            chgMap.set(sy, parseFloat(t.priceChangePercent) || 0);
+          });
+        }
+        // MEXC (fills gaps)
+        if (mData && Array.isArray(mData)) {
+          mData.forEach(t => {
+            if (!t.symbol || !t.symbol.endsWith('USDT')) return;
+            const sy = t.symbol.replace('USDT', '');
+            const vol = parseFloat(t.quoteVolume) || 0;
+            if (!prMap.has(sy)) { const pr = parseFloat(t.lastPrice) || 0; if (pr > 0) prMap.set(sy, pr); }
+            if (vol > 0) volMap.set(sy, (volMap.get(sy) || 0) + vol);
+            if (!chgMap.has(sy)) chgMap.set(sy, parseFloat(t.priceChangePercent) || 0);
+          });
+        }
+        // Gate.io (fills gaps)
+        if (gData && Array.isArray(gData)) {
+          gData.forEach(t => {
+            if (!t.currency_pair || !t.currency_pair.endsWith('_USDT')) return;
+            const sy = t.currency_pair.replace('_USDT', '').toUpperCase();
+            const vol = parseFloat(t.quote_volume) || 0;
+            if (!prMap.has(sy)) { const pr = parseFloat(t.last) || 0; if (pr > 0) prMap.set(sy, pr); }
+            if (vol > 0) volMap.set(sy, (volMap.get(sy) || 0) + vol);
+            if (!chgMap.has(sy)) chgMap.set(sy, parseFloat(t.change_percentage) || 0);
+          });
+        }
+        // Bybit
+        if (byData && byData.result && byData.result.list) {
+          byData.result.list.forEach(t => {
+            if (!t.symbol || !t.symbol.endsWith('USDT')) return;
+            const sy = t.symbol.replace('USDT', '');
+            const vol = parseFloat(t.turnover24h) || 0;
+            if (!prMap.has(sy)) { const pr = parseFloat(t.lastPrice) || 0; if (pr > 0) prMap.set(sy, pr); }
+            if (vol > 0) volMap.set(sy, (volMap.get(sy) || 0) + vol);
+            if (!chgMap.has(sy) && t.price24hPcnt) chgMap.set(sy, parseFloat(t.price24hPcnt) * 100);
+          });
+        }
+        // Apply to allC
+        let updated = 0;
         allC.forEach(c => {
-          const b = bMap.get(c.sy); if (b) { const bp = parseFloat(b.lastPrice); if (bp > 0) c.pr = bp; c.c24 = parseFloat(b.priceChangePercent) || 0 }
+          const pr = prMap.get(c.sy);
+          if (pr && pr > 0) { c.pr = pr; updated++; }
+          const chg = chgMap.get(c.sy);
+          if (chg !== undefined) c.c24 = chg;
+          // Fill volume gaps
+          const vol = volMap.get(c.sy);
+          if (vol && vol > 0 && (!c.vol || c.vol === 0)) { c.vol = vol; updated++; }
+          // Fill market cap from price × supply
+          if ((!c.mc || c.mc === 0) && c.pr > 0 && c.sup > 0) { c.mc = c.pr * c.sup; updated++; }
+          // Apply fallback for anything still missing
+          applyFallback(c);
+          saveFallback(c);
         });
-        filtC = [...allC]; render();
-      } catch (e) { }
+        if (updated > 0) { filtC = [...allC]; render(); }
+        console.log('[refreshPrices] Updated', updated, 'data points');
+      } catch (e) { console.warn('refreshPrices err:', e); }
     }
 
     // Common coin names for Binance fallback
-    const COIN_NAMES = { USDT: 'Tether', BTC: 'Bitcoin', ETH: 'Ethereum', BNB: 'BNB', SOL: 'Solana', XRP: 'XRP', DOGE: 'Dogecoin', ADA: 'Cardano', AVAX: 'Avalanche', DOT: 'Polkadot', LINK: 'Chainlink', MATIC: 'Polygon', UNI: 'Uniswap', SHIB: 'Shiba Inu', LTC: 'Litecoin', BCH: 'Bitcoin Cash', ATOM: 'Cosmos', FIL: 'Filecoin', APT: 'Aptos', ARB: 'Arbitrum', OP: 'Optimism', SUI: 'Sui', SEI: 'Sei', TIA: 'Celestia', INJ: 'Injective', JUP: 'Jupiter', NEAR: 'NEAR', ICP: 'Internet Computer', RNDR: 'Render', FET: 'Fetch.ai', GRT: 'The Graph', IMX: 'Immutable X', MKR: 'Maker', AAVE: 'Aave', SNX: 'Synthetix', CRV: 'Curve', LDO: 'Lido', RPL: 'Rocket Pool', ENS: 'ENS', SAND: 'The Sandbox', MANA: 'Decentraland', AXS: 'Axie Infinity', APE: 'ApeCoin', PEPE: 'Pepe', FLOKI: 'Floki', WLD: 'Worldcoin', BONK: 'Bonk', WIF: 'dogwifhat', TRX: 'TRON', ETC: 'Ethereum Classic', ALGO: 'Algorand', XLM: 'Stellar', VET: 'VeChain', HBAR: 'Hedera', THETA: 'Theta', EOS: 'EOS', XTZ: 'Tezos', FLOW: 'Flow', MINA: 'Mina', NEO: 'NEO', EGLD: 'MultiversX', KAVA: 'Kava', ONE: 'Harmony', ROSE: 'Oasis', FTM: 'Fantom', CKB: 'Nervos', KAS: 'Kaspa', TON: 'Toncoin', ORDI: 'ORDI', STX: 'Stacks', RUNE: 'THORChain', BLUR: 'Blur', GMX: 'GMX', PENDLE: 'Pendle', JTO: 'Jito', PYTH: 'Pyth', RAY: 'Raydium', CAKE: 'PancakeSwap', JASMY: 'JasmyCoin', CHZ: 'Chiliz', GMT: 'STEPN', GAL: 'Galxe', CFX: 'Conflux', ACH: 'Alchemy Pay', AGLD: 'Adventure Gold', AGIX: 'SingularityNET', AI: 'Sleepless AI', ALICE: 'My Neighbor Alice', ALPHA: 'Alpha Finance', ANKR: 'Ankr', ANT: 'Aragon', AR: 'Arweave', AUDIO: 'Audius', BAND: 'Band Protocol', BAT: 'Basic Attention', BOME: 'BOOK OF MEME', CELO: 'Celo', COMP: 'Compound', DASH: 'Dash', DYDX: 'dYdX', DYM: 'Dymension', ENJ: 'Enjin', GNO: 'Gnosis', ICX: 'ICON', IOTA: 'IOTA', LINA: 'Linear', MASK: 'Mask Network', OCEAN: 'Ocean Protocol', OMG: 'OMG Network', ONT: 'Ontology', PAXG: 'PAX Gold', QNT: 'Quant', QTUM: 'Qtum', SC: 'Siacoin', SKL: 'SKALE', STORJ: 'Storj', SUSHI: 'SushiSwap', SXP: 'Solar', YFI: 'yearn.finance', ZEC: 'Zcash', ZIL: 'Zilliqa', ZRX: '0x' };
+    const COIN_NAMES = { DAI: 'Dai', USDT: 'Tether', USDC: 'USD Coin', BUSD: 'Binance USD', TUSD: 'TrueUSD', FRAX: 'Frax', LUSD: 'Liquity USD', USDP: 'Pax Dollar', GUSD: 'Gemini Dollar', PYUSD: 'PayPal USD', USDD: 'USDD', FDUSD: 'First Digital USD', WBTC: 'Wrapped Bitcoin', STETH: 'Lido Staked ETH', WSTETH: 'Wrapped stETH', RETH: 'Rocket Pool ETH', CBETH: 'Coinbase Wrapped ETH', WETH: 'Wrapped Ether', WEETH: 'Wrapped eETH', PAXG: 'PAX Gold', BTC: 'Bitcoin', ETH: 'Ethereum', BNB: 'BNB', SOL: 'Solana', XRP: 'XRP', DOGE: 'Dogecoin', ADA: 'Cardano', AVAX: 'Avalanche', DOT: 'Polkadot', LINK: 'Chainlink', MATIC: 'Polygon', UNI: 'Uniswap', SHIB: 'Shiba Inu', LTC: 'Litecoin', BCH: 'Bitcoin Cash', ATOM: 'Cosmos', FIL: 'Filecoin', APT: 'Aptos', ARB: 'Arbitrum', OP: 'Optimism', SUI: 'Sui', SEI: 'Sei', TIA: 'Celestia', INJ: 'Injective', JUP: 'Jupiter', NEAR: 'NEAR', ICP: 'Internet Computer', RNDR: 'Render', FET: 'Fetch.ai', GRT: 'The Graph', IMX: 'Immutable X', MKR: 'Maker', AAVE: 'Aave', SNX: 'Synthetix', CRV: 'Curve', LDO: 'Lido', RPL: 'Rocket Pool', ENS: 'ENS', SAND: 'The Sandbox', MANA: 'Decentraland', AXS: 'Axie Infinity', APE: 'ApeCoin', PEPE: 'Pepe', FLOKI: 'Floki', WLD: 'Worldcoin', BONK: 'Bonk', WIF: 'dogwifhat', TRX: 'TRON', ETC: 'Ethereum Classic', ALGO: 'Algorand', XLM: 'Stellar', VET: 'VeChain', HBAR: 'Hedera', THETA: 'Theta', EOS: 'EOS', XTZ: 'Tezos', FLOW: 'Flow', MINA: 'Mina', NEO: 'NEO', EGLD: 'MultiversX', KAVA: 'Kava', ONE: 'Harmony', ROSE: 'Oasis', FTM: 'Fantom', CKB: 'Nervos', KAS: 'Kaspa', TON: 'Toncoin', ORDI: 'ORDI', STX: 'Stacks', RUNE: 'THORChain', BLUR: 'Blur', GMX: 'GMX', PENDLE: 'Pendle', JTO: 'Jito', PYTH: 'Pyth', RAY: 'Raydium', CAKE: 'PancakeSwap', JASMY: 'JasmyCoin', CHZ: 'Chiliz', GMT: 'STEPN', GAL: 'Galxe', CFX: 'Conflux', ACH: 'Alchemy Pay', AGLD: 'Adventure Gold', AGIX: 'SingularityNET', AI: 'Sleepless AI', ALICE: 'My Neighbor Alice', ALPHA: 'Alpha Finance', ANKR: 'Ankr', ANT: 'Aragon', AR: 'Arweave', AUDIO: 'Audius', BAND: 'Band Protocol', BAT: 'Basic Attention', BOME: 'BOOK OF MEME', CELO: 'Celo', COMP: 'Compound', DASH: 'Dash', DYDX: 'dYdX', DYM: 'Dymension', ENJ: 'Enjin', GNO: 'Gnosis', ICX: 'ICON', IOTA: 'IOTA', LINA: 'Linear', MASK: 'Mask Network', OCEAN: 'Ocean Protocol', OMG: 'OMG Network', ONT: 'Ontology', QNT: 'Quant', QTUM: 'Qtum', SC: 'Siacoin', SKL: 'SKALE', STORJ: 'Storj', SUSHI: 'SushiSwap', SXP: 'Solar', YFI: 'yearn.finance', ZEC: 'Zcash', ZIL: 'Zilliqa', ZRX: '0x' };
 
     async function loadMore1h7d() {
       // Symbol→coin map for O(1) lookup
@@ -8635,7 +8941,7 @@
         for (let i = 0; i < topSyms.length; i += 100) {
           const batch = topSyms.slice(i, i + 100);
           try {
-            const r = await fetch(`https://api.binance.com/api/v3/ticker?windowSize=${windowSize}&symbols=${encodeURIComponent(JSON.stringify(batch))}`, { signal: AbortSignal.timeout(2500) });
+            const r = await fetch(`https://api.binance.com/api/v3/ticker?windowSize=${windowSize}&symbols=${encodeURIComponent(JSON.stringify(batch))}`);
             if (r.ok) {
               const d = await r.json();
               (Array.isArray(d) ? d : [d]).forEach(t => {
@@ -8662,7 +8968,7 @@
           for (let i = 0; i < top.length; i += 25) {
             await Promise.all(top.slice(i, i + 25).map(async c => {
               try {
-                const r = await fetch(`https://api.binance.com/api/v3/klines?symbol=${c.sy}USDT&interval=1h&limit=5`, { signal: AbortSignal.timeout(2500) });
+                const r = await fetch(`https://api.binance.com/api/v3/klines?symbol=${c.sy}USDT&interval=1h&limit=5`);
                 if (r.ok) { const k = await r.json(); if (k.length >= 4) { const o = parseFloat(k[0][1]), cl = parseFloat(k[k.length - 1][4]); if (o > 0) c.c4 = ((cl - o) / o) * 100 } }
               } catch (e) { }
             }))
@@ -8681,7 +8987,7 @@
         for (const chunk of chunks) {
           await Promise.all(chunk.map(async c => {
             try {
-              const r = await fetch(`https://api.binance.com/api/v3/klines?symbol=${c.sy}USDT&interval=1d&limit=8`, { signal: AbortSignal.timeout(2500) });
+              const r = await fetch(`https://api.binance.com/api/v3/klines?symbol=${c.sy}USDT&interval=1d&limit=8`);
               if (r.ok) { const k = await r.json(); if (k.length >= 2) { const old = parseFloat(k[0][1]); const cur = parseFloat(k[k.length - 1][4]); if (old > 0) m7[c.sy] = ((cur - old) / old) * 100; } }
             } catch (e) { }
           }));
@@ -8691,7 +8997,7 @@
       } catch (e) { console.log('7d err:', e) }
 
       // Save updated data to cache
-      cacheSet('cryptohub_coins', allC.slice(0, 10000));
+      cacheSet('cryptohub_coins', allC.slice(0, 15000));
     }
 
     // ===== ENRICH MARKET CAP & SUPPLY - CoinGecko live data =====
@@ -8705,8 +9011,7 @@
         for (const page of [1, 2, 3, 4]) {
           try {
             const r = await fetch(
-              `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${page}&sparkline=false`,
-              { signal: AbortSignal.timeout(10000) }
+              `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${page}&sparkline=false`
             );
             if (!r.ok) { if (r.status === 429) await new Promise(w => setTimeout(w, 3000)); break; }
             const data = await r.json();
@@ -8734,7 +9039,7 @@
 
       // SOURCE 2: CoinCap bulk — fills remaining gaps
       try {
-        const r = await fetch('https://api.coincap.io/v2/assets?limit=2000&offset=0', { signal: AbortSignal.timeout(8000) });
+        const r = await fetch('https://api.coincap.io/v2/assets?limit=2000&offset=0');
         if (r.ok) {
           const d = await r.json();
           if (d.data) {
@@ -8892,13 +9197,94 @@
 
       applyKnownSupply(allC); // Final correction — HARD_SUPPLY always wins
       console.log('Supply enrichment done. Fixed:', totalFixed);
-      cacheSet('cryptohub_coins', allC.slice(0, 10000));
+      cacheSet('cryptohub_coins', allC.slice(0, 15000));
       // Bridge for token-vesting tool
       try {
-        const slim = allC.slice(0, 10000).map(c => ({ sy: c.sy, id: c.id, nm: c.nm, sup: c.sup||0, ts: c.ts||0, ms: c.ms||0, img: c.img||'' }));
+        const slim = allC.slice(0, 15000).map(c => ({ sy: c.sy, id: c.id, nm: c.nm, sup: c.sup||0, ts: c.ts||0, ms: c.ms||0, img: c.img||'' }));
         sessionStorage.setItem('ch_supply_bridge', JSON.stringify(slim));
       } catch(e) {}
     }
+
+    // ── CMC Pro API enrichment — fills missing price/vol/mc for all coins ──
+    async function enrichFromCMCPro() {
+      console.log('[CMC Pro] Starting enrichment...');
+      const symIdx = new Map(); allC.forEach(c => symIdx.set(c.sy.toUpperCase(), c));
+      let totalFixed = 0;
+      try {
+        // Fetch top 15000 coins in batches of 5000
+        for (let start = 1; start <= 15001; start += 5000) {
+          const d = await fetchCMCPro(`/v1/cryptocurrency/listings/latest?start=${start}&limit=5000&convert=USD&sort=market_cap&sort_dir=desc`);
+          if (!d || !d.data) { console.warn('[CMC Pro] No data for start=' + start); continue; }
+          const list = Array.isArray(d.data) ? d.data : [];
+          list.forEach(coin => {
+            const sym = coin.symbol ? coin.symbol.toUpperCase() : null;
+            if (!sym) return;
+            const qt = coin.quote && coin.quote.USD ? coin.quote.USD : null;
+            if (!qt) return;
+            const existing = symIdx.get(sym);
+            if (existing) {
+              // Fill gaps only — don't overwrite good data with zeros
+              if (qt.price > 0 && (!existing.pr || existing.pr === 0)) { existing.pr = qt.price; totalFixed++; }
+              if (qt.volume_24h > 0 && (!existing.vol || existing.vol === 0)) { existing.vol = qt.volume_24h; totalFixed++; }
+              if (qt.market_cap > 0 && (!existing.mc || existing.mc === 0)) { existing.mc = qt.market_cap; totalFixed++; }
+              if (qt.percent_change_24h && existing.c24 === 0) existing.c24 = qt.percent_change_24h;
+              if (qt.percent_change_1h && existing.c1 === 0) existing.c1 = qt.percent_change_1h;
+              if (qt.percent_change_7d && existing.c7 === 0) existing.c7 = qt.percent_change_7d;
+              if (coin.circulating_supply > 0 && (!existing.sup || existing.sup === 0)) existing.sup = coin.circulating_supply;
+              if (coin.total_supply > 0 && (!existing.ts || existing.ts === 0)) existing.ts = coin.total_supply;
+              if (coin.max_supply > 0 && (!existing.ms || existing.ms === 0)) existing.ms = coin.max_supply;
+              // Real exchange count from API
+              if (coin.num_market_pairs > 0) existing.ex = coin.num_market_pairs;
+              // Fix image
+              if (coin.id && (!existing.img || existing.img.includes('/0.png'))) existing.img = `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`;
+              // Save good values to fallback
+              saveFallback(existing);
+            } else {
+              // New coin not in our list
+              const vol = qt.volume_24h || 0; const mc = qt.market_cap || 0;
+              const nc = { id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percent_change_1h || 0, c4: 0, c24: qt.percent_change_24h || 0, c7: qt.percent_change_7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: coin.num_market_pairs || 0, sup: coin.circulating_supply || 0, ts: coin.total_supply || 0, ms: coin.max_supply || 0 };
+              allC.push(nc); symIdx.set(sym, nc);
+              saveFallback(nc);
+            }
+          });
+          console.log(`[CMC Pro] Processed ${list.length} coins from start=${start}`);
+          await new Promise(r => setTimeout(r, 300));
+        }
+        if (totalFixed > 0) {
+          reRank(); assignExCounts(); filtC = [...allC]; doSortArr(); render(); updateGlobalFromData();
+          persistFallbacks();
+          console.log(`[CMC Pro] Enrichment done. Fixed ${totalFixed} data gaps.`);
+        } else {
+          console.log('[CMC Pro] No gaps to fill.');
+        }
+      } catch(e) { console.warn('[CMC Pro] Enrichment error:', e); }
+    }
+
+    // Realistic exchange count based on market cap and volume
+    const KNOWN_EX_COUNTS = {BTC:897,ETH:827,USDT:789,BNB:412,SOL:538,XRP:537,USDC:435,ADA:398,DOGE:445,TRX:344,AVAX:352,DOT:337,LINK:405,MATIC:358,SHIB:362,TON:198,UNI:385,LTC:400,BCH:356,XLM:340,NEAR:252,ICP:198,APT:215,FIL:295,ARB:238,OP:218,ATOM:310,IMX:178,GRT:218,ALGO:248,FTM:242,SAND:198,MANA:205,AXS:195,AAVE:258,CRV:195,SNX:175,COMP:185,MKR:215,LDO:168,PEPE:285,WIF:145,BONK:165,FLOKI:172,FET:195,RNDR:198,INJ:178,SEI:165,SUI:205,TIA:158,JUP:142,WLD:155,STX:162,RUNE:175,EGLD:145,THETA:165,EOS:312,IOTA:178,XTZ:215,NEO:185,DASH:195,ZEC:198,ETC:338,HBAR:195,VET:218,KCS:85,CRO:148,GALA:175,ENJ:165,CHZ:178,APE:185,DYDX:135,GMX:118,PENDLE:125,PYTH:132,STRK:115,ZRO:108,EIGEN:95,ETHFI:88,W:82,ZK:98,BLAST:78,MANTA:85,ONDO:125,ENA:135,NOT:112,PEOPLE:105,ORDI:128,SATS:95,PIXEL:88,PORTAL:75,ALT:72,DYM:68,BOME:95,MEW:78,BRETT:65,DOG:58,POPCAT:72,DAI:245,WBTC:168,STETH:145,WEETH:85,RETH:78,CBETH:65,WETH:125,LEO:42,OKB:85,GT:65,HT:55,MX:48,CAKE:165,SUSHI:175,ONE_INCH:155,BAL:128,YFI:158,LIDO:98};
+    // 1INCH alias
+    KNOWN_EX_COUNTS['1INCH'] = 155;
+    function estExCount(c) {
+      if (KNOWN_EX_COUNTS[c.sy]) return KNOWN_EX_COUNTS[c.sy];
+      const mc = parseFloat(c.mc) || 0;
+      const vol = parseFloat(c.vol) || 0;
+      // Deterministic hash from symbol for consistent minor variation
+      let h = 0; const s = c.sy || ''; for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+      const v = Math.abs(h % 100) / 100; // 0..0.99 deterministic per symbol
+      // Use the higher signal between mc and vol for better estimation
+      const score = Math.max(mc, vol * 20); // vol*20 approximates equivalent mc significance
+      if (score > 50e9) return Math.floor(300 + v * 200);
+      if (score > 10e9) return Math.floor(180 + v * 120);
+      if (score > 1e9) return Math.floor(85 + v * 95);
+      if (score > 100e6) return Math.floor(35 + v * 55);
+      if (score > 10e6) return Math.floor(12 + v * 25);
+      if (score > 1e6) return Math.floor(5 + v * 12);
+      if (vol > 100000 || mc > 500000) return Math.floor(3 + v * 7);
+      if (vol > 0 || mc > 0) return Math.floor(1 + v * 4);
+      return 1;
+    }
+    function assignExCounts() { allC.forEach(c => { applyFallback(c); saveFallback(c); if (!c.ex || c.ex === 0) c.ex = estExCount(c); }); }
+    // After CMC data loads with real numMarketPairs, those values will override estimates
 
     function updateGlobalFromData() {
       if (!allC.length) return;
@@ -8919,7 +9305,7 @@
 
     async function loadMore() {
       if (isL) return; isL = true;
-      const btn = $('lmBtn'); btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + t('loading');
+      const btn = $('lmBtn'); if (!btn) { isL = false; return; } btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + t('loading');
       $('lProg').classList.remove('hidden');
       const existSyms = new Set(allC.map(c => c.sy));
       const before = allC.length;
@@ -8927,10 +9313,10 @@
       try {
         // Load more from CoinMarketCap starting after current count (via CORS proxy)
         const cmcStart = allC.length + 1;
-        for (let startBatch = cmcStart; startBatch < cmcStart + 8000; startBatch += 2000) {
+        for (let startBatch = cmcStart; startBatch < cmcStart + 20000; startBatch += 2000) {
           try {
             const reqs = [];
-            for (let j = 0; j < 4 && (startBatch + j * 500) < cmcStart + 8000; j++) {
+            for (let j = 0; j < 4 && (startBatch + j * 500) < cmcStart + 20000; j++) {
               const start = startBatch + j * 500;
               const url = `https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=${start}&limit=500&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all`;
               reqs.push(fetchCMC(url, j));
@@ -8944,9 +9330,9 @@
                   const qt = coin.quotes && coin.quotes.length ? coin.quotes.find(q => q.name === 'USD') : null;
                   if (!qt) return;
                   const vol = qt.volume24h || 0; const mc = qt.marketCap || 0;
-                  if (vol < MIN_VOL && mc <= 0 && allC.length > 9500) return;
+                  
                   existSyms.add(sym);
-                  allC.push({ id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: Math.floor(Math.random() * 50) + 10, sup: coin.circulatingSupply || 0, ts: coin.totalSupply || 0, ms: coin.maxSupply || 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] });
+                  allC.push({ id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: coin.numMarketPairs || 0, sup: coin.circulatingSupply || 0, ts: coin.totalSupply || 0, ms: coin.maxSupply || 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] });
                 });
               }
             });
@@ -8963,7 +9349,7 @@
               if (existSyms.has(sy)) return;
               const vol = parseFloat(t.volCcy24h) || 0;
               existSyms.add(sy);
-              allC.push({ id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: t.open24h > 0 ? ((parseFloat(t.last) - parseFloat(t.open24h)) / parseFloat(t.open24h) * 100) : 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: Math.floor(Math.random() * 50) + 10, sup: 0 });
+              allC.push({ id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: t.open24h > 0 ? ((parseFloat(t.last) - parseFloat(t.open24h)) / parseFloat(t.open24h) * 100) : 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 });
             });
           }
         } catch (e) { }
@@ -8978,7 +9364,9 @@
         updateGlobalFromData();
       } catch (e) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + t('errorLoading') }
       setTimeout(() => $('lProg').classList.add('hidden'), 800); isL = false;
-      setTimeout(enrichMarketCap, 1500)
+      setTimeout(enrichMarketCap, 1500);
+      setTimeout(enrichFromCMCPro, 5000);
+      setTimeout(persistFallbacks, 8000)
     }
 
     // CMC Top Bar
@@ -9147,15 +9535,104 @@
     function fgC(v) { return v < 20 ? '#ef4444' : v < 40 ? '#f97316' : v < 60 ? '#eab308' : v < 80 ? '#84cc16' : '#22c55e' }
     function fgLabel(v) { const ls = [t('extremeFear'), t('fear'), t('neutral'), t('greed'), t('extremeGreed')]; return ls[v < 20 ? 0 : v < 40 ? 1 : v < 60 ? 2 : v < 80 ? 3 : 4] }
 
+    // ── Real-time Fear & Greed Engine ──
+    // Combines alternative.me daily baseline with live Binance market signals
+    let _fgBase = null; // daily baseline from alternative.me
+    
+    async function calcLiveFG() {
+      try {
+        // 1. BTC price momentum (24h & 1h change)
+        const btc = allC.find(c => c.sy === 'BTC');
+        if (!btc || !btc.pr) return null;
+        const btc24h = btc.c24 || 0;
+        const btc1h = btc.c1 || 0;
+        
+        // 2. Market breadth — how many top 100 coins are green vs red
+        const top100 = allC.slice(0, 100);
+        const greenCount = top100.filter(c => c.c24 > 0).length;
+        const breadth = greenCount / Math.max(top100.length, 1); // 0-1
+        
+        // 3. Volume surge — compare current vol to avg
+        const totalVol = allC.slice(0, 50).reduce((s, c) => s + (parseFloat(c.vol) || 0), 0);
+        const avgMc = allC.slice(0, 50).reduce((s, c) => s + (parseFloat(c.mc) || 0), 0);
+        const volRatio = avgMc > 0 ? totalVol / avgMc : 0.05;
+        
+        // 4. BTC dominance shift (high dominance = fear, low = greed/altseason)
+        const btcDom = avgMc > 0 ? ((parseFloat(btc.mc) || 0) / (allC.reduce((s, c) => s + (parseFloat(c.mc) || 0), 0) || 1)) * 100 : 50;
+        
+        // 5. Top gainers momentum
+        const avgChange = top100.reduce((s, c) => s + (c.c24 || 0), 0) / Math.max(top100.length, 1);
+        
+        // Calculate component scores (each 0-100)
+        // Momentum: BTC 24h change mapped to 0-100
+        const momentumScore = Math.max(0, Math.min(100, 50 + btc24h * 3));
+        // Breadth: % of green coins → 0-100
+        const breadthScore = Math.max(0, Math.min(100, breadth * 100));
+        // Volume: high vol during up = greed, high vol during down = fear
+        const volScore = Math.max(0, Math.min(100, 50 + (volRatio > 0.08 ? (avgChange > 0 ? 20 : -20) : 0) + avgChange * 2));
+        // Short-term momentum (1h)
+        const shortTermScore = Math.max(0, Math.min(100, 50 + btc1h * 10));
+        // BTC dominance (lower = more greed/altseason, higher = fear)
+        const domScore = Math.max(0, Math.min(100, 100 - btcDom));
+        
+        // Weighted average
+        const liveScore = Math.round(
+          momentumScore * 0.30 +
+          breadthScore * 0.25 +
+          volScore * 0.15 +
+          shortTermScore * 0.15 +
+          domScore * 0.15
+        );
+        
+        return Math.max(0, Math.min(100, liveScore));
+      } catch(e) { return null; }
+    }
+
     async function loadFG() {
       try {
+        // Get daily baseline from alternative.me
         const r = await fetch('https://api.alternative.me/fng/?limit=31');
         const d = await r.json();
         const e = d.data;
-        fgD = { n: +e[0].value, y: +e[1].value, w: +(e[6] || e[0]).value, m: +(e[29] || e[0]).value };
+        _fgBase = { n: +e[0].value, y: +e[1].value, w: +(e[6] || e[0]).value, m: +(e[29] || e[0]).value };
+        
+        // Calculate live score
+        const liveScore = await calcLiveFG();
+        
+        if (liveScore !== null && _fgBase) {
+          // Blend: 40% alternative.me baseline + 60% live calculation
+          const blended = Math.round(_fgBase.n * 0.4 + liveScore * 0.6);
+          fgD = { n: blended, y: _fgBase.y, w: _fgBase.w, m: _fgBase.m };
+        } else {
+          fgD = _fgBase;
+        }
         updFG();
-      } catch (e) { console.log('FG err:', e) }
+      } catch (e) {
+        // Fallback: calculate purely from live data
+        const liveScore = await calcLiveFG();
+        if (liveScore !== null) {
+          fgD = { n: liveScore, y: liveScore, w: liveScore, m: liveScore };
+          updFG();
+        }
+        console.log('FG err:', e);
+      }
     }
+    
+    // Update FG every 30 seconds with live market data
+    async function refreshFG() {
+      try {
+        const liveScore = await calcLiveFG();
+        if (liveScore !== null) {
+          if (_fgBase) {
+            fgD.n = Math.round(_fgBase.n * 0.4 + liveScore * 0.6);
+          } else {
+            fgD = { n: liveScore, y: liveScore, w: liveScore, m: liveScore };
+          }
+          updFG();
+        }
+      } catch(e) {}
+    }
+    setInterval(refreshFG, 30000); // Update every 30 seconds
 
     function updFG() {
       if (!fgD) return;
@@ -13497,18 +13974,18 @@
         const dn = c.sy === 'USDT' ? 'Tether' : c.sy === 'USDC' ? 'USD Coin' : c.nm;
         const mkChg = (v) => { const col = v >= 0 ? 'var(--gn)' : 'var(--rd)'; const ic = v >= 0 ? 'fa-caret-up' : 'fa-caret-down'; return `<span class="chg" style="color:${col}"><i class="fas ${ic}"></i>${v >= 0 ? '+' : ''}${v.toFixed(2)}%</span>` };
         const aiBadge = Math.abs(c.c24) > 15 ? `<span style="font-size:9px;background:${c.c24 > 0 ? 'rgba(22,199,132,0.15)' : 'rgba(234,57,67,0.15)'};color:${c.c24 > 0 ? '#16c784' : '#ea3943'};padding:1px 4px;border-radius:4px;margin-inline-start:4px">AI Signal</span>` : '';
+        const volBadge = (parseFloat(c.vol) || 0) >= 500000 ? `<span style="position:relative;display:inline-flex;cursor:pointer;flex-shrink:0" class="vol-badge-wrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display:block"><circle cx="12" cy="12" r="10" fill="#3b82f6"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="vol-tip">Verified High Volume — This coin has a 24h trading volume exceeding $500,000, indicating strong market activity and liquidity.</span></span>` : '';
         const prDisp = c.pr >= 1 ? c.pr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : (c.pr >= 0.0001 ? c.pr.toFixed(6).replace(/0+$/, '').replace(/\.$/, '.0') : parseFloat(c.pr.toFixed(8)));
 
         return `<tr onclick="showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}', '${c.sy}', '${c.img}')">
-<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start"><span class="text-t2 text-xs font-bold" style="min-width:1.5rem">${rowNum}</span><img alt="icon" src="${c.img}" class="w-6 h-6 rounded-full" width="24" height="24" onerror="this.style.display='none'" loading="lazy"><span class="font-semibold text-sm">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2)">${c.sy}</span>${aiBadge}</div></td>
-<td class="font-bold text-end pr-4">$${prDisp}</td>
-<td class="hidden sm:table-cell text-end pr-4">${mkChg(c.c1)}</td>
-<td class="hidden sm:table-cell text-end pr-4">${mkChg(c.c4)}</td>
-<td class="text-end pr-4">${mkChg(c.c24)}</td>
-<td class="hidden md:table-cell text-end pr-4">${mkChg(c.c7)}</td>
-<td class="hidden lg:table-cell text-end pr-4" style="color:var(--t2);font-size:12px;font-weight:500">${fN(parseFloat(c.mc) || 0)}</td>
-<td class="hidden lg:table-cell text-end pr-4" style="color:var(--t2);font-size:12px;font-weight:500">${fN(parseFloat(c.vol) || 0)}</td>
-<td class="hidden xl:table-cell text-end pr-4"><div class="ib"><i class="fas fa-exchange-alt"></i> ${c.ex}</div></td>
+<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><img alt="icon" src="${c.img}" class="w-6 h-6 rounded-full" width="24" height="24" onerror="this.style.display='none'" loading="lazy" style="flex-shrink:0"><span class="font-semibold text-sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
+<td class="font-bold text-end pr-4" style="white-space:nowrap">$${prDisp}</td>
+<td class="text-end pr-4 col-1h" style="white-space:nowrap">${mkChg(c.c1)}</td>
+<td class="text-end pr-4 col-4h" style="white-space:nowrap">${mkChg(c.c4)}</td>
+<td class="text-end pr-4" style="white-space:nowrap">${mkChg(c.c24)}</td>
+<td class="text-end pr-4 col-7d" style="white-space:nowrap">${mkChg(c.c7)}</td>
+<td class="text-end pr-4 col-mcap" style="color:var(--t2);font-size:12px;font-weight:500;white-space:nowrap">${fN(parseFloat(c.mc) || 0)}</td>
+<td class="text-end pr-4 col-vol" style="color:var(--t2);font-size:12px;font-weight:500;white-space:nowrap">${fN(parseFloat(c.vol) || 0)}</td>
 </tr>`;
       }).join('');
       rPages(); $('sRange').textContent = `${st + 1} - ${Math.min(en, filtC.length)} `; $('tCoins').textContent = filtC.length.toLocaleString()
@@ -13763,11 +14240,11 @@
     function _parseSQ(data) { if (!Array.isArray(data) || !data[0]) return null; const sp = data[0].spreadProfilePrices; if (!sp || !sp[0]) return null; return (sp[0].bid + sp[0].ask) / 2 }
     const _SQ_PROXIES = [u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`, u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`];
     let _sqProxyIdx = 0;
-    async function _fetchSwissquote(sym) { const base = 'https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/' + sym + '/USD'; if (_sqDirect) { try { const r = await fetch(base, { signal: AbortSignal.timeout(2500) }); if (r.ok) { const v = _parseSQ(await r.json()); if (v) return v } _sqDirect = false } catch (e) { _sqDirect = false } } for (let i = 0; i < _SQ_PROXIES.length; i++) { const idx = (_sqProxyIdx + i) % _SQ_PROXIES.length; try { const r = await fetch(_SQ_PROXIES[idx](base), { signal: AbortSignal.timeout(6000) }); if (r.ok) { const v = _parseSQ(await r.json()); if (v) { _sqProxyIdx = idx; return v } } } catch (e) { } } return null }
-    async function _fetchCurrencyApiMetals() { try { const [ptR, pdR] = await Promise.all([fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/xpt.json', { signal: AbortSignal.timeout(8000) }).then(r => r.ok ? r.json() : null).catch(() => null), fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/xpd.json', { signal: AbortSignal.timeout(8000) }).then(r => r.ok ? r.json() : null).catch(() => null)]); if (ptR && ptR.xpt && ptR.xpt.usd > 0) { _mtPrev.pt = _mt.pt; _mt.pt = ptR.xpt.usd; _saveMtOpen('pt', _mt.pt) } if (pdR && pdR.xpd && pdR.xpd.usd > 0) { _mtPrev.pd = _mt.pd; _mt.pd = pdR.xpd.usd; _saveMtOpen('pd', _mt.pd) } } catch (e) { } }
+    async function _fetchSwissquote(sym) { const base = 'https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/' + sym + '/USD'; if (_sqDirect) { try { const r = await fetch(base); if (r.ok) { const v = _parseSQ(await r.json()); if (v) return v } _sqDirect = false } catch (e) { _sqDirect = false } } for (let i = 0; i < _SQ_PROXIES.length; i++) { const idx = (_sqProxyIdx + i) % _SQ_PROXIES.length; try { const r = await fetch(_SQ_PROXIES[idx](base)); if (r.ok) { const v = _parseSQ(await r.json()); if (v) { _sqProxyIdx = idx; return v } } } catch (e) { } } return null }
+    async function _fetchCurrencyApiMetals() { try { const [ptR, pdR] = await Promise.all([fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/xpt.json').then(r => r.ok ? r.json() : null).catch(() => null), fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/xpd.json').then(r => r.ok ? r.json() : null).catch(() => null)]); if (ptR && ptR.xpt && ptR.xpt.usd > 0) { _mtPrev.pt = _mt.pt; _mt.pt = ptR.xpt.usd; _saveMtOpen('pt', _mt.pt) } if (pdR && pdR.xpd && pdR.xpd.usd > 0) { _mtPrev.pd = _mt.pd; _mt.pd = pdR.xpd.usd; _saveMtOpen('pd', _mt.pd) } } catch (e) { } }
     // === SILVER ENGINE: goldprice.org (5s) calibrates Au/Ag ratio → PAXG WebSocket derives live silver ===
-    async function _fetchSilverGoldprice() { try { const r = await fetch('https://data-asg.goldprice.org/dbXRates/USD', { signal: AbortSignal.timeout(4000) }); if (!r.ok) return null; const d = await r.json(); if (d && d.items && d.items[0]) { const it = d.items[0]; if (it.xagPrice > 0 && it.xauPrice > 0) { _auAgRatio = it.xauPrice / it.xagPrice; _gpLastChg = it.pcXag || 0; return { price: it.xagPrice, chg: it.pcXag || 0, auPrice: it.xauPrice } } } return null } catch (e) { return null } }
-    async function _fetchSilverCurrencyApi() { try { const r = await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/xag.json', { signal: AbortSignal.timeout(5000) }); if (!r.ok) return null; const d = await r.json(); if (d && d.xag && d.xag.usd > 0) return d.xag.usd; return null } catch (e) { return null } }
+    async function _fetchSilverGoldprice() { try { const r = await fetch('https://data-asg.goldprice.org/dbXRates/USD'); if (!r.ok) return null; const d = await r.json(); if (d && d.items && d.items[0]) { const it = d.items[0]; if (it.xagPrice > 0 && it.xauPrice > 0) { _auAgRatio = it.xauPrice / it.xagPrice; _gpLastChg = it.pcXag || 0; return { price: it.xagPrice, chg: it.pcXag || 0, auPrice: it.xauPrice } } } return null } catch (e) { return null } }
+    async function _fetchSilverCurrencyApi() { try { const r = await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/xag.json'); if (!r.ok) return null; const d = await r.json(); if (d && d.xag && d.xag.usd > 0) return d.xag.usd; return null } catch (e) { return null } }
     async function _silverRapidPoll() { try { const results = await Promise.allSettled([_fetchSilverGoldprice(), _fetchSwissquote('XAG'), (_agFails > 3 ? _fetchSilverCurrencyApi() : Promise.resolve(null))]); const gp = results[0].status === 'fulfilled' ? results[0].value : null; const sq = results[1].status === 'fulfilled' ? results[1].value : null; const ca = results[2].status === 'fulfilled' ? results[2].value : null; let newP = null, src = ''; if (gp && gp.price > 0) { newP = gp.price; src = 'GoldPrice'; _mt.sChg = gp.chg } if (sq && sq > 0 && (!newP || Math.abs(sq - newP) < 2)) { newP = sq; src = 'Swissquote' } if (!newP && ca && ca > 0) { newP = ca; src = 'CurrencyAPI' } if (newP && newP > 0) { _mtPrev.s = _mt.s; _mt.s = newP; _agSrc = src; _agFails = 0; _agLastOk = Date.now(); _saveMtOpen('s', _mt.s); if (!_mt.sChg && _mtOpen.s && _mt.s > 0) { _mt.sChg = ((_mt.s - _mtOpen.s) / _mtOpen.s * 100) } if (_mt.sHi === 0 || _mt.s > _mt.sHi) _mt.sHi = _mt.s; if (_mt.sLo === 0 || _mt.s < _mt.sLo) _mt.sLo = _mt.s; _mt.lastUpd = Date.now(); _updMtl(); console.log('[XAG] $' + newP.toFixed(4) + ' via ' + src + ' | Au/Ag=' + (_auAgRatio ? _auAgRatio.toFixed(1) : '?')) } else { _agFails++; if (_mt.g > 0 && _auAgRatio > 0) { _deriveSilverFromPAXG(_mt.g); _mt.lastUpd = Date.now(); _updMtl(); console.log('[XAG] $' + _mt.s.toFixed(4) + ' derived from Binance PAXG') } else { console.warn('[XAG] all sources failed, attempt', _agFails) } } } catch (e) { _agFails++; console.warn('[XAG] poll error', e) } }
     // Platinum & Palladium poll (15s) — Silver handled separately by rapid engine above
     async function _fetchAllSpotMetals() {
@@ -13783,7 +14260,7 @@
     }
     async function _fetchGoldprice() {
       try {
-        const r = await fetch('https://data-asg.goldprice.org/dbXRates/USD', { signal: AbortSignal.timeout(5000) }); if (!r.ok) return; const d = await r.json(); if (!d || !d.items || !d.items[0]) return; const it = d.items[0];
+        const r = await fetch('https://data-asg.goldprice.org/dbXRates/USD'); if (!r.ok) return; const d = await r.json(); if (!d || !d.items || !d.items[0]) return; const it = d.items[0];
         if (it.xauPrice > 0 && it.xagPrice > 0) { _auAgRatio = it.xauPrice / it.xagPrice; _gpLastChg = it.pcXag || 0 }
         if (!_mt.g && it.xauPrice > 0) { _mtPrev.g = _mt.g; _mt.g = it.xauPrice; _mt.gChg = it.pcXau || 0; _saveMtOpen('g', _mt.g) }
         if (!_mt.s && it.xagPrice > 0) { _mtPrev.s = _mt.s; _mt.s = it.xagPrice; _mt.sChg = it.pcXag || 0; _saveMtOpen('s', _mt.s) }
@@ -13794,7 +14271,7 @@
       if (_mtInit) return; _mtInit = true; _initMtOpen();
       try {
         const [paxg, agP, ptP, pdP] = await Promise.all([
-          fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=PAXGUSDT', { signal: AbortSignal.timeout(5000) }).then(r => r.ok ? r.json() : null).catch(() => null),
+          fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=PAXGUSDT').then(r => r.ok ? r.json() : null).catch(() => null),
           _fetchSwissquote('XAG'), _fetchSwissquote('XPT'), _fetchSwissquote('XPD')]);
         if (paxg) { _mt.g = parseFloat(paxg.lastPrice) || 0; _mt.gChg = parseFloat(paxg.priceChangePercent) || 0; _mt.gHi = parseFloat(paxg.highPrice) || 0; _mt.gLo = parseFloat(paxg.lowPrice) || 0; _mt.gVol = parseFloat(paxg.quoteVolume) || 0; _saveMtOpen('g', _mt.g) }
         if (agP && agP > 0) { _mt.s = agP; _saveMtOpen('s', _mt.s) }
@@ -15041,8 +15518,7 @@
         await Promise.allSettled(batches.map(async batch => {
           try {
             const r = await fetch(
-              `${WORKER}?symbols=${batch.join(',')}`,
-              {signal: AbortSignal.timeout(10000)}
+              `${WORKER}?symbols=${batch.join(',')}`
             );
             if (!r.ok) return;
             const data = await r.json();
@@ -15084,7 +15560,7 @@
 
         for (const proxyFn of PROXIES) {
           try {
-            const r = await fetch(proxyFn(baseUrl), {signal: AbortSignal.timeout(8000)});
+            const r = await fetch(proxyFn(baseUrl));
             if (!r.ok) continue;
             const data = await r.json();
             const arr = Array.isArray(data) ? data : data?.data;
@@ -15143,7 +15619,7 @@
           const u = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${batch.join(',')}&fields=${FIELDS}`;
           try {
             const res = await Promise.any(PX(u).map(async pu => {
-              const r = await fetch(pu, {signal: AbortSignal.timeout(10000)});
+              const r = await fetch(pu);
               if (!r.ok) throw 0;
               const j = await r.json();
               const d = j?.quoteResponse?.result;
@@ -16721,7 +17197,7 @@
       items: 'Tickers, Klines, 24hr',
       interval: 60000,
       fetchFn: async () => {
-        const r = await fetch('https://api.binance.com/api/v3/ticker/24hr', { signal: AbortSignal.timeout(8000) });
+        const r = await fetch('https://api.binance.com/api/v3/ticker/24hr');
         if (!r.ok) throw new Error('HTTP ' + r.status);
         const d = await r.json();
         if (!Array.isArray(d) || d.length < 100) throw new Error('Invalid data');
@@ -16740,7 +17216,7 @@
       items: 'Live Exchange Volume',
       interval: 7200000,
       fetchFn: async () => {
-        const r = await fetch('https://api.coingecko.com/api/v3/exchanges', { signal: AbortSignal.timeout(8000) });
+        const r = await fetch('https://api.coingecko.com/api/v3/exchanges');
         if (!r.ok) throw new Error('HTTP ' + r.status);
         const d = await r.json();
         if (!Array.isArray(d)) throw new Error('Invalid exchange data');
@@ -16780,7 +17256,7 @@
       items: 'Supply, Volume, Market Cap',
       interval: 300000,
       fetchFn: async () => {
-        const r = await fetch('https://api.coincap.io/v2/assets?limit=500&offset=0', { signal: AbortSignal.timeout(8000) });
+        const r = await fetch('https://api.coincap.io/v2/assets?limit=500&offset=0');
         if (!r.ok) throw new Error('HTTP ' + r.status);
         const d = await r.json();
         if (!d || !d.data) throw new Error('Invalid data');
@@ -16792,15 +17268,9 @@
       type: 'rest',
       icon: 'fa-tachometer-alt',
       items: 'Market Sentiment',
-      interval: 300000,
+      interval: 30000,
       fetchFn: async () => {
-        const r = await fetch('https://api.alternative.me/fng/?limit=31', { signal: AbortSignal.timeout(8000) });
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        const d = await r.json();
-        if (!d || !d.data) throw new Error('No FG data');
-        const e = d.data;
-        fgD = { n: +e[0].value, y: +e[1].value, w: +(e[6] || e[0]).value, m: +(e[29] || e[0]).value };
-        updFG();
+        await refreshFG();
       }
     });
 
@@ -16845,7 +17315,7 @@
       items: 'Gold & Silver Backup',
       interval: 30000,
       fetchFn: async () => {
-        const r = await fetch('https://data-asg.goldprice.org/dbXRates/USD', { signal: AbortSignal.timeout(5000) });
+        const r = await fetch('https://data-asg.goldprice.org/dbXRates/USD');
         if (!r.ok) throw new Error('HTTP ' + r.status);
         const d = await r.json();
         if (!d || !d.items || !d.items[0]) throw new Error('No data');
@@ -16859,7 +17329,7 @@
       items: 'XPT, XPD Backup',
       interval: 60000,
       fetchFn: async () => {
-        const r = await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/xpt.json', { signal: AbortSignal.timeout(8000) });
+        const r = await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/xpt.json');
         if (!r.ok) throw new Error('HTTP ' + r.status);
         const d = await r.json();
         if (!d || !d.xpt || !d.xpt.usd) throw new Error('Invalid data');
@@ -17040,7 +17510,7 @@
 
       // Real-time intervals: global stats every 10s, badges every 30s, stocks every 60s
       setInterval(() => { updateGlobalFromData(); buildTrending() }, 10000);
-      setInterval(() => { if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString(); if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString(); if ($('ldSt')) $('ldSt').textContent = allC.length + ' ' + t('coins') }, 30000);
+      setInterval(() => { if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString(); if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString(); if ($('ldSt')) $('ldSt').textContent = allC.length + ' ' + t('coins') }, 5000);
       setInterval(() => { if (_stkTabD) { _stkCacheTs = 0; _loadStk(); } }, 90000);
     });
     window.addEventListener('beforeunload', () => { if(_mWs) _mWs.close(); _CM.destroy(); if (bWs) bWs.close(); if (uInt) clearInterval(uInt); if (_mtWs) _mtWs.close(); if (_mtPollId) clearInterval(_mtPollId) });
@@ -17124,7 +17594,7 @@
     const AI_SRC = { binance: { tr: 10 }, coinbase: { tr: 10 }, bybit: { tr: 9 }, gate: { tr: 9 }, coingecko: { tr: 10 } };
     let aiPriceCache = {};
 
-    async function aiFetchJSON(url, to) { to = to || 12000; const c = new AbortController(); const id = setTimeout(() => c.abort(), to); try { const r = await fetch(url, { signal: c.signal }); clearTimeout(id); if (!r.ok) throw new Error('H' + r.status); return await r.json() } catch (e) { clearTimeout(id); throw e } }
+    async function aiFetchJSON(url, to) { to = to || 12000; try { const r = await Promise.race([fetch(url), _tout(to)]); if (!r.ok) throw new Error('H' + r.status); return await r.json() } catch (e) { throw e } }
 
     async function aiPriceUpdate() {
       try {
@@ -17177,7 +17647,7 @@
             // Throttle AI polling by simulating idle time
             _aiLastAct = 0;
             // Reduce render batch size if not already minimal
-            if (iPP > 40) { iPP = 40; if (cPage === 1) render(); }
+            if (iPP > 50) { iPP = 50; if (cPage === 1) render(); }
           }
         });
         pObs.observe({ entryTypes: ['longtask'] });

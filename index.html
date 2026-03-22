@@ -1035,8 +1035,7 @@
       width: 100%;
       background: var(--bg1);
       border-radius: 12px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      overflow: visible;
       border: 1px solid var(--bc);
       box-shadow: var(--sh)
     }
@@ -4937,9 +4936,6 @@
       border-bottom: 1px solid var(--bc);
       border-radius: 0;
       padding: 0;
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
       z-index: 100;
     }
 
@@ -6458,7 +6454,7 @@
       </select>
 
 
-      <div id="lProg" class="hidden">
+      <div id="lProg" class="hidden" style="display:none!important">
         <div class="pb">
           <div class="pf" id="pFill" style="width:0%"></div>
         </div>
@@ -6476,7 +6472,7 @@
       <div class="ct mb-4" style="border-radius:14px">
         <!-- CoinMarketCap-Style Horizontal Networks Bar (outside scroll area) -->
         <span id="ldSt" style="display:none"></span>
-        <div class="cmc-net-bar" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch">
+        <div class="cmc-net-bar">
           <div class="cmc-net-scroll">
             <button class="cmc-net-btn cmc-net-active" data-net="all"><i class="fas fa-globe"
                 style="font-size:14px"></i> <span data-i18n="allNetworks">All Networks</span></button>

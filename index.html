@@ -5783,16 +5783,24 @@
       color: #fff;
     }
 
-    /* Responsive table: horizontal scroll handles most cases, hide only on very small */
+    /* Responsive table */
+    @media (max-width: 1024px) {
+      .col-4h { display: none !important; }
+    }
     @media (max-width: 768px) {
-      .col-4h, .col-7d { display: none !important; }
-      .ct th { padding: 10px 8px; font-size: 10px; }
-      .ct td { padding: 8px 6px; font-size: 12px; }
+      .col-1h, .col-7d { display: none !important; }
+      .ct th { padding: 10px 6px; font-size: 10px; }
+      .ct td { padding: 8px 5px; font-size: 12px; }
+      .ct table { min-width: 0 !important; table-layout: auto !important; }
+    }
+    @media (max-width: 600px) {
+      .col-mcap { display: none !important; }
     }
     @media (max-width: 480px) {
-      .col-1h, .col-mcap { display: none !important; }
-      .ct th { padding: 8px 5px; }
-      .ct td { padding: 7px 4px; font-size: 11px; }
+      .col-vol { display: none !important; }
+      .ct th { padding: 7px 4px; font-size: 9px; }
+      .ct td { padding: 6px 3px; font-size: 11px; }
+      .ct th#th_name { padding-left: 8px; }
     }
 
   </style>
@@ -6561,25 +6569,25 @@
         </div>
 
 
-        <table class="w-full" style="min-width:780px;table-layout:fixed">
+        <table class="w-full crypto-table" style="min-width:780px;table-layout:fixed">
           <thead>
             <tr>
-              <th onclick="doSort('name')" id="th_name" class="text-start" style="width:200px"><span data-i18n="colName">الاسم</span>
+              <th onclick="doSort('name')" id="th_name" class="text-start"><span data-i18n="colName">الاسم</span>
               </th>
-              <th onclick="doSort('price')" id="th_price" style="width:95px"><span data-i18n="colPrice">السعر</span> <span
+              <th onclick="doSort('price')" id="th_price"><span data-i18n="colPrice">السعر</span> <span
                   class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('change_1h')" id="th_change_1h" class="col-1h" style="width:68px">1h% <span
+              <th onclick="doSort('change_1h')" id="th_change_1h" class="col-1h">1h% <span
                   class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('change_4h')" id="th_change_4h" class="col-4h" style="width:68px">4h% <span
+              <th onclick="doSort('change_4h')" id="th_change_4h" class="col-4h">4h% <span
                   class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('change_24h')" id="th_change_24h" style="width:68px">24h% <span class="sort-icon"><i
+              <th onclick="doSort('change_24h')" id="th_change_24h">24h% <span class="sort-icon"><i
                     class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('change_7d')" id="th_change_7d" class="col-7d" style="width:68px">7d% <span
+              <th onclick="doSort('change_7d')" id="th_change_7d" class="col-7d">7d% <span
                   class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('market_cap')" id="th_market_cap" class="col-mcap" style="width:100px"><span
+              <th onclick="doSort('market_cap')" id="th_market_cap" class="col-mcap"><span
                   data-i18n="colMarketCap">القيمة السوقية</span> <span class="sort-icon"><i
                     class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-              <th onclick="doSort('volume')" id="th_volume" class="col-vol" style="width:100px"><span
+              <th onclick="doSort('volume')" id="th_volume" class="col-vol"><span
                   data-i18n="colVolume">الحجم 24س</span> <span class="sort-icon"><i class="fas fa-caret-up"></i><i
                     class="fas fa-caret-down"></i></span></th>
             </tr>
@@ -8274,14 +8282,18 @@
       u => u
     ];
     async function fetchCMC(url, proxyOffset = 0) {
-      const len = PROXIES.length;
-      for (let i = 0; i < len; i++) {
-        const proxy = PROXIES[(proxyOffset + i) % len];
-        try {
-          const r = await Promise.race([fetch(proxy(url)), _tout(6000)]);
-          if (r.ok) { const d = await r.json(); if (d && d.data) return d }
-        } catch (e) { }
-      }
+      // Race all proxies in parallel — first success wins
+      try {
+        const promises = PROXIES.map((proxy, i) => {
+          return Promise.race([fetch(proxy(url)), _tout(5000)])
+            .then(async r => { if (r.ok) { const d = await r.json(); if (d && d.data) return d; } return null; })
+            .catch(() => null);
+        });
+        const results = await Promise.allSettled(promises);
+        for (const r of results) {
+          if (r.status === 'fulfilled' && r.value) return r.value;
+        }
+      } catch(e) {}
       return null;
     }
 
@@ -8461,52 +8473,47 @@
           setTimeout(persistFallbacks, 25000);
           console.log('Loaded from cache:', allC.length);
           // Still run CMC enrichment in background to get MORE coins beyond cache
-          setTimeout(() => {
-            (async () => {
-              try {
-                for (let startBatch = 1; startBatch <= 20001; startBatch += 2000) {
-                  const reqs = [];
-                  for (let j = 0; j < 4 && (startBatch + j * 500) <= 20001; j++) {
-                    const start = startBatch + j * 500;
-                    reqs.push(fetchCMC(`https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=${start}&limit=500&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all`));
+          setTimeout(async () => {
+            try {
+              // Fire all CMC requests in parallel
+              const allReqs = [];
+              for (let start = 1; start <= 20001; start += 2000) {
+                allReqs.push(fetchCMC(`https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=${start}&limit=2000&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all`, Math.floor(start / 2000) % PROXIES.length));
+              }
+              const results = await Promise.allSettled(allReqs);
+              let added = 0;
+              results.forEach(r => {
+                if (r.status !== 'fulfilled' || !r.value) return;
+                const d = r.value;
+                if (!d || !d.data || !d.data.cryptoCurrencyList) return;
+                d.data.cryptoCurrencyList.forEach(coin => {
+                  const qt = coin.quotes && coin.quotes.length ? coin.quotes.find(q => q.name === 'USD') : null;
+                  if (!qt) return;
+                  const sym = coin.symbol;
+                  const existing = symMap.get(sym);
+                  if (existing) {
+                    if (qt.marketCap > 0 && (!existing.mc || existing.mc === 0)) existing.mc = qt.marketCap;
+                    if (qt.volume24h > 0 && (!existing.vol || existing.vol === 0)) existing.vol = qt.volume24h;
+                    if (qt.price > 0 && (!existing.pr || existing.pr === 0)) existing.pr = qt.price;
+                    if (qt.percentChange1h && existing.c1 === 0) existing.c1 = qt.percentChange1h;
+                    if (qt.percentChange7d && existing.c7 === 0) existing.c7 = qt.percentChange7d;
+                    if (coin.circulatingSupply && (!existing.sup || existing.sup === 0)) existing.sup = coin.circulatingSupply;
+                    if (coin.numMarketPairs > 0) existing.ex = coin.numMarketPairs;
+                    if (!existing.img || existing.img.includes('/0.png')) existing.img = `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`;
+                    saveFallback(existing);
+                    return;
                   }
-                  const results = await Promise.all(reqs);
-                  let added = 0;
-                  results.forEach(d => {
-                    if (!d || !d.data || !d.data.cryptoCurrencyList) return;
-                    d.data.cryptoCurrencyList.forEach(coin => {
-                      const qt = coin.quotes && coin.quotes.length ? coin.quotes.find(q => q.name === 'USD') : null;
-                      if (!qt) return;
-                      const sym = coin.symbol;
-                      const existing = symMap.get(sym);
-                      if (existing) {
-                        if (qt.marketCap > 0 && (!existing.mc || existing.mc === 0)) existing.mc = qt.marketCap;
-                        if (qt.volume24h > 0 && (!existing.vol || existing.vol === 0)) existing.vol = qt.volume24h;
-                        if (qt.price > 0 && (!existing.pr || existing.pr === 0)) existing.pr = qt.price;
-                        if (qt.percentChange1h && existing.c1 === 0) existing.c1 = qt.percentChange1h;
-                        if (qt.percentChange7d && existing.c7 === 0) existing.c7 = qt.percentChange7d;
-                        if (coin.circulatingSupply && (!existing.sup || existing.sup === 0)) existing.sup = coin.circulatingSupply;
-                        if (coin.numMarketPairs > 0) existing.ex = coin.numMarketPairs;
-                        if (!existing.img || existing.img.includes('/0.png')) existing.img = `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`;
-                        saveFallback(existing);
-                        return;
-                      }
-                      const vol = qt.volume24h || 0; const mc = qt.marketCap || 0;
-                      
-                      const nc = { id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: coin.numMarketPairs || 0, sup: coin.circulatingSupply || 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
-                      allC.push(nc); symMap.set(sym, nc); added++;
-                    });
-                  });
-                  if (added > 0) { reRank(); filtC = [...allC]; render() }
-                  await new Promise(r => setTimeout(r, 200));
-                }
-              } catch (e) { }
-              allC.sort((a, b) => (b.mc || 0) - (a.mc || 0) || (b.vol || 0) - (a.vol || 0));
-              allC.forEach((c, i) => c.rk = i + 1);
+                  const vol = qt.volume24h || 0; const mc = qt.marketCap || 0;
+                  const nc = { id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: coin.numMarketPairs || 0, sup: coin.circulatingSupply || 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
+                  allC.push(nc); symMap.set(sym, nc); added++;
+                });
+              });
+              if (added > 0) { reRank(); filtC = [...allC]; render() }
               assignExCounts(); filtC = [...allC]; render(); buildTicker(); updateGlobalFromData();
               cacheSet('cryptohub_coins', allC);
+              persistFallbacks();
               console.log('Cache+CMC enrichment done. Total:', allC.length);
-            })();
+            } catch (e) { console.log('Cache CMC err:', e) }
           }, 2000);
           isL = false; return;
         }
@@ -8718,31 +8725,14 @@
         $('pFill').style.width = '70%'; $('pTxt').textContent = t('loadingData') + ` (${allC.length})`;
         console.log('Phase 2 Exchanges:', allC.length, 'coins');
 
-        // ===== PHASE 2.5: CoinGecko extra pages (to fill gaps) =====
+        // ===== PHASE 2.5: CoinGecko extra pages (all parallel) =====
         try {
-          // Load in waves to avoid rate limits: wave 1 (pages 1-15), wave 2 (pages 16-40)
-          const cgPages1 = [];
-          for (let p = 1; p <= 15; p++) {
-            cgPages1.push(fetchJSON(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${p}&sparkline=false`, 5000));
+          const cgPages = [];
+          for (let p = 1; p <= 55; p++) {
+            cgPages.push(fetchJSON(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${p}&sparkline=false`, 6000));
           }
-          const cgResults1 = await Promise.allSettled(cgPages1);
-          cgResults1.forEach(r => {
-            if (r.status !== 'fulfilled' || !r.value || !Array.isArray(r.value)) return;
-            r.value.forEach(c => {
-              const sy = (c.symbol || '').toUpperCase();
-              if (!sy || symMap.has(sy)) return;
-              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: 0, c4: 0, c24: c.price_change_percentage_24h || 0, c7: 0, mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
-              allC.push(coin); symMap.set(sy, coin);
-            });
-          });
-          // Wave 2 after short delay
-          await new Promise(r => setTimeout(r, 2000));
-          const cgPages2 = [];
-          for (let p = 16; p <= 55; p++) {
-            cgPages2.push(fetchJSON(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${p}&sparkline=false`, 5000));
-          }
-          const cgResults2 = await Promise.allSettled(cgPages2);
-          cgResults2.forEach(r => {
+          const cgResults = await Promise.allSettled(cgPages);
+          cgResults.forEach(r => {
             if (r.status !== 'fulfilled' || !r.value || !Array.isArray(r.value)) return;
             r.value.forEach(c => {
               const sy = (c.symbol || '').toUpperCase();
@@ -8759,66 +8749,56 @@
         allC.forEach((c, i) => c.rk = i + 1);
         assignExCounts(); filtC = [...allC]; render(); buildTrending(); buildTicker();
 
-        // ===== PHASE 3: CoinMarketCap background enrichment (non-blocking & smart) =====
-        // Runs after user already sees data - enriches mc, c1, c7 AND adds new coins
+        // ===== PHASE 3: CoinMarketCap background enrichment (fast & parallel) =====
         $('pFill').style.width = '80%'; $('pTxt').textContent = t('loadingData') + ` (${allC.length})`;
-        const smartDelay = ms => new Promise(r => {
-          if (window.requestIdleCallback) window.requestIdleCallback(() => r(), { timeout: ms + 100 });
-          else setTimeout(r, ms);
-        });
 
         (async () => {
           try {
-            let totalAdded = 0;
-            for (let startBatch = 1; startBatch <= 20001; startBatch += 2000) {
-              await smartDelay(200);
-              const reqs = [];
-              for (let j = 0; j < 4 && (startBatch + j * 500) <= 20001; j++) {
-                const start = startBatch + j * 500;
-                reqs.push(fetchCMC(`https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=${start}&limit=500&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all`, j));
-              }
-              const results = await Promise.allSettled(reqs);
-              let added = 0;
-              results.forEach(r => {
-                if (r.status !== 'fulfilled' || !r.value) return;
-                const d = r.value;
-                if (!d || !d.data || !d.data.cryptoCurrencyList) return;
-                d.data.cryptoCurrencyList.forEach(coin => {
-                  const qt = coin.quotes && coin.quotes.length ? coin.quotes.find(q => q.name === 'USD') : null;
-                  if (!qt) return;
-                  const sym = coin.symbol;
-                  const existing = symMap.get(sym);
-                  if (existing) {
-                    if (qt.marketCap > 0 && (!existing.mc || existing.mc === 0)) existing.mc = qt.marketCap;
-                    if (qt.volume24h > 0 && (!existing.vol || existing.vol === 0)) existing.vol = qt.volume24h;
-                    if (qt.price > 0 && (!existing.pr || existing.pr === 0)) existing.pr = qt.price;
-                    if (qt.percentChange1h && existing.c1 === 0) existing.c1 = qt.percentChange1h;
-                    if (qt.percentChange7d && existing.c7 === 0) existing.c7 = qt.percentChange7d;
-                    if (coin.circulatingSupply && (!existing.sup || existing.sup === 0)) existing.sup = coin.circulatingSupply;
-                    if (coin.numMarketPairs > 0) existing.ex = coin.numMarketPairs;
-                    if (!existing.img || existing.img.includes('/0.png')) existing.img = `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`;
-                    saveFallback(existing);
-                    return;
-                  }
-                  const vol = qt.volume24h || 0; const mc = qt.marketCap || 0;
-                  const nc = { id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: coin.numMarketPairs || 0, sup: coin.circulatingSupply || 0, ts: 0, ms: 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
-                  allC.push(nc); symMap.set(sym, nc); added++;
-                });
-              });
-              totalAdded += added;
-              if (added > 0) {
-                allC.sort((a, b) => (b.mc || 0) - (a.mc || 0) || (b.vol || 0) - (a.vol || 0));
-                allC.forEach((c, i) => c.rk = i + 1);
-                filtC = [...allC]; doFilter();
-                if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
-                if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
-                console.log('CMC batch added', added, 'coins. Total:', allC.length);
-              }
+            // Fire all CMC requests in parallel (10 batches of 2000 = 20,000 coins)
+            const allReqs = [];
+            for (let start = 1; start <= 20001; start += 2000) {
+              allReqs.push(fetchCMC(`https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=${start}&limit=2000&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all`, Math.floor(start / 2000) % PROXIES.length));
             }
-          } catch (e) { console.log('CMC enrichment err:', e) }
-          allC.sort((a, b) => (b.mc || 0) - (a.mc || 0) || (b.vol || 0) - (a.vol || 0));
-          allC.forEach((c, i) => c.rk = i + 1);
-          assignExCounts(); filtC = [...allC]; render(); buildTicker(); updateGlobalFromData();
+            const results = await Promise.allSettled(allReqs);
+            let added = 0;
+            results.forEach(function(r) {
+              if (r.status !== 'fulfilled' || !r.value) return;
+              var d = r.value;
+              if (!d || !d.data || !d.data.cryptoCurrencyList) return;
+              d.data.cryptoCurrencyList.forEach(function(coin) {
+                var qt = coin.quotes && coin.quotes.length ? coin.quotes.find(function(q) { return q.name === 'USD'; }) : null;
+                if (!qt) return;
+                var sym = coin.symbol;
+                var existing = symMap.get(sym);
+                if (existing) {
+                  if (qt.marketCap > 0 && (!existing.mc || existing.mc === 0)) existing.mc = qt.marketCap;
+                  if (qt.volume24h > 0 && (!existing.vol || existing.vol === 0)) existing.vol = qt.volume24h;
+                  if (qt.price > 0 && (!existing.pr || existing.pr === 0)) existing.pr = qt.price;
+                  if (qt.percentChange1h && existing.c1 === 0) existing.c1 = qt.percentChange1h;
+                  if (qt.percentChange7d && existing.c7 === 0) existing.c7 = qt.percentChange7d;
+                  if (coin.circulatingSupply && (!existing.sup || existing.sup === 0)) existing.sup = coin.circulatingSupply;
+                  if (coin.numMarketPairs > 0) existing.ex = coin.numMarketPairs;
+                  if (!existing.img || existing.img.includes('/0.png')) existing.img = 'https://s2.coinmarketcap.com/static/img/coins/64x64/' + coin.id + '.png';
+                  saveFallback(existing);
+                  return;
+                }
+                var vol = qt.volume24h || 0, mc = qt.marketCap || 0;
+                var nc = { id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/' + coin.id + '.png', ex: coin.numMarketPairs || 0, sup: coin.circulatingSupply || 0, ts: 0, ms: 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
+                allC.push(nc); symMap.set(sym, nc); added++;
+              });
+            });
+            if (added > 0) {
+              allC.sort(function(a, b) { return (parseFloat(b.mc) || 0) - (parseFloat(a.mc) || 0) || (parseFloat(b.vol) || 0) - (parseFloat(a.vol) || 0); });
+              allC.forEach(function(c, i) { c.rk = i + 1; });
+              filtC = allC.slice(); doFilter();
+              if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
+              if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
+              console.log('CMC added', added, 'coins. Total:', allC.length);
+            }
+          } catch (e) { console.log('CMC enrichment err:', e); }
+          allC.sort(function(a, b) { return (parseFloat(b.mc) || 0) - (parseFloat(a.mc) || 0) || (parseFloat(b.vol) || 0) - (parseFloat(a.vol) || 0); });
+          allC.forEach(function(c, i) { c.rk = i + 1; });
+          assignExCounts(); filtC = allC.slice(); render(); buildTicker(); updateGlobalFromData();
           cacheSet('cryptohub_coins', allC);
           persistFallbacks();
           console.log('CMC enrichment done. Total:', allC.length);

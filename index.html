@@ -9417,7 +9417,7 @@
           for (var start = 1; start <= 15001; start += 5000) {
             try {
               var r = await Promise.race([
-                fetch('https://www.cryptohubcoin.com/cmc-proxy.php?start=' + start + '&limit=5000'),
+                fetch('https://dry-water-c412.skymoonsport.workers.dev/?start=' + start + '&limit=5000'),
                 new Promise(function(_, rej) { setTimeout(function() { rej(new Error('timeout')); }, 10000); })
               ]);
               if (!r.ok) continue;
@@ -15807,7 +15807,7 @@
 
       // ── Step 1b: Fetch live prices via Cloudflare Worker ──
       const _fetchWorkerPrices = async () => {
-        const WORKER = 'https://lingering-mouse-0244.hamdysaedmoh1989.workers.dev';
+        const WORKER = 'https://dry-water-c412.skymoonsport.workers.dev';
         // Priority: fetch important stocks first, rest in background
         const PRIORITY = ['AAPL','MSFT','NVDA','TSLA','AMZN','META','GOOGL','AMD',
           'SPY','QQQ','GLD','BTC=F','ETH=F','GC=F','CL=F','^GSPC','^DJI','^IXIC',

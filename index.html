@@ -8419,22 +8419,16 @@
 
     // ── CMC Pro API with user key ──
     const CMC_PRO_KEY = '3eace7af-382d-4470-b27c-7337f06dcae3';
+    const CMC_WORKER = 'https://dry-water-c412.skymoonsport.workers.dev';
     async function fetchCMCPro(endpoint) {
-      const url = `https://pro-api.coinmarketcap.com${endpoint}`;
-      const fullUrl = url + (url.includes('?') ? '&' : '?') + 'CMC_PRO_API_KEY=' + CMC_PRO_KEY;
-      // Try direct first (works if server has CORS headers)
+      // Extract start and limit from endpoint
+      var params = new URLSearchParams(endpoint.split('?')[1] || '');
+      var start = params.get('start') || '1';
+      var limit = params.get('limit') || '5000';
       try {
-        const r = await Promise.race([fetch(fullUrl), _tout(4000)]);
-        if (r.ok) { const d = await r.json(); if (d && d.data) return d; }
+        var r = await Promise.race([fetch(CMC_WORKER + '/?start=' + start + '&limit=' + limit), _tout(12000)]);
+        if (r.ok) { var d = await r.json(); if (d && d.data) return d; }
       } catch(e) {}
-      // Fallback: try first 2 proxies only (fast ones)
-      for (let i = 0; i < Math.min(2, PROXIES.length); i++) {
-        try {
-          const proxyUrl = PROXIES[i](fullUrl);
-          const r = await Promise.race([fetch(proxyUrl), _tout(5000)]);
-          if (r.ok) { const d = await r.json(); if (d && d.data) return d; }
-        } catch(e) {}
-      }
       return null;
     }
 
@@ -9332,8 +9326,8 @@
       const symIdx = new Map(); allC.forEach(c => symIdx.set(c.sy.toUpperCase(), c));
       let totalFixed = 0;
       try {
-        // Fetch top 15000 coins in batches of 5000
-        for (let start = 1; start <= 15001; start += 5000) {
+        // Fetch top 20000 coins in batches of 5000
+        for (let start = 1; start <= 20001; start += 5000) {
           const d = await fetchCMCPro(`/v1/cryptocurrency/listings/latest?start=${start}&limit=5000&convert=USD&sort=market_cap&sort_dir=desc`);
           if (!d || !d.data) { console.warn('[CMC Pro] No data for start=' + start); continue; }
           const list = Array.isArray(d.data) ? d.data : [];
@@ -9369,15 +9363,18 @@
             }
           });
           console.log(`[CMC Pro] Processed ${list.length} coins from start=${start}`);
+          // Update UI after each batch
+          reRank(); assignExCounts(); filtC = [...allC]; render();
+          if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
+          if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
           await new Promise(r => setTimeout(r, 300));
         }
-        if (totalFixed > 0) {
-          reRank(); assignExCounts(); filtC = [...allC]; doSortArr(); render(); updateGlobalFromData();
-          persistFallbacks();
-          console.log(`[CMC Pro] Enrichment done. Fixed ${totalFixed} data gaps.`);
-        } else {
-          console.log('[CMC Pro] No gaps to fill.');
-        }
+        reRank(); assignExCounts(); filtC = [...allC]; doSortArr(); render(); updateGlobalFromData();
+        persistFallbacks();
+        cacheSet('cryptohub_coins', allC);
+        if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
+        if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
+        console.log(`[CMC Pro] Done. Total coins: ${allC.length}`);
       } catch(e) { console.warn('[CMC Pro] Enrichment error:', e); }
     }
 
@@ -9414,7 +9411,7 @@
       // === SOURCE 1 (PRIMARY): CMC Pro via your server proxy — 15,000 coins, no CORS ===
       var proxyP = (async function() {
         try {
-          for (var start = 1; start <= 15001; start += 5000) {
+          for (var start = 1; start <= 20001; start += 5000) {
             try {
               var r = await Promise.race([
                 fetch('https://dry-water-c412.skymoonsport.workers.dev/?start=' + start + '&limit=5000'),

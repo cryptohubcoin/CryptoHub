@@ -8419,7 +8419,7 @@
 
     // ── CMC Pro API with user key ──
     const CMC_PRO_KEY = '0447db53f13c40e99c63bfdb85021394';
-    const CMC_WORKER = 'https://dry-water-c412.skymoonsport.workers.dev';
+    const CMC_WORKER = 'https://summer-union-dc27.bitcoinswapnet.workers.dev';
     async function fetchCMCPro(endpoint) {
       var params = new URLSearchParams(endpoint.split('?')[1] || '');
       var start = params.get('start') || '1';
@@ -9424,7 +9424,7 @@
           for (var start = 1; start <= 10001; start += 5000) {
             try {
               var r = await Promise.race([
-                fetch('https://dry-water-c412.skymoonsport.workers.dev/?src=cmc&start=' + start + '&limit=5000'),
+                fetch('https://summer-union-dc27.bitcoinswapnet.workers.dev/?src=cmc&start=' + start + '&limit=5000'),
                 new Promise(function(_, rej) { setTimeout(function() { rej(new Error('timeout')); }, 15000); })
               ]);
               if (!r.ok) continue;
@@ -15828,7 +15828,7 @@
 
       // ── Step 1b: Fetch live prices via Cloudflare Worker ──
       const _fetchWorkerPrices = async () => {
-        const WORKER = 'https://dry-water-c412.skymoonsport.workers.dev';
+        const WORKER = 'https://summer-union-dc27.bitcoinswapnet.workers.dev';
         // Priority: fetch important stocks first, rest in background
         const PRIORITY = ['AAPL','MSFT','NVDA','TSLA','AMZN','META','GOOGL','AMD',
           'SPY','QQQ','GLD','BTC=F','ETH=F','GC=F','CL=F','^GSPC','^DJI','^IXIC',

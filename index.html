@@ -8418,17 +8418,27 @@
     }
 
     // ── CMC Pro API with user key ──
-    const CMC_PRO_KEY = '3eace7af-382d-4470-b27c-7337f06dcae3';
+    const CMC_PRO_KEY = '0447db53f13c40e99c63bfdb85021394';
     const CMC_WORKER = 'https://dry-water-c412.skymoonsport.workers.dev';
     async function fetchCMCPro(endpoint) {
-      // Extract start and limit from endpoint
       var params = new URLSearchParams(endpoint.split('?')[1] || '');
       var start = params.get('start') || '1';
       var limit = params.get('limit') || '5000';
       try {
-        var r = await Promise.race([fetch(CMC_WORKER + '/?start=' + start + '&limit=' + limit), _tout(12000)]);
-        if (r.ok) { var d = await r.json(); if (d && d.data) return d; }
-      } catch(e) {}
+        var r = await Promise.race([fetch(CMC_WORKER + '/?src=cmc&start=' + start + '&limit=' + limit), _tout(15000)]);
+        if (r.ok) {
+          var raw = await r.json();
+          // Convert free API format to Pro format
+          if (raw && raw.data && raw.data.cryptoCurrencyList) {
+            var converted = raw.data.cryptoCurrencyList.map(function(c) {
+              var qt = c.quotes && c.quotes.length ? c.quotes.find(function(q){return q.name==='USD'}) : null;
+              return { id: c.id, name: c.name, symbol: c.symbol, slug: c.slug, num_market_pairs: c.marketPairCount||c.numMarketPairs||0, circulating_supply: c.circulatingSupply||0, total_supply: c.totalSupply||0, max_supply: c.maxSupply||0, platform: c.platform||null, tags: c.tags||[], quote: { USD: { price: qt?qt.price:0, volume_24h: qt?qt.volume24h:0, market_cap: qt?qt.marketCap:0, percent_change_1h: qt?qt.percentChange1h:0, percent_change_24h: qt?qt.percentChange24h:0, percent_change_7d: qt?qt.percentChange7d:0 }}};
+            });
+            return { data: converted };
+          }
+          if (raw && raw.data && Array.isArray(raw.data)) return raw;
+        }
+      } catch(e) { console.log('fetchCMCPro err:', e.message); }
       return null;
     }
 
@@ -9408,31 +9418,45 @@
         added++;
       }
 
-      // === SOURCE 1 (PRIMARY): CMC Pro via your server proxy — 15,000 coins, no CORS ===
+      // === SOURCE 1 (PRIMARY): CMC via Worker proxy — up to 8,500 coins, no CORS ===
       var proxyP = (async function() {
         try {
-          for (var start = 1; start <= 20001; start += 5000) {
+          for (var start = 1; start <= 10001; start += 5000) {
             try {
               var r = await Promise.race([
-                fetch('https://dry-water-c412.skymoonsport.workers.dev/?start=' + start + '&limit=5000'),
-                new Promise(function(_, rej) { setTimeout(function() { rej(new Error('timeout')); }, 10000); })
+                fetch('https://dry-water-c412.skymoonsport.workers.dev/?src=cmc&start=' + start + '&limit=5000'),
+                new Promise(function(_, rej) { setTimeout(function() { rej(new Error('timeout')); }, 15000); })
               ]);
               if (!r.ok) continue;
-              var d = await r.json();
-              if (!d || !d.data) continue;
-              var list = Array.isArray(d.data) ? d.data : [];
+              var raw = await r.json();
+              // CMC free API format: data.cryptoCurrencyList
+              var list = [];
+              if (raw && raw.data && raw.data.cryptoCurrencyList) {
+                list = raw.data.cryptoCurrencyList;
+              } else if (raw && raw.data && Array.isArray(raw.data)) {
+                list = raw.data;
+              }
+              if (!list.length) continue;
               list.forEach(function(coin) {
-                var qt = coin.quote && coin.quote.USD ? coin.quote.USD : null;
+                // Handle both Pro and Free API formats
+                var qt = null;
+                if (coin.quote && coin.quote.USD) {
+                  qt = coin.quote.USD;
+                } else if (coin.quotes && coin.quotes.length) {
+                  var found = coin.quotes.find(function(q){return q.name==='USD'});
+                  if (found) qt = { price: found.price, volume_24h: found.volume24h, market_cap: found.marketCap, percent_change_1h: found.percentChange1h, percent_change_24h: found.percentChange24h, percent_change_7d: found.percentChange7d };
+                }
                 if (!qt) return;
-                addOrEnrich(coin.symbol, coin.name, qt.price||0, qt.percent_change_24h||0, qt.market_cap||0, qt.volume_24h||0, 'https://s2.coinmarketcap.com/static/img/coins/64x64/'+coin.id+'.png', coin.circulating_supply||0, qt.percent_change_1h||0, qt.percent_change_7d||0, coin.num_market_pairs||0);
+                var nmp = coin.num_market_pairs || coin.marketPairCount || coin.numMarketPairs || 0;
+                addOrEnrich(coin.symbol, coin.name, qt.price||0, qt.percent_change_24h||qt.percentChange24h||0, qt.market_cap||qt.marketCap||0, qt.volume_24h||qt.volume24h||0, 'https://s2.coinmarketcap.com/static/img/coins/64x64/'+coin.id+'.png', coin.circulating_supply||coin.circulatingSupply||0, qt.percent_change_1h||qt.percentChange1h||0, qt.percent_change_7d||qt.percentChange7d||0, nmp);
               });
-              console.log('[AutoLoad] CMC Proxy batch start=' + start + ' done. Total:', allC.length);
-            } catch(e) { console.log('[AutoLoad] CMC Proxy batch err:', e.message); }
+              console.log('[AutoLoad] CMC Worker batch start=' + start + ': ' + list.length + ' coins. Total:', allC.length);
+              // Update UI after each batch
+              reRank(); assignExCounts(); filtC = allC.slice(); render();
+              if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
+              if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
+            } catch(e) { console.log('[AutoLoad] CMC Worker batch err:', e.message); }
           }
-          // Update UI
-          reRank(); assignExCounts(); filtC = allC.slice(); render(); updateGlobalFromData();
-          if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
-          if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
           console.log('[AutoLoad] CMC Proxy ALL done. Total:', allC.length);
         } catch(e) { console.log('[AutoLoad] CMC Proxy err:', e.message); }
       })();

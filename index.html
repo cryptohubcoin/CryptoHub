@@ -14659,6 +14659,13 @@
     }
 
     async function showEx(cid, cn, cs, cl) {
+      // Fallback: use COIN_NAMES for proper name if cn is just the symbol
+      if ((!cn || cn === cs || cn.length <= 5) && COIN_NAMES[cs]) cn = COIN_NAMES[cs];
+      // Fallback: use CMC image if logo is missing or broken
+      if (!cl || cl === '' || cl.includes('/0.png')) {
+        const _cmcFallback = typeof cmcImg !== 'undefined' ? cmcImg(cs) : '';
+        if (_cmcFallback) cl = _cmcFallback;
+      }
       // Block render during modal open
       _renderBlocked = true; setTimeout(() => _renderBlocked = false, 1500);
       // Show modal INSTANTLY — populate with whatever we have right now

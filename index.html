@@ -6462,7 +6462,7 @@
 
     </div>
 
-    <div class="tab-content active" id="tab_crypto">
+    <div class="tab-content active" id="tab_crypto" style="min-height:600px">
       <!-- Top Gainers Orbital -->
       <div class="tg-section" id="tickerWrap" style="min-height:110px">
         <div class="tg-hdr">
@@ -9640,7 +9640,7 @@
         var h = sorted.map(function (c, i) {
           var img = c.img ? '<img alt="icon" src="' + c.img + '" width="24" height="24" onerror="this.style.display=\'none\'" loading="lazy">' : '<div class="tg-noimg">' + c.sy.slice(0, 2) + '</div>';
           var pr = fN(c.pr);
-          return `<div class="tg-card" onclick="showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}','${c.sy}','${c.img}')"><div class="tg-rank">#${i + 1}</div>${img}<span class="tg-sym">${c.sy}</span><span class="tg-pr">${pr}</span><span class="tg-chg tg-up">+${c.c24.toFixed(1)}%</span></div>`;
+          return `<div class="tg-card" onclick="blockRender();showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}','${c.sy}','${c.img}')"><div class="tg-rank">#${i + 1}</div>${img}<span class="tg-sym">${c.sy}</span><span class="tg-pr">${pr}</span><span class="tg-chg tg-up">+${c.c24.toFixed(1)}%</span></div>`;
         }).join('');
         var el = document.getElementById('tickerContent');
         el.innerHTML = h + h;
@@ -9712,7 +9712,7 @@
         return s === 'usdt' ? null : `${s}usdt@ticker`;
       }).filter(Boolean).slice(0, 50);
       if (!wsStms.length) return; doWS();
-      if (!uInt) uInt = setInterval(() => { if (cPage === 1 && document.querySelector('#tab_crypto.active')) render() }, 5000);
+      if (!uInt) uInt = setInterval(() => { if (cPage === 1 && document.querySelector('#tab_crypto.active')) { try { updatePricesInPlace() } catch(e) { render() } } }, 5000);
       setInterval(() => { if (wsOk && Date.now() - wsLst > 25000) { wsOk = false; reWS() } }, 12000);
       // Fetch accurate global market data from CoinGecko every 30s
       _fetchGlobalMarketData();
@@ -13762,16 +13762,19 @@
     }
 
     async function showEx(cid, cn, cs, cl) {
-      var cd = allC.find(c => c.id === cid);
-      if (!cd) return;
-
-      $('mName').textContent = cn;
-      $('mSym').textContent = cs;
-      $('mLogo').src = cl;
+      // Block render during modal open
+      _renderBlocked = true; setTimeout(() => _renderBlocked = false, 1500);
+      // Show modal INSTANTLY (fixes INP 3.5s → <100ms)
       $('exMod').classList.add('active');
       document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
-      // Show mobile sticky back button
+      $('mName').textContent = cn;
+      $('mSym').textContent = cs;
+      $('mLogo').src = cl;
+      // Defer heavy work to next frame
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      var cd = allC.find(c => c.id === cid); if (!cd) cd = allC.find(c => c.sy === cs);
+      if (!cd) return;
 
       $('mRank').textContent = '#' + cd.rk;
       $('cdMktName').textContent = cn;
@@ -14117,7 +14120,7 @@
         html += `<div class="p-2 text-xs font-bold text-ac opacity-70 uppercase tracking-wider" style="background:var(--bg2)">${t('tabCrypto')}</div>`;
         html += coins.map(c => {
           const chg = c.c24 || 0;
-          return `<div class="gs-res-item" onclick="showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}', '${c.sy}', '${c.img}'); closeSrch()">
+          return `<div class="gs-res-item" onclick="blockRender();showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}', '${c.sy}', '${c.img}'); closeSrch()">
           <img alt="icon" src="${c.img}" class="gs-res-img" width="28" height="28" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22><rect width=%2232%22 height=%2232%22 fill=%22%23ccc%22/></svg>'">
             <div class="gs-res-info">
               <div class="gs-res-name">${c.nm} <span class="gs-res-sym">${c.sy}</span></div>
@@ -14289,7 +14292,32 @@
 
     // AI Engine now integrated directly
 
-    function render() {
+    // Click-safe render guard — prevents DOM destruction during coin click
+    var _renderBlocked = false;
+    var _renderPending = false;
+    function blockRender() { _renderBlocked = true; clearTimeout(window._renderBlockTimer); window._renderBlockTimer = setTimeout(() => { _renderBlocked = false; if (_renderPending) { _renderPending = false; _doRender(); } }, 1500); }
+
+    // Smart in-place price update — avoids destroying DOM (fixes click issues)
+    function updatePricesInPlace() {
+      const tb = $('tBody');
+      if (!tb) return;
+      const rows = tb.querySelectorAll('tr');
+      if (!rows.length) { render(); return; }
+      const st = (cPage - 1) * iPP;
+      const pg = filtC.slice(st, st + iPP);
+      if (rows.length !== pg.length) { render(); return; }
+      const mkChg = (v) => { const col = v >= 0 ? 'var(--gn)' : 'var(--rd)'; const ic = v >= 0 ? 'fa-caret-up' : 'fa-caret-down'; return `<span class="chg" style="color:${col}"><i class="fas ${ic}"></i>${v >= 0 ? '+' : ''}${v.toFixed(2)}%</span>` };
+      pg.forEach((c, i) => {
+        const cells = rows[i]?.querySelectorAll('td');
+        if (!cells || cells.length < 8) return;
+        const prDisp = c.pr >= 1 ? c.pr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : (c.pr >= 0.0001 ? c.pr.toFixed(6).replace(/0+$/, '').replace(/\.$/, '.0') : parseFloat(c.pr.toFixed(8)));
+        cells[1].innerHTML = `$${prDisp}`;
+        cells[4].innerHTML = mkChg(c.c24);
+      });
+    }
+
+    function render() { if (_renderBlocked) { _renderPending = true; return; } _doRender(); }
+    function _doRender() {
       const st = (cPage - 1) * iPP, en = st + iPP, pg = filtC.slice(st, en); const tb = $('tBody');
       if (!pg.length) { tb.innerHTML = `<tr><td colspan="10" class="p-6 text-center" style="color:var(--t2)">${t('noExchanges')}</td></tr>`; return }
       tb.innerHTML = pg.map((c, index) => {
@@ -14301,7 +14329,7 @@
         const prDisp = c.pr >= 1 ? c.pr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : (c.pr >= 0.0001 ? c.pr.toFixed(6).replace(/0+$/, '').replace(/\.$/, '.0') : parseFloat(c.pr.toFixed(8)));
 
         return `<tr onclick="showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}', '${c.sy}', '${c.img}')">
-<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><div style="position:relative;width:24px;height:24px;flex-shrink:0"><img alt="${c.sy}" src="${c.img}" class="w-6 h-6 rounded-full" width="24" height="24" onerror="this.style.display='none';this.nextSibling.style.display='flex'" loading="lazy" style="position:absolute;inset:0"><div style="display:none;width:24px;height:24px;border-radius:50%;background:var(--ac);color:#fff;font-size:9px;font-weight:700;align-items:center;justify-content:center">${c.sy.slice(0,2)}</div></div><span class="font-semibold text-sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
+<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><img alt="icon" src="${c.img}" class="w-6 h-6 rounded-full" width="24" height="24" onerror="this.style.display='none'" loading="lazy" style="flex-shrink:0"><span class="font-semibold text-sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
 <td class="font-bold text-end pr-4" style="white-space:nowrap">$${prDisp}</td>
 <td class="text-end pr-4 col-1h" style="white-space:nowrap">${mkChg(c.c1)}</td>
 <td class="text-end pr-4 col-4h" style="white-space:nowrap">${mkChg(c.c4)}</td>

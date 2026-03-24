@@ -4576,137 +4576,348 @@
 
     /* Top Gainers Belt */
     /* === CSS Block 3 === */
-    /* Global Search */
-    .gs-wrap {
-      position: relative;
-      flex: 1;
-      max-width: 420px;
-      margin: 0 15px;
-    }
-
-    .gs-input-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .gs-input {
-      width: 100%;
-      background: var(--bg3);
-      border: 1px solid var(--bc);
-      border-radius: 12px;
-      padding: 8px 12px 8px 38px;
-      font-size: 14px;
-      color: var(--t1);
-      transition: all .25s ease;
-      outline: none;
-    }
-
-    .gs-input:focus {
-      border-color: var(--ac);
-      background: var(--bg1);
-      box-shadow: 0 0 0 3px rgba(56, 97, 251, 0.1);
-    }
-
-    .gs-icon {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--t2);
-      font-size: 14px;
-      pointer-events: none;
-    }
-
-    .gs-shortcut {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--bg2);
-      border: 1px solid var(--bc);
-      color: var(--t2);
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      pointer-events: none;
-    }
-
-    .gs-results {
-      position: absolute;
-      top: calc(100% + 8px);
-      left: 0;
-      right: 0;
-      background: var(--bg1);
-      border: 1px solid var(--bc);
-      border-radius: 16px;
-      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-      z-index: 2000;
-      max-height: 480px;
-      overflow-y: auto;
+    /* ===== GLOBAL SEARCH — CoinMarketCap Style ===== */
+    .gs-overlay {
       display: none;
-      backdrop-filter: blur(16px);
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      background: rgba(0, 0, 0, .6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: min(8vh, 60px);
+    }
+    .gs-overlay.active {
+      display: flex;
+      animation: gsOverIn .2s ease;
+    }
+    @keyframes gsOverIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
-    .gs-results.active {
-      display: block;
-      animation: modalFadeIn .2s ease-out;
+    .gs-modal {
+      width: 94%;
+      max-width: 640px;
+      background: var(--bg1);
+      border: 1px solid var(--bc);
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);
+      overflow: hidden;
+      animation: gsModalPop .25s cubic-bezier(.32,.72,.24,1.02);
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .dark .gs-modal {
+      background: #0d1117;
+      border-color: #1e2738;
+    }
+    @keyframes gsModalPop {
+      from { transform: scale(.95) translateY(-12px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
     }
 
-    .gs-res-item {
-      padding: 10px 14px;
+    /* Search Top Bar */
+    .gs-top {
       display: flex;
       align-items: center;
       gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--bc);
+    }
+    .gs-top-icon {
+      color: var(--t2);
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .gs-top-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--t1);
+      font-size: 16px;
+      outline: none;
+      font-family: inherit;
+      min-width: 0;
+    }
+    .gs-top-input::placeholder {
+      color: var(--t2);
+      opacity: .7;
+    }
+    .gs-top-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--bc);
+      background: var(--bg2);
+      color: var(--t2);
+      font-size: 16px;
       cursor: pointer;
-      transition: background .15s;
-      border-bottom: 1px solid rgba(128, 128, 128, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all .2s;
+    }
+    .gs-top-close:hover {
+      background: var(--rd);
+      color: #fff;
+      border-color: var(--rd);
     }
 
-    .gs-res-item:hover {
+    /* Scrollable Content Area */
+    .gs-body {
+      overflow-y: auto;
+      flex: 1;
+      scrollbar-width: thin;
+      scrollbar-color: var(--bc) transparent;
+    }
+    .gs-body::-webkit-scrollbar { width: 5px; }
+    .gs-body::-webkit-scrollbar-thumb { background: var(--bc); border-radius: 4px; }
+
+    /* Section Headers */
+    .gs-section-hd {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px 8px;
+    }
+    .gs-section-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--ac);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .gs-section-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--t2);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      transition: all .15s;
+    }
+    .gs-section-btn:hover {
+      background: rgba(239,68,68,.1);
+      color: var(--rd);
+    }
+
+    /* Recent Searches Chips */
+    .gs-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 4px 20px 14px;
+    }
+    .gs-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 20px;
+      background: var(--bg2);
+      border: 1px solid var(--bc);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t1);
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .gs-chip:hover {
+      border-color: var(--ac);
       background: var(--hv);
     }
-
-    .gs-res-item:last-child {
-      border-bottom: none;
+    .gs-chip img {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
     }
+    .gs-chip-del {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--t2);
+      font-size: 11px;
+      padding: 0;
+      margin-inline-start: 2px;
+      opacity: 0;
+      transition: opacity .15s, color .15s;
+      display: flex;
+      align-items: center;
+    }
+    .gs-chip:hover .gs-chip-del { opacity: 1; }
+    .gs-chip-del:hover { color: var(--rd); }
 
-    .gs-res-img {
+    /* Top Boosted / Trending Coins Cards */
+    .gs-boosted-scroll {
+      display: flex;
+      gap: 10px;
+      padding: 4px 20px 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .gs-boosted-scroll::-webkit-scrollbar { display: none; }
+    .gs-boost-card {
+      min-width: 150px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: var(--bg2);
+      border: 1px solid var(--bc);
+      cursor: pointer;
+      transition: all .2s;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .gs-boost-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(56,97,251,.12);
+      border-color: var(--ac);
+      background: var(--hv);
+    }
+    .gs-boost-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .gs-boost-top img {
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      object-fit: contain;
+    }
+    .gs-boost-sym {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--t1);
+    }
+    .gs-boost-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #f97316;
+      margin-inline-start: auto;
+    }
+    .gs-boost-price {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ac);
     }
 
-    .gs-res-info {
+    /* Trending Crypto List */
+    .gs-trending-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background .15s;
+      border-bottom: 1px solid rgba(128,128,128,.06);
+    }
+    .gs-trending-item:hover {
+      background: var(--hv);
+    }
+    .gs-trending-item:last-child {
+      border-bottom: none;
+    }
+    .gs-trending-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .gs-trending-info {
       flex: 1;
       min-width: 0;
     }
-
-    .gs-res-name {
-      font-weight: 700;
+    .gs-trending-name {
       font-size: 14px;
+      font-weight: 700;
       color: var(--t1);
       display: flex;
       align-items: center;
       gap: 6px;
     }
-
-    .gs-res-sym {
+    .gs-trending-rank {
       font-size: 11px;
       color: var(--t2);
-      text-transform: uppercase;
-    }
-
-    .gs-res-pr {
       font-weight: 600;
-      font-size: 13px;
+    }
+    .gs-trending-sym {
+      font-size: 12px;
+      color: var(--t2);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+    .gs-trending-meta {
+      font-size: 11px;
+      color: var(--t2);
+      display: flex;
+      gap: 12px;
+      margin-top: 2px;
+    }
+    .gs-trending-right {
+      text-align: end;
+      flex-shrink: 0;
+    }
+    .gs-trending-pr {
+      font-size: 14px;
+      font-weight: 700;
       color: var(--t1);
     }
-
-    .gs-res-chg {
+    .gs-trending-chg {
       font-size: 11px;
       font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      justify-content: flex-end;
+      margin-top: 2px;
+    }
+
+    /* No Results */
+    .gs-no-results {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--t2);
+      font-size: 14px;
+    }
+
+    /* Keep old .gs-wrap for backward compat but hide it */
+    .gs-wrap { display: none !important; }
+
+    @media(max-width:640px) {
+      .gs-modal {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        max-height: 100vh;
+        height: 100vh;
+      }
+      .gs-overlay {
+        padding-top: 0;
+      }
+      .gs-boost-card {
+        min-width: 130px;
+        padding: 12px 14px;
+      }
+      .gs-trending-item {
+        padding: 10px 16px;
+      }
     }
 
 
@@ -5984,7 +6195,7 @@
               <i class="fas fa-search gs-icon"></i>
               <input type="text" class="gs-input" id="gsInput" data-i18n-ph="searchCoin" placeholder="Search coin..."
                 autocomplete="off">
-              <div class="gs-shortcut">/</div>
+              <button id="gsClear" onclick="clearSearch()" title="مسح البحث" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);background:var(--bg3);border:none;cursor:pointer;color:var(--t2);width:20px;height:20px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:13px;line-height:1;padding:0;transition:all .2s" onmouseover="this.style.background='var(--bc)';this.style.color='var(--t1)'" onmouseout="this.style.background='var(--bg3)';this.style.color='var(--t2)'">✕</button>
             </div>
             <div class="gs-results" id="gsResults"></div>
           </div>
@@ -8167,8 +8378,8 @@
 
     const _K = 'siteTitle,exchanges,recommendedExchanges,live,trustScore,fearGreedTitle,fearGreedSub,outOf100,extremeFear,fear,neutral,greed,extremeGreed,aiTitle,aiSub,analyzing,bullishSignals,bearishSignals,bollingerBands,searchCoin,sortBy,network,show,loadMore,loadingData,filteredBy,colName,colPrice,colMarketCap,colVolume,colExchanges,prev,next,showing,of,coins,availableOn,exchange,referralNote,register,visit,trustHigh,trustMedium,trustLow,volume,allNetworks,rank,marketCap,price,change24h,noExchanges,errorLoading,retry,allLoaded,loadMoreRemaining,oversold,overbought,bullish,bearish,nearBottom,nearTop,goldenCross,deathCross,strongBuy,buy,sell,strongSell,coinsFound,trendingTitle,trendingSub,altcoinIndex,altcoinSeason,btcDominance,ethDominance,totalMarketCap,totalVolume24,fgHistory,now,yesterday,lastWeek,lastMonth,entryExitTitle,entryZone,exitZone,currentPrice,entryNote,exitNote,volAnalysis,supportResistance,aiRecommendation,strongTrend,weakTrend,highVol,lowVol,aboveAvg,belowAvg,footerDesc,quickLinks,home,topExchanges,disclaimer,disclaimerText,allRights,btcSeason,holdEntry,goodEntry,riskHigh,support,yourName,yourEmail,yourMessage,sendMessage,messageSent,languages,secure,loading,tabCrypto,tabExchanges,tabCommodities,allExchangesTitle,allExchangesSub,searchExchange,metalExTitle,metalExSub,stocksTitle,stocksSub,colExchange2,colPairs,colRefPrice,colVol24h,colTrade,colStock,telegramSupport,features,realTimePrices,aiAnalysis,commodities'.split(',');
     const T = {
-      ar: { aiMenuTitle: 'التحليل الفني', aiMenuDesc: 'تحليل بالذكاء الاصطناعي', trustScore: 'الثقة', siteTitle: 'CryptoHub', exchanges: 'المنصات', recommendedExchanges: 'منصات التداول الموصى بها', live: 'مباشر', fearGreedTitle: 'مؤشر الخوف والطمع', fearGreedSub: 'مؤشر معنويات السوق - تحليل شامل', outOf100: 'من 100', extremeFear: 'خوف شديد', fear: 'خوف', neutral: 'محايد', greed: 'طمع', extremeGreed: 'طمع شديد', aiTitle: 'تحليل الذكاء الاصطناعي', aiSub: 'تنبؤات مدعومة بالذكاء الاصطناعي', analyzing: 'جاري التحليل...', bullishSignals: 'إشارات صعود', bearishSignals: 'إشارات هبوط', bollingerBands: 'بولينجر', searchCoin: 'البحث عن عملة...', sortBy: 'الترتيب', network: 'الشبكة', show: 'العرض', loadMore: 'تحميل المزيد', loadingData: 'جاري التحميل...', filteredBy: 'تصفية:', colName: 'الاسم', colPrice: 'السعر', colMarketCap: 'القيمة السوقية', colVolume: 'الحجم 24س', colExchanges: 'المنصات', prev: 'السابق', next: 'التالي', showing: 'عرض', of: 'من', coins: 'عملة', availableOn: 'متوفر على', exchange: 'منصة', referralNote: '🎁 روابط إحالة خاصة', register: 'سجل الآن', visit: 'زيارة', trustHigh: 'ثقة عالية', trustMedium: 'ثقة متوسطة', trustLow: 'ثقة منخفضة', volume: 'الحجم', allNetworks: 'جميع الشبكات', rank: 'الترتيب', marketCap: 'القيمة السوقية', price: 'السعر', change24h: 'تغير 24س', noExchanges: 'لا توجد بيانات', errorLoading: 'خطأ في التحميل', retry: 'إعادة المحاولة', allLoaded: 'تم تحميل الكل', loadMoreRemaining: 'تحميل المزيد', oversold: 'تشبع بيعي', overbought: 'تشبع شرائي', bullish: 'صاعد', bearish: 'هابط', nearBottom: 'قرب القاع', nearTop: 'قرب القمة', goldenCross: 'تقاطع ذهبي', deathCross: 'تقاطع الموت', strongBuy: 'شراء قوي', buy: 'شراء', sell: 'بيع', strongSell: 'بيع قوي', coinsFound: 'عملة', trendingTitle: 'الأكثر رواجاً', trendingSub: 'أفضل 100 عملة من حيث حجم التداول خلال 24 ساعة', altcoinIndex: 'مؤشر موسم الألتكوين', altcoinSeason: 'موسم ألتكوين', btcDominance: 'هيمنة BTC', ethDominance: 'هيمنة ETH', totalMarketCap: 'القيمة الكلية', totalVolume24: 'الحجم الكلي 24س', fgHistory: 'التاريخ', now: 'الآن', yesterday: 'أمس', lastWeek: 'الأسبوع', lastMonth: 'الشهر', entryExitTitle: 'إشارات الدخول والخروج - Bitcoin', entryZone: 'منطقة الدخول', exitZone: 'منطقة الخروج', currentPrice: 'السعر الحالي', entryNote: 'عند مستوى الدعم', exitNote: 'عند مستوى المقاومة', volAnalysis: 'تحليل الحجم', supportResistance: 'دعم/مقاومة', aiRecommendation: 'التوصية', strongTrend: 'اتجاه قوي', weakTrend: 'اتجاه ضعيف', highVol: 'حجم مرتفع', lowVol: 'حجم منخفض', aboveAvg: 'أعلى من المتوسط', belowAvg: 'أقل من المتوسط', footerDesc: 'منصتك الشاملة لتتبع أكثر من 10,000 عملة رقمية مع أدوات تحليل ذكاء اصطناعي متقدمة وأسعار لحظية.', quickLinks: 'روابط سريعة', home: 'الرئيسية', topExchanges: 'أفضل المنصات', disclaimer: 'إخلاء المسؤولية', disclaimerText: 'المعلومات المقدمة في هذا الموقع هي لأغراض تعليمية ومعلوماتية فقط وليست نصيحة مالية أو استثمارية. تداول العملات الرقمية ينطوي على مخاطر عالية جداً وقد تخسر رأس مالك بالكامل.', allRights: 'جميع الحقوق محفوظة', btcSeason: 'موسم بيتكوين', holdEntry: 'انتظر فرصة أفضل', goodEntry: 'فرصة دخول جيدة', riskHigh: 'مخاطرة عالية', support: 'الدعم الفني', yourName: 'اسمك', yourEmail: 'بريدك الإلكتروني', yourMessage: 'رسالتك...', sendMessage: 'إرسال الرسالة', messageSent: 'تم الإرسال بنجاح!', languages: 'لغة', secure: 'آمن', loading: 'جاري التحميل...', tabCrypto: 'العملات الرقمية', tabExchanges: 'جميع المنصات', tabCommodities: 'المعادن الثمينة', allExchangesTitle: 'جميع منصات التداول العالمية', allExchangesSub: '500 منصة تداول عالمية مرخصة • مرتبة حسب درجة الثقة • روابط تداول مباشرة', searchExchange: 'ابحث عن منصة...', metalExTitle: 'منصات تداول الذهب والفضة والمعادن الثمينة', metalExSub: 'جميع المنصات التي تدعم تداول المعادن الثمينة مع أزواج التداول وحجم التداول الفعلي', stocksTitle: 'الأسهم الرئيسية وصناديق ETF', stocksSub: 'أسهم مرمّزة وصناديق المعادن الثمينة • بيانات لحظية من الأسواق العالمية', colExchange2: 'المنصة', colPairs: 'أزواج التداول', colRefPrice: 'السعر المرجعي', colVol24h: 'الحجم 24 ساعة', colTrade: 'تداول', colStock: 'السهم', telegramSupport: 'الدعم عبر تيليجرام', features: 'المميزات', realTimePrices: 'أسعار لحظية', aiAnalysis: 'تحليل ذكاء اصطناعي', commodities: 'المعادن', stkAll: 'الكل', stkStock: 'أسهم', stkEtf: 'صناديق ETF', stkCommodity: 'سلع', stkIndex: 'مؤشرات', stkResults: 'نتيجة', stkSearchPlh: 'ابحث عن سهم...', stkPage: 'صفحة', stkOf: 'من', blogNav: 'المدونة', blogNavDesc: 'مقالات ودروس تعليمية', blogPost1Title: 'دليل بيتكوين 2025', blogPost1Desc: 'كل ما تحتاج معرفته عن بيتكوين', blogPost2Title: 'تنصيف البيتكوين', blogPost2Desc: 'تأثير الهالفينج على الأسعار', blogPost3Title: 'BRC-20 مقابل Runes', blogPost3Desc: 'مقارنة بروتوكولات بيتكوين', blogPost4Title: 'مؤشر الخوف والطمع', blogPost4Desc: 'فهم معنويات السوق', blogPost5Title: 'الذهب مقابل البيتكوين', blogPost5Desc: 'أيهما أفضل للاستثمار؟', blogPost6Title: 'RSI وMACD وبولينجر', blogPost6Desc: 'دليل المؤشرات الفنية', blogRead: 'اقرأ المقال', blogSectionTitle: 'مقالات تعليمية', blogTagAnalysis: 'تحليل', blogTagBeginner: 'مبتدئ', blogTagGold: 'ذهب', blogTagSecurity: 'أمان', blogViewAll: 'عرض الكل', cryptoAnalyzer: 'محلل التشفير', cryptoAnalyzerDesc: 'تحليل الرموز المشفرة', cryptoArbitrage: 'أربيتراج الكريبتو', cryptoArbitrageDesc: 'فرص الأربيتراج اللحظية', forexAnalyzer: 'محلل الفوركس', forexAnalyzerDesc: 'تحليل أزواج العملات' },
-      en: { aiMenuTitle: 'Technical Analysis', aiMenuDesc: 'AI Powered Analysis', trustScore: 'Trust', siteTitle: 'CryptoHub', exchanges: 'Exchanges', recommendedExchanges: 'Recommended Exchanges', live: 'Live', fearGreedTitle: 'Fear & Greed Index', fearGreedSub: 'Market Sentiment - Comprehensive Analysis', outOf100: 'out of 100', extremeFear: 'Extreme Fear', fear: 'Fear', neutral: 'Neutral', greed: 'Greed', extremeGreed: 'Extreme Greed', aiTitle: 'AI Analysis', aiSub: 'AI-powered predictions', analyzing: 'Analyzing...', bullishSignals: 'Bullish Signals', bearishSignals: 'Bearish Signals', bollingerBands: 'Bollinger', searchCoin: 'Search coin...', sortBy: 'Sort By', network: 'Network', show: 'Show', loadMore: 'Load More', loadingData: 'Loading data...', filteredBy: 'Filter:', colName: 'Name', colPrice: 'Price', colMarketCap: 'Market Cap', colVolume: 'Volume 24h', colExchanges: 'Exchanges', prev: 'Previous', next: 'Next', showing: 'Showing', of: 'of', coins: 'coins', availableOn: 'Available on', exchange: 'exchanges', referralNote: '🎁 Referral links included', register: 'Register', visit: 'Visit', trustHigh: 'High Trust', trustMedium: 'Medium Trust', trustLow: 'Low Trust', volume: 'Volume', allNetworks: 'All Networks', rank: 'Rank', marketCap: 'Market Cap', price: 'Price', change24h: '24h Change', noExchanges: 'None found', errorLoading: 'Loading Error', retry: 'Retry', allLoaded: 'All Loaded', loadMoreRemaining: 'Load More', oversold: 'Oversold', overbought: 'Overbought', bullish: 'Bullish', bearish: 'Bearish', nearBottom: 'Near Bottom', nearTop: 'Near Top', goldenCross: 'Golden Cross', deathCross: 'Death Cross', strongBuy: 'Strong Buy', buy: 'Buy', sell: 'Sell', strongSell: 'Strong Sell', coinsFound: 'found', trendingTitle: 'Trending', trendingSub: 'Top 100 coins by 24h volume', altcoinIndex: 'Altcoin Season Index', altcoinSeason: 'Altcoin Season', btcDominance: 'BTC Dominance', ethDominance: 'ETH Dominance', totalMarketCap: 'Total Market Cap', totalVolume24: 'Total Volume 24h', fgHistory: 'History', now: 'Now', yesterday: 'Yesterday', lastWeek: 'Last Week', lastMonth: 'Last Month', entryExitTitle: 'Entry & Exit Signals - Bitcoin', entryZone: 'Entry Zone', exitZone: 'Exit Zone', currentPrice: 'Current Price', entryNote: 'At support level', exitNote: 'At resistance level', volAnalysis: 'Volume Analysis', supportResistance: 'Support/Resistance', aiRecommendation: 'Recommendation', strongTrend: 'Strong Trend', weakTrend: 'Weak Trend', highVol: 'High Volume', lowVol: 'Low Volume', aboveAvg: 'Above Average', belowAvg: 'Below Average', footerDesc: 'Your comprehensive platform for tracking 10,000+ cryptocurrencies with advanced AI analysis tools and real-time prices.', quickLinks: 'Quick Links', home: 'Home', topExchanges: 'Top Exchanges', disclaimer: 'Disclaimer', disclaimerText: 'The information provided on this site is for educational and informational purposes only and is not financial or investment advice. Cryptocurrency trading involves very high risk and you may lose your entire capital.', allRights: 'All Rights Reserved', btcSeason: 'Bitcoin Season', holdEntry: 'Wait for better entry', goodEntry: 'Good entry opportunity', riskHigh: 'High Risk', support: 'Support', yourName: 'Your Name', yourEmail: 'Your Email', yourMessage: 'Your Message...', sendMessage: 'Send Message', messageSent: 'Message sent successfully!', languages: 'Languages', secure: 'Secure', loading: 'Loading...', tabCrypto: 'Cryptocurrencies', tabExchanges: 'All Exchanges', tabCommodities: 'Precious Metals', allExchangesTitle: 'All Global Exchanges', allExchangesSub: '500 Licensed Global Exchanges • Ranked by Trust • Direct Links', searchExchange: 'Search exchange...', metalExTitle: 'Gold, Silver & Precious Metals Exchanges', metalExSub: 'Platforms supporting precious metals trading with pairs and volume', stocksTitle: 'Major Stocks & ETFs', stocksSub: 'Tokenized stocks and precious metal ETFs • Real-time data from Global Markets', colExchange2: 'Exchange', colPairs: 'Trading Pairs', colRefPrice: 'Ref. Price', colVol24h: 'Volume 24h', colTrade: 'Trade', colStock: 'Stock', telegramSupport: 'Telegram Support', features: 'Features', realTimePrices: 'Real-time Prices', aiAnalysis: 'AI Analysis', commodities: 'Metals', stkAll: 'All', stkStock: 'Stocks', stkEtf: 'ETFs', stkCommodity: 'Commodities', stkIndex: 'Indices', stkResults: 'results', stkSearchPlh: 'Search stocks, ETFs...', stkPage: 'Page', stkOf: 'of' },
+      ar: { clearAll: 'مسح الكل', recentSearches: 'عمليات البحث الأخيرة', topBoosted: 'الأكثر تداولاً', trendingCrypto: 'العملات الرائجة', deleteItem: 'حذف', noResults: 'لا توجد نتائج لـ', searchPlaceholder: 'ابحث عن عملة، NFT، منصة...', aiMenuTitle: 'التحليل الفني', aiMenuDesc: 'تحليل بالذكاء الاصطناعي', trustScore: 'الثقة', siteTitle: 'CryptoHub', exchanges: 'المنصات', recommendedExchanges: 'منصات التداول الموصى بها', live: 'مباشر', fearGreedTitle: 'مؤشر الخوف والطمع', fearGreedSub: 'مؤشر معنويات السوق - تحليل شامل', outOf100: 'من 100', extremeFear: 'خوف شديد', fear: 'خوف', neutral: 'محايد', greed: 'طمع', extremeGreed: 'طمع شديد', aiTitle: 'تحليل الذكاء الاصطناعي', aiSub: 'تنبؤات مدعومة بالذكاء الاصطناعي', analyzing: 'جاري التحليل...', bullishSignals: 'إشارات صعود', bearishSignals: 'إشارات هبوط', bollingerBands: 'بولينجر', searchCoin: 'البحث عن عملة...', sortBy: 'الترتيب', network: 'الشبكة', show: 'العرض', loadMore: 'تحميل المزيد', loadingData: 'جاري التحميل...', filteredBy: 'تصفية:', colName: 'الاسم', colPrice: 'السعر', colMarketCap: 'القيمة السوقية', colVolume: 'الحجم 24س', colExchanges: 'المنصات', prev: 'السابق', next: 'التالي', showing: 'عرض', of: 'من', coins: 'عملة', availableOn: 'متوفر على', exchange: 'منصة', referralNote: '🎁 روابط إحالة خاصة', register: 'سجل الآن', visit: 'زيارة', trustHigh: 'ثقة عالية', trustMedium: 'ثقة متوسطة', trustLow: 'ثقة منخفضة', volume: 'الحجم', allNetworks: 'جميع الشبكات', rank: 'الترتيب', marketCap: 'القيمة السوقية', price: 'السعر', change24h: 'تغير 24س', noExchanges: 'لا توجد بيانات', errorLoading: 'خطأ في التحميل', retry: 'إعادة المحاولة', allLoaded: 'تم تحميل الكل', loadMoreRemaining: 'تحميل المزيد', oversold: 'تشبع بيعي', overbought: 'تشبع شرائي', bullish: 'صاعد', bearish: 'هابط', nearBottom: 'قرب القاع', nearTop: 'قرب القمة', goldenCross: 'تقاطع ذهبي', deathCross: 'تقاطع الموت', strongBuy: 'شراء قوي', buy: 'شراء', sell: 'بيع', strongSell: 'بيع قوي', coinsFound: 'عملة', trendingTitle: 'الأكثر رواجاً', trendingSub: 'أفضل 100 عملة من حيث حجم التداول خلال 24 ساعة', altcoinIndex: 'مؤشر موسم الألتكوين', altcoinSeason: 'موسم ألتكوين', btcDominance: 'هيمنة BTC', ethDominance: 'هيمنة ETH', totalMarketCap: 'القيمة الكلية', totalVolume24: 'الحجم الكلي 24س', fgHistory: 'التاريخ', now: 'الآن', yesterday: 'أمس', lastWeek: 'الأسبوع', lastMonth: 'الشهر', entryExitTitle: 'إشارات الدخول والخروج - Bitcoin', entryZone: 'منطقة الدخول', exitZone: 'منطقة الخروج', currentPrice: 'السعر الحالي', entryNote: 'عند مستوى الدعم', exitNote: 'عند مستوى المقاومة', volAnalysis: 'تحليل الحجم', supportResistance: 'دعم/مقاومة', aiRecommendation: 'التوصية', strongTrend: 'اتجاه قوي', weakTrend: 'اتجاه ضعيف', highVol: 'حجم مرتفع', lowVol: 'حجم منخفض', aboveAvg: 'أعلى من المتوسط', belowAvg: 'أقل من المتوسط', footerDesc: 'منصتك الشاملة لتتبع أكثر من 10,000 عملة رقمية مع أدوات تحليل ذكاء اصطناعي متقدمة وأسعار لحظية.', quickLinks: 'روابط سريعة', home: 'الرئيسية', topExchanges: 'أفضل المنصات', disclaimer: 'إخلاء المسؤولية', disclaimerText: 'المعلومات المقدمة في هذا الموقع هي لأغراض تعليمية ومعلوماتية فقط وليست نصيحة مالية أو استثمارية. تداول العملات الرقمية ينطوي على مخاطر عالية جداً وقد تخسر رأس مالك بالكامل.', allRights: 'جميع الحقوق محفوظة', btcSeason: 'موسم بيتكوين', holdEntry: 'انتظر فرصة أفضل', goodEntry: 'فرصة دخول جيدة', riskHigh: 'مخاطرة عالية', support: 'الدعم الفني', yourName: 'اسمك', yourEmail: 'بريدك الإلكتروني', yourMessage: 'رسالتك...', sendMessage: 'إرسال الرسالة', messageSent: 'تم الإرسال بنجاح!', languages: 'لغة', secure: 'آمن', loading: 'جاري التحميل...', tabCrypto: 'العملات الرقمية', tabExchanges: 'جميع المنصات', tabCommodities: 'المعادن الثمينة', allExchangesTitle: 'جميع منصات التداول العالمية', allExchangesSub: '500 منصة تداول عالمية مرخصة • مرتبة حسب درجة الثقة • روابط تداول مباشرة', searchExchange: 'ابحث عن منصة...', metalExTitle: 'منصات تداول الذهب والفضة والمعادن الثمينة', metalExSub: 'جميع المنصات التي تدعم تداول المعادن الثمينة مع أزواج التداول وحجم التداول الفعلي', stocksTitle: 'الأسهم الرئيسية وصناديق ETF', stocksSub: 'أسهم مرمّزة وصناديق المعادن الثمينة • بيانات لحظية من الأسواق العالمية', colExchange2: 'المنصة', colPairs: 'أزواج التداول', colRefPrice: 'السعر المرجعي', colVol24h: 'الحجم 24 ساعة', colTrade: 'تداول', colStock: 'السهم', telegramSupport: 'الدعم عبر تيليجرام', features: 'المميزات', realTimePrices: 'أسعار لحظية', aiAnalysis: 'تحليل ذكاء اصطناعي', commodities: 'المعادن', stkAll: 'الكل', stkStock: 'أسهم', stkEtf: 'صناديق ETF', stkCommodity: 'سلع', stkIndex: 'مؤشرات', stkResults: 'نتيجة', stkSearchPlh: 'ابحث عن سهم...', stkPage: 'صفحة', stkOf: 'من', blogNav: 'المدونة', blogNavDesc: 'مقالات ودروس تعليمية', blogPost1Title: 'دليل بيتكوين 2025', blogPost1Desc: 'كل ما تحتاج معرفته عن بيتكوين', blogPost2Title: 'تنصيف البيتكوين', blogPost2Desc: 'تأثير الهالفينج على الأسعار', blogPost3Title: 'BRC-20 مقابل Runes', blogPost3Desc: 'مقارنة بروتوكولات بيتكوين', blogPost4Title: 'مؤشر الخوف والطمع', blogPost4Desc: 'فهم معنويات السوق', blogPost5Title: 'الذهب مقابل البيتكوين', blogPost5Desc: 'أيهما أفضل للاستثمار؟', blogPost6Title: 'RSI وMACD وبولينجر', blogPost6Desc: 'دليل المؤشرات الفنية', blogRead: 'اقرأ المقال', blogSectionTitle: 'مقالات تعليمية', blogTagAnalysis: 'تحليل', blogTagBeginner: 'مبتدئ', blogTagGold: 'ذهب', blogTagSecurity: 'أمان', blogViewAll: 'عرض الكل', cryptoAnalyzer: 'محلل التشفير', cryptoAnalyzerDesc: 'تحليل الرموز المشفرة', cryptoArbitrage: 'أربيتراج الكريبتو', cryptoArbitrageDesc: 'فرص الأربيتراج اللحظية', forexAnalyzer: 'محلل الفوركس', forexAnalyzerDesc: 'تحليل أزواج العملات' },
+      en: { clearAll: 'Clear All', recentSearches: 'Recent Searches', topBoosted: 'Top Boosted', trendingCrypto: 'Trending Crypto', deleteItem: 'Delete', noResults: 'No results found for', searchPlaceholder: 'Search coin, NFT, exchange...', aiMenuTitle: 'Technical Analysis', aiMenuDesc: 'AI Powered Analysis', trustScore: 'Trust', siteTitle: 'CryptoHub', exchanges: 'Exchanges', recommendedExchanges: 'Recommended Exchanges', live: 'Live', fearGreedTitle: 'Fear & Greed Index', fearGreedSub: 'Market Sentiment - Comprehensive Analysis', outOf100: 'out of 100', extremeFear: 'Extreme Fear', fear: 'Fear', neutral: 'Neutral', greed: 'Greed', extremeGreed: 'Extreme Greed', aiTitle: 'AI Analysis', aiSub: 'AI-powered predictions', analyzing: 'Analyzing...', bullishSignals: 'Bullish Signals', bearishSignals: 'Bearish Signals', bollingerBands: 'Bollinger', searchCoin: 'Search coin...', sortBy: 'Sort By', network: 'Network', show: 'Show', loadMore: 'Load More', loadingData: 'Loading data...', filteredBy: 'Filter:', colName: 'Name', colPrice: 'Price', colMarketCap: 'Market Cap', colVolume: 'Volume 24h', colExchanges: 'Exchanges', prev: 'Previous', next: 'Next', showing: 'Showing', of: 'of', coins: 'coins', availableOn: 'Available on', exchange: 'exchanges', referralNote: '🎁 Referral links included', register: 'Register', visit: 'Visit', trustHigh: 'High Trust', trustMedium: 'Medium Trust', trustLow: 'Low Trust', volume: 'Volume', allNetworks: 'All Networks', rank: 'Rank', marketCap: 'Market Cap', price: 'Price', change24h: '24h Change', noExchanges: 'None found', errorLoading: 'Loading Error', retry: 'Retry', allLoaded: 'All Loaded', loadMoreRemaining: 'Load More', oversold: 'Oversold', overbought: 'Overbought', bullish: 'Bullish', bearish: 'Bearish', nearBottom: 'Near Bottom', nearTop: 'Near Top', goldenCross: 'Golden Cross', deathCross: 'Death Cross', strongBuy: 'Strong Buy', buy: 'Buy', sell: 'Sell', strongSell: 'Strong Sell', coinsFound: 'found', trendingTitle: 'Trending', trendingSub: 'Top 100 coins by 24h volume', altcoinIndex: 'Altcoin Season Index', altcoinSeason: 'Altcoin Season', btcDominance: 'BTC Dominance', ethDominance: 'ETH Dominance', totalMarketCap: 'Total Market Cap', totalVolume24: 'Total Volume 24h', fgHistory: 'History', now: 'Now', yesterday: 'Yesterday', lastWeek: 'Last Week', lastMonth: 'Last Month', entryExitTitle: 'Entry & Exit Signals - Bitcoin', entryZone: 'Entry Zone', exitZone: 'Exit Zone', currentPrice: 'Current Price', entryNote: 'At support level', exitNote: 'At resistance level', volAnalysis: 'Volume Analysis', supportResistance: 'Support/Resistance', aiRecommendation: 'Recommendation', strongTrend: 'Strong Trend', weakTrend: 'Weak Trend', highVol: 'High Volume', lowVol: 'Low Volume', aboveAvg: 'Above Average', belowAvg: 'Below Average', footerDesc: 'Your comprehensive platform for tracking 10,000+ cryptocurrencies with advanced AI analysis tools and real-time prices.', quickLinks: 'Quick Links', home: 'Home', topExchanges: 'Top Exchanges', disclaimer: 'Disclaimer', disclaimerText: 'The information provided on this site is for educational and informational purposes only and is not financial or investment advice. Cryptocurrency trading involves very high risk and you may lose your entire capital.', allRights: 'All Rights Reserved', btcSeason: 'Bitcoin Season', holdEntry: 'Wait for better entry', goodEntry: 'Good entry opportunity', riskHigh: 'High Risk', support: 'Support', yourName: 'Your Name', yourEmail: 'Your Email', yourMessage: 'Your Message...', sendMessage: 'Send Message', messageSent: 'Message sent successfully!', languages: 'Languages', secure: 'Secure', loading: 'Loading...', tabCrypto: 'Cryptocurrencies', tabExchanges: 'All Exchanges', tabCommodities: 'Precious Metals', allExchangesTitle: 'All Global Exchanges', allExchangesSub: '500 Licensed Global Exchanges • Ranked by Trust • Direct Links', searchExchange: 'Search exchange...', metalExTitle: 'Gold, Silver & Precious Metals Exchanges', metalExSub: 'Platforms supporting precious metals trading with pairs and volume', stocksTitle: 'Major Stocks & ETFs', stocksSub: 'Tokenized stocks and precious metal ETFs • Real-time data from Global Markets', colExchange2: 'Exchange', colPairs: 'Trading Pairs', colRefPrice: 'Ref. Price', colVol24h: 'Volume 24h', colTrade: 'Trade', colStock: 'Stock', telegramSupport: 'Telegram Support', features: 'Features', realTimePrices: 'Real-time Prices', aiAnalysis: 'AI Analysis', commodities: 'Metals', stkAll: 'All', stkStock: 'Stocks', stkEtf: 'ETFs', stkCommodity: 'Commodities', stkIndex: 'Indices', stkResults: 'results', stkSearchPlh: 'Search stocks, ETFs...', stkPage: 'Page', stkOf: 'of' },
       zh: { trustScore: '信任', siteTitle: 'CryptoHub', exchanges: '交易所', recommendedExchanges: '推荐交易所', live: '实时', fearGreedTitle: '恐惧与贪婪指数', fearGreedSub: '市场情绪指标 - 由Binance提供', outOf100: '满分100', extremeFear: '极度恐惧', fear: '恐惧', neutral: '中性', greed: '贪婪', extremeGreed: '极度贪婪', aiTitle: 'AI智能分析', aiSub: '人工智能驱动的预测', analyzing: '分析中...', bullishSignals: '看涨信号', bearishSignals: '看跌信号', bollingerBands: '布林带', searchCoin: '搜索币种...', sortBy: '排序', network: '网络', show: '显示', loadMore: '加载更多', loadingData: '数据加载中...', filteredBy: '筛选:', colName: '名称', colPrice: '价格', colMarketCap: '市值', colVolume: '24h成交量', colExchanges: '交易所', prev: '上一页', next: '下一页', showing: '显示', of: '共', coins: '币种', availableOn: '可交易于', exchange: '个交易所', referralNote: '🎁 包含推荐链接', register: '注册', visit: '访问', trustHigh: '高信任', trustMedium: '中等信任', trustLow: '低信任', volume: '成交量', allNetworks: '所有网络', rank: '排名', marketCap: '市值', price: '价格', change24h: '24h变化', noExchanges: '未找到', errorLoading: '加载错误', retry: '重试', allLoaded: '全部加载完成', loadMoreRemaining: '加载更多', oversold: '超卖', overbought: '超买', bullish: '看涨', bearish: '看跌', nearBottom: '接近底部', nearTop: '接近顶部', goldenCross: '金叉', deathCross: '死叉', strongBuy: '强烈买入', buy: '买入', sell: '卖出', strongSell: '强烈卖出', coinsFound: '个币种', trendingTitle: '热门趋势', trendingSub: '24小时交易量前100名', altcoinIndex: '山寨币季节指数', altcoinSeason: '山寨币季节', btcDominance: 'BTC主导地位', ethDominance: 'ETH主导地位', totalMarketCap: '总市值', totalVolume24: '24h总成交量', fgHistory: '历史', now: '现在', yesterday: '昨天', lastWeek: '上周', lastMonth: '上月', entryExitTitle: '入场与出场信号 - Bitcoin', entryZone: '入场区域', exitZone: '出场区域', currentPrice: '当前价格', entryNote: '在支撑位', exitNote: '在阻力位', volAnalysis: '成交量分析', supportResistance: '支撑/阻力', aiRecommendation: '建议', strongTrend: '强势趋势', weakTrend: '弱势趋势', highVol: '高成交量', lowVol: '低成交量', aboveAvg: '高于平均', belowAvg: '低于平均', footerDesc: '您的综合平台，追踪5000多种加密货币，配备先进的AI分析工具和实时价格。', quickLinks: '快速链接', home: '首页', topExchanges: '顶级交易所', disclaimer: '免责声明', disclaimerText: '本网站提供的信息仅供教育和参考目的，不构成财务或投资建议。加密货币交易涉及极高风险，您可能会损失全部本金。', allRights: '版权所有', btcSeason: '比特币季节', holdEntry: '等待更好的入场时机', goodEntry: '良好的入场机会', riskHigh: '高风险', support: '技术支持', yourName: '您的姓名', yourEmail: '您的邮箱', yourMessage: '您的留言...', sendMessage: '发送消息', messageSent: '消息发送成功！', languages: '语言', secure: '安全', loading: '加载中...', tabCrypto: '加密货币', tabExchanges: '所有交易所', tabCommodities: '黄金、白银和股票', allExchangesTitle: '全球交易所', allExchangesSub: '500家持牌全球交易所 • 按信任度排名 • 直接交易链接', searchExchange: '搜索交易所...', metalExTitle: '贵金属交易平台', metalExSub: '支持贵金属交易的所有交易所及交易对和实时成交量', stocksTitle: '主要股票和ETF', stocksSub: '代币化股票和贵金属ETF • 来自Yahoo Finance的实时数据', colExchange2: '交易所', colPairs: '交易对', colRefPrice: '参考价格', colVol24h: '24h成交量', colTrade: '交易', colStock: '股票', stkAll: '全部', stkStock: '股票', stkEtf: 'ETF', stkCommodity: '大宗商品', stkIndex: '指数', stkResults: '结果', stkSearchPlh: '搜索股票...', stkPage: '第', stkOf: '共' },
       es: { aiMenuTitle: 'Análisis Técnico', aiMenuDesc: 'Análisis con IA', trustScore: 'Confianza', siteTitle: 'CryptoHub', exchanges: 'Exchanges', recommendedExchanges: 'Exchanges Recomendados', live: 'En Vivo', fearGreedTitle: 'Índice de Miedo y Codicia', fearGreedSub: 'Sentimiento del Mercado - Impulsado por Binance', outOf100: 'de 100', extremeFear: 'Miedo Extremo', fear: 'Miedo', neutral: 'Neutral', greed: 'Codicia', extremeGreed: 'Codicia Extrema', aiTitle: 'Análisis de IA', aiSub: 'Predicciones impulsadas por IA', analyzing: 'Analizando...', bullishSignals: 'Señales Alcistas', bearishSignals: 'Señales Bajistas', bollingerBands: 'Bollinger', searchCoin: 'Buscar moneda...', sortBy: 'Ordenar por', network: 'Red', show: 'Mostrar', loadMore: 'Cargar Más', loadingData: 'Cargando datos...', filteredBy: 'Filtro:', colName: 'Nombre', colPrice: 'Precio', colMarketCap: 'Cap. de Mercado', colVolume: 'Volumen 24h', colExchanges: 'Exchanges', prev: 'Anterior', next: 'Siguiente', showing: 'Mostrando', of: 'de', coins: 'monedas', availableOn: 'Disponible en', exchange: 'exchanges', referralNote: '🎁 Enlaces de referencia incluidos', register: 'Registrarse', visit: 'Visitar', trustHigh: 'Alta Confianza', trustMedium: 'Confianza Media', trustLow: 'Baja Confianza', volume: 'Volumen', allNetworks: 'Todas las Redes', rank: 'Ranking', marketCap: 'Cap. de Mercado', price: 'Precio', change24h: 'Cambio 24h', noExchanges: 'No encontrado', errorLoading: 'Error de carga', retry: 'Reintentar', allLoaded: 'Todo Cargado', loadMoreRemaining: 'Cargar Más', oversold: 'Sobrevendido', overbought: 'Sobrecomprado', bullish: 'Alcista', bearish: 'Bajista', nearBottom: 'Cerca del Fondo', nearTop: 'Cerca del Techo', goldenCross: 'Cruce Dorado', deathCross: 'Cruce de Muerte', strongBuy: 'Compra Fuerte', buy: 'Comprar', sell: 'Vender', strongSell: 'Venta Fuerte', coinsFound: 'encontradas', trendingTitle: 'Tendencias', trendingSub: 'Top 100 monedas por volumen 24h', altcoinIndex: 'Índice Temporada Altcoins', altcoinSeason: 'Temporada Altcoins', btcDominance: 'Dominancia BTC', ethDominance: 'Dominancia ETH', totalMarketCap: 'Cap. Total', totalVolume24: 'Volumen Total 24h', fgHistory: 'Historial', now: 'Ahora', yesterday: 'Ayer', lastWeek: 'Semana Pasada', lastMonth: 'Mes Pasado', entryExitTitle: 'Señales de Entrada y Salida - Bitcoin', entryZone: 'Zona de Entrada', exitZone: 'Zona de Salida', currentPrice: 'Precio Actual', entryNote: 'En nivel de soporte', exitNote: 'En resistencia', volAnalysis: 'Análisis de Volumen', supportResistance: 'Soporte/Resistencia', aiRecommendation: 'Recomendación', strongTrend: 'Tendencia Fuerte', weakTrend: 'Tendencia Débil', highVol: 'Volumen Alto', lowVol: 'Volumen Bajo', aboveAvg: 'Sobre Promedio', belowAvg: 'Bajo Promedio', footerDesc: 'Tu plataforma integral para rastrear más de 5000 criptomonedas con herramientas avanzadas de análisis de IA y precios en tiempo real.', quickLinks: 'Enlaces Rápidos', home: 'Inicio', topExchanges: 'Mejores Exchanges', disclaimer: 'Descargo de Responsabilidad', disclaimerText: 'La información proporcionada es solo para fines educativos e informativos y no constituye asesoramiento financiero. El comercio de criptomonedas implica un riesgo muy alto.', allRights: 'Todos los Derechos Reservados', btcSeason: 'Temporada Bitcoin', holdEntry: 'Esperar mejor entrada', goodEntry: 'Buena oportunidad', riskHigh: 'Alto Riesgo', support: 'Soporte', yourName: 'Tu Nombre', yourEmail: 'Tu Email', yourMessage: 'Tu Mensaje...', sendMessage: 'Enviar Mensaje', messageSent: '¡Mensaje enviado con éxito!', languages: 'Idiomas', secure: 'Seguro', loading: 'Cargando...', tabCrypto: 'Criptomonedas', tabExchanges: 'Todos los Exchanges', tabCommodities: 'Oro, Plata y Acciones', allExchangesTitle: 'Todos los Exchanges Globales', allExchangesSub: '500 exchanges globales licenciados • Ordenados por confianza • Enlaces directos', searchExchange: 'Buscar exchange...', metalExTitle: 'Plataformas de Metales Preciosos', metalExSub: 'Todos los exchanges que soportan metales preciosos con pares y volumen en tiempo real', stocksTitle: 'Acciones Principales y ETFs', stocksSub: 'Acciones tokenizadas y ETFs de metales preciosos • Datos en tiempo real de Yahoo Finance', colExchange2: 'Exchange', colPairs: 'Pares de Trading', colRefPrice: 'Precio Ref.', colVol24h: 'Volumen 24h', colTrade: 'Operar', colStock: 'Acción', stkAll: 'Todo', stkStock: 'Acciones', stkEtf: 'ETFs', stkCommodity: 'Materias', stkIndex: 'Índices', stkResults: 'resultados', stkSearchPlh: 'Buscar acciones...', stkPage: 'Pág', stkOf: 'de' },
       pt: { aiMenuTitle: 'Análise Técnica', aiMenuDesc: 'Análise por IA', trustScore: 'Confiança', siteTitle: 'CryptoHub', exchanges: 'Exchanges', recommendedExchanges: 'Exchanges Recomendadas', live: 'Ao Vivo', fearGreedTitle: 'Índice de Medo e Ganância', fearGreedSub: 'Sentimento do Mercado - Alimentado por Binance', outOf100: 'de 100', extremeFear: 'Medo Extremo', fear: 'Medo', neutral: 'Neutro', greed: 'Ganância', extremeGreed: 'Ganância Extrema', aiTitle: 'Análise de IA', aiSub: 'Previsões alimentadas por IA', analyzing: 'Analisando...', bullishSignals: 'Sinais de Alta', bearishSignals: 'Sinais de Baixa', bollingerBands: 'Bollinger', searchCoin: 'Pesquisar moeda...', sortBy: 'Ordenar por', network: 'Rede', show: 'Mostrar', loadMore: 'Carregar Mais', loadingData: 'Carregando dados...', filteredBy: 'Filtro:', colName: 'Nome', colPrice: 'Preço', colMarketCap: 'Cap. de Mercado', colVolume: 'Volume 24h', colExchanges: 'Exchanges', prev: 'Anterior', next: 'Próximo', showing: 'Mostrando', of: 'de', coins: 'moedas', availableOn: 'Disponível em', exchange: 'exchanges', referralNote: '🎁 Links de indicação incluídos', register: 'Registrar', visit: 'Visitar', trustHigh: 'Alta Confiança', trustMedium: 'Confiança Média', trustLow: 'Baixa Confiança', volume: 'Volume', allNetworks: 'Todas as Redes', rank: 'Ranking', marketCap: 'Cap. de Mercado', price: 'Preço', change24h: 'Variação 24h', noExchanges: 'Não encontrado', errorLoading: 'Erro ao carregar', retry: 'Tentar novamente', allLoaded: 'Tudo Carregado', loadMoreRemaining: 'Carregar Mais', oversold: 'Sobrevendido', overbought: 'Sobrecomprado', bullish: 'Alta', bearish: 'Baixa', nearBottom: 'Perto do Fundo', nearTop: 'Perto do Topo', goldenCross: 'Cruz Dourada', deathCross: 'Cruz da Morte', strongBuy: 'Compra Forte', buy: 'Comprar', sell: 'Vender', strongSell: 'Venda Forte', coinsFound: 'encontradas', trendingTitle: 'Em Alta', trendingSub: 'Top 100 moedas por volume 24h', altcoinIndex: 'Índice Temporada Altcoins', altcoinSeason: 'Temporada Altcoins', btcDominance: 'Dominância BTC', ethDominance: 'Dominância ETH', totalMarketCap: 'Cap. Total', totalVolume24: 'Volume Total 24h', fgHistory: 'Histórico', now: 'Agora', yesterday: 'Ontem', lastWeek: 'Semana Passada', lastMonth: 'Mês Passado', entryExitTitle: 'Sinais de Entrada e Saída - Bitcoin', entryZone: 'Zona de Entrada', exitZone: 'Zona de Saída', currentPrice: 'Preço Atual', entryNote: 'No nível de suporte', exitNote: 'Na resistência', volAnalysis: 'Análise de Volume', supportResistance: 'Suporte/Resistência', aiRecommendation: 'Recomendação', strongTrend: 'Tendência Forte', weakTrend: 'Tendência Fraca', highVol: 'Volume Alto', lowVol: 'Volume Baixo', aboveAvg: 'Acima da Média', belowAvg: 'Abaixo da Média', footerDesc: 'Sua plataforma completa para rastrear mais de 5000 criptomoedas com ferramentas avançadas de análise de IA e preços em tempo real.', quickLinks: 'Links Rápidos', home: 'Início', topExchanges: 'Melhores Exchanges', disclaimer: 'Aviso Legal', disclaimerText: 'As informações fornecidas são apenas para fins educacionais e informativos e não constituem aconselhamento financeiro. A negociação de criptomoedas envolve risco muito alto.', allRights: 'Todos os Direitos Reservados', btcSeason: 'Temporada Bitcoin', holdEntry: 'Aguardar melhor entrada', goodEntry: 'Boa oportunidade', riskHigh: 'Alto Risco', support: 'Suporte', yourName: 'Seu Nome', yourEmail: 'Seu Email', yourMessage: 'Sua Mensagem...', sendMessage: 'Enviar Mensagem', messageSent: 'Mensagem enviada com sucesso!', languages: 'Idiomas', secure: 'Seguro', loading: 'Carregando...', tabCrypto: 'Criptomoedas', tabExchanges: 'Todas as Exchanges', tabCommodities: 'Ouro, Prata e Ações', allExchangesTitle: 'Todas as Exchanges Globais', allExchangesSub: '500 exchanges globais licenciadas • Por grau de confiança • Links diretos', searchExchange: 'Pesquisar exchange...', metalExTitle: 'Plataformas de Metais Preciosos', metalExSub: 'Todas as exchanges com metais preciosos, pares e volume em tempo real', stocksTitle: 'Ações Principais e ETFs', stocksSub: 'Ações tokenizadas e ETFs de metais preciosos • Dados em tempo real do Yahoo Finance', colExchange2: 'Exchange', colPairs: 'Pares de Trading', colRefPrice: 'Preço Ref.', colVol24h: 'Volume 24h', colTrade: 'Negociar', colStock: 'Ação', stkAll: 'Tudo', stkStock: 'Ações', stkEtf: 'ETFs', stkCommodity: 'Commodities', stkIndex: 'Índices', stkResults: 'resultados', stkSearchPlh: 'Pesquisar ações...', stkPage: 'Pág', stkOf: 'de' },
@@ -14297,148 +14508,309 @@
 
     function closeMod() { $('exMod').classList.remove('active'); document.documentElement.style.overflow = ''; document.body.style.overflow = ''; if (window.exUpdTimer) clearInterval(window.exUpdTimer); }
     function openSrch() {
-      const gsr = $('gsResults');
-      if (gsr) gsr.classList.add('active');
+      const ov = document.getElementById('gsOverlay');
+      if (!ov) return;
+      ov.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      const inp = document.getElementById('gsModalInput');
+      if (inp) { inp.value = ''; setTimeout(() => inp.focus(), 100); }
+      gsRenderDefault();
     }
 
     function closeSrch() {
-      const gsr = $('gsResults');
-      if (gsr) {
-        gsr.classList.remove('active');
-        $('gsInput').value = '';
-      }
+      const ov = document.getElementById('gsOverlay');
+      if (!ov) return;
+      const inp = document.getElementById('gsModalInput');
+      if (inp && inp.value.trim().length >= 2) saveSrchHistory(inp.value.trim());
+      ov.classList.remove('active');
+      document.body.style.overflow = '';
     }
 
-    function liveSearch(query) {
-      if (!query || query.length < 1) {
-        const gsr = $('gsResults');
-        if (gsr) gsr.classList.remove('active');
-        return;
-      }
-      const q = query.toLowerCase();
+    // ===== SEARCH HISTORY =====
+    const SRCH_HIST_KEY = 'ch_search_history';
+    const SRCH_HIST_MAX = 8;
 
-      // Use allC if loaded, otherwise fall back to INSTANT_COINS for instant results
-      const searchPool = allC.length > 10 ? allC : INSTANT_COINS;
+    function getSrchHistory() {
+      try { return JSON.parse(localStorage.getItem(SRCH_HIST_KEY) || '[]'); } catch(e) { return []; }
+    }
+    function saveSrchHistory(query) {
+      if (!query || query.trim().length < 2) return;
+      const q = query.trim();
+      let hist = getSrchHistory().filter(h => h.toLowerCase() !== q.toLowerCase());
+      hist.unshift(q);
+      hist = hist.slice(0, SRCH_HIST_MAX);
+      try { localStorage.setItem(SRCH_HIST_KEY, JSON.stringify(hist)); } catch(e) {}
+    }
+    function deleteSrchHistoryItem(q) {
+      let hist = getSrchHistory().filter(h => h !== q);
+      try { localStorage.setItem(SRCH_HIST_KEY, JSON.stringify(hist)); } catch(e) {}
+      gsRenderDefault();
+    }
+    function clearAllSrchHistory() {
+      try { localStorage.removeItem(SRCH_HIST_KEY); } catch(e) {}
+      gsRenderDefault();
+    }
 
-      // Search in coins and EX_DB (exchanges)
-      const coins = searchPool.filter(c =>
-        c.nm.toLowerCase().includes(q) || c.sy.toLowerCase().includes(q)
-      ).slice(0, 10);
-      const exchanges = EX_DB.filter(ex => ex.n.toLowerCase().includes(q)).slice(0, 5);
+    // Top Boosted Coins (static popular coins)
+    // Dynamic Top Boosted — picks top 6 by 24h volume from live data
+    function getTopBoosted() {
+      const pool = allC.length > 10 ? allC : INSTANT_COINS;
+      return [...pool]
+        .filter(c => c.vol > 0 && c.pr > 0)
+        .sort((a, b) => (b.vol || 0) - (a.vol || 0))
+        .slice(0, 6);
+    }
 
-      const gsr = $('gsResults');
-      if (!gsr) return;
+    function gsGetCoinData(sy) {
+      const pool = allC.length > 10 ? allC : INSTANT_COINS;
+      return pool.find(c => c.sy.toUpperCase() === sy.toUpperCase());
+    }
 
-      if (coins.length === 0 && exchanges.length === 0) {
-        gsr.innerHTML = `<div class="p-4 text-center text-t2 text-sm">${t('noExchanges')}</div>`;
-        gsr.classList.add('active');
-        return;
-      }
+    function gsFmtPrice(pr) {
+      if (!pr || pr <= 0) return '—';
+      return '$' + (pr >= 1 ? pr.toLocaleString('en-US', { maximumFractionDigits: 2 }) : pr.toFixed(6));
+    }
 
+    function gsFmtMcap(mc) {
+      if (!mc) return '—';
+      if (mc >= 1e12) return '$' + (mc / 1e12).toFixed(1) + 'T';
+      if (mc >= 1e9) return '$' + (mc / 1e9).toFixed(1) + 'B';
+      if (mc >= 1e6) return '$' + (mc / 1e6).toFixed(1) + 'M';
+      return '$' + mc.toLocaleString();
+    }
+
+    function gsRenderDefault() {
+      const body = document.getElementById('gsModalBody');
+      if (!body) return;
       let html = '';
+      const hist = getSrchHistory();
 
-      // Coins Section
-      if (coins.length > 0) {
-        html += `<div class="p-2 text-xs font-bold text-ac opacity-70 uppercase tracking-wider" style="background:var(--bg2)">${t('tabCrypto')}</div>`;
-        html += coins.map(c => {
-          const chg = c.c24 || 0;
-          const prDisp = c.pr > 0 ? ('$' + (c.pr >= 1 ? c.pr.toLocaleString('en-US', { maximumFractionDigits: 2 }) : c.pr.toFixed(6))) : '—';
-          return `<div class="gs-res-item" onclick="blockRender();showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}', '${c.sy}', '${c.img}'); closeSrch()">
-          <img alt="icon" src="${c.img}" class="gs-res-img" width="28" height="28" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22><rect width=%2232%22 height=%2232%22 fill=%22%23ccc%22/></svg>'">
-            <div class="gs-res-info">
-              <div class="gs-res-name">${c.nm} <span class="gs-res-sym">${c.sy}</span></div>
+      // Recent Searches
+      if (hist.length > 0) {
+        html += `
+        <div class="gs-section-hd">
+          <span class="gs-section-title">${t('recentSearches')}</span>
+          <button class="gs-section-btn" onclick="clearAllSrchHistory()">${t('clearAll')} ✕</button>
+        </div>
+        <div class="gs-chips">
+          ${hist.map(q => {
+            const coin = gsGetCoinData(q);
+            const imgHtml = coin ? `<img src="${coin.img}" onerror="this.style.display='none'">` : `<i class="fas fa-history" style="font-size:12px;color:var(--t2)"></i>`;
+            return `<div class="gs-chip" onclick="document.getElementById('gsModalInput').value='${q.replace(/'/g,"\\'")}';gsLiveSearch('${q.replace(/'/g,"\\'")}')">
+              ${imgHtml}
+              <span>${q}</span>
+              <button class="gs-chip-del" onclick="event.stopPropagation();deleteSrchHistoryItem('${q.replace(/'/g,"\\'")}')" title="${t('deleteItem')}"><i class="fas fa-times"></i></button>
+            </div>`;
+          }).join('')}
+        </div>`;
+      }
+
+      // Top Boosted Cards — dynamic from live data
+      const boosted = getTopBoosted();
+      html += `
+      <div class="gs-section-hd">
+        <span class="gs-section-title"><i class="fas fa-rocket" style="color:#f97316"></i> ${t('topBoosted')}</span>
+      </div>
+      <div class="gs-boosted-scroll">
+        ${boosted.map(b => {
+          const price = gsFmtPrice(b.pr);
+          const chg = b.c24 || 0;
+          const chgColor = chg >= 0 ? 'var(--gn)' : 'var(--rd)';
+          const imgSrc = (b.img && !b.img.includes('/0.png')) ? b.img : (typeof cmcImg !== 'undefined' ? cmcImg(b.sy) : b.img) || b.img;
+          return `<div class="gs-boost-card" onclick="gsClickCoinFull('${b.id}','${b.nm.replace(/'/g,"\\'")}','${b.sy}','${b.img}')">
+            <div class="gs-boost-top">
+              <img src="${imgSrc}" onerror="this.onerror=null;this.src='${typeof letterAvatar !== 'undefined' ? letterAvatar(b.sy,28) : ''}'" width="28" height="28" style="border-radius:50%">
+              <span class="gs-boost-sym">${b.sy}</span>
+              <span class="gs-boost-badge" style="color:${chgColor}">${chg >= 0 ? '▲' : '▼'} ${Math.abs(chg).toFixed(1)}%</span>
             </div>
-            <div style="text-align:end">
-              <div class="gs-res-pr">${prDisp}</div>
-              <div class="gs-res-chg" style="color:${chg >= 0 ? 'var(--gn)' : 'var(--rd)'}">${chg !== 0 ? (chg >= 0 ? '+' : '') + chg.toFixed(2) + '%' : ''}</div>
+            <div class="gs-boost-price">${price}</div>
+            <div style="font-size:10px;color:var(--t2);font-weight:600">${b.nm}</div>
+          </div>`;
+        }).join('')}
+      </div>`;
+
+      // Trending Crypto
+      const pool = allC.length > 10 ? allC : INSTANT_COINS;
+      const trending = pool.slice(0, 6);
+      if (trending.length > 0) {
+        html += `
+        <div class="gs-section-hd">
+          <span class="gs-section-title"><i class="fas fa-fire" style="color:#f97316"></i> ${t('trendingCrypto')} 🔥</span>
+        </div>`;
+        html += trending.map((c, i) => {
+          const chg = c.c24 || 0;
+          const mc = c.mc || 0;
+          const vol = c.v24 || 0;
+          return `<div class="gs-trending-item" onclick="gsClickCoinFull('${c.id}','${c.nm.replace(/'/g,"\\'")}','${c.sy}','${c.img}')">
+            <img class="gs-trending-img" src="${c.img}" onerror="this.onerror=null;this.style.background='var(--bg3)'" loading="lazy">
+            <div class="gs-trending-info">
+              <div class="gs-trending-name">${c.nm} <span class="gs-trending-rank">#${c.rk || (i+1)}</span></div>
+              <div class="gs-trending-sym">${c.sy}</div>
+              <div class="gs-trending-meta">
+                <span>MCap: <b style="color:var(--t1)">${gsFmtMcap(mc)}</b></span>
+                <span>Vol(24h): <b style="color:var(--t1)">${gsFmtMcap(vol)}</b></span>
+              </div>
+            </div>
+            <div class="gs-trending-right">
+              <div class="gs-trending-pr">${gsFmtPrice(c.pr)}</div>
+              <div class="gs-trending-chg" style="color:${chg >= 0 ? 'var(--gn)' : 'var(--rd)'}">
+                <i class="fas fa-caret-${chg >= 0 ? 'up' : 'down'}" style="font-size:10px"></i>
+                ${Math.abs(chg).toFixed(2)}%
+              </div>
             </div>
           </div>`;
         }).join('');
       }
 
-      // Exchanges Section
+      body.innerHTML = html;
+    }
+
+    function gsClickCoin(sy) {
+      const pool = allC.length > 10 ? allC : INSTANT_COINS;
+      const c = pool.find(x => x.sy.toUpperCase() === sy.toUpperCase());
+      if (c) {
+        saveSrchHistory(sy);
+        blockRender();
+        showEx(c.id, c.nm, c.sy, c.img);
+        closeSrch();
+      } else {
+        document.getElementById('gsModalInput').value = sy;
+        gsLiveSearch(sy);
+      }
+    }
+
+    function gsClickCoinFull(id, nm, sy, img) {
+      saveSrchHistory(sy);
+      blockRender();
+      showEx(id, nm, sy, img);
+      closeSrch();
+    }
+
+    function gsLiveSearch(query) {
+      if (!query || query.length < 1) {
+        gsRenderDefault();
+        return;
+      }
+      const q = query.toLowerCase();
+      const searchPool = allC.length > 10 ? allC : INSTANT_COINS;
+      const coins = searchPool.filter(c =>
+        c.nm.toLowerCase().includes(q) || c.sy.toLowerCase().includes(q)
+      ).slice(0, 10);
+      const exchanges = EX_DB.filter(ex => ex.n.toLowerCase().includes(q)).slice(0, 5);
+
+      const body = document.getElementById('gsModalBody');
+      if (!body) return;
+
+      if (coins.length === 0 && exchanges.length === 0) {
+        body.innerHTML = `<div class="gs-no-results"><i class="fas fa-search" style="font-size:24px;opacity:.3;display:block;margin-bottom:12px"></i>No results found for "${query}"</div>`;
+        return;
+      }
+
+      let html = '';
+
+      if (coins.length > 0) {
+        html += `<div class="gs-section-hd"><span class="gs-section-title">${t('tabCrypto')}</span></div>`;
+        html += coins.map((c, i) => {
+          const chg = c.c24 || 0;
+          const mc = c.mc || 0;
+          const vol = c.v24 || 0;
+          return `<div class="gs-trending-item" onclick="gsClickCoinFull('${c.id}','${c.nm.replace(/'/g,"\\'")}','${c.sy}','${c.img}')">
+            <img class="gs-trending-img" src="${c.img}" onerror="this.onerror=null;this.style.background='var(--bg3)'" loading="lazy">
+            <div class="gs-trending-info">
+              <div class="gs-trending-name">${c.nm} <span class="gs-trending-rank">#${c.rk || ''}</span></div>
+              <div class="gs-trending-sym">${c.sy}</div>
+              <div class="gs-trending-meta">
+                <span>MCap: <b style="color:var(--t1)">${gsFmtMcap(mc)}</b></span>
+                <span>Vol(24h): <b style="color:var(--t1)">${gsFmtMcap(vol)}</b></span>
+              </div>
+            </div>
+            <div class="gs-trending-right">
+              <div class="gs-trending-pr">${gsFmtPrice(c.pr)}</div>
+              <div class="gs-trending-chg" style="color:${chg >= 0 ? 'var(--gn)' : 'var(--rd)'}">
+                <i class="fas fa-caret-${chg >= 0 ? 'up' : 'down'}" style="font-size:10px"></i>
+                ${Math.abs(chg).toFixed(2)}%
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+      }
+
       if (exchanges.length > 0) {
-        html += `<div class="p-2 text-xs font-bold text-ac opacity-70 uppercase tracking-wider" style="background:var(--bg2)">${t('exchanges')}</div>`;
+        html += `<div class="gs-section-hd"><span class="gs-section-title">${t('exchanges')}</span></div>`;
         html += exchanges.map(ex => {
           const ref = getRef(ex.n, ex.u.replace(/{s}/g, 'BTC').replace(/{sl}/g, 'btc'));
-          return `<a href="${ref}" target="_blank" class="gs-res-item no-underline" onclick="closeSrch()">
-          <img alt="icon" src="${ex.l}" class="gs-res-img" width="28" height="28" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22><rect width=%2232%22 height=%2232%22 fill=%22%23ccc%22/></svg>'">
-            <div class="gs-res-info">
-              <div class="gs-res-name">${ex.n}</div>
-              <span class="text-xs text-t2">${t('rank')}: #${ex.t}/10</span>
+          return `<a href="${ref}" target="_blank" class="gs-trending-item no-underline" onclick="closeSrch()" style="text-decoration:none">
+            <img class="gs-trending-img" src="${ex.l}" onerror="this.onerror=null;this.style.background='var(--bg3)'" loading="lazy">
+            <div class="gs-trending-info">
+              <div class="gs-trending-name">${ex.n}</div>
+              <span class="gs-trending-sym">${t('rank')}: #${ex.t}/10</span>
             </div>
-            <div class="text-ac font-bold text-xs">${t('colTrade')} &larr;</div>
+            <div class="gs-trending-right">
+              <span style="color:var(--ac);font-weight:700;font-size:12px">${t('colTrade')} ←</span>
+            </div>
           </a>`;
         }).join('');
       }
 
-      gsr.innerHTML = html;
-      gsr.classList.add('active');
+      body.innerHTML = html;
     }
 
     function toggleMobileSearch() {
-      const gsw = document.querySelector('.gs-wrap');
-      const btn = document.getElementById('navSearchBtn');
-      if (gsw) {
-        const isHidden = gsw.classList.contains('hidden');
-        if (isHidden) {
-          gsw.classList.remove('hidden');
-          gsw.style.position = 'absolute';
-          gsw.style.top = '100%';
-          gsw.style.left = '0';
-          gsw.style.right = '0';
-          gsw.style.maxWidth = '100%';
-          gsw.style.margin = '0';
-          gsw.style.padding = '8px 12px';
-          gsw.style.background = 'var(--bg1)';
-          gsw.style.borderBottom = '1px solid var(--bc)';
-          gsw.style.zIndex = '9998';
-          if (btn) btn.classList.add('active-search');
-          $('gsInput').focus();
-        } else {
-          gsw.classList.add('hidden');
-          gsw.removeAttribute('style');
-          if (btn) btn.classList.remove('active-search');
-        }
-      }
+      openSrch();
     }
+
+    function updateClearBtn() {}
+    function clearSearch() {
+      const inp = document.getElementById('gsModalInput');
+      if (inp) { inp.value = ''; inp.focus(); }
+      gsRenderDefault();
+    }
+    function showSrchHistory() { gsRenderDefault(); }
 
     // GS Integration
     document.addEventListener('DOMContentLoaded', () => {
-      const gsi = $('gsInput');
-      if (gsi) {
-        gsi.addEventListener('input', e => liveSearch(e.target.value));
-        gsi.addEventListener('focus', () => { if (gsi.value) openSrch(); });
+      // Inject Search Overlay HTML
+      const overlayDiv = document.createElement('div');
+      overlayDiv.id = 'gsOverlay';
+      overlayDiv.className = 'gs-overlay';
+      overlayDiv.innerHTML = `
+        <div class="gs-modal">
+          <div class="gs-top">
+            <i class="fas fa-search gs-top-icon"></i>
+            <input type="text" class="gs-top-input" id="gsModalInput" placeholder="Search coin, NFT, exchange..." autocomplete="off">
+            <button class="gs-top-close" onclick="closeSrch()" title="Close">✕</button>
+          </div>
+          <div class="gs-body" id="gsModalBody"></div>
+        </div>
+      `;
+      document.body.appendChild(overlayDiv);
+
+      // Overlay click-to-close
+      overlayDiv.addEventListener('click', e => {
+        if (e.target === overlayDiv) closeSrch();
+      });
+
+      // Input events
+      const inp = document.getElementById('gsModalInput');
+      if (inp) {
+        let _gsT;
+        inp.addEventListener('input', e => {
+          clearTimeout(_gsT);
+          _gsT = setTimeout(() => gsLiveSearch(e.target.value), 150);
+        });
       }
 
-      // Shortcut "/"
+      // Shortcut "/" to open search
       document.addEventListener('keydown', e => {
         if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
           e.preventDefault();
-          const gsi = $('gsInput');
-          if (gsi) {
-            if (document.querySelector('.gs-wrap').classList.contains('hidden')) {
-              toggleMobileSearch();
-            } else {
-              gsi.focus();
-            }
-          }
+          openSrch();
         }
         if (e.key === 'Escape') closeSrch();
       });
-
-      // Global click listener to close search
-      document.addEventListener('click', e => {
-        const gsw = document.querySelector('.gs-wrap');
-        const searchBtn = document.getElementById('navSearchBtn');
-        if (gsw && !gsw.classList.contains('hidden') && !gsw.contains(e.target) && e.target !== searchBtn && !searchBtn.contains(e.target)) {
-          closeSrch();
-          gsw.classList.add('hidden');
-          gsw.removeAttribute('style');
-          if (searchBtn) searchBtn.classList.remove('active-search');
-        }
-      });
     });
+
+
 
     // Legal modals
     function openLegal(id) { const el = $(id); if (el) { el.classList.add('active'); el.onclick = function (e) { if (e.target === el) el.classList.remove('active') } } }

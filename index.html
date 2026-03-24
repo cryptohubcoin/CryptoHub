@@ -4909,7 +4909,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      z-index: 9998;
+      z-index: 10001;
       background: rgba(0, 0, 0, .6);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
@@ -5298,6 +5298,15 @@
 
       .gs-overlay {
         padding-top: 0;
+      }
+
+      .gs-top {
+        padding: 16px 16px;
+        padding-top: calc(16px + env(safe-area-inset-top, 0px));
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--bg1);
       }
 
       .gs-boosted-scroll {

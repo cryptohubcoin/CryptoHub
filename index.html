@@ -8860,7 +8860,7 @@
               if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.lastPrice) || 0; if (p > 0) existing.pr = p; }
               return;
             }
-            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
+            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
             allC.push(coin); symMap.set(sy, coin);
           });
         }
@@ -8876,7 +8876,7 @@
               if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.last) || 0; if (p > 0) existing.pr = p; }
               return;
             }
-            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: parseFloat(t.change_percentage) || 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
+            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: parseFloat(t.change_percentage) || 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
             allC.push(coin); symMap.set(sy, coin);
           });
         }
@@ -8892,7 +8892,7 @@
               if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.last) || 0; if (p > 0) existing.pr = p; }
               return;
             }
-            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: t.open24h > 0 ? ((parseFloat(t.last) - parseFloat(t.open24h)) / parseFloat(t.open24h) * 100) : 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
+            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: t.open24h > 0 ? ((parseFloat(t.last) - parseFloat(t.open24h)) / parseFloat(t.open24h) * 100) : 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
             allC.push(coin); symMap.set(sy, coin);
           });
         }
@@ -8910,7 +8910,7 @@
                 if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.lastPrice) || 0; if (p > 0) existing.pr = p; }
                 return;
               }
-              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.price24hPcnt) ? parseFloat(t.price24hPcnt) * 100 : 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
+              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.price24hPcnt) ? parseFloat(t.price24hPcnt) * 100 : 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
               allC.push(coin); symMap.set(sy, coin);
             });
           }
@@ -8929,7 +8929,7 @@
                 if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.last) || 0; if (p > 0) existing.pr = p; }
                 return;
               }
-              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: parseFloat(t.changeRate) ? parseFloat(t.changeRate) * 100 : 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
+              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: parseFloat(t.changeRate) ? parseFloat(t.changeRate) * 100 : 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
               allC.push(coin); symMap.set(sy, coin);
             });
           }
@@ -8945,7 +8945,7 @@
                 if (symMap.has(sy)) return;
                 const prBtc = parseFloat(t.lastPrice) || 0;
                 const vol = (parseFloat(t.quoteVolume) || 0) * btcPrice;
-                const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: prBtc * btcPrice, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 };
+                const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: prBtc * btcPrice, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
                 allC.push(coin); symMap.set(sy, coin);
               });
             }
@@ -9135,8 +9135,115 @@
     // Common coin names for Binance fallback
     const COIN_NAMES = { DAI: 'Dai', USDT: 'Tether', USDC: 'USD Coin', BUSD: 'Binance USD', TUSD: 'TrueUSD', FRAX: 'Frax', LUSD: 'Liquity USD', USDP: 'Pax Dollar', GUSD: 'Gemini Dollar', PYUSD: 'PayPal USD', USDD: 'USDD', FDUSD: 'First Digital USD', WBTC: 'Wrapped Bitcoin', STETH: 'Lido Staked ETH', WSTETH: 'Wrapped stETH', RETH: 'Rocket Pool ETH', CBETH: 'Coinbase Wrapped ETH', WETH: 'Wrapped Ether', WEETH: 'Wrapped eETH', PAXG: 'PAX Gold', BTC: 'Bitcoin', ETH: 'Ethereum', BNB: 'BNB', SOL: 'Solana', XRP: 'XRP', DOGE: 'Dogecoin', ADA: 'Cardano', AVAX: 'Avalanche', DOT: 'Polkadot', LINK: 'Chainlink', MATIC: 'Polygon', UNI: 'Uniswap', SHIB: 'Shiba Inu', LTC: 'Litecoin', BCH: 'Bitcoin Cash', ATOM: 'Cosmos', FIL: 'Filecoin', APT: 'Aptos', ARB: 'Arbitrum', OP: 'Optimism', SUI: 'Sui', SEI: 'Sei', TIA: 'Celestia', INJ: 'Injective', JUP: 'Jupiter', NEAR: 'NEAR', ICP: 'Internet Computer', RNDR: 'Render', FET: 'Fetch.ai', GRT: 'The Graph', IMX: 'Immutable X', MKR: 'Maker', AAVE: 'Aave', SNX: 'Synthetix', CRV: 'Curve', LDO: 'Lido', RPL: 'Rocket Pool', ENS: 'ENS', SAND: 'The Sandbox', MANA: 'Decentraland', AXS: 'Axie Infinity', APE: 'ApeCoin', PEPE: 'Pepe', FLOKI: 'Floki', WLD: 'Worldcoin', BONK: 'Bonk', WIF: 'dogwifhat', TRX: 'TRON', ETC: 'Ethereum Classic', ALGO: 'Algorand', XLM: 'Stellar', VET: 'VeChain', HBAR: 'Hedera', THETA: 'Theta', EOS: 'EOS', XTZ: 'Tezos', FLOW: 'Flow', MINA: 'Mina', NEO: 'NEO', EGLD: 'MultiversX', KAVA: 'Kava', ONE: 'Harmony', ROSE: 'Oasis', FTM: 'Fantom', CKB: 'Nervos', KAS: 'Kaspa', TON: 'Toncoin', ORDI: 'ORDI', STX: 'Stacks', RUNE: 'THORChain', BLUR: 'Blur', GMX: 'GMX', PENDLE: 'Pendle', JTO: 'Jito', PYTH: 'Pyth', RAY: 'Raydium', CAKE: 'PancakeSwap', JASMY: 'JasmyCoin', CHZ: 'Chiliz', GMT: 'STEPN', GAL: 'Galxe', CFX: 'Conflux', ACH: 'Alchemy Pay', AGLD: 'Adventure Gold', AGIX: 'SingularityNET', AI: 'Sleepless AI', ALICE: 'My Neighbor Alice', ALPHA: 'Alpha Finance', ANKR: 'Ankr', ANT: 'Aragon', AR: 'Arweave', AUDIO: 'Audius', BAND: 'Band Protocol', BAT: 'Basic Attention', BOME: 'BOOK OF MEME', CELO: 'Celo', COMP: 'Compound', DASH: 'Dash', DYDX: 'dYdX', DYM: 'Dymension', ENJ: 'Enjin', GNO: 'Gnosis', ICX: 'ICON', IOTA: 'IOTA', LINA: 'Linear', MASK: 'Mask Network', OCEAN: 'Ocean Protocol', OMG: 'OMG Network', ONT: 'Ontology', QNT: 'Quant', QTUM: 'Qtum', SC: 'Siacoin', SKL: 'SKALE', STORJ: 'Storj', SUSHI: 'SushiSwap', SXP: 'Solar', YFI: 'yearn.finance', ZEC: 'Zcash', ZIL: 'Zilliqa', ZRX: '0x' };
     // CMC coin IDs for image URLs
-    const CMC_IDS = {BTC:1,ETH:1027,USDT:825,BNB:1839,SOL:5426,XRP:52,USDC:3408,DOGE:74,ADA:2010,TRX:1958,AVAX:5805,LINK:1975,DOT:6636,SHIB:5994,TON:11419,UNI:7083,LTC:2,BCH:1831,NEAR:6535,ATOM:3794,XLM:512,HBAR:4642,APT:21794,FIL:2280,ARB:11841,OP:11840,SUI:20947,SEI:23149,INJ:7226,FET:5681,RNDR:5690,GRT:6719,IMX:10603,MKR:1518,AAVE:7278,PEPE:24478,WIF:28752,BONK:23095,FLOKI:10804,WLD:13502,STX:4847,RUNE:4157,ETC:1321,ALGO:4030,VET:3077,FTM:3513,MANA:1966,SAND:6210,AXS:6783,APE:18876,EOS:1765,XTZ:2011,NEO:1376,THETA:2416,IOTA:1720,DASH:131,ZEC:1437,COMP:5692,SNX:2586,CRV:6538,LDO:8000,ENJ:2130,CHZ:4066,GMT:18069,CAKE:7186,SUSHI:6758,YFI:5864,KAS:20396,EGLD:6892,DYDX:28324,GMX:11857,PENDLE:9481,JUP:29210,PYTH:28177,TIA:22861,QNT:3155,AR:5632,PAXG:4705,DAI:4943,WBTC:3717,STETH:8085,KCS:2087,CRO:3635,GALA:7080,FLOW:4558,MINA:8646,KAVA:4846,ONE:3945,ROSE:7653,CKB:4948,ORDI:25028,SXP:4279,BAT:1697,ZIL:2469,ICX:2099,ONT:2566,QTUM:1684,SC:1042,SKL:5765,STORJ:1772,ZRX:1896,ANKR:3783,BAND:4679,CELO:5567,CFX:7334,JASMY:8425,AUDIO:7455,GNO:1659,MASK:8536,OMG:1808,BLUR:23121,RAY:8526,ALICE:8766,BOME:29870,DYM:28932,ENS:13855,RPL:2943,ACH:6958,LINA:7102,AGLD:11568};
+    const CMC_IDS = {BTC:1,ETH:1027,USDT:825,BNB:1839,SOL:5426,XRP:52,USDC:3408,DOGE:74,ADA:2010,TRX:1958,AVAX:5805,LINK:1975,DOT:6636,SHIB:5994,TON:11419,UNI:7083,LTC:2,BCH:1831,NEAR:6535,ATOM:3794,XLM:512,HBAR:4642,APT:21794,FIL:2280,ARB:11841,OP:11840,SUI:20947,SEI:23149,INJ:7226,FET:5681,RNDR:5690,GRT:6719,IMX:10603,MKR:1518,AAVE:7278,PEPE:24478,WIF:28752,BONK:23095,FLOKI:10804,WLD:13502,STX:4847,RUNE:4157,ETC:1321,ALGO:4030,VET:3077,FTM:3513,MANA:1966,SAND:6210,AXS:6783,APE:18876,EOS:1765,XTZ:2011,NEO:1376,THETA:2416,IOTA:1720,DASH:131,ZEC:1437,COMP:5692,SNX:2586,CRV:6538,LDO:8000,ENJ:2130,CHZ:4066,GMT:18069,CAKE:7186,SUSHI:6758,YFI:5864,KAS:20396,EGLD:6892,DYDX:28324,GMX:11857,PENDLE:9481,JUP:29210,PYTH:28177,TIA:22861,QNT:3155,AR:5632,PAXG:4705,DAI:4943,WBTC:3717,STETH:8085,KCS:2087,CRO:3635,GALA:7080,FLOW:4558,MINA:8646,KAVA:4846,ONE:3945,ROSE:7653,CKB:4948,ORDI:25028,SXP:4279,BAT:1697,ZIL:2469,ICX:2099,ONT:2566,QTUM:1684,SC:1042,SKL:5765,STORJ:1772,ZRX:1896,ANKR:3783,BAND:4679,CELO:5567,CFX:7334,JASMY:8425,AUDIO:7455,GNO:1659,MASK:8536,OMG:1808,BLUR:23121,RAY:8526,ALICE:8766,BOME:29870,DYM:28932,ENS:13855,RPL:2943,ACH:6958,LINA:7102,AGLD:11568,
+      // Extended coverage — top 200-400 by market cap
+      PI:31730,TAO:22974,ONDO:18626,FDUSD:26081,AERO:29270,ROBO:30273,XUSD:26688,A2Z:32287,
+      JTO:29469,PYUSD:28298,ETHFI:29814,ENA:30171,W:29587,STRK:22691,MANTA:28301,ALT:29737,
+      PORTAL:29971,PIXEL:30832,WEN:30126,MYRO:29045,BCUT:30564,SLERF:30602,TRUMP:35788,MELANIA:35951,
+      PNUT:33575,LUCE:34168,MOODENG:32982,GOAT:33960,NEIRO:34506,ACT:34988,CHILLGUY:34887,
+      VIRTUAL:28850,AI16Z:34889,GRIFFAIN:35108,FARTCOIN:35167,ZEREBRO:34793,SWARMS:35372,
+      BRETT:29743,TOSHI:30126,DEGEN:29660,HIGHER:30560,PRIME:26481,BEAM:26450,SUPER:6717,
+      BLUR:23121,HOOK:22352,MAGIC:18549,RDNT:20414,VELA:22017,GNS:10726,GAINS:20312,
+      HFT:22177,LQTY:9640,DODO:7224,ALPHA:7225,PERP:8259,BADGER:7859,CREAM:6892,HARVEST:7626,
+      PICKLE:7786,COVER:7958,VALUE:7440,SWRV:7654,HBTC:7923,RENBTC:6117,
+      OCEAN:3911,AGI:5681,NMR:1732,REP:1104,MLN:544,OXT:2563,KEEP:5566,NU:6892,TBTC:5776,
+      CELR:3829,IOTX:2777,RSR:3964,REN:2539,OGN:5117,DUSK:4730,AERGO:3671,ARPA:4695,
+      CTSI:5444,DATA:2546,RLC:2019,TRB:4823,NKN:2780,FIO:5865,DENT:1886,MTL:1788,
+      COCOS:3947,TFUEL:3623,WAN:2606,STPT:4006,LOOM:2588,PERL:4705,WTC:2396,HC:2663,
+      AE:1700,ZEN:1698,DCR:1168,DGB:109,SC:1042,DIVI:2567,ARDR:1320,LSK:1214,NAV:811,
+      STEEM:1230,NXT:66,XEM:873,WAVES:1274,GAME:2148,GAS:1785,IOST:2405,ELF:2299,
+      NULS:2092,WAN:2606,GXC:1576,NANO:1567,ZRX:1896,POLY:3789,CELR:3829,
+      WSTETH:12409,CBETH:21535,RETH:15060,WEETH:30277,WETH:2396,FRAX:6952,LUSD:9566,USDP:3330,GUSD:4779,
+      TUSD:2563,BUSD:4687,USDD:19891,
+      KNC:1982,BAND:4679,HEGIC:7023,UMA:5617,BAL:5728,MTA:5748,CREAM:6892,PICKLE:7786,
+      ALCX:8613,SPELL:11289,ICE:10632,BTRFLY:16749,LOOKS:16563,X2Y2:18679,SUDOSWAP:21160,
+      DOODLES:18688,BAYC:17162,AZUKI:18385,
+      METIS:9640,BOBA:14556,MOVR:9285,GLMR:14013,KLAY:4256,OAS:21021,TOMO:2570,
+      CANTO:21516,EVMOS:19899,ROSE:7653,AURORA:14803,KUB:5765,FUSE:5765,OKT:8267,
+      HT:2502,GT:4269,BGB:8119,OKB:3897,MX:2956,LEO:3957,
+      DYDX:28324,SNX:2586,PERP:8259,KWENTA:23050,GMX:11857,GNS:10726,GAINS:20312,
+      VELO:9452,THALES:12274,LYRA:12193,PREMIA:8289,HEGIC:7023,OPYN:8243,
+      FORTH:9288,INDEX:7981,DPI:7982,MVI:9531,BED:9532,DATA2:10016,IBTC:9533,IMATIC:9534,
+      COMP:5692,CREAM:6892,IRON:10000,
+      YFII:5957,ROOK:10044,BIFI:7311,BUNNY:9739,AUTO:9644,MDX:9001,SWAMP:9638,EPS:8645,
+      BSW:10073,BABY:9868,CHESS:9990,NFTB:10177,NULS:2092,ANKR:3783,
+      LUNC:4172,USTC:7129,LUNA:20314,
+      AVAX:5805,PNG:9442,JOE:11396,QI:11338,XAVA:9770,
+      NEAR:6535,AURORA:14803,OCT:16540,REF:10064,
+      SOL:5426,SRM:6187,MNGO:10660,STEP:9695,SUNNY:10643,PORT:11055,TULIP:10771,LARIX:11068,FIDA:7978,MAPS:8490,OXY:8533,
+      ALGO:4030,YLDY:11414,
+      DOT:6636,GLMR:14013,MOVR:9285,PHA:6841,KSM:5034,
+      ATOM:3794,OSMO:12220,JUNO:14299,STARS:15271,AKT:7431,SCRT:5604,DVPN:7786,CTK:6888,
+      KAVA:4846,HARD:8431,SWP:9544,
+      MATIC:3890,QUICK:8206,GHST:7046,DFYN:9596,FISH:9692,BONE:9737,LEASH:10142,TREAT:11029,
+      FTM:3513,BOO:9036,ICE:10632,ZOO:9750,SPELL:11289,MIM:162,LQDR:13456,
+      ONE:3945,VIPER:10523,TRANQ:10698,
+      EGLD:6892,MEX:8425,RIDE:10671,ITHEUM:12935,
+      CELO:5567,UBE:9907,MOBI:10048,SOURCE:11285,
+      KDA:5647,
+      HBAR:4642,HBAR:4642,
+      IOTA:1720,ASMB:14801,
+      XDC:2634,
+      ZIL:2469,ZWAP:10266,
+      EWT:5268,
+      VET:3077,VTHO:3012,
+      NULS:2092,Nuls:2092,
+      QTUM:1684,
+      THETA:2416,TFUEL:3623,
+      ICX:2099,CFT:5553,OMM:11088,
+      ONT:2566,ONG:3217,
+      IOST:2405,
+      XEM:873,NEM:873,
+      WAVES:1274,NSBT:8093,VIRES:12081,SWOP:9465,
+      LSK:1214,
+      ARDR:1320,
+      STEEM:1230,
+      NANO:1567,
+      DGB:109,
+      DCR:1168,
+      ZEN:1698,
+      XVG:693,
+      SC:1042,
+      STORJ:1772,
+      ANKR:3783,
+      RLC:2019,
+      REP:1104,
+      OXT:2563,
+      NMR:1732,
+      MLN:544,
+      KNC:1982,
+      KEEP:5566,
+      BTT:16086,SUN:5665,JST:5488,WIN:4206,NFT:11654,
+      HT:2502,MDT:9014,
+      CRO:3635,VVS:18679,TONIC:14892,
+      OKB:3897,OKT:8267,
+      GT:4269,
+      MX:2956,
+      BGB:8119,
+      LEO:3957,
+      WRX:5161,
+      NEXO:3778,
+      CEL:2700,
+      FTT:4195
+    };
     function cmcImg(sy) { var id = CMC_IDS[sy]; return id ? 'https://s2.coinmarketcap.com/static/img/coins/64x64/' + id + '.png' : ''; }
+
+    // Smart image fallback: tries CMC → CoinGecko → CoinCap → letter avatar
+    function coinImgWithFallback(coin) {
+      if (coin.img && !coin.img.includes('/0.png') && !coin.img.includes('undefined')) return coin.img;
+      const cmcId = CMC_IDS[coin.sy];
+      if (cmcId) return 'https://s2.coinmarketcap.com/static/img/coins/64x64/' + cmcId + '.png';
+      // CoinCap fallback
+      return 'https://assets.coincap.io/assets/icons/' + coin.sy.toLowerCase() + '@2x.png';
+    }
+
+    // Generate SVG letter avatar for coins with no image
+    function letterAvatar(sym, size) {
+      const colors = ['#3861fb','#16c784','#f7931a','#ea3943','#9c27b0','#00bcd4','#ff5722','#607d8b'];
+      const color = colors[sym.charCodeAt(0) % colors.length];
+      const letter = (sym || '?').slice(0,2).toUpperCase();
+      return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}'><rect width='${size}' height='${size}' rx='${size/2}' fill='${encodeURIComponent(color)}'/><text x='50%' y='50%' font-family='Arial,sans-serif' font-size='${Math.round(size*0.42)}' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='central'>${letter}</text></svg>`;
+    }
 
     async function loadMore1h7d() {
       // Symbol→coin map for O(1) lookup
@@ -9496,7 +9603,7 @@
           return;
         }
         symSet.add(sy);
-        var nc = { id: sy.toLowerCase(), rk: allC.length + 1, nm: nm, sy: sy, pr: pr, c1: c1||0, c4: 0, c24: c24||0, c7: c7||0, mc: mc, vol: vol, img: img || 'https://s2.coinmarketcap.com/static/img/coins/64x64/0.png', ex: nmp||0, sup: sup || 0 };
+        var nc = { id: sy.toLowerCase(), rk: allC.length + 1, nm: nm, sy: sy, pr: pr, c1: c1||0, c4: 0, c24: c24||0, c7: c7||0, mc: mc, vol: vol, img: img || cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: nmp||0, sup: sup || 0 };
         allC.push(nc);
         symIdx.set(sy, nc);
         added++;
@@ -9692,7 +9799,7 @@
               if (existSyms.has(sy)) return;
               const vol = parseFloat(t.volCcy24h) || 0;
               existSyms.add(sy);
-              allC.push({ id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: t.open24h > 0 ? ((parseFloat(t.last) - parseFloat(t.open24h)) / parseFloat(t.open24h) * 100) : 0, c7: 0, mc: 0, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/0.png`, ex: 0, sup: 0 });
+              allC.push({ id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: t.open24h > 0 ? ((parseFloat(t.last) - parseFloat(t.open24h)) / parseFloat(t.open24h) * 100) : 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 });
             });
           }
         } catch (e) { }
@@ -9722,7 +9829,7 @@
         if (sorted.length < 5) return;
         if (_tgBuilt >= 2) return; _tgBuilt++;
         var h = sorted.map(function (c, i) {
-          var img = c.img ? '<img alt="icon" src="' + c.img + '" width="24" height="24" onerror="this.style.display=\'none\'" loading="lazy">' : '<div class="tg-noimg">' + c.sy.slice(0, 2) + '</div>';
+          var img = c.img ? '<img alt="icon" src="' + c.img + '" width="24" height="24" onerror="this.onerror=null;this.src=\'' + letterAvatar(c.sy,24).replace(/'/g,"\\'") + '\'" loading="lazy">' : '<div class="tg-noimg">' + c.sy.slice(0, 2) + '</div>';
           var pr = fN(c.pr);
           return `<div class="tg-card" onclick="blockRender();showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}','${c.sy}','${c.img}')"><div class="tg-rank">#${i + 1}</div>${img}<span class="tg-sym">${c.sy}</span><span class="tg-pr">${pr}</span><span class="tg-chg tg-up">+${c.c24.toFixed(1)}%</span></div>`;
         }).join('');
@@ -14432,7 +14539,7 @@
       });
     }
 
-    function render() { if (_renderBlocked) { _renderPending = true; return; } setTimeout(_doRender, 0); }
+    function render() { if (_renderBlocked) { _renderPending = true; return; } _doRender(); }
     function _doRender() {
       const st = (cPage - 1) * iPP, en = st + iPP, pg = filtC.slice(st, en); const tb = $('tBody');
       if (!pg.length) { tb.innerHTML = `<tr><td colspan="10" class="p-6 text-center" style="color:var(--t2)">${t('noExchanges')}</td></tr>`; return }
@@ -14441,11 +14548,12 @@
         const dn = c.sy === 'USDT' ? 'Tether' : c.sy === 'USDC' ? 'USD Coin' : c.nm;
         const mkChg = (v) => { const col = v >= 0 ? 'var(--gn)' : 'var(--rd)'; const ic = v >= 0 ? 'fa-caret-up' : 'fa-caret-down'; return `<span class="chg" style="color:${col}"><i class="fas ${ic}"></i>${v >= 0 ? '+' : ''}${v.toFixed(2)}%</span>` };
         const aiBadge = Math.abs(c.c24) > 15 ? `<span style="font-size:9px;background:${c.c24 > 0 ? 'rgba(22,199,132,0.15)' : 'rgba(234,57,67,0.15)'};color:${c.c24 > 0 ? '#16c784' : '#ea3943'};padding:1px 4px;border-radius:4px;margin-inline-start:4px">AI Signal</span>` : '';
-        const volBadge = (parseFloat(c.vol) || 0) >= 500000 ? `<span style="position:relative;display:inline-flex;cursor:pointer;flex-shrink:0" class="vol-badge-wrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display:block"><circle cx="12" cy="12" r="10" fill="#3b82f6"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="vol-tip">Verified High Volume — This coin has a 24h trading volume exceeding $500,000, indicating strong market activity and liquidity.</span></span>` : '';
+        const volBadge = (parseFloat(c.vol) || 0) >= 500000 ? `<span style="position:relative;display:inline-flex;cursor:default;flex-shrink:0;pointer-events:none" class="vol-badge-wrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display:block"><circle cx="12" cy="12" r="10" fill="#3b82f6"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="vol-tip">Verified High Volume — This coin has a 24h trading volume exceeding $500,000, indicating strong market activity and liquidity.</span></span>` : '';
         const prDisp = c.pr >= 1 ? c.pr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : (c.pr >= 0.0001 ? c.pr.toFixed(6).replace(/0+$/, '').replace(/\.$/, '.0') : parseFloat(c.pr.toFixed(8)));
 
+        const imgSrc = coinImgWithFallback(c);
         return `<tr onclick="showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}', '${c.sy}', '${c.img}')">
-<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><img alt="icon" src="${c.img}" class="w-6 h-6 rounded-full" width="24" height="24" onerror="this.style.display='none'" loading="lazy" style="flex-shrink:0"><span class="font-semibold text-sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
+<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><img alt="icon" src="${imgSrc}" class="w-6 h-6 rounded-full" width="24" height="24" onerror="this.onerror=null;this.src='${letterAvatar(c.sy,24)}'" loading="lazy" style="flex-shrink:0"><span class="font-semibold text-sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
 <td class="font-bold text-end pr-4" style="white-space:nowrap">$${prDisp}</td>
 <td class="text-end pr-4 col-1h" style="white-space:nowrap">${mkChg(c.c1)}</td>
 <td class="text-end pr-4 col-4h" style="white-space:nowrap">${mkChg(c.c4)}</td>

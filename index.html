@@ -22,10 +22,18 @@
     })();
   </script>
   <style id="anti-flash">
-    body {
-      visibility: hidden;
-    }
+    /* Use opacity instead of visibility so browser can still paint LCP element */
+    body { opacity: 0; transition: opacity 0.05s ease; }
   </style>
+  <script>
+    // Guarantee body is visible within 300ms max — prevents LCP blocking if JS is slow
+    setTimeout(function() {
+      var b = document.body;
+      if (b && b.style.opacity !== '1') { b.style.opacity = '1'; }
+      var af = document.getElementById('anti-flash');
+      if (af) af.remove();
+    }, 300);
+  </script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FTBNSF9WJT"></script>
   <script>
@@ -447,6 +455,70 @@
     /* Contain exMod to avoid reflow during open */
     #exMod {
       contain: layout;
+    }
+
+    /* ============================================================
+       CLS FIX — #tab_crypto (score: 0.769 — highest priority)
+       Root cause: table grows as coins load, shifting page content
+    ============================================================ */
+    #tab_crypto {
+      /* Reserve space: 75 rows × ~47px row height = ~3525px + controls */
+      min-height: calc(75 * 47px + 200px);
+    }
+
+    /* Lock the coins table wrapper height while loading */
+    #tab_crypto .ct.mb-4 {
+      min-height: calc(75 * 47px);
+    }
+
+    /* Remove reservation once data is loaded (added by JS) */
+    #tab_crypto.data-loaded {
+      min-height: 0;
+    }
+    #tab_crypto.data-loaded .ct.mb-4 {
+      min-height: 0;
+    }
+
+    /* ============================================================
+       CLS FIX — #cmcPag (score: 0.195)
+       Root cause: pagination appears after render, shifting content
+    ============================================================ */
+    #cmcPag {
+      /* Reserve exact space pagination takes before it renders */
+      min-height: 60px;
+      visibility: hidden; /* Invisible but occupies space — no shift */
+    }
+    #cmcPag.pag-ready {
+      visibility: visible;
+    }
+
+    /* ============================================================
+       CLS FIX — html>body>section (score: 0.555)
+       Root cause: blog grid cards load async, shifting layout
+    ============================================================ */
+    section[style*="max-width:1280px"] {
+      contain: layout style;
+      /* Reserve height for 2-row blog grid */
+      min-height: 520px;
+    }
+    section[style*="max-width:1280px"] > div[style*="grid"] > a > div {
+      /* Explicit min-height prevents card expansion from shifting others */
+      min-height: 230px;
+      contain: layout style;
+    }
+    section[style*="max-width:1280px"] > div[style*="grid"] > a > div > div[style*="height:110px"] {
+      /* Lock image placeholder height */
+      height: 110px;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       CLS FIX — #globalBar / #cmcBar (ticker)
+       Prevent market cap bar from shifting page on load
+    ============================================================ */
+    #cmcBar {
+      min-height: 36px;
+      contain: layout style;
     }
   </style>
   <!-- Critical Tailwind utilities fallback (works even if CDN is slow) -->
@@ -1455,8 +1527,8 @@
     .ct tbody tr {
       transition: background .15s;
       cursor: pointer;
-      content-visibility: auto;
-      contain-intrinsic-size: 53px
+      /* Remove 300ms tap delay on mobile */
+      touch-action: manipulation;
     }
 
     .ct tbody tr:hover {
@@ -4916,11 +4988,14 @@
       align-items: flex-start;
       justify-content: center;
       padding-top: min(8vh, 60px);
+      /* Promote to compositor layer — faster open response */
+      will-change: opacity;
+      contain: strict;
     }
 
     .gs-overlay.active {
       display: flex;
-      animation: gsOverIn .2s ease;
+      animation: gsOverIn .15s ease;
     }
 
     @keyframes gsOverIn {
@@ -9125,6 +9200,9 @@
     function $(id) { return document.getElementById(id) }
     function t(k) { return (T[cLang] && T[cLang][k]) || T.en[k] || k }
     function fN(n) { if (!n || isNaN(n) || n === 0) return '--'; if (n >= 1e12) return '$' + (n / 1e12).toFixed(2) + 'T'; if (n >= 1e9) return '$' + (n / 1e9).toFixed(2) + 'B'; if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M'; if (n >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K'; return '$' + n.toFixed(2) }
+    // Clamp percentage values — prevents divide-by-zero artifacts (e.g. +310,000,000%)
+    // from exchange APIs with open24h=0 corrupting rank and display
+    function sanitizePct(v) { var n = parseFloat(v) || 0; return (Math.abs(n) > 1000) ? 0 : n; }
     function fS(n) { return n >= 1000 ? (n / 1000).toFixed(1) + 'K' : n.toFixed(0) }
 
     // Language
@@ -9145,7 +9223,7 @@
     }
 
     function applyLang() {
-      var af = document.getElementById('anti-flash'); if (af) af.remove();
+      var af = document.getElementById('anti-flash'); if (af) { document.body.style.opacity = '1'; af.remove(); }
       applyItI18n();
       const l = LANGS.find(x => x.c === cLang); if (!l) return; document.documentElement.lang = l.c; document.documentElement.dir = l.d; $('cFlag').textContent = l.f; $('cCode').textContent = l.c.toUpperCase(); document.title = cLang === 'ar' ? 'كريبتو هاب | أسعار العملات الرقمية وتحليل الكريبتو بالذكاء الاصطناعي' : 'CryptoHub AI - Cryptocurrency Hub | Live Crypto Prices';
       // Special innerHTML handling for faq answers
@@ -9480,7 +9558,7 @@
             cgTop.forEach(c => {
               const sy = (c.symbol || '').toUpperCase();
               if (!sy || symMap.has(sy)) return;
-              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: c.price_change_percentage_1h_in_currency || 0, c4: 0, c24: c.price_change_percentage_24h || 0, c7: c.price_change_percentage_7d_in_currency || 0, mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
+              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: sanitizePct(c.price_change_percentage_1h_in_currency), c4: 0, c24: sanitizePct(c.price_change_percentage_24h), c7: sanitizePct(c.price_change_percentage_7d_in_currency), mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
               allC.push(coin); symMap.set(sy, coin);
             });
           }
@@ -9499,11 +9577,11 @@
               if (existing) {
                 // Update with Binance live price (more real-time)
                 existing.pr = pr;
-                if (existing.c24 === 0) existing.c24 = parseFloat(t.priceChangePercent) || 0;
+                if (existing.c24 === 0) existing.c24 = sanitizePct(t.priceChangePercent);
                 if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
                 return;
               }
-              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: pr, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
+              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: pr, c1: 0, c4: 0, c24: sanitizePct(t.priceChangePercent), c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
               allC.push(coin); symMap.set(sy, coin);
             });
           }
@@ -9537,7 +9615,7 @@
                 if (existing.nm === existing.sy && c.name) existing.nm = c.name;
                 return;
               }
-              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sym, pr: pr, c1: 0, c4: 0, c24: parseFloat(c.changePercent24Hr) || 0, c7: 0, mc: mc, vol: vol, img: `https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`, ex: 0, sup: sup };
+              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sym, pr: pr, c1: 0, c4: 0, c24: sanitizePct(c.changePercent24Hr), c7: 0, mc: mc, vol: vol, img: `https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`, ex: 0, sup: sup };
               allC.push(coin); symMap.set(sym, coin);
             });
           });
@@ -9565,7 +9643,7 @@
               if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.lastPrice) || 0; if (p > 0) existing.pr = p; }
               return;
             }
-            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
+            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: sanitizePct(t.priceChangePercent), c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
             allC.push(coin); symMap.set(sy, coin);
           });
         }
@@ -9581,7 +9659,7 @@
               if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.last) || 0; if (p > 0) existing.pr = p; }
               return;
             }
-            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: parseFloat(t.change_percentage) || 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
+            const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: sanitizePct(t.change_percentage), c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
             allC.push(coin); symMap.set(sy, coin);
           });
         }
@@ -9615,7 +9693,7 @@
                 if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.lastPrice) || 0; if (p > 0) existing.pr = p; }
                 return;
               }
-              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.price24hPcnt) ? parseFloat(t.price24hPcnt) * 100 : 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
+              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: sanitizePct(sanitizePct(parseFloat(t.price24hPcnt) * 100)), c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
               allC.push(coin); symMap.set(sy, coin);
             });
           }
@@ -9634,7 +9712,7 @@
                 if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.last) || 0; if (p > 0) existing.pr = p; }
                 return;
               }
-              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: parseFloat(t.changeRate) ? parseFloat(t.changeRate) * 100 : 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
+              const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: sanitizePct(parseFloat(t.changeRate) * 100), c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
               allC.push(coin); symMap.set(sy, coin);
             });
           }
@@ -9650,7 +9728,7 @@
                 if (symMap.has(sy)) return;
                 const prBtc = parseFloat(t.lastPrice) || 0;
                 const vol = (parseFloat(t.quoteVolume) || 0) * btcPrice;
-                const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: prBtc * btcPrice, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
+                const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: prBtc * btcPrice, c1: 0, c4: 0, c24: sanitizePct(t.priceChangePercent), c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
                 allC.push(coin); symMap.set(sy, coin);
               });
             }
@@ -9671,7 +9749,7 @@
             r.value.forEach(c => {
               const sy = (c.symbol || '').toUpperCase();
               if (!sy || symMap.has(sy)) return;
-              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: 0, c4: 0, c24: c.price_change_percentage_24h || 0, c7: 0, mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
+              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: 0, c4: 0, c24: sanitizePct(c.price_change_percentage_24h), c7: 0, mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
               allC.push(coin); symMap.set(sy, coin);
             });
           });
@@ -9780,7 +9858,7 @@
             const pr = parseFloat(t.lastPrice) || 0;
             if (pr > 0) prMap.set(sy, pr);
             if (vol > 0) volMap.set(sy, (volMap.get(sy) || 0) + vol);
-            chgMap.set(sy, parseFloat(t.priceChangePercent) || 0);
+            chgMap.set(sy, sanitizePct(t.priceChangePercent));
           });
         }
         // MEXC (fills gaps)
@@ -9791,7 +9869,7 @@
             const vol = parseFloat(t.quoteVolume) || 0;
             if (!prMap.has(sy)) { const pr = parseFloat(t.lastPrice) || 0; if (pr > 0) prMap.set(sy, pr); }
             if (vol > 0) volMap.set(sy, (volMap.get(sy) || 0) + vol);
-            if (!chgMap.has(sy)) chgMap.set(sy, parseFloat(t.priceChangePercent) || 0);
+            if (!chgMap.has(sy)) chgMap.set(sy, sanitizePct(t.priceChangePercent));
           });
         }
         // Gate.io (fills gaps)
@@ -9802,7 +9880,7 @@
             const vol = parseFloat(t.quote_volume) || 0;
             if (!prMap.has(sy)) { const pr = parseFloat(t.last) || 0; if (pr > 0) prMap.set(sy, pr); }
             if (vol > 0) volMap.set(sy, (volMap.get(sy) || 0) + vol);
-            if (!chgMap.has(sy)) chgMap.set(sy, parseFloat(t.change_percentage) || 0);
+            if (!chgMap.has(sy)) chgMap.set(sy, sanitizePct(t.change_percentage));
           });
         }
         // Bybit
@@ -9813,7 +9891,7 @@
             const vol = parseFloat(t.turnover24h) || 0;
             if (!prMap.has(sy)) { const pr = parseFloat(t.lastPrice) || 0; if (pr > 0) prMap.set(sy, pr); }
             if (vol > 0) volMap.set(sy, (volMap.get(sy) || 0) + vol);
-            if (!chgMap.has(sy) && t.price24hPcnt) chgMap.set(sy, parseFloat(t.price24hPcnt) * 100);
+            if (!chgMap.has(sy) && t.price24hPcnt) chgMap.set(sy, sanitizePct(parseFloat(t.price24hPcnt) * 100));
           });
         }
         // Apply to allC
@@ -9934,13 +10012,33 @@
     };
     function cmcImg(sy) { var id = CMC_IDS[sy]; return id ? 'https://s2.coinmarketcap.com/static/img/coins/64x64/' + id + '.png' : ''; }
 
-    // Smart image fallback: tries CMC → CoinGecko → CoinCap → letter avatar
+    // Smart image fallback: tries CMC → CoinCap → letter avatar
     function coinImgWithFallback(coin) {
-      if (coin.img && !coin.img.includes('/0.png') && !coin.img.includes('undefined')) return coin.img;
+      if (coin.img && !coin.img.includes('/0.png') && !coin.img.includes('undefined') && coin.img !== '') return coin.img;
       const cmcId = CMC_IDS[coin.sy];
       if (cmcId) return 'https://s2.coinmarketcap.com/static/img/coins/64x64/' + cmcId + '.png';
       // CoinCap fallback
       return 'https://assets.coincap.io/assets/icons/' + coin.sy.toLowerCase() + '@2x.png';
+    }
+
+    // Cascading image onerror: tries multiple sources before letterAvatar
+    function imgOnerror(el, sy) {
+      const src = el.src || '';
+      // Stage 1: if current src is NOT coincap, try coincap
+      if (!src.includes('coincap.io')) {
+        el.onerror = function() { imgOnerror(el, sy); };
+        el.src = 'https://assets.coincap.io/assets/icons/' + sy.toLowerCase() + '@2x.png';
+        return;
+      }
+      // Stage 2: if current src is coincap, try CryptoCompare
+      if (!src.includes('cryptocompare.com')) {
+        el.onerror = function() { imgOnerror(el, sy); };
+        el.src = 'https://www.cryptocompare.com/media/44082116/' + sy.toLowerCase() + '.png';
+        return;
+      }
+      // Stage 3: final fallback — letter avatar
+      el.onerror = null;
+      el.src = letterAvatar(sy, parseInt(el.width) || 24);
     }
 
     // Generate SVG letter avatar for coins with no image
@@ -9967,7 +10065,7 @@
             if (r.ok) {
               const d = await r.json();
               (Array.isArray(d) ? d : [d]).forEach(t => {
-                if (t.symbol && t.symbol.endsWith('USDT')) map[t.symbol.replace('USDT', '')] = parseFloat(t.priceChangePercent) || 0;
+                if (t.symbol && t.symbol.endsWith('USDT')) map[t.symbol.replace('USDT', '')] = sanitizePct(t.priceChangePercent);
               });
             }
           } catch (e) { }
@@ -10387,7 +10485,7 @@
             var data = await r.json();
             if (!Array.isArray(data) || data.length === 0) break;
             data.forEach(function (c) {
-              addOrEnrich((c.symbol || '').toUpperCase(), c.name, c.current_price || 0, c.price_change_percentage_24h || 0, c.market_cap || 0, c.total_volume || 0, c.image || '', c.circulating_supply || 0);
+              addOrEnrich((c.symbol || '').toUpperCase(), c.name, c.current_price || 0, sanitizePct(c.price_change_percentage_24h), c.market_cap || 0, c.total_volume || 0, c.image || '', c.circulating_supply || 0);
             });
             if (page % 10 === 0) {
               reRank(); assignExCounts(); filtC = allC.slice(); render();
@@ -15008,15 +15106,26 @@
       if (p) p.innerHTML = h;
     }
 
-    function closeMod() { $('exMod').classList.remove('active'); document.documentElement.style.overflow = ''; document.body.style.overflow = ''; if (window.exUpdTimer) clearInterval(window.exUpdTimer); }
+    function closeMod() {
+      const m = $('exMod');
+      if (!m) return;
+      // Remove active class immediately (visual response — this is what INP measures)
+      m.classList.remove('active');
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      // Defer timer cleanup to after paint
+      if (window.exUpdTimer) { setTimeout(() => clearInterval(window.exUpdTimer), 0); }
+    }
     function openSrch() {
       const ov = document.getElementById('gsOverlay');
       if (!ov) return;
+      // Show modal INSTANTLY — this is what the browser measures for INP
       ov.classList.add('active');
       document.body.style.overflow = 'hidden';
       const inp = document.getElementById('gsModalInput');
-      if (inp) { inp.value = ''; setTimeout(() => inp.focus(), 100); }
-      gsRenderDefault();
+      if (inp) { inp.value = ''; setTimeout(() => inp.focus(), 50); }
+      // Defer heavy render work to after the browser has painted the open state
+      setTimeout(gsRenderDefault, 0);
     }
 
     function closeSrch() {
@@ -15097,7 +15206,7 @@
         <div class="gs-chips">
           ${hist.map(q => {
           const coin = gsGetCoinData(q);
-          const imgHtml = coin ? `<img src="${coin.img}" onerror="this.style.display='none'">` : `<i class="fas fa-history" style="font-size:12px;color:var(--t2)"></i>`;
+          const imgHtml = coin ? `<img src="${coin.img}" onerror="this.style.display='none'" width="20" height="20" style="border-radius:50%">` : `<i class="fas fa-history" style="font-size:12px;color:var(--t2)"></i>`;
           return `<div class="gs-chip" onclick="document.getElementById('gsModalInput').value='${q.replace(/'/g, "\\'")}';gsLiveSearch('${q.replace(/'/g, "\\'")}')">
               ${imgHtml}
               <span>${q}</span>
@@ -15107,7 +15216,7 @@
         </div>`;
       }
 
-      // Top Boosted Cards — dynamic from live data
+      // Top Boosted Cards — dynamic from live data (lightweight, always render)
       const boosted = getTopBoosted();
       html += `
       <div class="gs-section-hd">
@@ -15131,26 +15240,29 @@
       }).join('')}
       </div>`;
 
-      // Trending Crypto
-      const pool = allC.length > 10 ? allC : INSTANT_COINS;
-      const trending = pool.slice(0, 6);
-      if (trending.length > 0) {
-        html += `
+      // Render history + boosted immediately
+      body.innerHTML = html;
+
+      // Defer trending section to idle time — avoids blocking the main thread on open
+      const renderTrending = () => {
+        const pool = allC.length > 10 ? allC : INSTANT_COINS;
+        const trending = pool.slice(0, 6);
+        if (!trending.length) return;
+        const trendingHtml = `
         <div class="gs-section-hd">
           <span class="gs-section-title"><i class="fas fa-fire" style="color:#f97316"></i> ${t('trendingCrypto')} 🔥</span>
-        </div>`;
-        html += trending.map((c, i) => {
-          const chg = c.c24 || 0;
-          const mc = c.mc || 0;
-          const vol = c.v24 || 0;
-          return `<div class="gs-trending-item" onclick="gsClickCoinFull('${c.id}','${c.nm.replace(/'/g, "\\'")}','${c.sy}','${c.img}')">
-            <img class="gs-trending-img" src="${c.img}" onerror="this.onerror=null;this.style.background='var(--bg3)'" loading="lazy">
+        </div>` +
+          trending.map((c, i) => {
+            const chg = c.c24 || 0;
+            const mc = c.mc || 0;
+            const imgSrc = (c.img && !c.img.includes('/0.png')) ? c.img : (typeof cmcImg !== 'undefined' ? cmcImg(c.sy) : '') || c.img;
+            return `<div class="gs-trending-item" onclick="gsClickCoinFull('${c.id}','${c.nm.replace(/'/g, "\\'")}','${c.sy}','${c.img}')">
+            <img class="gs-trending-img" src="${imgSrc}" onerror="this.onerror=null;this.style.background='var(--bg3)'" loading="lazy" width="32" height="32">
             <div class="gs-trending-info">
               <div class="gs-trending-name">${c.nm} <span class="gs-trending-rank">#${c.rk || (i + 1)}</span></div>
               <div class="gs-trending-sym">${c.sy}</div>
               <div class="gs-trending-meta">
                 <span>MCap: <b style="color:var(--t1)">${gsFmtMcap(mc)}</b></span>
-                <span>Vol(24h): <b style="color:var(--t1)">${gsFmtMcap(vol)}</b></span>
               </div>
             </div>
             <div class="gs-trending-right">
@@ -15161,10 +15273,17 @@
               </div>
             </div>
           </div>`;
-        }).join('');
-      }
+          }).join('');
+        // Append trending below the already-rendered content
+        const b2 = document.getElementById('gsModalBody');
+        if (b2) b2.insertAdjacentHTML('beforeend', trendingHtml);
+      };
 
-      body.innerHTML = html;
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(renderTrending, { timeout: 500 });
+      } else {
+        setTimeout(renderTrending, 50);
+      }
     }
 
     function gsClickCoin(sy) {
@@ -15190,7 +15309,8 @@
 
     function gsLiveSearch(query) {
       if (!query || query.length < 1) {
-        gsRenderDefault();
+        // Defer heavy default render to keep input response instant
+        setTimeout(gsRenderDefault, 0);
         return;
       }
       const q = query.toLowerCase();
@@ -15203,27 +15323,28 @@
       const body = document.getElementById('gsModalBody');
       if (!body) return;
 
+      // Show quick skeleton immediately so the response feels instant
       if (coins.length === 0 && exchanges.length === 0) {
         body.innerHTML = `<div class="gs-no-results"><i class="fas fa-search" style="font-size:24px;opacity:.3;display:block;margin-bottom:12px"></i>No results found for "${query}"</div>`;
         return;
       }
 
+      // Build and insert HTML in one shot (single reflow)
       let html = '';
 
       if (coins.length > 0) {
         html += `<div class="gs-section-hd"><span class="gs-section-title">${t('tabCrypto')}</span></div>`;
-        html += coins.map((c, i) => {
+        html += coins.map((c) => {
           const chg = c.c24 || 0;
           const mc = c.mc || 0;
-          const vol = c.v24 || 0;
+          const imgSrc = (c.img && !c.img.includes('/0.png')) ? c.img : (typeof cmcImg !== 'undefined' ? cmcImg(c.sy) : '') || c.img;
           return `<div class="gs-trending-item" onclick="gsClickCoinFull('${c.id}','${c.nm.replace(/'/g, "\\'")}','${c.sy}','${c.img}')">
-            <img class="gs-trending-img" src="${c.img}" onerror="this.onerror=null;this.style.background='var(--bg3)'" loading="lazy">
+            <img class="gs-trending-img" src="${imgSrc}" onerror="this.onerror=null;this.style.background='var(--bg3)'" loading="lazy" width="32" height="32">
             <div class="gs-trending-info">
               <div class="gs-trending-name">${c.nm} <span class="gs-trending-rank">#${c.rk || ''}</span></div>
               <div class="gs-trending-sym">${c.sy}</div>
               <div class="gs-trending-meta">
                 <span>MCap: <b style="color:var(--t1)">${gsFmtMcap(mc)}</b></span>
-                <span>Vol(24h): <b style="color:var(--t1)">${gsFmtMcap(vol)}</b></span>
               </div>
             </div>
             <div class="gs-trending-right">
@@ -15242,7 +15363,7 @@
         html += exchanges.map(ex => {
           const ref = getRef(ex.n, ex.u.replace(/{s}/g, 'BTC').replace(/{sl}/g, 'btc'));
           return `<a href="${ref}" target="_blank" class="gs-trending-item no-underline" onclick="closeSrch()" style="text-decoration:none">
-            <img class="gs-trending-img" src="${ex.l}" onerror="this.onerror=null;this.style.background='var(--bg3)'" loading="lazy">
+            <img class="gs-trending-img" src="${ex.l}" onerror="this.onerror=null;this.style.background='var(--bg3)'" loading="lazy" width="32" height="32">
             <div class="gs-trending-info">
               <div class="gs-trending-name">${ex.n}</div>
               <span class="gs-trending-sym">${t('rank')}: #${ex.t}/10</span>
@@ -15298,7 +15419,7 @@
         let _gsT;
         inp.addEventListener('input', e => {
           clearTimeout(_gsT);
-          _gsT = setTimeout(() => gsLiveSearch(e.target.value), 150);
+          _gsT = setTimeout(() => gsLiveSearch(e.target.value), 80);
         });
       }
 
@@ -15336,6 +15457,20 @@
     document.addEventListener('DOMContentLoaded', () => { $('exSrch')?.addEventListener('input', e => { const s = e.target.value.toLowerCase(); document.querySelectorAll('.ec-row').forEach(c => { c.style.display = c.textContent.toLowerCase().includes(s) ? 'table-row' : 'none' }) }) });
 
     function reRank() {
+      // Sanitize bad percentage values before dedup (e.g. +310,757,553% from divide-by-zero in APIs)
+      const MAX_PCT = 1000;  // ±1000% max realistic change
+      allC.forEach(function(c) {
+        if (Math.abs(c.c1  || 0) > MAX_PCT) c.c1  = 0;
+        if (Math.abs(c.c4  || 0) > MAX_PCT) c.c4  = 0;
+        if (Math.abs(c.c24 || 0) > MAX_PCT) c.c24 = 0;
+        if (Math.abs(c.c7  || 0) > MAX_PCT) c.c7  = 0;
+        // Sanitize price: negative or astronomically large prices are bad data
+        if (c.pr < 0 || c.pr > 1e12) c.pr = 0;
+        // Sanitize volume: negative or impossibly large
+        if ((parseFloat(c.vol) || 0) < 0) c.vol = 0;
+        if ((parseFloat(c.mc)  || 0) < 0) c.mc  = 0;
+      });
+
       // Dedup: merge duplicate symbols into one entry with best data
       var seen = new Map();
       var clean = [];
@@ -15427,7 +15562,7 @@
 
         const imgSrc = coinImgWithFallback(c);
         return `<tr onclick="showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}', '${c.sy}', '${c.img}')">
-<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><img alt="icon" src="${imgSrc}" class="w-6 h-6 rounded-full" width="24" height="24" onerror="this.onerror=null;this.src='${letterAvatar(c.sy, 24)}'" loading="lazy" style="flex-shrink:0"><span class="font-semibold text-sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
+<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><img alt="icon" src="${imgSrc}" class="w-6 h-6 rounded-full" width="24" height="24" onerror="imgOnerror(this,'${c.sy}')" loading="lazy" style="flex-shrink:0"><span class="font-semibold text-sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
 <td class="font-bold text-end pr-4" style="white-space:nowrap">$${prDisp}</td>
 <td class="text-end pr-4 col-1h" style="white-space:nowrap">${mkChg(c.c1)}</td>
 <td class="text-end pr-4 col-4h" style="white-space:nowrap">${mkChg(c.c4)}</td>
@@ -15437,7 +15572,9 @@
 <td class="text-end pr-4 col-vol" style="color:var(--t2);font-size:12px;font-weight:500;white-space:nowrap">${fN(parseFloat(c.vol) || 0)}</td>
 </tr>`;
       }).join('');
-      rPages(); $('sRange').textContent = `${st + 1} - ${Math.min(en, filtC.length)} `; $('tCoins').textContent = filtC.length.toLocaleString()
+      rPages(); $('sRange').textContent = `${st + 1} - ${Math.min(en, filtC.length)} `; $('tCoins').textContent = filtC.length.toLocaleString();
+      // Release height reservation after first real data render (CLS fix)
+      const tc = $('tab_crypto'); if (tc && filtC.length > 5 && !tc.classList.contains('data-loaded')) tc.classList.add('data-loaded');
     }
 
     function rPages() {
@@ -15455,6 +15592,8 @@
       }).join('');
       if ($('pgPrev')) $('pgPrev').disabled = cPage <= 1;
       if ($('pgNext')) $('pgNext').disabled = cPage >= tot;
+      // Make pagination visible now that it has content (CLS fix — was visibility:hidden)
+      const pag = $('cmcPag'); if (pag) pag.classList.add('pag-ready');
     }
     function gNext() { if (cPage < Math.ceil(filtC.length / iPP)) { cPage++; render(); scrollTo({ top: 0, behavior: 'smooth' }) } }
     function gPrev() { if (cPage > 1) { cPage--; render(); scrollTo({ top: 0, behavior: 'smooth' }) } }
@@ -17022,7 +17161,7 @@
               const sy = _MXr[t.symbol]; if (!sy) return;
               const pr = parseFloat(t.lastPrice); if (pr <= 0) return;
               const prev = parseFloat(t.prevClosePrice) || pr;
-              const chg = parseFloat(t.priceChangePercent) || 0;
+              const chg = sanitizePct(t.priceChangePercent);
               _stkP[sy] = {
                 pr, chg,
                 hi: parseFloat(t.highPrice) || pr,
@@ -19057,11 +19196,11 @@
           aiFetchJSON('https://api.gateio.ws/api/v4/spot/tickers')
         ]);
         // Process Binance
-        if (bn.status === 'fulfilled' && bn.value) { bn.value.forEach(t => { if (!t.symbol || !t.symbol.endsWith('USDT')) return; const s = t.symbol.replace('USDT', ''); const p = parseFloat(t.lastPrice); if (p > 0) { if (!results[s]) results[s] = []; results[s].push({ pr: p, w: 10, c24: parseFloat(t.priceChangePercent) || 0 }) } }) }
+        if (bn.status === 'fulfilled' && bn.value) { bn.value.forEach(t => { if (!t.symbol || !t.symbol.endsWith('USDT')) return; const s = t.symbol.replace('USDT', ''); const p = parseFloat(t.lastPrice); if (p > 0) { if (!results[s]) results[s] = []; results[s].push({ pr: p, w: 10, c24: sanitizePct(t.priceChangePercent) }) } }) }
         // Process Bybit
         if (bb.status === 'fulfilled' && bb.value && bb.value.result && bb.value.result.list) { bb.value.result.list.forEach(t => { if (!t.symbol || !t.symbol.endsWith('USDT')) return; const s = t.symbol.replace('USDT', ''); const p = parseFloat(t.lastPrice); if (p > 0) { if (!results[s]) results[s] = []; results[s].push({ pr: p, w: 9, c24: (parseFloat(t.price24hPcnt) || 0) * 100 }) } }) }
         // Process Gate
-        if (gt.status === 'fulfilled' && gt.value) { gt.value.forEach(t => { if (!t.currency_pair || !t.currency_pair.endsWith('_USDT')) return; const s = t.currency_pair.replace('_USDT', ''); const p = parseFloat(t.last); if (p > 0) { if (!results[s]) results[s] = []; results[s].push({ pr: p, w: 9, c24: parseFloat(t.change_percentage) || 0 }) } }) }
+        if (gt.status === 'fulfilled' && gt.value) { gt.value.forEach(t => { if (!t.currency_pair || !t.currency_pair.endsWith('_USDT')) return; const s = t.currency_pair.replace('_USDT', ''); const p = parseFloat(t.last); if (p > 0) { if (!results[s]) results[s] = []; results[s].push({ pr: p, w: 9, c24: sanitizePct(t.change_percentage) }) } }) }
         // AI Aggregation: weighted median with outlier removal
         const agg = {};
         Object.entries(results).forEach(([sy, prs]) => {

@@ -1,8 +1,8 @@
 # Cloudflare _redirects — يحل مشكلة 4xx errors
 
-# Force www redirect (يمنع 301 loops تسبب 4xx)
-http://cryptohubcoin.com/* https://www.cryptohubcoin.com/:splat 301!
-https://cryptohubcoin.com/* https://www.cryptohubcoin.com/:splat 301!
+# Force www redirect (بدون !)
+http://cryptohubcoin.com/* https://www.cryptohubcoin.com/:splat 301
+https://cryptohubcoin.com/* https://www.cryptohubcoin.com/:splat 301
 
 # Common 404s — redirect لصفحات موجودة
 /favicon.ico /logo.png 301
@@ -13,4 +13,5 @@ https://cryptohubcoin.com/* https://www.cryptohubcoin.com/:splat 301!
 /blog/* /blog/:splat 200
 
 # SPA fallback — أي URL مش موجود يرجع للـ index
+# ملاحظة: لازم يكون آخر سطر!
 /* /index.html 200

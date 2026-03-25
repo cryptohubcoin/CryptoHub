@@ -1,0 +1,7 @@
+# Redirect www to non-www
+https://www.cryptohubcoin.com/* https://cryptohubcoin.com/:splat 301
+
+# Old tool URLs redirect to clean URLs
+/Crypto%20Arbitrage%20.html /crypto-arbitrage 301
+/crypto-analyzer.html /crypto-analyzer 301
+/crypto-arbitrage.html /crypto-arbitrage 301

@@ -1,8 +1,4 @@
-# Cloudflare _redirects
-
-# Force www redirect
-http://cryptohubcoin.com/* https://www.cryptohubcoin.com/:splat 301
-https://cryptohubcoin.com/* https://www.cryptohubcoin.com/:splat 301
+# Cloudflare _redirects — نسخة مبسطة
 
 # Common 404s
 /favicon.ico /logo.png 301
@@ -12,5 +8,5 @@ https://cryptohubcoin.com/* https://www.cryptohubcoin.com/:splat 301
 # Blog posts
 /blog/* /blog/:splat 200
 
-# SPA fallback - آخر سطر!
+# SPA fallback - آخر سطر
 /* /index.html 200

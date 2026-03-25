@@ -1,31 +1,121 @@
-# Cloudflare _headers file — رفعه مع الموقع
-# يحسن Cache Rate من 25% لـ 85%+
+Options -MultiViews
+RewriteEngine On
+RewriteBase /
 
-# HTML Pages — cache بـ stale-while-revalidate
-/*
-  Cache-Control: public, max-age=300, stale-while-revalidate=3600
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: SAMEORIGIN
-  Referrer-Policy: strict-origin-when-cross-origin
+# ============================================================
+# FORCE HTTPS (SSL must be active on your server)
+# ============================================================
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Static Assets — cache طويل جداً
-/*.js
-  Cache-Control: public, max-age=31536000, immutable
+# ============================================================
+# REMOVE WWW → non-www
+# ============================================================
+RewriteCond %{HTTP_HOST} ^www\.cryptohubcoin\.com [NC]
+RewriteRule ^(.*)$ https://cryptohubcoin.com/$1 [R=301,L]
 
-/*.css
-  Cache-Control: public, max-age=31536000, immutable
+# ============================================================
+# ORIGINAL RULES (kept exactly as-is)
+# ============================================================
 
-/*.png
-  Cache-Control: public, max-age=2592000
-  
-/*.jpg
-  Cache-Control: public, max-age=2592000
+# Force text/html for all extensionless files
+<FilesMatch "^[^\.]+$">
+    ForceType text/html
+</FilesMatch>
 
-/*.webp
-  Cache-Control: public, max-age=2592000
+# Remove .html extension from URL
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^\.]+)$ $1.html [NC,L]
 
-/*.woff2
-  Cache-Control: public, max-age=31536000, immutable
+# Redirect .html URLs to clean URLs (without .html) - strip query string too
+RewriteCond %{THE_REQUEST} \s/+(.*?)\.html[\s?] [NC]
+RewriteRule ^ /%1? [R=301,NE,L]
 
-/*.ico
-  Cache-Control: public, max-age=86400
+# ============================================================
+# GZIP COMPRESSION
+# ============================================================
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE font/woff
+  AddOutputFilterByType DEFLATE font/woff2
+</IfModule>
+
+# ============================================================
+# BROWSER CACHING
+# ============================================================
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html                  "access plus 1 hour"
+  ExpiresByType text/css                   "access plus 1 month"
+  ExpiresByType application/javascript     "access plus 1 month"
+  ExpiresByType image/png                  "access plus 6 months"
+  ExpiresByType image/jpeg                 "access plus 6 months"
+  ExpiresByType image/webp                 "access plus 6 months"
+  ExpiresByType image/svg+xml              "access plus 6 months"
+  ExpiresByType image/x-icon              "access plus 1 year"
+  ExpiresByType font/woff                  "access plus 1 year"
+  ExpiresByType font/woff2                 "access plus 1 year"
+  ExpiresByType application/json           "access plus 0 seconds"
+</IfModule>
+
+# ============================================================
+# SECURITY HEADERS
+# ============================================================
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  <FilesMatch "\.(ico|jpg|jpeg|png|gif|webp|svg|woff|woff2)$">
+    Header set Cache-Control "max-age=31536000, public, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "max-age=2592000, public"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "max-age=3600, public, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ============================================================
+# MIME TYPES
+# ============================================================
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType font/woff .woff
+  AddType font/woff2 .woff2
+  AddType application/manifest+json .json
+  AddType application/xml .xml
+</IfModule>
+
+# ============================================================
+# CUSTOM ERROR PAGES
+# ============================================================
+ErrorDocument 404 /index.html
+ErrorDocument 403 /index.html
+
+# ============================================================
+# TOOL REDIRECTS - Old URLs → Clean URLs
+# ============================================================
+RewriteCond %{REQUEST_URI} ^/Crypto%20Arbitrage%20\.html [NC]
+RewriteRule ^ /crypto-arbitrage [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/crypto-analyzer\.html [NC]
+RewriteRule ^ /crypto-analyzer [R=301,L]
+
+# ============================================================
+# STRIP QUERY STRINGS FROM TOOL URLS → Clean URLs
+# ============================================================
+RewriteCond %{THE_REQUEST} \s/+(crypto-arbitrage)\.html\?[^\s]* [NC]
+RewriteRule ^ /crypto-arbitrage? [R=301,NE,L]
+
+RewriteCond %{THE_REQUEST} \s/+(crypto-analyzer)\.html\?[^\s]* [NC]
+RewriteRule ^ /crypto-analyzer? [R=301,NE,L]

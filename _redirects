@@ -1,9 +1,0 @@
-# Cloudflare _redirects
-
-# Common 404s — redirect لصفحات موجودة
-/favicon.ico /logo.png 301
-/sitemap /sitemap.xml 200
-/robots /robots.txt 200
-
-# Blog posts — إذا كانت URLs مش صح
-/blog/* /blog/:splat 200

@@ -2,25 +2,7 @@ name = "cryptohub"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
-# ═══════════════════════════════════════════════════
 # KV Namespace — اضفه لما تكون جاهز
-# ═══════════════════════════════════════════════════
 # [[kv_namespaces]]
 # binding = "STATIC_ASSETS"
 # id = "YOUR_KV_NAMESPACE_ID_HERE"
-
-# ═══════════════════════════════════════════════════
-# الخطوات لإضافة KV:
-# ═══════════════════════════════════════════════════
-# 1. npx wrangler kv namespace create STATIC_ASSETS
-#    → خد الـ id وافتح التعليق فوق وحطه
-#
-# 2. ارفع الملفات للـ KV:
-#    npx wrangler kv key put "index.html" --path ./index.html --namespace-id=YOUR_ID
-#    npx wrangler kv key put "logo.png" --path ./logo.png --namespace-id=YOUR_ID
-#    npx wrangler kv key put "manifest.json" --path ./manifest.json --namespace-id=YOUR_ID
-#    npx wrangler kv key put "sitemap.xml" --path ./sitemap.xml --namespace-id=YOUR_ID
-#    npx wrangler kv key put "robots.txt" --path ./robots.txt --namespace-id=YOUR_ID
-#
-# 3. npx wrangler deploy
-# ═══════════════════════════════════════════════════

@@ -1,79 +1,31 @@
-# Cloudflare Pages _headers
-# ترفعه مع باقي ملفات الموقع في نفس الـ root
-
-# ============================================
-# HTML Pages — cache قصير مع stale-while-revalidate
-# ============================================
-/
-  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/*
   X-Content-Type-Options: nosniff
-  X-Frame-Options: SAMEORIGIN
+  X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-XSS-Protection: 1; mode=block
 
-/index.html
-  Cache-Control: public, max-age=300, stale-while-revalidate=3600
-  X-Content-Type-Options: nosniff
-
-# ============================================
-# Blog pages
-# ============================================
-/blog/*
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
-
-# ============================================
-# Static Assets — cache طويل جداً (immutable)
-# ============================================
-/*.js
-  Cache-Control: public, max-age=31536000, immutable
+/*.html
+  Cache-Control: no-cache
+  Content-Type: text/html; charset=UTF-8
 
 /*.css
   Cache-Control: public, max-age=31536000, immutable
 
-/*.woff2
+/*.js
   Cache-Control: public, max-age=31536000, immutable
 
-/*.woff
-  Cache-Control: public, max-age=31536000, immutable
-
-# ============================================
-# Images
-# ============================================
-/logo.png
-  Cache-Control: public, max-age=2592000
-  
 /*.png
-  Cache-Control: public, max-age=2592000
+  Cache-Control: public, max-age=31536000, immutable
 
 /*.jpg
-  Cache-Control: public, max-age=2592000
-
-/*.webp
-  Cache-Control: public, max-age=2592000
+  Cache-Control: public, max-age=31536000, immutable
 
 /*.svg
-  Cache-Control: public, max-age=2592000
+  Cache-Control: public, max-age=31536000, immutable
 
-/*.ico
-  Cache-Control: public, max-age=86400
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
 
-# ============================================
-# JSON/Data files
-# ============================================
-/manifest.json
-  Cache-Control: public, max-age=86400
-  Content-Type: application/json
-
-/sitemap.xml
-  Cache-Control: public, max-age=3600
-
-/robots.txt
-  Cache-Control: public, max-age=3600
-
-# ============================================
-# API Worker routes — no cache on HTML side
-# (Worker handles its own caching)
-# ============================================
-/api/*
-  Cache-Control: no-store
-  Access-Control-Allow-Origin: *
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable

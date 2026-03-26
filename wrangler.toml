@@ -26,3 +26,5 @@ id = "YOUR_KV_NAMESPACE_ID"
 # 4. في Dashboard: Workers → Triggers → Routes:
 #    www.cryptohubcoin.com/* → Zone: cryptohubcoin.com
 #    cryptohubcoin.com/* → Zone: cryptohubcoin.com
+# wrangler.toml
+name = 'cryptohub'

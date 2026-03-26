@@ -22,20 +22,39 @@
     })();
   </script>
   <style id="anti-flash">
-    /* Use opacity instead of visibility so browser can still paint LCP element */
-    body { opacity: 0; transition: opacity 0.05s ease; }
+    body { opacity: 0; }
   </style>
   <script>
-    // Guarantee body is visible within 300ms max — prevents LCP blocking if JS is slow
-    setTimeout(function() {
+    // Show body ASAP — 50ms max wait, use rAF for paint-aligned reveal
+    requestAnimationFrame(function() {
       var b = document.body;
-      if (b && b.style.opacity !== '1') { b.style.opacity = '1'; }
+      if (b) b.style.opacity = '1';
       var af = document.getElementById('anti-flash');
       if (af) af.remove();
-    }, 300);
+    });
+    setTimeout(function() {
+      var b = document.body;
+      if (b && b.style.opacity !== '1') b.style.opacity = '1';
+      var af = document.getElementById('anti-flash');
+      if (af) af.remove();
+    }, 50);
   </script>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FTBNSF9WJT"></script>
+  <!-- Google tag (gtag.js) - deferred to not block FCP/LCP -->
+  <script>
+    (function() {
+      function loadGA() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-FTBNSF9WJT';
+        document.head.appendChild(s);
+      }
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadGA, { timeout: 3000 });
+      } else {
+        setTimeout(loadGA, 2000);
+      }
+    })();
+  </script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
@@ -305,11 +324,8 @@
   <!-- ============================================================ -->
   <!--  PERFORMANCE & RESOURCE HINTS                                 -->
   <!-- ============================================================ -->
+  <!-- Performance & Resource Hints (deduped) -->
   <link rel="preconnect" href="https://api.binance.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.gstatic.com/s/cairo/v28/SLXgc1nY6HkvalIhTp2mxdt0UX8.woff2" as="font"
-    type="font/woff2" crossorigin>
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
 
   <link rel="dns-prefetch" href="https://api.binance.com">
@@ -322,7 +338,6 @@
   <link rel="dns-prefetch" href="https://data-asg.goldprice.org">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
   <link rel="dns-prefetch" href="https://query1.finance.yahoo.com">
-  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 
   <!-- Icons -->
   <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
@@ -378,6 +393,12 @@
     #cryptoTable tbody:empty {
       min-height: 400px;
       display: block;
+    }
+    #cryptoTable tbody {
+      contain: layout style;
+    }
+    #cryptoTable {
+      contain: layout style;
     }
 
     /* Prevent ticker layout shift */
@@ -454,7 +475,8 @@
 
     /* Contain exMod to avoid reflow during open */
     #exMod {
-      contain: layout;
+      contain: layout style paint;
+      will-change: opacity, visibility;
     }
 
     /* ============================================================
@@ -513,12 +535,18 @@
     }
 
     /* ============================================================
-       CLS FIX — #globalBar / #cmcBar (ticker)
+       CLS FIX — #cmcBar / #cmcBar (ticker)
        Prevent market cap bar from shifting page on load
     ============================================================ */
     #cmcBar {
       min-height: 36px;
       contain: layout style;
+    }
+
+    /* === PERFORMANCE: content-visibility for below-fold sections === */
+    #tab_exchanges, #tab_commodities, footer {
+      content-visibility: auto;
+      contain-intrinsic-size: 0 500px;
     }
   </style>
   <!-- Critical Tailwind utilities fallback (works even if CDN is slow) -->
@@ -816,9 +844,8 @@
     // Load Tailwind non-blocking after critical CSS is already inlined above
     (function () { var s = document.createElement('script'); s.src = 'https://cdn.tailwindcss.com'; s.async = true; document.head.appendChild(s); })();
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;600&display=swap"
-    rel="stylesheet">
-  <noscript></noscript>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet"></noscript>
   <style>
     /* Font Awesome fallback - prevent layout shift while loading */
     .fas,
@@ -829,19 +856,20 @@
       font-style: normal
     }
   </style>
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <noscript></noscript>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
   <style>
     /* === PERFORMANCE: Font display swap is handled via Google Fonts API URL parameter === */
 
     /* === CSS Block 1 === */
     * {
-      scroll-behavior: smooth;
       margin: 0;
       padding: 0;
       box-sizing: border-box
+    }
+    html {
+      scroll-behavior: smooth;
     }
 
     :root {
@@ -883,8 +911,10 @@
     body {
       background: var(--bg1);
       color: var(--t1);
-      transition: background .3s, color .3s;
       overflow-x: hidden
+    }
+    body.theme-transitioning {
+      transition: background .3s, color .3s;
     }
 
     html {
@@ -896,7 +926,7 @@
       border: 1px solid var(--bc);
       border-radius: 16px;
       padding: 20px;
-      transition: all .2s;
+      transition: box-shadow .2s;
       box-shadow: var(--sh)
     }
 
@@ -6020,7 +6050,7 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      transition: all .2s
+      transition: background .2s, color .2s, border-color .2s
     }
 
     .cd-close:hover {
@@ -9252,8 +9282,8 @@
     }
     function buildLM() { $('lMenu').innerHTML = LANGS.map(l => `<div class="ddi ${l.c === cLang ? 'active' : ''}" data-lang="${l.c}" onclick="setLang('${l.c}')"><span class="flag">${l.f}</span><span>${l.l}</span><i class="fas fa-check ck"></i></div>`).join('') }
     function buildNS() { $('netSel').innerHTML = `<option value="all">${t('allNetworks')}</option>` + NETS.map(n => `<option value="${n.id}">${n.i} ${n.n}</option>`).join('') }
-    function toggleDD(id) { const dd = $(id); const m = dd.querySelector('.ddm') || dd.querySelector('.stats-panel'); if (!m) return; const w = m.classList.contains('active'); closeDD(); if (!w) { m.classList.add('active'); if (id === 'statsDd') { const hb = dd.querySelector('.nav-hamburger'); if (hb) hb.classList.add('active'); } } }
-    function closeDD() { document.querySelectorAll('.ddm,.stats-panel').forEach(m => m.classList.remove('active')); document.querySelectorAll('.nav-hamburger').forEach(h => h.classList.remove('active')) }
+    function toggleDD(id) { const dd = $(id); if (!dd) return; const m = dd.querySelector('.ddm') || dd.querySelector('.stats-panel'); if (!m) return; const w = m.classList.contains('active'); closeDD(); if (!w) { m.classList.add('active'); if (id === 'statsDd') { const hb = dd.querySelector('.nav-hamburger'); if (hb) hb.classList.add('active'); } } }
+    function closeDD() { var active = document.querySelectorAll('.ddm.active,.stats-panel.active'); active.forEach(function(m) { m.classList.remove('active') }); document.querySelectorAll('.nav-hamburger.active').forEach(function(h) { h.classList.remove('active') }) }
     function navTo(section) { closeDD(); swTab(section); setTimeout(() => { const el = $('tab_' + section); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 100); if (section === 'crypto' && $('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length ? allC.length.toLocaleString() : '--' }
     document.addEventListener('click', e => { if (!e.target.closest('.dropdown')) closeDD() }, { passive: true });
     document.addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSrch() } if (e.key === 'Escape') { closeSrch(); closeDD(); closeMod(); document.querySelectorAll('.legal-modal.active').forEach(m => m.classList.remove('active')) } });
@@ -9503,9 +9533,9 @@
           // Still run CMC enrichment in background to get MORE coins beyond cache
           setTimeout(async () => {
             try {
-              // Fire all CMC requests in parallel
+              // Fire CMC requests in parallel (reduced to 10K coins for speed)
               const allReqs = [];
-              for (let start = 1; start <= 20001; start += 2000) {
+              for (let start = 1; start <= 10001; start += 2000) {
                 allReqs.push(fetchCMC(`https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=${start}&limit=2000&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all`, Math.floor(start / 2000) % PROXIES.length));
               }
               const results = await Promise.allSettled(allReqs);
@@ -9737,22 +9767,27 @@
         $('pFill').style.width = '70%'; $('pTxt').textContent = t('loadingData') + ` (${allC.length})`;
         console.log('Phase 2 Exchanges:', allC.length, 'coins');
 
-        // ===== PHASE 2.5: CoinGecko extra pages (all parallel) =====
+        // ===== PHASE 2.5: CoinGecko extra pages (batched to avoid rate limits) =====
         try {
-          const cgPages = [];
-          for (let p = 1; p <= 55; p++) {
-            cgPages.push(fetchJSON(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${p}&sparkline=false`, 6000));
-          }
-          const cgResults = await Promise.allSettled(cgPages);
-          cgResults.forEach(r => {
-            if (r.status !== 'fulfilled' || !r.value || !Array.isArray(r.value)) return;
-            r.value.forEach(c => {
-              const sy = (c.symbol || '').toUpperCase();
-              if (!sy || symMap.has(sy)) return;
-              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: 0, c4: 0, c24: sanitizePct(c.price_change_percentage_24h), c7: 0, mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
-              allC.push(coin); symMap.set(sy, coin);
+          // Only fetch 10 pages (2500 coins) — CoinGecko rate limits beyond this anyway
+          const CG_PAGES = 10;
+          const CG_BATCH = 5;
+          for (let batch = 0; batch < CG_PAGES; batch += CG_BATCH) {
+            const cgPages = [];
+            for (let p = batch + 1; p <= Math.min(batch + CG_BATCH, CG_PAGES); p++) {
+              cgPages.push(fetchJSON(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${p}&sparkline=false`, 6000));
+            }
+            const cgResults = await Promise.allSettled(cgPages);
+            cgResults.forEach(r => {
+              if (r.status !== 'fulfilled' || !r.value || !Array.isArray(r.value)) return;
+              r.value.forEach(c => {
+                const sy = (c.symbol || '').toUpperCase();
+                if (!sy || symMap.has(sy)) return;
+                const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: 0, c4: 0, c24: sanitizePct(c.price_change_percentage_24h), c7: 0, mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
+                allC.push(coin); symMap.set(sy, coin);
+              });
             });
-          });
+          }
           console.log('Phase 2.5 CoinGecko:', allC.length, 'coins');
         } catch (e) { console.log('CoinGecko extra err:', e) }
 
@@ -9766,9 +9801,9 @@
 
         (async () => {
           try {
-            // Fire all CMC requests in parallel (10 batches of 2000 = 20,000 coins)
+            // Fire CMC requests in parallel (5 batches of 2000 = 10,000 coins — rest via worker)
             const allReqs = [];
-            for (let start = 1; start <= 20001; start += 2000) {
+            for (let start = 1; start <= 10001; start += 2000) {
               allReqs.push(fetchCMC(`https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=${start}&limit=2000&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all`, Math.floor(start / 2000) % PROXIES.length));
             }
             const results = await Promise.allSettled(allReqs);
@@ -15548,21 +15583,35 @@
       });
     }
 
-    function render() { if (_renderBlocked) { _renderPending = true; return; } _doRender(); }
+    // Render throttle — max 1 render per 200ms during loading
+    var _renderThrottleTimer = null;
+    var _lastRenderTime = 0;
+    var _RENDER_THROTTLE_MS = 200;
+    function render() { 
+      if (_renderBlocked) { _renderPending = true; return; }
+      var now = Date.now();
+      if (now - _lastRenderTime < _RENDER_THROTTLE_MS) {
+        clearTimeout(_renderThrottleTimer);
+        _renderThrottleTimer = setTimeout(function() { _lastRenderTime = Date.now(); _doRender(); }, _RENDER_THROTTLE_MS);
+        return;
+      }
+      _lastRenderTime = now;
+      _doRender(); 
+    }
     function _doRender() {
       const st = (cPage - 1) * iPP, en = st + iPP, pg = filtC.slice(st, en); const tb = $('tBody');
       if (!pg.length) { tb.innerHTML = `<tr><td colspan="10" class="p-6 text-center" style="color:var(--t2)">${t('noExchanges')}</td></tr>`; return }
+      const mkChg = (v) => { const col = v >= 0 ? 'var(--gn)' : 'var(--rd)'; const ic = v >= 0 ? 'fa-caret-up' : 'fa-caret-down'; return `<span class="chg" style="color:${col}"><i class="fas ${ic}"></i>${v >= 0 ? '+' : ''}${v.toFixed(2)}%</span>` };
       tb.innerHTML = pg.map((c, index) => {
         const rowNum = st + index + 1;
         const dn = c.sy === 'USDT' ? 'Tether' : c.sy === 'USDC' ? 'USD Coin' : c.nm;
-        const mkChg = (v) => { const col = v >= 0 ? 'var(--gn)' : 'var(--rd)'; const ic = v >= 0 ? 'fa-caret-up' : 'fa-caret-down'; return `<span class="chg" style="color:${col}"><i class="fas ${ic}"></i>${v >= 0 ? '+' : ''}${v.toFixed(2)}%</span>` };
         const aiBadge = Math.abs(c.c24) > 15 ? `<span style="font-size:9px;background:${c.c24 > 0 ? 'rgba(22,199,132,0.15)' : 'rgba(234,57,67,0.15)'};color:${c.c24 > 0 ? '#16c784' : '#ea3943'};padding:1px 4px;border-radius:4px;margin-inline-start:4px">AI Signal</span>` : '';
         const volBadge = (parseFloat(c.vol) || 0) >= 500000 ? `<span style="position:relative;display:inline-flex;cursor:default;flex-shrink:0;pointer-events:none" class="vol-badge-wrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display:block"><circle cx="12" cy="12" r="10" fill="#3b82f6"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="vol-tip">Verified High Volume — This coin has a 24h trading volume exceeding $500,000, indicating strong market activity and liquidity.</span></span>` : '';
         const prDisp = c.pr >= 1 ? c.pr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : (c.pr >= 0.0001 ? c.pr.toFixed(6).replace(/0+$/, '').replace(/\.$/, '.0') : parseFloat(c.pr.toFixed(8)));
 
         const imgSrc = coinImgWithFallback(c);
         return `<tr onclick="showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}', '${c.sy}', '${c.img}')">
-<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><img alt="icon" src="${imgSrc}" class="w-6 h-6 rounded-full" width="24" height="24" onerror="imgOnerror(this,'${c.sy}')" loading="lazy" style="flex-shrink:0"><span class="font-semibold text-sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
+<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><img alt="icon" src="${imgSrc}" class="w-6 h-6 rounded-full" width="24" height="24" decoding="async" onerror="imgOnerror(this,'${c.sy}')" loading="lazy" style="flex-shrink:0"><span class="font-semibold text-sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
 <td class="font-bold text-end pr-4" style="white-space:nowrap">$${prDisp}</td>
 <td class="text-end pr-4 col-1h" style="white-space:nowrap">${mkChg(c.c1)}</td>
 <td class="text-end pr-4 col-4h" style="white-space:nowrap">${mkChg(c.c4)}</td>

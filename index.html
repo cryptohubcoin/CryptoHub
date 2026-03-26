@@ -43,11 +43,6 @@
     gtag('config', 'G-FTBNSF9WJT');
   </script>
   <meta charset="UTF-8">
-  <!-- Cache & Performance Headers (fallback if server headers not set) -->
-  <meta http-equiv="Cache-Control" content="public, max-age=300, stale-while-revalidate=3600">
-  <!-- Security Headers -->
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <meta name="google-site-verification" content="Z1fGL4Lo5HEyBaliOcGwLf9OhPJB75dhHc7pONLx0Eg" />
   <meta name="coinzilla" content="ece6e7ce1f4971f260ea140940fb79c1" />
   <meta name="google-adsense-account" content="ca-pub-6273496386873741">
@@ -9267,94 +9262,59 @@
 
     // ===== DATA LOADING - Optimized for Speed =====
     function _tout(ms) { return new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms)); }
-    // ── API Proxy Configuration ──
-    // الـ Worker بيعمل proxy لكل الـ APIs ويحل مشكلة CORS و 4xx errors
-    const API_BASE = 'https://www.cryptohubcoin.com/api';
-
-    // Smart fetch: tries Worker first, falls back to direct if Worker is down
     async function fetchJSON(url, tm = 6000) {
-      // Map known API URLs to Worker routes
-      const workerUrl = _toWorkerUrl(url);
-      const targets = workerUrl !== url ? [workerUrl, url] : [url];
-
-      for (const target of targets) {
-        for (let i = 0; i < 2; i++) {
-          try {
-            const r = await Promise.race([fetch(target), _tout(tm + (i * 2000))]);
-            if (r.ok) return await r.json();
-            if (r.status === 429) { await new Promise(w => setTimeout(w, 2000 * (i + 1))); continue; }
-            if (r.status >= 500) break; // try next target
-          } catch (e) {
-            if (i === 0) await new Promise(w => setTimeout(w, 500));
-          }
+      for (let i = 0; i < 2; i++) {
+        try {
+          const r = await Promise.race([fetch(url), _tout(tm + (i * 2000))]);
+          if (r.ok) return await r.json();
+          if (r.status === 429) { await new Promise(w => setTimeout(w, 2000 * (i + 1))); continue }
+          console.warn(`fetchJSON error ${r.status} for ${url}`);
+        } catch (e) {
+          console.error(`fetchJSON fail for ${url}`, e.message || e);
+          if (i === 0) await new Promise(w => setTimeout(w, 1000));
         }
-      }
+      };
       return null;
     }
 
-    // Map direct API URLs → Worker proxy URLs
-    function _toWorkerUrl(url) {
-      if (url.includes('api.binance.com/api/v3/ticker/24hr')) return `${API_BASE}/binance/ticker`;
-      if (url.includes('api.binance.com/api/v3/ticker?')) return `${API_BASE}/binance/window?${url.split('?')[1] || ''}`;
-      if (url.includes('api.binance.com/api/v3/klines')) return `${API_BASE}/binance/klines?${url.split('?')[1] || ''}`;
-      if (url.includes('api.coingecko.com/api/v3/coins/markets')) return `${API_BASE}/coingecko/markets?${url.split('?')[1] || ''}`;
-      if (url.includes('api.coingecko.com/api/v3/coins/') && url.includes('/tickers')) {
-        const coin = url.match(/\/coins\/([^\/]+)\/tickers/)?.[1] || '';
-        return `${API_BASE}/coingecko/tickers/${coin}`;
-      }
-      if (url.includes('api.coincap.io/v2/assets') && !url.includes('/markets')) return `${API_BASE}/coincap/assets?${url.split('?')[1] || ''}`;
-      if (url.includes('api.coincap.io/v2/assets') && url.includes('/markets')) {
-        const coin = url.match(/\/assets\/([^\/]+)\/markets/)?.[1] || '';
-        return `${API_BASE}/coincap/markets/${coin}`;
-      }
-      if (url.includes('api.mexc.com/api/v3/ticker/24hr')) return `${API_BASE}/mexc/ticker`;
-      if (url.includes('api.gateio.ws/api/v4/spot/tickers')) return `${API_BASE}/gate/tickers`;
-      if (url.includes('okx.com/api/v5/market/tickers')) return `${API_BASE}/okx/tickers`;
-      if (url.includes('api.bybit.com/v5/market/tickers')) return `${API_BASE}/bybit/tickers`;
-      if (url.includes('api.kucoin.com/api/v1/market/allTickers')) return `${API_BASE}/kucoin/tickers`;
-      if (url.includes('api.alternative.me/fng')) return `${API_BASE}/fg`;
-      if (url.includes('data-asg.goldprice.org')) return `${API_BASE}/gold`;
-      if (url.includes('swissquote.com') && url.includes('XAU')) return `${API_BASE}/metals/xauusd`;
-      if (url.includes('swissquote.com') && url.includes('XAG')) return `${API_BASE}/metals/xagusd`;
-      if (url.includes('swissquote.com') && url.includes('XPT')) return `${API_BASE}/metals/xptusd`;
-      if (url.includes('swissquote.com') && url.includes('XPD')) return `${API_BASE}/metals/xpdusd`;
-      if (url.includes('coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs')) return `${API_BASE}/cmc/pairs?${url.split('?')[1] || ''}`;
-      if (url.includes('coinmarketcap.com/data-api/v3/cryptocurrency/listing')) return `${API_BASE}/cmc/listing?${url.split('?')[1] || ''}`;
-      return url; // unknown URL — use directly
-    }
 
     function _ato(ms) { const ac = new AbortController(); setTimeout(() => ac.abort(), ms); return ac.signal; }
-
-    // CMC via Worker (replaces old PROXIES chain)
+    // CORS proxy chain (multiple fallbacks)
     const PROXIES = [
-      u => _toWorkerUrl(u),
       u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+      u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+      u => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
+      u => `https://thingproxy.freeboard.io/fetch/${encodeURIComponent(u)}`,
       u => u
     ];
     async function fetchCMC(url, proxyOffset = 0) {
+      // Race all proxies in parallel — first success wins
       try {
-        const workerUrl = _toWorkerUrl(url);
-        const r = await Promise.race([fetch(workerUrl), _tout(6000)]);
-        if (r.ok) { const d = await r.json(); if (d && d.data) return d; }
-      } catch (e) {}
-      // Fallback to allorigins
-      try {
-        const r = await Promise.race([fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`), _tout(5000)]);
-        if (r.ok) { const d = await r.json(); if (d && d.data) return d; }
-      } catch (e) {}
+        const promises = PROXIES.map((proxy, i) => {
+          return Promise.race([fetch(proxy(url)), _tout(5000)])
+            .then(async r => { if (r.ok) { const d = await r.json(); if (d && d.data) return d; } return null; })
+            .catch(() => null);
+        });
+        const results = await Promise.allSettled(promises);
+        for (const r of results) {
+          if (r.status === 'fulfilled' && r.value) return r.value;
+        }
+      } catch (e) { }
       return null;
     }
 
+    // ── CMC Pro API with user key ──
     const CMC_PRO_KEY = '0447db53f13c40e99c63bfdb85021394';
-    const CMC_WORKER = 'https://www.cryptohubcoin.com/api/cmc';
+    const CMC_WORKER = 'https://summer-union-dc27.bitcoinswapnet.workers.dev';
     async function fetchCMCPro(endpoint) {
       var params = new URLSearchParams(endpoint.split('?')[1] || '');
       var start = params.get('start') || '1';
       var limit = params.get('limit') || '5000';
       try {
-        var r = await Promise.race([fetch(`${API_BASE}/cmc/listing?start=${start}&limit=${limit}&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all`), _tout(15000)]);
+        var r = await Promise.race([fetch(CMC_WORKER + '/?src=cmc&start=' + start + '&limit=' + limit), _tout(15000)]);
         if (r.ok) {
           var raw = await r.json();
+          // Convert free API format to Pro format
           if (raw && raw.data && raw.data.cryptoCurrencyList) {
             var converted = raw.data.cryptoCurrencyList.map(function (c) {
               var qt = c.quotes && c.quotes.length ? c.quotes.find(function (q) { return q.name === 'USD' }) : null;
@@ -10884,8 +10844,8 @@
 
     async function loadFG() {
       try {
-        // Get daily baseline from alternative.me (via Worker proxy)
-        const r = await fetch(`${API_BASE}/fg`);
+        // Get daily baseline from alternative.me
+        const r = await fetch('https://api.alternative.me/fng/?limit=31');
         const d = await r.json();
         const e = d.data;
         _fgBase = { n: +e[0].value, y: +e[1].value, w: +(e[6] || e[0]).value, m: +(e[29] || e[0]).value };
@@ -15870,10 +15830,10 @@
     function _parseSQ(data) { if (!Array.isArray(data) || !data[0]) return null; const sp = data[0].spreadProfilePrices; if (!sp || !sp[0]) return null; return (sp[0].bid + sp[0].ask) / 2 }
     const _SQ_PROXIES = [u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`, u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`];
     let _sqProxyIdx = 0;
-    async function _fetchSwissquote(sym) { const _symLower = sym.toLowerCase().replace('/','-'); const base = API_BASE + '/metals/' + _symLower + 'usd'; if (_sqDirect) { try { const r = await fetch(base); if (r.ok) { const v = _parseSQ(await r.json()); if (v) return v } _sqDirect = false } catch (e) { _sqDirect = false } } for (let i = 0; i < _SQ_PROXIES.length; i++) { const idx = (_sqProxyIdx + i) % _SQ_PROXIES.length; try { const r = await fetch(_SQ_PROXIES[idx](base)); if (r.ok) { const v = _parseSQ(await r.json()); if (v) { _sqProxyIdx = idx; return v } } } catch (e) { } } return null }
+    async function _fetchSwissquote(sym) { const base = 'https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/' + sym + '/USD'; if (_sqDirect) { try { const r = await fetch(base); if (r.ok) { const v = _parseSQ(await r.json()); if (v) return v } _sqDirect = false } catch (e) { _sqDirect = false } } for (let i = 0; i < _SQ_PROXIES.length; i++) { const idx = (_sqProxyIdx + i) % _SQ_PROXIES.length; try { const r = await fetch(_SQ_PROXIES[idx](base)); if (r.ok) { const v = _parseSQ(await r.json()); if (v) { _sqProxyIdx = idx; return v } } } catch (e) { } } return null }
     async function _fetchCurrencyApiMetals() { try { const [ptR, pdR] = await Promise.all([fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/xpt.json').then(r => r.ok ? r.json() : null).catch(() => null), fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/xpd.json').then(r => r.ok ? r.json() : null).catch(() => null)]); if (ptR && ptR.xpt && ptR.xpt.usd > 0) { _mtPrev.pt = _mt.pt; _mt.pt = ptR.xpt.usd; _saveMtOpen('pt', _mt.pt) } if (pdR && pdR.xpd && pdR.xpd.usd > 0) { _mtPrev.pd = _mt.pd; _mt.pd = pdR.xpd.usd; _saveMtOpen('pd', _mt.pd) } } catch (e) { } }
     // === SILVER ENGINE: goldprice.org (5s) calibrates Au/Ag ratio → PAXG WebSocket derives live silver ===
-    async function _fetchSilverGoldprice() { try { const r = await fetch(API_BASE + '/gold'); if (!r.ok) return null; const d = await r.json(); if (d && d.items && d.items[0]) { const it = d.items[0]; if (it.xagPrice > 0 && it.xauPrice > 0) { _auAgRatio = it.xauPrice / it.xagPrice; _gpLastChg = it.pcXag || 0; return { price: it.xagPrice, chg: it.pcXag || 0, auPrice: it.xauPrice } } } return null } catch (e) { return null } }
+    async function _fetchSilverGoldprice() { try { const r = await fetch('https://data-asg.goldprice.org/dbXRates/USD'); if (!r.ok) return null; const d = await r.json(); if (d && d.items && d.items[0]) { const it = d.items[0]; if (it.xagPrice > 0 && it.xauPrice > 0) { _auAgRatio = it.xauPrice / it.xagPrice; _gpLastChg = it.pcXag || 0; return { price: it.xagPrice, chg: it.pcXag || 0, auPrice: it.xauPrice } } } return null } catch (e) { return null } }
     async function _fetchSilverCurrencyApi() { try { const r = await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/xag.json'); if (!r.ok) return null; const d = await r.json(); if (d && d.xag && d.xag.usd > 0) return d.xag.usd; return null } catch (e) { return null } }
     async function _silverRapidPoll() { try { const results = await Promise.allSettled([_fetchSilverGoldprice(), _fetchSwissquote('XAG'), (_agFails > 3 ? _fetchSilverCurrencyApi() : Promise.resolve(null))]); const gp = results[0].status === 'fulfilled' ? results[0].value : null; const sq = results[1].status === 'fulfilled' ? results[1].value : null; const ca = results[2].status === 'fulfilled' ? results[2].value : null; let newP = null, src = ''; if (gp && gp.price > 0) { newP = gp.price; src = 'GoldPrice'; _mt.sChg = gp.chg } if (sq && sq > 0 && (!newP || Math.abs(sq - newP) < 2)) { newP = sq; src = 'Swissquote' } if (!newP && ca && ca > 0) { newP = ca; src = 'CurrencyAPI' } if (newP && newP > 0) { _mtPrev.s = _mt.s; _mt.s = newP; _agSrc = src; _agFails = 0; _agLastOk = Date.now(); _saveMtOpen('s', _mt.s); if (!_mt.sChg && _mtOpen.s && _mt.s > 0) { _mt.sChg = ((_mt.s - _mtOpen.s) / _mtOpen.s * 100) } if (_mt.sHi === 0 || _mt.s > _mt.sHi) _mt.sHi = _mt.s; if (_mt.sLo === 0 || _mt.s < _mt.sLo) _mt.sLo = _mt.s; _mt.lastUpd = Date.now(); _updMtl(); console.log('[XAG] $' + newP.toFixed(4) + ' via ' + src + ' | Au/Ag=' + (_auAgRatio ? _auAgRatio.toFixed(1) : '?')) } else { _agFails++; if (_mt.g > 0 && _auAgRatio > 0) { _deriveSilverFromPAXG(_mt.g); _mt.lastUpd = Date.now(); _updMtl(); console.log('[XAG] $' + _mt.s.toFixed(4) + ' derived from Binance PAXG') } else { console.warn('[XAG] all sources failed, attempt', _agFails) } } } catch (e) { _agFails++; console.warn('[XAG] poll error', e) } }
     // Platinum & Palladium poll (15s) — Silver handled separately by rapid engine above
@@ -15890,7 +15850,7 @@
     }
     async function _fetchGoldprice() {
       try {
-        const r = await fetch(API_BASE + '/gold'); if (!r.ok) return; const d = await r.json(); if (!d || !d.items || !d.items[0]) return; const it = d.items[0];
+        const r = await fetch('https://data-asg.goldprice.org/dbXRates/USD'); if (!r.ok) return; const d = await r.json(); if (!d || !d.items || !d.items[0]) return; const it = d.items[0];
         if (it.xauPrice > 0 && it.xagPrice > 0) { _auAgRatio = it.xauPrice / it.xagPrice; _gpLastChg = it.pcXag || 0 }
         if (!_mt.g && it.xauPrice > 0) { _mtPrev.g = _mt.g; _mt.g = it.xauPrice; _mt.gChg = it.pcXau || 0; _saveMtOpen('g', _mt.g) }
         if (!_mt.s && it.xagPrice > 0) { _mtPrev.s = _mt.s; _mt.s = it.xagPrice; _mt.sChg = it.pcXag || 0; _saveMtOpen('s', _mt.s) }
@@ -18945,7 +18905,7 @@
       items: 'Gold & Silver Backup',
       interval: 30000,
       fetchFn: async () => {
-        const r = await fetch(API_BASE + '/gold');
+        const r = await fetch('https://data-asg.goldprice.org/dbXRates/USD');
         if (!r.ok) throw new Error('HTTP ' + r.status);
         const d = await r.json();
         if (!d || !d.items || !d.items[0]) throw new Error('No data');

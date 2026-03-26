@@ -1,90 +1,34 @@
-// worker.js - Backward Compatible + KV Static Assets
-export default {
-  async fetch(request, env, ctx) {
-    const url = new URL(request.url);
-    
-    // ========== API Routes (دايماً شغالة) ==========
-    if (url.pathname.startsWith('/api/')) {
-      return handleAPI(request, env);
-    }
-    
-    // ========== Static Files (لو فيه KV بس) ==========
-    // Check if KV binding exists (STATIC_ASSETS)
-    if (env?.STATIC_ASSETS) {
-      try {
-        let path = url.pathname;
-        
-        // Default to index.html
-        if (path === '/' || path === '') {
-          path = '/index.html';
-        }
-        
-        // Try exact path first
-        let asset = await env.STATIC_ASSETS.get(path, 'arrayBuffer');
-        
-        // If not found and no extension, try .html
-        if (!asset && !path.includes('.', path.lastIndexOf('/'))) {
-          asset = await env.STATIC_ASSETS.get(path + '.html', 'arrayBuffer');
-        }
-        
-        if (asset) {
-          return new Response(asset, {
-            headers: { 
-              'Content-Type': getContentType(path),
-              'Cache-Control': 'public, max-age=3600'
-            }
-          });
-        }
-      } catch (e) {
-        // KV error - silent fail, continue to 404
-        console.error('KV Error:', e);
-      }
-    }
-    
-    // ========== Fallback 404 ==========
-    return new Response('Not Found', { status: 404 });
-  }
-};
+name = "cryptohub-worker"
+main = "worker.js"
+compatibility_date = "2024-01-01"
 
-// API Handler
-async function handleAPI(request, env) {
-  const url = new URL(request.url);
-  
-  // Health check
-  if (url.pathname === '/api/health') {
-    return jsonResponse({ 
-      status: 'ok', 
-      kv_connected: !!env?.STATIC_ASSETS 
-    });
-  }
-  
-  // Your existing API logic here...
-  return jsonResponse({ message: 'API working' });
-}
+# ═══════════════════════════════════════════════════
+# KV Namespace — غيّر الـ ID بعد ما تعمل:
+# npx wrangler kv namespace create STATIC_ASSETS
+# ═══════════════════════════════════════════════════
+[[kv_namespaces]]
+binding = "STATIC_ASSETS"
+id = "YOUR_KV_NAMESPACE_ID"
 
-// Helpers
-function jsonResponse(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { 'Content-Type': 'application/json' }
-  });
-}
-
-function getContentType(path) {
-  const ext = path.split('.').pop()?.toLowerCase() || '';
-  const types = {
-    html: 'text/html; charset=utf-8',
-    css: 'text/css',
-    js: 'application/javascript',
-    json: 'application/json',
-    png: 'image/png',
-    jpg: 'image/jpeg',
-    jpeg: 'image/jpeg',
-    gif: 'image/gif',
-    svg: 'image/svg+xml',
-    ico: 'image/x-icon',
-    xml: 'application/xml',
-    txt: 'text/plain'
-  };
-  return types[ext] || 'application/octet-stream';
-}
+# ═══════════════════════════════════════════════════
+# الخطوات:
+# ═══════════════════════════════════════════════════
+# 1. npx wrangler kv namespace create STATIC_ASSETS
+#    → خد الـ id وحطه فوق بدل YOUR_KV_NAMESPACE_ID
+#
+# 2. ارفع الملفات للـ KV:
+#    npx wrangler kv key put "index.html" --path ./index.html --namespace-id=YOUR_ID
+#    npx wrangler kv key put "logo.png" --path ./logo.png --namespace-id=YOUR_ID
+#    npx wrangler kv key put "manifest.json" --path ./manifest.json --namespace-id=YOUR_ID
+#    npx wrangler kv key put "sitemap.xml" --path ./sitemap.xml --namespace-id=YOUR_ID
+#    npx wrangler kv key put "robots.txt" --path ./robots.txt --namespace-id=YOUR_ID
+#
+# 3. اعمل deploy:
+#    npx wrangler deploy
+#
+# 4. في Cloudflare Dashboard:
+#    Workers & Pages → cryptohub-worker → Triggers → Routes
+#    أضف الـ Routes دي:
+#    - www.cryptohubcoin.com/*  (Zone: cryptohubcoin.com)
+#    - cryptohubcoin.com/*      (Zone: cryptohubcoin.com)
+# ═══════════════════════════════════════════════════

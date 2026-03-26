@@ -3,18 +3,17 @@ main = "worker.js"
 compatibility_date = "2024-01-01"
 
 # ═══════════════════════════════════════════════════
-# KV Namespace — غيّر الـ ID بعد ما تعمل:
-# npx wrangler kv namespace create STATIC_ASSETS
+# KV Namespace — اضفه لما تكون جاهز
 # ═══════════════════════════════════════════════════
-[[kv_namespaces]]
-binding = "STATIC_ASSETS"
-id = "YOUR_KV_NAMESPACE_ID"
+# [[kv_namespaces]]
+# binding = "STATIC_ASSETS"
+# id = "YOUR_KV_NAMESPACE_ID_HERE"
 
 # ═══════════════════════════════════════════════════
-# الخطوات:
+# الخطوات لإضافة KV:
 # ═══════════════════════════════════════════════════
 # 1. npx wrangler kv namespace create STATIC_ASSETS
-#    → خد الـ id وحطه فوق بدل YOUR_KV_NAMESPACE_ID
+#    → خد الـ id وافتح التعليق فوق وحطه
 #
 # 2. ارفع الملفات للـ KV:
 #    npx wrangler kv key put "index.html" --path ./index.html --namespace-id=YOUR_ID
@@ -23,12 +22,5 @@ id = "YOUR_KV_NAMESPACE_ID"
 #    npx wrangler kv key put "sitemap.xml" --path ./sitemap.xml --namespace-id=YOUR_ID
 #    npx wrangler kv key put "robots.txt" --path ./robots.txt --namespace-id=YOUR_ID
 #
-# 3. اعمل deploy:
-#    npx wrangler deploy
-#
-# 4. في Cloudflare Dashboard:
-#    Workers & Pages → cryptohub → Triggers → Routes
-#    أضف الـ Routes دي:
-#    - www.cryptohubcoin.com/*  (Zone: cryptohubcoin.com)
-#    - cryptohubcoin.com/*      (Zone: cryptohubcoin.com)
+# 3. npx wrangler deploy
 # ═══════════════════════════════════════════════════

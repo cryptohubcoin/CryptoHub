@@ -1,19 +1,12 @@
-# Cloudflare Worker Configuration
-# Deploy with: npx wrangler deploy
-
-name = "cryptohub-api-proxy"
+name = "cryptohub"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-# Worker routes — يربط الـ worker بدومين الموقع
+# Route للـ API بس
 [[routes]]
 pattern = "www.cryptohubcoin.com/api/*"
 zone_name = "cryptohubcoin.com"
 
-# Cache settings
-[build]
-command = ""
-
-[placement]
-mode = "smart"
+[site]
+bucket = "./"

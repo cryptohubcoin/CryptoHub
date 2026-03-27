@@ -2,9 +2,6 @@
 # CryptoHub — Cloudflare Pages Redirects
 # ═══════════════════════════════════════════════════
 
-# www redirect
-https://cryptohubcoin.com/* https://www.cryptohubcoin.com/:splat 301
-
 # ─── Clean URLs → ملفات HTML ───
 /crypto-analyzer /crypto-analyzer.html 200
 /crypto-arbitrage /crypto-arbitrage.html 200

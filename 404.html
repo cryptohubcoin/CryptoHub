@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FTBNSF9WJT"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -9,20 +8,36 @@
     gtag('js', new Date());
     gtag('config', 'G-FTBNSF9WJT');
   </script>
-  <meta charset="UTF-8">
-  <title>Redirecting...</title>
   <script>
-    // www redirect
+    // www redirect فقط (بدون non-www)
     if (window.location.hostname === 'cryptohubcoin.com') {
       window.location.replace('https://www.cryptohubcoin.com' + window.location.pathname + window.location.search);
-    } else {
-      // SPA redirect for GitHub Pages
-      var path = window.location.pathname;
-      window.location.replace('https://www.cryptohubcoin.com' + path);
     }
   </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found - CryptoHub</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',-apple-system,sans-serif;background:#0d1421;color:#e8eaed;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:20px}
+    .c{max-width:480px}
+    .code{font-size:120px;font-weight:800;background:linear-gradient(135deg,#3861fb,#6c5ce7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+    h1{font-size:24px;margin:16px 0 8px}
+    p{color:#8a919e;font-size:15px;margin-bottom:24px;line-height:1.5}
+    a{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:#3861fb;color:#fff;text-decoration:none;border-radius:12px;font-weight:600;font-size:15px;transition:background .2s}
+    a:hover{background:#2d4fd4}
+  </style>
 </head>
 <body>
-  <p>Redirecting...</p>
+  <div class="c">
+    <div class="code">404</div>
+    <h1>Page Not Found</h1>
+    <p>The page you're looking for doesn't exist. Head back to CryptoHub to track live crypto prices.</p>
+    <a href="/">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M9 21V12h6v9"/></svg>
+      Back to CryptoHub
+    </a>
+  </div>
 </body>
 </html>

@@ -1,29 +1,30 @@
-# Cloudflare Pages _redirects
-# يحل مشكلة 4xx errors
+# Clean URLs
+/crypto-analyzer /crypto-analyzer.html 200
+/crypto-arbitrage /crypto-arbitrage.html 200
+/crypto-prediction /crypto-prediction.html 200
+/forex-analyzer /forex-analyzer.html 200
+/token-vesting /token-vesting.html 200
+/privacy /privacy.html 200
+/terms /terms.html 200
+/settings /settings.html 200
 
-# ============================================
-# Force www — يمنع duplicate requests
-# ============================================
-http://cryptohubcoin.com/* https://www.cryptohubcoin.com/:splat 301!
-https://cryptohubcoin.com/* https://www.cryptohubcoin.com/:splat 301!
+# Favicon
+/favicon.ico /logo.png 301
+/sitemap /sitemap.xml 200
+/robots /robots.txt 200
 
-# ============================================
-# Common 404 fixes
-# ============================================
-/favicon.ico /logo.png 302
-/favicon.png /logo.png 302
-/apple-touch-icon.png /logo.png 302
-/apple-touch-icon-precomposed.png /logo.png 302
+# Apple Touch Icons
+/apple-touch-icon.png /logo.png 200
+/apple-touch-icon-precomposed.png /logo.png 200
+/apple-touch-icon-120x120.png /logo.png 200
+/apple-touch-icon-152x152.png /logo.png 200
+/apple-touch-icon-180x180.png /logo.png 200
+/favicon-16x16.png /logo.png 200
+/favicon-32x32.png /logo.png 200
+/favicon-96x96.png /logo.png 200
+/android-chrome-192x192.png /logo.png 200
+/android-chrome-512x512.png /logo.png 200
 
-# ============================================
-# SPA Fallback — CRITICAL
-# كل URL مش موجود يرجع index.html بدل 404
-# ده هو سبب الـ 47% 4xx errors
-# ============================================
-/crypto-predictions /index.html 200
-/token-vesting /index.html 200
-/forex-analyzer /index.html 200
-/crypto-arbitrage /index.html 200
-
-# General SPA catch-all (يجي في الآخر)
+# Blog
+/blog/* /blog/:splat 200
 /* /index.html 200

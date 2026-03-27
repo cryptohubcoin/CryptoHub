@@ -1,0 +1,17 @@
+# CryptoHub — Cloudflare Pages Redirects
+# فقط redirects ضرورية — Cloudflare Pages بيخدم .html files تلقائي
+
+# Favicon
+/favicon.ico /logo.png 302
+/favicon.png /logo.png 302
+
+# Apple Touch Icons
+/apple-touch-icon.png /logo.png 200
+/apple-touch-icon-precomposed.png /logo.png 200
+/apple-touch-icon-120x120.png /logo.png 200
+/apple-touch-icon-152x152.png /logo.png 200
+/apple-touch-icon-180x180.png /logo.png 200
+/favicon-16x16.png /logo.png 200
+/favicon-32x32.png /logo.png 200
+/android-chrome-192x192.png /logo.png 200
+/android-chrome-512x512.png /logo.png 200

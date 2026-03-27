@@ -9080,7 +9080,6 @@
           <div><div class="exd-logo-wrap" id="exdLogoLg"><img src="" alt=""></div><div class="exd-exname" id="exdNameLg">--</div></div>
           <div class="exd-links" id="exdLinks"></div>
           <a class="exd-reg" id="exdRegBtn" href="#" target="_blank"><i class="fas fa-user-plus"></i> Register Now</a>
-          <div class="exd-trust" id="exdTrust"><span id="exdTrustVal">--</span></div>
         </div>
         <div class="exd-right">
           <div class="exd-stats">
@@ -9088,11 +9087,6 @@
               <div><div class="exd-vl">Spot trading volume (24h)</div><div class="exd-vv" id="exdVol24">--</div><div class="exd-vs" id="exdVolBtc">--</div></div>
               <div><div class="exd-vl">Total assets</div><div class="exd-vv" id="exdAssets">--</div></div>
               <div style="align-self:center"><span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:16px;font-size:10px;font-weight:600;background:rgba(22,199,132,.08);color:var(--gn);border:1px solid rgba(22,199,132,.18)"><i class="fas fa-clock" style="font-size:9px"></i>4h Refresh</span></div>
-            </div>
-            <div class="exd-cards">
-              <div class="exd-cd"><div class="exd-cdl">Trading pairs</div><div class="exd-cdv" id="exdPairs">--</div></div>
-              <div class="exd-cd"><div class="exd-cdl">Coins</div><div class="exd-cdv" id="exdCoins">--</div></div>
-              <div class="exd-cd"><div class="exd-cdl">Weekly visits</div><div class="exd-cdv" id="exdVisits">--</div></div>
             </div>
           </div>
           <div class="exd-mhd"><div class="exd-mt">Markets</div><div style="font-size:11px;color:var(--t2)" id="exdMktInfo">Loading...</div></div>
@@ -16065,55 +16059,41 @@
       const tc=parseFloat(ds)>=9?'exd-th':parseFloat(ds)>=7?'exd-tm':'exd-tl';
       const tv=parseFloat(ds)>=9?'10/10':(Math.round(parseFloat(ds))+'/10');
 
-      // Logo — smart resolution chain
-      const cgId=_exdCgMap[exId]||exId;
+      // Logo: CoinGecko HD → Google 128px → letter fallback
+      const cgId=_exdCgMap[ex.id]||ex.id;
       const exHost=ex.u.replace('https://','').replace('http://','').split('/')[0];
-      function _mkLogo(url,sz){
-        const d=document.createElement('div');d.style.cssText='width:100%;height:100%;display:flex;align-items:center;justify-content:center';
-        const img=new Image();img.style.cssText=`width:${sz}px;height:${sz}px;object-fit:contain;border-radius:${Math.round(sz/5)}px`;
-        img.src=url;
-        img.onerror=function(){
-          d.innerHTML=`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(56,97,251,.12),rgba(108,92,231,.08));border-radius:inherit;font-weight:800;font-size:${Math.round(sz*.45)}px;color:var(--ac)">${ex.n[0]}</div>`;
-        };
-        d.appendChild(img);return d;
+      const initLogo=ex.l.includes('coingecko.com')?ex.l:'https://www.google.com/s2/favicons?domain='+exHost+'&sz=128';
+      function _mki(url,sz){
+        const i=new Image();i.style.cssText='width:'+sz+'px;height:'+sz+'px;object-fit:contain;border-radius:'+Math.round(sz/5)+'px';i.src=url;
+        i.onerror=function(){this.onerror=null;this.parentElement.innerHTML='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(56,97,251,.12),rgba(108,92,231,.08));border-radius:inherit;font-weight:800;font-size:'+Math.round(sz*.45)+'px;color:var(--ac)">'+ex.n[0]+'</div>';};
+        return i;
       }
-      // Start with Google 128px favicon (crisp at all sizes)
-      const initUrl=ex.l.includes('coingecko.com')?ex.l:`https://www.google.com/s2/favicons?domain=${exHost}&sz=128`;
-      $('exdLogo').innerHTML='';$('exdLogo').appendChild(_mkLogo(initUrl,22));
-      $('exdLogoLg').innerHTML='';$('exdLogoLg').appendChild(_mkLogo(initUrl,38));
-      // Async upgrade: fetch HD logo from CoinGecko exchange API
-      fetch(`https://api.coingecko.com/api/v3/exchanges/${cgId}`).then(r=>r.ok?r.json():null).then(d=>{
-        if(d&&d.image){$('exdLogo').innerHTML='';$('exdLogo').appendChild(_mkLogo(d.image,22));$('exdLogoLg').innerHTML='';$('exdLogoLg').appendChild(_mkLogo(d.image,38));}
+      $('exdLogo').innerHTML='';$('exdLogo').appendChild(_mki(initLogo,22));
+      $('exdLogoLg').innerHTML='';$('exdLogoLg').appendChild(_mki(initLogo,38));
+      fetch('https://api.coingecko.com/api/v3/exchanges/'+cgId).then(r=>r.ok?r.json():null).then(d=>{
+        if(d&&d.image){$('exdLogo').innerHTML='';$('exdLogo').appendChild(_mki(d.image,22));$('exdLogoLg').innerHTML='';$('exdLogoLg').appendChild(_mki(d.image,38));}
       }).catch(()=>{});
-
       $('exdName').textContent=ex.n;$('exdNameLg').textContent=ex.n;
 
       const ref=getRef(ex.n,ex.u.replace(/{s}/g,'BTC').replace(/{sl}/g,'btc'));
+      const host=exHost;
       $('exdLinks').innerHTML=[
-        `<a class="exd-lnk" href="https://${exHost}" target="_blank"><i class="fas fa-globe"></i>${exHost}</a>`,
+        `<a class="exd-lnk" href="https://${host}" target="_blank"><i class="fas fa-globe"></i>${host}</a>`,
         `<a class="exd-lnk" href="https://x.com/${ex.n.replace(/[\s.]+/g,'')}" target="_blank"><i class="fab fa-x-twitter"></i>@${ex.n.replace(/[\s.]+/g,'')}</a>`
       ].join('');
       $('exdRegBtn').href=ref;
-      $('exdTrust').className='exd-trust '+tc;
-      $('exdTrustVal').textContent='Trust score: '+tv;
 
       const bp=allC.find(c=>c.sy==='BTC')?.pr||68000;
       const vol=exLiveVol[ex.id]?(exLiveVol[ex.id]*bp):(ex.t*5e8+(h%1e9));
-      const mkts=Math.floor(Math.max(50,ex.t*150+(h%1000)));
-      const coins=Math.floor(mkts*0.85);
-      const vis=Math.floor(ex.t*1e6+(h%5e6));
 
       $('exdVol24').textContent=_vf(vol);
       $('exdVolBtc').textContent=Math.floor(vol/bp).toLocaleString()+' BTC';
       $('exdAssets').textContent=_vf(vol*(3+(h%10)));
-      $('exdPairs').textContent=mkts.toLocaleString();
-      $('exdCoins').textContent=coins.toLocaleString();
-      $('exdVisits').textContent=vis>=1e6?(vis/1e6).toFixed(1)+'M':Math.floor(vis/1e3)+'K';
 
       _exdT=[];_exdPg=1;
       $('exdPag').style.display='none';
 
-      // Show data INSTANTLY from allC, then upgrade with real API data
+      // Show data INSTANTLY from allC, then upgrade with real API
       _exdFallback(ex.id);
       _loadExdTickers(ex.id);
     }
@@ -16143,7 +16123,7 @@
             fails=0;const d=await r.json();
             if(!d?.tickers?.length){more=false;break;}
             all=all.concat(d.tickers);
-            _processExdTickers(all,exId); // Update table with each batch
+            _processExdTickers(all,exId);
             if(d.tickers.length<100)more=false;else{pg++;await new Promise(ok=>setTimeout(ok,1300));}
           }catch(e){fails++;await new Promise(ok=>setTimeout(ok,2000));}
         }
@@ -16164,7 +16144,7 @@
     function _exdFallback(exId){
       const ex=EX_DB.find(e=>e.id===exId);if(!ex)return;
       const h=dHash(ex.n);
-      _exdT=allC.filter(c=>c.pr>0).slice(0,500).map((c,i)=>({
+      _exdT=allC.filter(c=>c.pr>0).slice(0,1000).map((c,i)=>({
         base:c.sy,target:'USDT',last:c.pr,_nm:c.nm,_im:c.img||'',
         converted_volume:{usd:c.vol||(c.pr*(5e4+(h+i)%5e5))},
         trade_url:ex.u.replace(/{s}/g,c.sy).replace(/{sl}/g,c.sy.toLowerCase())

@@ -6,8 +6,11 @@
   X-XSS-Protection: 1; mode=block
 
 /*.html
-  Cache-Control: no-cache
+  Cache-Control: public, max-age=300, s-maxage=3600, stale-while-revalidate=86400
   Content-Type: text/html; charset=UTF-8
+
+/
+  Cache-Control: public, max-age=300, s-maxage=3600, stale-while-revalidate=86400
 
 /*.css
   Cache-Control: public, max-age=31536000, immutable
@@ -27,5 +30,29 @@
 /*.webp
   Cache-Control: public, max-age=31536000, immutable
 
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/manifest.json
+  Cache-Control: public, max-age=86400
+  Content-Type: application/manifest+json
+
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+  Content-Type: application/xml; charset=utf-8
+
+/robots.txt
+  Cache-Control: public, max-age=86400
+  Content-Type: text/plain; charset=utf-8
+
+/logo.png
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: image/png

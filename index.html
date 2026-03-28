@@ -335,6 +335,8 @@
   <link rel="dns-prefetch" href="https://api.codetabs.com">
   <link rel="dns-prefetch" href="https://data-asg.goldprice.org">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://late-wood-9120.bitcoinswapnet.workers.dev" crossorigin>
+  <link rel="dns-prefetch" href="https://late-wood-9120.bitcoinswapnet.workers.dev">
   <link rel="dns-prefetch" href="https://query1.finance.yahoo.com">
 
   <!-- Icons -->
@@ -9485,6 +9487,7 @@
     // ── CMC Pro API with user key ──
     const CMC_PRO_KEY = '0447db53f13c40e99c63bfdb85021394';
     const CMC_WORKER = 'https://summer-union-dc27.bitcoinswapnet.workers.dev';
+    const KV_WORKER = 'https://late-wood-9120.bitcoinswapnet.workers.dev';
     async function fetchCMCPro(endpoint) {
       var params = new URLSearchParams(endpoint.split('?')[1] || '');
       var start = params.get('start') || '1';
@@ -9660,7 +9663,40 @@
         $('lProg').classList.remove('hidden');
         $('pFill').style.width = '3%'; $('pTxt').textContent = t('loadingData');
 
-        // ===== CHECK SESSION CACHE (instant reload) =====
+        // ===== PHASE 0: KV EDGE SNAPSHOT (single fetch → 10k coins from Cron Worker) =====
+        try {
+          const kvR = await Promise.race([fetch(KV_WORKER + '/api/coins?start=0&limit=10000'), _tout(5000)]);
+          if (kvR.ok) {
+            const kvData = await kvR.json();
+            const kvCoins = kvData.coins || kvData;
+            if (Array.isArray(kvCoins) && kvCoins.length > 100) {
+              kvCoins.forEach(function(c) {
+                // Normalize fields (KV Worker uses same format but ensure c4 exists)
+                if (c.c4 === undefined) c.c4 = 0;
+                allC.push(c); symMap.set(c.sy, c);
+              });
+              applyKnownSupply(allC);
+              $('pFill').style.width = '100%';
+              assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
+              $('lProg').classList.add('hidden');
+              if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
+              if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
+              if ($('ldSt')) $('ldSt').textContent = allC.length + ' ' + t('coins') + ' ✓';
+              updateGlobalFromData(); initWS();
+              cacheSet('cryptohub_coins', allC);
+              console.log('⚡ KV edge snapshot:', allC.length, 'coins loaded instantly');
+              // Background: live price refresh via WebSocket + Binance
+              setTimeout(refreshPrices, 500);
+              setTimeout(loadMore1h7d, 4000);
+              setTimeout(enrichFromCMCPro, 15000);
+              setTimeout(autoLoadMore, 5000);
+              setTimeout(persistFallbacks, 20000);
+              isL = false; return;
+            }
+          }
+        } catch (kvErr) { console.log('KV snapshot miss:', kvErr.message); }
+
+        // ===== CHECK SESSION CACHE (instant reload — fallback if KV miss) =====
         const cached = cacheGet('cryptohub_coins');
         if (cached && cached.length > 50) {
           cached.forEach(c => { allC.push(c); symMap.set(c.sy, c); });

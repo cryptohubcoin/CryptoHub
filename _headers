@@ -1,58 +1,183 @@
-/*
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=()
-  X-XSS-Protection: 1; mode=block
+export async function onRequest(context) {
+  const { request } = context;
+  const url = new URL(request.url);
+  const path = url.pathname;
+  const search = url.search;
+  
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
 
-/*.html
-  Cache-Control: public, max-age=300, s-maxage=3600, stale-while-revalidate=86400
-  Content-Type: text/html; charset=UTF-8
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { status: 204, headers: corsHeaders });
+  }
 
-/
-  Cache-Control: public, max-age=300, s-maxage=3600, stale-while-revalidate=86400
+  // API Routes مع headers المناسبة
+  const apiConfigs = {
+    '/api/fg': {
+      url: 'https://api.alternative.me/fng/?limit=31',
+      headers: {}
+    },
+    '/api/gold': {
+      url: 'https://data-asg.goldprice.org/dbXRates/USD',
+      headers: {
+        'Accept': 'application/json',
+        'Origin': 'https://www.cryptohubcoin.com'
+      }
+    },
+    '/api/binance/ticker': {
+      url: 'https://api.binance.com/api/v3/ticker/24hr',
+      headers: {}
+    },
+    '/api/coincap/assets': {
+      url: 'https://api.coincap.io/v2/assets' + search,
+      headers: {
+        'Accept': 'application/json',
+        'Origin': 'https://www.cryptohubcoin.com'
+      }
+    },
+    '/api/coingecko/markets': {
+      url: 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1',
+      headers: {}
+    },
+    '/api/mexc/ticker': {
+      url: 'https://api.mexc.com/api/v3/ticker/24hr',
+      headers: {}
+    },
+    '/api/gate/tickers': {
+      url: 'https://api.gateio.ws/api/v4/spot/tickers',
+      headers: {
+        'Accept': 'application/json'
+      }
+    },
+    '/api/okx/tickers': {
+      url: 'https://www.okx.com/api/v5/market/tickers?instType=SPOT',
+      headers: {
+        'Accept': 'application/json'
+      }
+    },
+    '/api/bybit/tickers': {
+      url: 'https://api.bybit.com/v5/market/tickers?category=spot',
+      headers: {
+        'Accept': 'application/json'
+      }
+    },
+    '/api/kucoin/tickers': {
+      url: 'https://api.kucoin.com/api/v1/market/allTickers',
+      headers: {
+        'Accept': 'application/json'
+      }
+    },
+    '/api/metals/xauusd': {
+      url: 'https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XAU/USD',
+      headers: {
+        'Accept': 'application/json',
+        'Origin': 'https://www.swissquote.com'
+      }
+    },
+    '/api/metals/xagusd': {
+      url: 'https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XAG/USD',
+      headers: {
+        'Accept': 'application/json',
+        'Origin': 'https://www.swissquote.com'
+      }
+    },
+    '/api/metals/xptusd': {
+      url: 'https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XPT/USD',
+      headers: {
+        'Accept': 'application/json',
+        'Origin': 'https://www.swissquote.com'
+      }
+    },
+    '/api/metals/xpdusd': {
+      url: 'https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XPD/USD',
+      headers: {
+        'Accept': 'application/json',
+        'Origin': 'https://www.swissquote.com'
+      }
+    },
+  };
 
-/*.css
-  Cache-Control: public, max-age=31536000, immutable
+  // Dynamic routes
+  if (path.startsWith('/api/coincap/markets/')) {
+    const assetId = path.replace('/api/coincap/markets/', '');
+    apiConfigs[path] = {
+      url: `https://api.coincap.io/v2/assets/${assetId}/markets?limit=200`,
+      headers: {
+        'Accept': 'application/json',
+        'Origin': 'https://www.cryptohubcoin.com'
+      }
+    };
+  }
 
-/*.js
-  Cache-Control: public, max-age=31536000, immutable
+  if (path.startsWith('/api/coingecko/tickers/')) {
+    const coinId = path.replace('/api/coingecko/tickers/', '');
+    apiConfigs[path] = {
+      url: `https://api.coingecko.com/api/v3/coins/${coinId}/tickers?depth=false&order=volume_desc&per_page=100`,
+      headers: {}
+    };
+  }
 
-/*.png
-  Cache-Control: public, max-age=31536000, immutable
+  if (path.startsWith('/api/cmc/')) {
+    const query = search || '?start=1&limit=5000&sortBy=market_cap&sortType=desc&convert=USD';
+    apiConfigs[path] = {
+      url: `https://api.coinmarketcap.com/data-api/v3/cryptocurrency${path.replace('/api/cmc', '')}${query}`,
+      headers: {
+        'Accept': 'application/json',
+        'Referer': 'https://www.cryptohubcoin.com'
+      }
+    };
+  }
 
-/*.jpg
-  Cache-Control: public, max-age=31536000, immutable
+  const config = apiConfigs[path];
+  
+  if (!config) {
+    return new Response(JSON.stringify({ error: 'Not found', path }), {
+      status: 404,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
 
-/*.svg
-  Cache-Control: public, max-age=31536000, immutable
+  try {
+    const fetchHeaders = {
+      'User-Agent': 'CryptoHub/3.1',
+      'Accept': 'application/json',
+      ...config.headers
+    };
 
-/*.webp
-  Cache-Control: public, max-age=31536000, immutable
+    const response = await fetch(config.url, { headers: fetchHeaders });
 
-/*.ico
-  Cache-Control: public, max-age=31536000, immutable
+    if (!response.ok) {
+      return new Response(JSON.stringify({ 
+        error: 'Upstream error', 
+        status: response.status,
+        url: config.url 
+      }), {
+        status: response.status,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
-/*.woff2
-  Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
-
-/*.woff
-  Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
-
-/manifest.json
-  Cache-Control: public, max-age=86400
-  Content-Type: application/manifest+json
-
-/sitemap.xml
-  Cache-Control: public, max-age=86400
-  Content-Type: application/xml; charset=utf-8
-
-/robots.txt
-  Cache-Control: public, max-age=86400
-  Content-Type: text/plain; charset=utf-8
-
-/logo.png
-  Cache-Control: public, max-age=31536000, immutable
-  Content-Type: image/png
+    const data = await response.text();
+    
+    return new Response(data, {
+      status: 200,
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=60',
+      },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ 
+      error: 'Fetch failed', 
+      message: err.message,
+      url: config.url 
+    }), {
+      status: 502,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+}

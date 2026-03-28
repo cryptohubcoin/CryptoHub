@@ -2,7 +2,6 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     
-    // BLOCK SUSPICIOUS PATHS
     const blockedPaths = [
       '/wp-admin', '/wp-login', '/wp-content', '/wp-includes', 
       '/wp-json', '/xmlrpc.php', '/wordpress',
@@ -23,7 +22,6 @@ export default {
       });
     }
 
-    // Try cache first
     const cache = caches.default;
     const cachedResponse = await cache.match(request);
     
@@ -34,10 +32,8 @@ export default {
       });
     }
 
-    // Fetch from origin
     let response = await env.ASSETS.fetch(request);
     
-    // Cache static assets
     if (request.method === 'GET' && response.status === 200) {
       ctx.waitUntil(cache.put(request, response.clone()));
     }

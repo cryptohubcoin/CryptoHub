@@ -6838,7 +6838,7 @@
             style="color:var(--t1)">
             <img src="logo.png" alt="CryptoHub" fetchpriority="high"
               style="height:36px;width:36px;object-fit:contain;border-radius:4px" width="36" height="36"
-              decoding="async">
+              decoding="sync">
             <h1 class="text-base font-bold" data-i18n="siteTitle">CryptoHub</h1>
           </a>
           <div class="dropdown" id="exDd"><button class="ddb" onclick="toggleDD('exDd')"><i class="fas fa-exchange-alt"
@@ -7401,7 +7401,7 @@
 
     </div>
 
-    <div class="tab-content active" id="tab_crypto" style="min-height:600px">
+    <div class="tab-content active" id="tab_crypto" style="min-height:600px;contain:layout style">
       <!-- Top Gainers Orbital -->
       <div class="tg-section" id="tickerWrap" style="min-height:110px">
         <div class="tg-hdr">
@@ -7446,7 +7446,7 @@
           style="color:var(--t2)"></span></div>
 
       <!-- Coins Section with integrated networks -->
-      <div class="ct mb-4" style="border-radius:14px">
+      <div class="ct mb-4" style="border-radius:14px;min-height:500px">
         <!-- CoinMarketCap-Style Horizontal Networks Bar (outside scroll area) -->
         <span id="ldSt" style="display:none"></span>
         <div class="cmc-net-bar">
@@ -7689,7 +7689,7 @@
 
       <!-- CMC-Style Pagination -->
       <div id="cmcPag"
-        style="display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:16px 0">
+        style="display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:16px 0;min-height:48px">
         <button onclick="gFirst()" class="pg-btn" title="First"><i class="fas fa-angle-double-left"></i></button>
         <button onclick="gPrev()" class="pg-btn" id="pgPrev"><i class="fas fa-angle-left"></i></button>
         <div id="pgs" style="display:flex;gap:4px;flex-wrap:wrap;align-items:center"></div>
@@ -9083,13 +9083,20 @@
         </div>
         <div class="exd-right">
           <div class="exd-stats">
-            <div class="exd-vr">
-              <div><div class="exd-vl">Spot trading volume (24h)</div><div class="exd-vv" id="exdVol24">--</div><div class="exd-vs" id="exdVolBtc">--</div></div>
-              <div><div class="exd-vl">Total assets</div><div class="exd-vv" id="exdAssets">--</div></div>
-              <div style="align-self:center"><span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:16px;font-size:10px;font-weight:600;background:rgba(22,199,132,.08);color:var(--gn);border:1px solid rgba(22,199,132,.18)"><i class="fas fa-clock" style="font-size:9px"></i>4h Refresh</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div style="background:var(--bg3);border:1px solid var(--bc);border-radius:10px;padding:10px 14px">
+                <div class="exd-vl">Spot trading volume (24h)</div>
+                <div class="exd-vv" id="exdVol24">--</div>
+                <div class="exd-vs" id="exdVolBtc">--</div>
+              </div>
+              <div style="background:var(--bg3);border:1px solid var(--bc);border-radius:10px;padding:10px 14px">
+                <div style="display:flex;align-items:center;justify-content:space-between"><div class="exd-vl">Total assets</div><span style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:600;background:rgba(22,199,132,.08);color:var(--gn);border:1px solid rgba(22,199,132,.18)"><i class="fas fa-clock" style="font-size:8px"></i>4h</span></div>
+                <div class="exd-vv" id="exdAssets">--</div>
+                <div class="exd-vs" id="exdAssetsBtc">--</div>
+              </div>
             </div>
           </div>
-          <div class="exd-mhd"><div class="exd-mt">Markets</div><div style="font-size:11px;color:var(--t2)" id="exdMktInfo">Loading...</div></div>
+          <div class="exd-mhd"><div class="exd-mt">Markets</div></div>
           <div class="exd-mw" id="exdMW">
             <table class="exd-tbl"><thead><tr>
               <th style="text-align:center;width:30px">#</th>
@@ -9424,7 +9431,7 @@
     }
     function buildLM() { $('lMenu').innerHTML = LANGS.map(l => `<div class="ddi ${l.c === cLang ? 'active' : ''}" data-lang="${l.c}" onclick="setLang('${l.c}')"><span class="flag">${l.f}</span><span>${l.l}</span><i class="fas fa-check ck"></i></div>`).join('') }
     function buildNS() { $('netSel').innerHTML = `<option value="all">${t('allNetworks')}</option>` + NETS.map(n => `<option value="${n.id}">${n.i} ${n.n}</option>`).join('') }
-    function toggleDD(id) { const dd = $(id); if (!dd) return; const m = dd.querySelector('.ddm') || dd.querySelector('.stats-panel'); if (!m) return; const w = m.classList.contains('active'); closeDD(); if (!w) { m.classList.add('active'); if (id === 'statsDd') { const hb = dd.querySelector('.nav-hamburger'); if (hb) hb.classList.add('active'); } } }
+    function toggleDD(id) { requestAnimationFrame(()=>{ const dd = $(id); if (!dd) return; const m = dd.querySelector('.ddm') || dd.querySelector('.stats-panel'); if (!m) return; const w = m.classList.contains('active'); closeDD(); if (!w) { m.classList.add('active'); if (id === 'statsDd') { const hb = dd.querySelector('.nav-hamburger'); if (hb) hb.classList.add('active'); } } }); }
     function closeDD() { var active = document.querySelectorAll('.ddm.active,.stats-panel.active'); active.forEach(function(m) { m.classList.remove('active') }); document.querySelectorAll('.nav-hamburger.active').forEach(function(h) { h.classList.remove('active') }) }
     function navTo(section) { closeDD(); swTab(section); setTimeout(() => { const el = $('tab_' + section); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 100); if (section === 'crypto' && $('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length ? allC.length.toLocaleString() : '--' }
     document.addEventListener('click', e => { if (!e.target.closest('.dropdown')) closeDD() }, { passive: true });
@@ -16088,7 +16095,9 @@
 
       $('exdVol24').textContent=_vf(vol);
       $('exdVolBtc').textContent=Math.floor(vol/bp).toLocaleString()+' BTC';
-      $('exdAssets').textContent=_vf(vol*(3+(h%10)));
+      const assets=vol*(3+(h%10));
+      $('exdAssets').textContent=_vf(assets);
+      $('exdAssetsBtc').textContent=Math.floor(assets/bp).toLocaleString()+' BTC';
 
       _exdT=[];_exdPg=1;
       $('exdPag').style.display='none';
@@ -16137,7 +16146,7 @@
         tk._im=lc?(lc.img||''):'';
       });
       _exdT=tickers.sort((a,b)=>(b.converted_volume?.usd||0)-(a.converted_volume?.usd||0));
-      $('exdMktInfo').textContent=_exdT.length+' pairs';
+      
       _exdPg=1;_renderExd();
     }
 
@@ -16149,7 +16158,7 @@
         converted_volume:{usd:c.vol||(c.pr*(5e4+(h+i)%5e5))},
         trade_url:ex.u.replace(/{s}/g,c.sy).replace(/{sl}/g,c.sy.toLowerCase())
       })).sort((a,b)=>(b.converted_volume?.usd||0)-(a.converted_volume?.usd||0));
-      $('exdMktInfo').textContent=_exdT.length+' pairs';
+      
       _exdPg=1;_renderExd();
     }
 

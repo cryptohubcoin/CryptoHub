@@ -6414,6 +6414,18 @@
       #exMod table td:nth-child(6) {
         display: none;
       }
+
+      /* ===== NFT TABLE MOBILE RESPONSIVE ===== */
+      #nftTable { min-width: 600px !important; }
+      #nftTable th:nth-child(7),
+      #nftTable td:nth-child(7),
+      #nftTable th:nth-child(8),
+      #nftTable td:nth-child(8) { display: none; }
+      #nftTable th, #nftTable td { padding: 8px 6px !important; font-size: 11px !important; }
+      #nftTable th:first-child, #nftTable td:first-child { min-width: 140px !important; }
+      #tab_commodities .card { padding: 12px !important; }
+      #nftSearch { max-width: 100% !important; }
+      #tab_commodities .flex-wrap { flex-direction: column; }
     }
 
     /* ===== MOBILE EXCHANGE TABLE FIX ===== */
@@ -6451,9 +6463,18 @@
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+
+      /* NFT table — hide more columns on small screens */
+      #nftTable th:nth-child(4), #nftTable td:nth-child(4),
+      #nftTable th:nth-child(5), #nftTable td:nth-child(5) { display: none !important; }
+      #nftTable { min-width: 400px !important; }
     }
 
     @media(max-width:480px) {
+      /* NFT — card-like layout on phones */
+      #nftTable { min-width: 340px !important; }
+      #nftTable th:nth-child(3), #nftTable td:nth-child(3) { display: none !important; }
+      #nftTable th, #nftTable td { padding: 6px 4px !important; font-size: 10px !important; }
       nav .max-w-7xl {
         padding: 0 8px !important
       }

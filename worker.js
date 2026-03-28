@@ -1,8 +1,7 @@
 /**
- * CryptoHub Cloudflare Worker v3.0
+ * CryptoHub Cloudflare Worker v3.1
  * ================================
- * Backward Compatible: يشتغل API-only بدون KV
- * لو فيه KV: بيقدم static files تلقائياً
+ * محسّن: Cache TTL أعلى لتحسين Performance
  */
 
 // ═══════════════════════════════════════════════════
@@ -10,19 +9,21 @@
 // ═══════════════════════════════════════════════════
 const CONFIG = {
   name: 'CryptoHub',
-  version: '3.0',
+  version: '3.1',
   domain: 'www.cryptohubcoin.com',
 };
 
-// Cache TTLs للـ API
+// ═══════════════════════════════════════════════════
+// Cache TTLs - محسّنة للـ Cache Rate الأعلى
+// ═══════════════════════════════════════════════════
 const CACHE_TTL = {
-  prices: 15,
-  tickers: 20,
-  markets: 60,
-  fg: 1800,
-  metals: 30,
-  cmc: 120,
-  coincap: 30,
+  prices: 60,        // زود من 15 لـ 60 ثانية
+  tickers: 60,       // زود من 20 لـ 60 ثانية
+  markets: 300,      // زود من 60 لـ 5 دقايق
+  fg: 3600,          // Fear & Greed: ساعة كاملة
+  metals: 300,       // Metals: 5 دقايق
+  cmc: 300,          // CMC: 5 دقايق
+  coincap: 60,       // CoinCap: دقيقة
 };
 
 // CORS Headers
@@ -76,7 +77,7 @@ const STATIC_CACHE = {
   webmanifest: 86400,
 };
 
-// SPA Routes (تخدم index.html)
+// SPA Routes
 const SPA_ROUTES = new Set([
   '/crypto-analyzer',
   '/crypto-arbitrage',
@@ -148,13 +149,13 @@ function isSPARoute(path) {
 }
 
 // ═══════════════════════════════════════════════════
-// API Proxy
+// API Proxy - محسّن للـ Caching
 // ═══════════════════════════════════════════════════
 async function proxyRequest(targetUrl, ttl) {
   const cacheKey = new Request(targetUrl);
   const cache = caches.default;
 
-  // Check cache
+  // Check cache first
   let response = await cache.match(cacheKey);
   if (response) {
     return new Response(response.body, {
@@ -164,6 +165,7 @@ async function proxyRequest(targetUrl, ttl) {
         'Content-Type': 'application/json',
         'X-Cache': 'HIT',
         'Cache-Control': `public, max-age=${ttl}`,
+        'CDN-Cache-Control': `max-age=${ttl}`,
       },
     });
   }
@@ -171,10 +173,13 @@ async function proxyRequest(targetUrl, ttl) {
   try {
     const upstream = await fetch(targetUrl, {
       headers: {
-        'User-Agent': 'CryptoHub/3.0',
+        'User-Agent': 'CryptoHub/3.1',
         'Accept': 'application/json',
       },
-      cf: { cacheTtl: ttl, cacheEverything: true },
+      cf: { 
+        cacheTtl: ttl, 
+        cacheEverything: true,
+      },
     });
 
     if (!upstream.ok) {
@@ -194,6 +199,7 @@ async function proxyRequest(targetUrl, ttl) {
         ...CORS_HEADERS,
         'Content-Type': 'application/json',
         'Cache-Control': `public, max-age=${ttl}`,
+        'CDN-Cache-Control': `max-age=${ttl}`,
         'X-Cache': 'MISS',
       },
     });
@@ -215,19 +221,16 @@ async function proxyRequest(targetUrl, ttl) {
 // Static File Handler (من KV)
 // ═══════════════════════════════════════════════════
 async function serveStatic(request, path, env, ctx) {
-  // لو مفيش KV، رجع null على طول
   if (!env?.STATIC_ASSETS) {
     return null;
   }
 
   let key = path === '/' ? 'index.html' : path.replace(/^\//, '');
 
-  // SPA routing
   if (isSPARoute(path)) {
     key = 'index.html';
   }
 
-  // Add .html للـ routes اللي مالهاش extension
   if (!key.includes('.') && key !== 'index.html') {
     key = 'index.html';
   }
@@ -244,11 +247,9 @@ async function serveStatic(request, path, env, ctx) {
   if (cached) return cached;
 
   try {
-    // Fetch from KV
     const value = await env.STATIC_ASSETS.get(key, binary ? 'arrayBuffer' : 'text');
 
     if (value === null) {
-      // Try SPA fallback
       if (!key.includes('.') || isSPARoute(path)) {
         const fallback = await env.STATIC_ASSETS.get('index.html', 'text');
         if (fallback) {
@@ -270,7 +271,6 @@ async function serveStatic(request, path, env, ctx) {
       'Vary': 'Accept-Encoding',
     });
 
-    // Cache headers
     if (ext === 'html') {
       headers.set('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
       headers.set('X-Frame-Options', 'SAMEORIGIN');

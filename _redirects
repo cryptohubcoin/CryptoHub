@@ -1,17 +1,44 @@
-# CryptoHub — Cloudflare Pages Redirects
-# فقط redirects ضرورية — Cloudflare Pages بيخدم .html files تلقائي
+# ============================================
+# _redirects - Block suspicious requests
+# ============================================
 
-# Favicon
-/favicon.ico /logo.png 302
-/favicon.png /logo.png 302
+# Block WordPress attacks
+/wp-admin* /404.html 404
+/wp-login* /404.html 404
+/wp-content* /404.html 404
+/wp-includes* /404.html 404
+/wp-json* /404.html 404
+/xmlrpc.php* /404.html 404
+/wordpress* /404.html 404
 
-# Apple Touch Icons
-/apple-touch-icon.png /logo.png 200
-/apple-touch-icon-precomposed.png /logo.png 200
-/apple-touch-icon-120x120.png /logo.png 200
-/apple-touch-icon-152x152.png /logo.png 200
-/apple-touch-icon-180x180.png /logo.png 200
-/favicon-16x16.png /logo.png 200
-/favicon-32x32.png /logo.png 200
-/android-chrome-192x192.png /logo.png 200
-/android-chrome-512x512.png /logo.png 200
+# Block config files
+/.env* /404.html 404
+/.git* /404.html 404
+/.htaccess* /404.html 404
+/.htpasswd* /404.html 404
+
+# Block admin panels
+/admin* /404.html 404
+/phpmyadmin* /404.html 404
+/pma* /404.html 404
+/mysql* /404.html 404
+
+# Block backup files
+/backup* /404.html 404
+/backups* /404.html 404
+/old* /404.html 404
+/test* /404.html 404
+/dev* /404.html 404
+/staging* /404.html 404
+
+# Block common exploits
+/config* /404.html 404
+/configuration* /404.html 404
+/install* /404.html 404
+/setup* /404.html 404
+/api/.env* /404.html 404
+
+# API routes (200 = rewrite, not redirect)
+/api/crypto /functions/api/crypto 200
+/api/prices /functions/api/prices 200
+/api/* /functions/api/[[path]] 200

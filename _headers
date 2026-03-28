@@ -6,57 +6,28 @@
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=()
 
-# HTML Pages - Short cache
 /*.html
   Cache-Control: public, max-age=120, stale-while-revalidate=300
 
-# Root path
 /
   Cache-Control: public, max-age=120, stale-while-revalidate=300
 
-# CSS - Long cache
 /*.css
   Cache-Control: public, max-age=31536000, immutable
 
-# JS - Long cache  
 /*.js
   Cache-Control: public, max-age=31536000, immutable
 
-# Images - Long cache
 /*.png
   Cache-Control: public, max-age=31536000, immutable
+
 /*.jpg
   Cache-Control: public, max-age=31536000, immutable
-/*.jpeg
-  Cache-Control: public, max-age=31536000, immutable
+
 /*.svg
   Cache-Control: public, max-age=31536000, immutable
-/*.gif
-  Cache-Control: public, max-age=31536000, immutable
-/*.webp
-  Cache-Control: public, max-age=31536000, immutable
-/*.ico
-  Cache-Control: public, max-age=31536000, immutable
 
-# Fonts - Long cache
-/*.woff
-  Cache-Control: public, max-age=31536000, immutable
-/*.woff2
-  Cache-Control: public, max-age=31536000, immutable
-/*.ttf
-  Cache-Control: public, max-age=31536000, immutable
-/*.eot
-  Cache-Control: public, max-age=31536000, immutable
-
-# API - Very short cache
 /api/*
   Cache-Control: public, max-age=5, stale-while-revalidate=10
   Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET, POST, OPTIONS
-  Access-Control-Allow-Headers: Content-Type
-
-# JSON files
-/*.json
-  Cache-Control: public, max-age=300, stale-while-revalidate=600

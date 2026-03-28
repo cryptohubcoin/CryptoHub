@@ -2,43 +2,33 @@
 # _redirects - Block suspicious requests
 # ============================================
 
-# Block WordPress attacks
-/wp-admin* /404.html 404
-/wp-login* /404.html 404
-/wp-content* /404.html 404
-/wp-includes* /404.html 404
-/wp-json* /404.html 404
-/xmlrpc.php* /404.html 404
-/wordpress* /404.html 404
+/wp-admin* / 200
+/wp-login* / 200
+/wp-content* / 200
+/wp-includes* / 200
+/wp-json* / 200
+/xmlrpc.php* / 200
+/wordpress* / 200
+/.env* / 200
+/.git* / 200
+/.htaccess* / 200
+/.htpasswd* / 200
+/admin* / 200
+/phpmyadmin* / 200
+/pma* / 200
+/mysql* / 200
+/backup* / 200
+/backups* / 200
+/old* / 200
+/test* / 200
+/dev* / 200
+/staging* / 200
+/config* / 200
+/configuration* / 200
+/install* / 200
+/setup* / 200
+/api/.env* / 200
 
-# Block config files
-/.env* /404.html 404
-/.git* /404.html 404
-/.htaccess* /404.html 404
-/.htpasswd* /404.html 404
-
-# Block admin panels
-/admin* /404.html 404
-/phpmyadmin* /404.html 404
-/pma* /404.html 404
-/mysql* /404.html 404
-
-# Block backup files
-/backup* /404.html 404
-/backups* /404.html 404
-/old* /404.html 404
-/test* /404.html 404
-/dev* /404.html 404
-/staging* /404.html 404
-
-# Block common exploits
-/config* /404.html 404
-/configuration* /404.html 404
-/install* /404.html 404
-/setup* /404.html 404
-/api/.env* /404.html 404
-
-# API routes (200 = rewrite, not redirect)
 /api/crypto /functions/api/crypto 200
 /api/prices /functions/api/prices 200
 /api/* /functions/api/[[path]] 200

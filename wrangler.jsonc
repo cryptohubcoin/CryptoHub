@@ -1,24 +1,14 @@
-// worker.js - CryptoHub Worker with Blocking
-
-export default {
-  async fetch(request, env, ctx) {
-    const url = new URL(request.url);
-    
-    // BLOCK BAD PATHS
-    const blocked = [
-      '/wp-admin', '/wp-login', '/wp-content', '/wp-includes',
-      '/xmlrpc.php', '/phpmyadmin', '/pma', '/.env', '/.git',
-      '/admin', '/config', '/setup', '/install'
-    ];
-    
-    if (blocked.some(b => url.pathname.toLowerCase().startsWith(b))) {
-      return new Response('Not Found', { 
-        status: 404,
-        headers: { 'Cache-Control': 'no-store' }
-      });
-    }
-
-    // SERVE STATIC ASSETS
-    return env.ASSETS.fetch(request);
-  }
-};
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cryptohub",
+  "compatibility_date": "2025-09-27",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "."
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}

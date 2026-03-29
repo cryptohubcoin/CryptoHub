@@ -6416,16 +6416,43 @@
       }
 
       /* ===== NFT TABLE MOBILE RESPONSIVE ===== */
-      #tab_commodities .ct { overflow-x: auto !important; -webkit-overflow-scrolling: touch; width: 100% !important; display: block !important; }
-      #nftTable { min-width: 700px !important; width: max-content !important; }
-      #nftTable th:nth-child(7), #nftTable td:nth-child(7),
-      #nftTable th:nth-child(8), #nftTable td:nth-child(8) { display: none !important; }
-      #nftTable th, #nftTable td { padding: 8px 6px !important; font-size: 11px !important; }
-      #nftTable th:first-child, #nftTable td:first-child { min-width: 160px !important; max-width: 220px !important; }
-      #nftTable td:first-child div { gap: 6px !important; }
-      #nftTable td:first-child div div:first-child span { font-size: 10px !important; min-width: 16px !important; }
-      #nftTable td:first-child img, #nftTable td:first-child div[style*="32px"] { width: 26px !important; height: 26px !important; }
-      #nftTable td:first-child div div:last-child div:first-child { font-size: 11px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+      #tab_commodities .ct { overflow-x: hidden !important; width: 100% !important; display: block !important; }
+      #nftTable { min-width: 0 !important; width: 100% !important; border-collapse: collapse !important; }
+      #nftTable thead { display: none !important; }
+      #nftTable tbody tr {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 2px 8px;
+        padding: 12px 10px !important;
+        border-bottom: 1px solid var(--bc) !important;
+        position: relative;
+      }
+      /* Collection name — full width row */
+      #nftTable td:first-child {
+        grid-column: 1 / -1;
+        padding: 0 0 6px 0 !important;
+        border: none !important;
+      }
+      #nftTable td:first-child div { gap: 8px !important; }
+      #nftTable td:first-child img, #nftTable td:first-child div[style*="32px"] { width: 32px !important; height: 32px !important; border-radius: 8px !important; }
+      #nftTable td:first-child div div:last-child div:first-child { font-size: 13px !important; font-weight: 600 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+      /* Floor price */
+      #nftTable td:nth-child(2) { text-align: left !important; padding: 2px 0 !important; border: none !important; font-size: 12px !important; font-weight: 600 !important; }
+      #nftTable td:nth-child(2)::before { content: 'Floor: '; font-weight: 400; color: var(--t2); font-size: 10px; }
+      /* 24h change */
+      #nftTable td:nth-child(3) { text-align: right !important; padding: 2px 0 !important; border: none !important; font-size: 12px !important; font-weight: 600 !important; }
+      #nftTable td:nth-child(3)::before { content: '24h: '; font-weight: 400; color: var(--t2); font-size: 10px; }
+      /* 7d change */
+      #nftTable td:nth-child(4) { text-align: left !important; padding: 2px 0 !important; border: none !important; font-size: 11px !important; }
+      #nftTable td:nth-child(4)::before { content: '7d: '; font-weight: 400; color: var(--t2); font-size: 10px; }
+      /* Market cap */
+      #nftTable td:nth-child(5) { text-align: right !important; padding: 2px 0 !important; border: none !important; font-size: 11px !important; }
+      #nftTable td:nth-child(5)::before { content: 'MCap: '; font-weight: 400; color: var(--t2); font-size: 10px; }
+      /* Volume */
+      #nftTable td:nth-child(6) { text-align: left !important; padding: 2px 0 !important; border: none !important; font-size: 11px !important; }
+      #nftTable td:nth-child(6)::before { content: 'Vol: '; font-weight: 400; color: var(--t2); font-size: 10px; }
+      /* Hide owners & supply on mobile */
+      #nftTable td:nth-child(7), #nftTable td:nth-child(8) { display: none !important; }
       #tab_commodities .card { padding: 10px !important; }
       #nftSearch { max-width: 100% !important; }
       #tab_commodities .flex-wrap { flex-direction: column; }
@@ -6467,16 +6494,14 @@
         white-space: nowrap;
       }
 
-      /* NFT table — hide more columns on small screens */
-      #nftTable th:nth-child(4), #nftTable td:nth-child(4),
-      #nftTable th:nth-child(6), #nftTable td:nth-child(6) { display: none !important; }
+      /* NFT table — extra small: hide 7d + volume */
+      #nftTable td:nth-child(4), #nftTable td:nth-child(6) { display: none !important; }
     }
 
     @media(max-width:480px) {
-      /* NFT — minimal columns: Collection + Floor + 24H% only */
-      #nftTable th:nth-child(3), #nftTable td:nth-child(3) { display: none !important; }
-      #nftTable th, #nftTable td { padding: 6px 3px !important; font-size: 10px !important; }
-      #nftTable td:first-child div div:last-child div:first-child { max-width: 80px; font-size: 10px !important; }
+      /* NFT — minimal: Collection + Floor + 24H% only */
+      #nftTable td:nth-child(5) { display: none !important; }
+      #nftTable td:first-child div div:last-child div:first-child { max-width: 140px; font-size: 12px !important; }
       nav .max-w-7xl {
         padding: 0 8px !important
       }
@@ -9680,7 +9705,8 @@
 
     async function loadCoins() {
       if (isL) return; isL = true;
-      const symMap = new Map();// symbol→coin for O(1) lookup
+      const symMap = new Map();// cmc_id or symbol→coin for O(1) lookup
+      function _ck(c) { return c.cmc_id ? 'cmc_' + c.cmc_id : c.sy; } // coin key matching worker
       const MIN_VOL = 0; // Load all coins without volume threshold
       try {
         $('lProg').classList.remove('hidden');
@@ -9696,7 +9722,7 @@
               kvCoins.forEach(function(c) {
                 // Normalize fields (KV Worker uses same format but ensure c4 exists)
                 if (c.c4 === undefined) c.c4 = 0;
-                allC.push(c); symMap.set(c.sy, c);
+                allC.push(c); symMap.set(_ck(c), c);
               });
               applyKnownSupply(allC);
               $('pFill').style.width = '100%';
@@ -9722,7 +9748,7 @@
         // ===== CHECK SESSION CACHE (instant reload — fallback if KV miss) =====
         const cached = cacheGet('cryptohub_coins');
         if (cached && cached.length > 50) {
-          cached.forEach(c => { allC.push(c); symMap.set(c.sy, c); });
+          cached.forEach(c => { allC.push(c); symMap.set(_ck(c), c); });
           // Fix any bad supply data in cache immediately
           applyKnownSupply(allC);
           $('pFill').style.width = '100%';
@@ -9756,7 +9782,8 @@
                   const qt = coin.quotes && coin.quotes.length ? coin.quotes.find(q => q.name === 'USD') : null;
                   if (!qt) return;
                   const sym = coin.symbol;
-                  const existing = symMap.get(sym);
+                  const cmcKey = 'cmc_' + coin.id;
+                  const existing = symMap.get(cmcKey);
                   if (existing) {
                     if (qt.marketCap > 0 && (!existing.mc || existing.mc === 0)) existing.mc = qt.marketCap;
                     if (qt.volume24h > 0 && (!existing.vol || existing.vol === 0)) existing.vol = qt.volume24h;
@@ -9770,8 +9797,8 @@
                     return;
                   }
                   const vol = qt.volume24h || 0; const mc = qt.marketCap || 0;
-                  const nc = { id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: coin.numMarketPairs || 0, sup: coin.circulatingSupply || 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
-                  allC.push(nc); symMap.set(sym, nc); added++;
+                  const nc = { id: coin.slug || sym.toLowerCase(), cmc_id: coin.id, rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: coin.numMarketPairs || 0, sup: coin.circulatingSupply || 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
+                  allC.push(nc); symMap.set(cmcKey, nc); added++;
                 });
               });
               if (added > 0) { reRank(); filtC = [...allC]; render() }
@@ -10024,7 +10051,8 @@
                 var qt = coin.quotes && coin.quotes.length ? coin.quotes.find(function (q) { return q.name === 'USD'; }) : null;
                 if (!qt) return;
                 var sym = coin.symbol;
-                var existing = symMap.get(sym);
+                var cmcKey = 'cmc_' + coin.id;
+                var existing = symMap.get(cmcKey);
                 if (existing) {
                   if (qt.marketCap > 0 && (!existing.mc || existing.mc === 0)) existing.mc = qt.marketCap;
                   if (qt.volume24h > 0 && (!existing.vol || existing.vol === 0)) existing.vol = qt.volume24h;
@@ -10038,8 +10066,8 @@
                   return;
                 }
                 var vol = qt.volume24h || 0, mc = qt.marketCap || 0;
-                var nc = { id: coin.slug || sym.toLowerCase(), rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/' + coin.id + '.png', ex: coin.numMarketPairs || 0, sup: coin.circulatingSupply || 0, ts: 0, ms: 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
-                allC.push(nc); symMap.set(sym, nc); added++;
+                var nc = { id: coin.slug || sym.toLowerCase(), cmc_id: coin.id, rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/' + coin.id + '.png', ex: coin.numMarketPairs || 0, sup: coin.circulatingSupply || 0, ts: 0, ms: 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
+                allC.push(nc); symMap.set(cmcKey, nc); added++;
               });
             });
             if (added > 0) {

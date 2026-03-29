@@ -9705,7 +9705,33 @@
 
     async function loadCoins() {
       if (isL) return; isL = true;
-      const symMap = new Map();// cmc_id or symbol→coin for O(1) lookup
+      // DualMap: indexes by cmc_id (primary, unique per chain) AND symbol (secondary, first-match only)
+      // This prevents same-symbol coins on different chains from overwriting each other
+      const _primaryMap = new Map(); // cmc_id → coin (unique, never overwrites)
+      const _symFirstMap = new Map(); // symbol → first coin with that symbol (for legacy lookups)
+      const symMap = {
+        has(key) { return _primaryMap.has(key) || _symFirstMap.has(key); },
+        get(key) { return _primaryMap.get(key) || _symFirstMap.get(key) || undefined; },
+        set(key, val) {
+          // If key looks like cmc_xxx, store in primary
+          if (typeof key === 'string' && key.startsWith('cmc_')) {
+            _primaryMap.set(key, val);
+            // Also set symbol first-match if not already set
+            if (val.sy && !_symFirstMap.has(val.sy)) _symFirstMap.set(val.sy, val);
+          } else {
+            // Legacy symbol key: only store if symbol not yet in first-match map
+            // This prevents overwriting different-chain coins
+            if (!_symFirstMap.has(key)) {
+              _symFirstMap.set(key, val);
+            }
+            // Always store by cmc_id if coin has one
+            if (val && val.cmc_id) {
+              _primaryMap.set('cmc_' + val.cmc_id, val);
+            }
+          }
+        },
+        get size() { return _primaryMap.size + _symFirstMap.size; },
+      };
       function _ck(c) { return c.cmc_id ? 'cmc_' + c.cmc_id : c.sy; } // coin key matching worker
       const MIN_VOL = 0; // Load all coins without volume threshold
       try {

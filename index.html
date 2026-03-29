@@ -5117,7 +5117,7 @@
       padding-top: min(8vh, 60px);
       /* Promote to compositor layer — faster open response */
       will-change: opacity;
-      contain: strict;
+      contain: layout style;
     }
 
     .gs-overlay.active {
@@ -6416,12 +6416,12 @@
       }
 
       /* ===== NFT TABLE MOBILE RESPONSIVE ===== */
-      #nftTable { min-width: auto !important; width: 100% !important; }
-      #nftTable th:nth-child(5), #nftTable td:nth-child(5),
+      #tab_commodities .ct { overflow-x: auto !important; -webkit-overflow-scrolling: touch; width: 100% !important; display: block !important; }
+      #nftTable { min-width: 600px !important; width: max-content !important; }
       #nftTable th:nth-child(7), #nftTable td:nth-child(7),
       #nftTable th:nth-child(8), #nftTable td:nth-child(8) { display: none !important; }
       #nftTable th, #nftTable td { padding: 8px 5px !important; font-size: 11px !important; }
-      #nftTable th:first-child, #nftTable td:first-child { min-width: 120px !important; max-width: 180px !important; }
+      #nftTable th:first-child, #nftTable td:first-child { min-width: 120px !important; max-width: 180px !important; position: sticky; left: 0; background: var(--bg1); z-index: 2; }
       #nftTable td:first-child div { gap: 6px !important; }
       #nftTable td:first-child div div:first-child span { font-size: 10px !important; min-width: 16px !important; }
       #nftTable td:first-child img, #nftTable td:first-child div[style*="32px"] { width: 26px !important; height: 26px !important; }
@@ -9334,7 +9334,7 @@
       exData = [], exPage = 1, exIPP = 10;
     /* iPP: always 50 */
     // Clear old truncated cache (v2 upgrade)
-    try { const ov = sessionStorage.getItem('cryptohub_v'); if (ov !== '13') { sessionStorage.removeItem('cryptohub_coins'); sessionStorage.removeItem('ch_fallback'); sessionStorage.setItem('cryptohub_v', '13') } } catch (e) { }
+    try { const ov = sessionStorage.getItem('cryptohub_v'); if (ov !== '14') { sessionStorage.removeItem('cryptohub_coins'); sessionStorage.removeItem('ch_fallback'); sessionStorage.setItem('cryptohub_v', '14') } } catch (e) { }
 
     // ===== INSTANT SEARCH INDEX =====
     // Built immediately from static data — search works BEFORE any API responds
@@ -11360,12 +11360,24 @@
 
     // Network filter — checks platform slug, tags, and known token list
     function chkNet(c, nid) {
+      // L1 native coins should only show under their OWN network, not every network they're bridged to
+      const L1_MAP = { 'BTC': 'bitcoin', 'ETH': 'ethereum', 'BNB': 'binance-smart-chain', 'SOL': 'solana', 'XRP': null, 'ADA': 'cardano', 'AVAX': 'avalanche', 'DOT': 'polkadot', 'DOGE': null, 'SHIB': 'ethereum', 'LTC': null, 'BCH': null, 'ATOM': 'cosmos', 'FIL': null, 'NEAR': 'near-protocol', 'ICP': null, 'APT': 'aptos', 'SUI': 'sui', 'TON': null, 'TRX': 'tron', 'ETC': null, 'ALGO': 'algorand', 'XLM': 'stellar', 'HBAR': null, 'VET': null, 'FTM': 'fantom', 'EOS': null, 'XTZ': null, 'NEO': null, 'MATIC': 'polygon-pos', 'POL': 'polygon-pos' };
+      const l1Net = L1_MAP[c.sy];
+      if (l1Net !== undefined) {
+        // This is a known L1 coin — only show under its native network
+        if (l1Net === nid) return true;
+        // Also show if it's in the hardcoded token list for this network
+        const tokens = NET_TOKENS[nid];
+        if (tokens && tokens.includes(c.sy.toUpperCase())) return true;
+        return false;
+      }
+
       // Check platform field from CMC
       if (c.plat) {
         if (c.plat === nid) return true;
         if (c.plat.includes(nid)) return true;
         // Aliases
-        if (nid === 'ethereum' && (c.plat === 'ethereum' || c.plat.includes('erc20') || c.plat.includes('eth'))) return true;
+        if (nid === 'ethereum' && (c.plat === 'ethereum' || c.plat.includes('erc20'))) return true;
         if (nid === 'binance-smart-chain' && (c.plat.includes('binance') || c.plat.includes('bsc') || c.plat.includes('bnb'))) return true;
         if (nid === 'polygon-pos' && (c.plat.includes('polygon') || c.plat.includes('matic'))) return true;
         if (nid === 'arbitrum-one' && c.plat.includes('arbitrum')) return true;
@@ -11382,21 +11394,21 @@
         if (nid === 'blast' && c.plat.includes('blast')) return true;
         if (nid === 'zksync' && (c.plat.includes('zksync') || c.plat.includes('zk-sync'))) return true;
       }
-      // Check tags
+      // Check tags (but NOT generic tags like 'defi' — too broad)
       if (c.tags && Array.isArray(c.tags)) {
-        if (c.tags.includes(nid) || c.tags.includes(nid + '-ecosystem')) return true;
-        if (nid === 'ethereum' && (c.tags.includes('erc-20') || c.tags.includes('ethereum-ecosystem') || c.tags.includes('defi') || c.tags.includes('ethereum'))) return true;
-        if (nid === 'binance-smart-chain' && (c.tags.includes('bep-20') || c.tags.includes('bnb-chain') || c.tags.includes('binance-smart-chain') || c.tags.includes('bsc-ecosystem'))) return true;
-        if (nid === 'tron' && (c.tags.includes('trc-20') || c.tags.includes('tron-ecosystem'))) return true;
-        if (nid === 'solana' && (c.tags.includes('spl-token') || c.tags.includes('solana-ecosystem') || c.tags.includes('solana'))) return true;
-        if (nid === 'polygon-pos' && (c.tags.includes('polygon-ecosystem') || c.tags.includes('polygon'))) return true;
-        if (nid === 'arbitrum-one' && (c.tags.includes('arbitrum-ecosystem') || c.tags.includes('arbitrum'))) return true;
-        if (nid === 'avalanche' && (c.tags.includes('avalanche-ecosystem') || c.tags.includes('avalanche'))) return true;
-        if (nid === 'base' && (c.tags.includes('base-ecosystem') || c.tags.includes('base'))) return true;
-        if (nid === 'cosmos' && (c.tags.includes('cosmos-ecosystem') || c.tags.includes('cosmos'))) return true;
+        if (c.tags.includes(nid + '-ecosystem')) return true;
+        if (nid === 'ethereum' && (c.tags.includes('erc-20') || c.tags.includes('ethereum-ecosystem'))) return true;
+        if (nid === 'binance-smart-chain' && (c.tags.includes('bep-20') || c.tags.includes('bnb-chain') || c.tags.includes('bnb-chain-ecosystem') || c.tags.includes('bsc-ecosystem'))) return true;
+        if (nid === 'tron' && (c.tags.includes('trc-20') || c.tags.includes('tron-ecosystem') || c.tags.includes('tron20-ecosystem'))) return true;
+        if (nid === 'solana' && (c.tags.includes('spl-token') || c.tags.includes('solana-ecosystem'))) return true;
+        if (nid === 'polygon-pos' && c.tags.includes('polygon-ecosystem')) return true;
+        if (nid === 'arbitrum-one' && c.tags.includes('arbitrum-ecosystem')) return true;
+        if (nid === 'avalanche' && c.tags.includes('avalanche-ecosystem')) return true;
+        if (nid === 'base' && c.tags.includes('base-ecosystem')) return true;
+        if (nid === 'cosmos' && c.tags.includes('cosmos-ecosystem')) return true;
         if (nid === 'near-protocol' && c.tags.includes('near-protocol-ecosystem')) return true;
-        if (nid === 'sui' && (c.tags.includes('sui-ecosystem') || c.tags.includes('sui'))) return true;
-        if (nid === 'aptos' && (c.tags.includes('aptos-ecosystem') || c.tags.includes('aptos'))) return true;
+        if (nid === 'sui' && c.tags.includes('sui-ecosystem')) return true;
+        if (nid === 'aptos' && c.tags.includes('aptos-ecosystem')) return true;
       }
       // Check known token list
       const tokens = NET_TOKENS[nid];
@@ -15589,7 +15601,7 @@
       const q = query.toLowerCase();
       const searchPool = allC.length > 10 ? allC : INSTANT_COINS;
       const coins = searchPool.filter(c =>
-        c.nm.toLowerCase().includes(q) || c.sy.toLowerCase().includes(q)
+        (c.nm || '').toLowerCase().includes(q) || (c.sy || '').toLowerCase().includes(q)
       ).slice(0, 10);
       const exchanges = EX_DB.filter(ex => ex.n.toLowerCase().includes(q)).slice(0, 5);
 
@@ -15780,7 +15792,7 @@
     }
 
     // Filter/Sort/Render
-    function doFilter() { const s = $('search').value.toLowerCase(); filtC = allC.filter(c => { const ms = c.nm.toLowerCase().includes(s) || c.sy.toLowerCase().includes(s); const mn = cNet === 'all' || chkNet(c, cNet); return ms && mn }); const af = $('aFilt'); if (cNet !== 'all') { af.classList.remove('hidden'); const net = NETS.find(n => n.id === cNet); $('aNetName').textContent = net ? `${net.i} ${net.n} ` : cNet; $('fCount').textContent = `(${filtC.length} ${t('coinsFound')})` } else af.classList.add('hidden'); doSortArr(); cPage = 1; render() }
+    function doFilter() { const s = $('search').value.toLowerCase(); filtC = allC.filter(c => { if (!c.nm || !c.sy) return false; const ms = (c.nm || '').toLowerCase().includes(s) || (c.sy || '').toLowerCase().includes(s); const mn = cNet === 'all' || chkNet(c, cNet); return ms && mn }); const af = $('aFilt'); if (cNet !== 'all') { af.classList.remove('hidden'); const net = NETS.find(n => n.id === cNet); $('aNetName').textContent = net ? `${net.i} ${net.n} ` : cNet; $('fCount').textContent = `(${filtC.length} ${t('coinsFound')})` } else af.classList.add('hidden'); doSortArr(); cPage = 1; render() }
     function clearNet() { cNet = 'all'; $('netSel').value = 'all'; doFilter() }
 
     function doSort(col) {
@@ -15913,7 +15925,7 @@
           document.querySelectorAll('.cmc-mg-item').forEach(function (b) { b.classList.remove('cmc-mg-active') });
           btn.classList.add('cmc-net-active');
           cNet = btn.getAttribute('data-net');
-          $('netSel').value = cNet;
+          try { $('netSel').value = cNet; } catch(e){}
           doFilter();
           if (cNet !== 'all') fetchNetTokens(cNet);
           if (mDrop) { mDrop.classList.remove('show'); if (mChev) mChev.style.transform = 'rotate(0)' }
@@ -15926,7 +15938,7 @@
           document.querySelectorAll('.cmc-mg-item').forEach(function (b) { b.classList.remove('cmc-mg-active') });
           btn.classList.add('cmc-mg-active');
           cNet = btn.getAttribute('data-net');
-          $('netSel').value = cNet;
+          try { $('netSel').value = cNet; } catch(e){}
           doFilter();
           if (cNet !== 'all') fetchNetTokens(cNet);
           if (mDrop) { mDrop.classList.remove('show'); if (mChev) mChev.style.transform = 'rotate(0)' }

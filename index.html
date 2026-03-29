@@ -6416,14 +6416,17 @@
       }
 
       /* ===== NFT TABLE MOBILE RESPONSIVE ===== */
-      #nftTable { min-width: 600px !important; }
-      #nftTable th:nth-child(7),
-      #nftTable td:nth-child(7),
-      #nftTable th:nth-child(8),
-      #nftTable td:nth-child(8) { display: none; }
-      #nftTable th, #nftTable td { padding: 8px 6px !important; font-size: 11px !important; }
-      #nftTable th:first-child, #nftTable td:first-child { min-width: 140px !important; }
-      #tab_commodities .card { padding: 12px !important; }
+      #nftTable { min-width: auto !important; width: 100% !important; }
+      #nftTable th:nth-child(5), #nftTable td:nth-child(5),
+      #nftTable th:nth-child(7), #nftTable td:nth-child(7),
+      #nftTable th:nth-child(8), #nftTable td:nth-child(8) { display: none !important; }
+      #nftTable th, #nftTable td { padding: 8px 5px !important; font-size: 11px !important; }
+      #nftTable th:first-child, #nftTable td:first-child { min-width: 120px !important; max-width: 180px !important; }
+      #nftTable td:first-child div { gap: 6px !important; }
+      #nftTable td:first-child div div:first-child span { font-size: 10px !important; min-width: 16px !important; }
+      #nftTable td:first-child img, #nftTable td:first-child div[style*="32px"] { width: 26px !important; height: 26px !important; }
+      #nftTable td:first-child div div:last-child div:first-child { font-size: 11px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
+      #tab_commodities .card { padding: 10px !important; }
       #nftSearch { max-width: 100% !important; }
       #tab_commodities .flex-wrap { flex-direction: column; }
     }
@@ -6466,15 +6469,14 @@
 
       /* NFT table — hide more columns on small screens */
       #nftTable th:nth-child(4), #nftTable td:nth-child(4),
-      #nftTable th:nth-child(5), #nftTable td:nth-child(5) { display: none !important; }
-      #nftTable { min-width: 400px !important; }
+      #nftTable th:nth-child(6), #nftTable td:nth-child(6) { display: none !important; }
     }
 
     @media(max-width:480px) {
-      /* NFT — card-like layout on phones */
-      #nftTable { min-width: 340px !important; }
+      /* NFT — minimal columns: Collection + Floor + 24H% only */
       #nftTable th:nth-child(3), #nftTable td:nth-child(3) { display: none !important; }
-      #nftTable th, #nftTable td { padding: 6px 4px !important; font-size: 10px !important; }
+      #nftTable th, #nftTable td { padding: 6px 3px !important; font-size: 10px !important; }
+      #nftTable td:first-child div div:last-child div:first-child { max-width: 80px; font-size: 10px !important; }
       nav .max-w-7xl {
         padding: 0 8px !important
       }
@@ -16306,18 +16308,41 @@
     }
     async function loadMetals() {
       if (_mtInit) return; _mtInit = true; _initMtOpen();
+      // ===== KV FAST LOAD: Get metals from KV Worker instantly =====
       try {
-        const [paxg, agP, ptP, pdP] = await Promise.all([
-          fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=PAXGUSDT').then(r => r.ok ? r.json() : null).catch(() => null),
-          _fetchSwissquote('XAG'), _fetchSwissquote('XPT'), _fetchSwissquote('XPD')]);
-        if (paxg) { _mt.g = parseFloat(paxg.lastPrice) || 0; _mt.gChg = parseFloat(paxg.priceChangePercent) || 0; _mt.gHi = parseFloat(paxg.highPrice) || 0; _mt.gLo = parseFloat(paxg.lowPrice) || 0; _mt.gVol = parseFloat(paxg.quoteVolume) || 0; _saveMtOpen('g', _mt.g) }
-        if (agP && agP > 0) { _mt.s = agP; _saveMtOpen('s', _mt.s) }
-        if (ptP && ptP > 0) { _mt.pt = ptP; _saveMtOpen('pt', _mt.pt) }
-        if (pdP && pdP > 0) { _mt.pd = pdP; _saveMtOpen('pd', _mt.pd) }
-      } catch (e) { }
-      if (!_mt.g || !_mt.s) await _fetchGoldprice();
-      if (!_mt.pt || !_mt.pd) await _fetchCurrencyApiMetals();
-      _mt.lastUpd = Date.now(); _updMtl(); _connectMetalWs(); _mtPollId = setInterval(_fetchAllSpotMetals, 15000); _silverRapidPoll(); _agPollId = setInterval(_silverRapidPoll, 5000)
+        const kvM = await Promise.race([fetch(KV_WORKER + '/api/metals'), _tout(3000)]);
+        if (kvM.ok) {
+          const md = await kvM.json();
+          if (md && md.gold && md.gold.price > 0) {
+            _mt.g = md.gold.price; _mt.gChg = md.gold.chg || 0; _saveMtOpen('g', _mt.g);
+            if (md.silver && md.silver.price > 0) { _mt.s = md.silver.price; _mt.sChg = md.silver.chg || 0; _saveMtOpen('s', _mt.s); }
+            if (md.platinum && md.platinum.price > 0) { _mt.pt = md.platinum.price; _mt.ptChg = md.platinum.chg || 0; _saveMtOpen('pt', _mt.pt); }
+            if (md.palladium && md.palladium.price > 0) { _mt.pd = md.palladium.price; _mt.pdChg = md.palladium.chg || 0; _saveMtOpen('pd', _mt.pd); }
+            _mt.lastUpd = Date.now(); _updMtl();
+            console.log('⚡ Metals from KV: Gold $' + _mt.g.toFixed(2));
+          }
+        }
+      } catch (e) { console.log('KV metals miss:', e.message); }
+      // ===== Start WebSocket + goldprice immediately (don't wait for slow Swissquote) =====
+      _connectMetalWs();
+      _fetchGoldprice().catch(function(){});
+      _silverRapidPoll(); _agPollId = setInterval(_silverRapidPoll, 5000);
+      // ===== Slow APIs in background (non-blocking) =====
+      setTimeout(async function() {
+        try {
+          const [paxg, agP, ptP, pdP] = await Promise.all([
+            fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=PAXGUSDT').then(r => r.ok ? r.json() : null).catch(() => null),
+            _fetchSwissquote('XAG'), _fetchSwissquote('XPT'), _fetchSwissquote('XPD')]);
+          if (paxg) { _mt.g = parseFloat(paxg.lastPrice) || 0; _mt.gChg = parseFloat(paxg.priceChangePercent) || 0; _mt.gHi = parseFloat(paxg.highPrice) || 0; _mt.gLo = parseFloat(paxg.lowPrice) || 0; _mt.gVol = parseFloat(paxg.quoteVolume) || 0; _saveMtOpen('g', _mt.g) }
+          if (agP && agP > 0) { _mt.s = agP; _saveMtOpen('s', _mt.s) }
+          if (ptP && ptP > 0) { _mt.pt = ptP; _saveMtOpen('pt', _mt.pt) }
+          if (pdP && pdP > 0) { _mt.pd = pdP; _saveMtOpen('pd', _mt.pd) }
+        } catch (e) { }
+        if (!_mt.g || !_mt.s) await _fetchGoldprice().catch(function(){});
+        if (!_mt.pt || !_mt.pd) await _fetchCurrencyApiMetals().catch(function(){});
+        _mt.lastUpd = Date.now(); _updMtl();
+      }, 100);
+      _mtPollId = setInterval(_fetchAllSpotMetals, 15000);
     }
     function _updMtl() {
       const f2 = (n, d) => n > 0 ? '$' + n.toLocaleString('en', { minimumFractionDigits: d || 2, maximumFractionDigits: d || 2 }) : '--';

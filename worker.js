@@ -3,13 +3,13 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname.toLowerCase();
 
-    // BLOCK known malicious paths — return 403 (not 404) to distinguish from real missing pages
+    // BLOCK known malicious paths — return 404
     const BLOCKED = ['wp-admin','wp-login','wp-content','wp-includes','xmlrpc.php','phpmyadmin','pma','.env','.git','.htaccess','.htpasswd'];
-    if (BLOCKED.some(b => path.includes(b))) {
-      return new Response('Forbidden', { 
-        status: 403,
+    if (BLOCKED.some(b => path.startsWith('/' + b))) {
+      return new Response('Not Found', { 
+        status: 404,
         headers: { 
-          'Cache-Control': 'public, max-age=86400',
+          'Cache-Control': 'no-store',
           'Content-Type': 'text/plain'
         }
       });

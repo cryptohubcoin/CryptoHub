@@ -1,33 +1,47 @@
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    
-    // BLOCK BAD PATHS
-    if (url.pathname.includes('wp-admin') || 
-        url.pathname.includes('wp-login') ||
-        url.pathname.includes('.env') ||
-        url.pathname.includes('.git') ||
-        url.pathname.includes('xmlrpc.php') ||
-        url.pathname.includes('wp-content') ||
-        url.pathname.includes('wp-includes') ||
-        url.pathname.includes('admin') ||
-        url.pathname.includes('phpmyadmin')) {
-      return new Response('Not Found', { 
-        status: 404,
-        headers: { 'Cache-Control': 'no-store' }
+    const path = url.pathname.toLowerCase();
+
+    // BLOCK known malicious paths — return 403 (not 404) to distinguish from real missing pages
+    const BLOCKED = ['wp-admin','wp-login','wp-content','wp-includes','xmlrpc.php','phpmyadmin','pma','.env','.git','.htaccess','.htpasswd'];
+    if (BLOCKED.some(b => path.includes(b))) {
+      return new Response('Forbidden', { 
+        status: 403,
+        headers: { 
+          'Cache-Control': 'public, max-age=86400',
+          'Content-Type': 'text/plain'
+        }
       });
     }
 
-    // CACHE
+    // CACHE — check edge cache first
     const cache = caches.default;
-    const cached = await cache.match(request);
+    const cacheKey = new Request(url.toString(), request);
+    const cached = await cache.match(cacheKey);
     if (cached) return cached;
 
-    // FETCH
+    // FETCH from origin
     const response = await env.ASSETS.fetch(request);
-    
+
+    // Only cache successful GET responses  
     if (request.method === 'GET' && response.status === 200) {
-      ctx.waitUntil(cache.put(request, response.clone()));
+      const resp = new Response(response.body, response);
+      
+      // Add cache headers if not already set
+      if (!resp.headers.has('Cache-Control')) {
+        const ct = resp.headers.get('Content-Type') || '';
+        if (ct.includes('text/html')) {
+          resp.headers.set('Cache-Control', 'public, max-age=300, s-maxage=600, stale-while-revalidate=3600');
+        } else if (ct.includes('image/')) {
+          resp.headers.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+        } else if (ct.includes('application/json')) {
+          resp.headers.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=600');
+        }
+      }
+      
+      ctx.waitUntil(cache.put(cacheKey, resp.clone()));
+      return resp;
     }
 
     return response;

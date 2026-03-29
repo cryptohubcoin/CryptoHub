@@ -1,34 +1,29 @@
 # ============================================
-# _redirects - Block suspicious requests
+# _redirects - Block suspicious/bot requests
+# Serve homepage (200 rewrite) instead of 404
 # ============================================
 
+# WordPress probing (bots)
 /wp-admin* / 200
 /wp-login* / 200
 /wp-content* / 200
 /wp-includes* / 200
 /wp-json* / 200
-/xmlrpc.php* / 200
+/xmlrpc.php / 200
 /wordpress* / 200
-/.env* / 200
+
+# Sensitive files
+/.env / 200
 /.git* / 200
-/.htaccess* / 200
-/.htpasswd* / 200
-/admin* / 200
+/.htaccess / 200
+/.htpasswd / 200
+
+# Database/admin panels
 /phpmyadmin* / 200
 /pma* / 200
 /mysql* / 200
-/backup* / 200
-/backups* / 200
-/old* / 200
-/test* / 200
-/dev* / 200
-/staging* / 200
-/config* / 200
-/configuration* / 200
+
+# PHP/server probing
 /install* / 200
 /setup* / 200
-/api/.env* / 200
-
-/api/crypto /functions/api/crypto 200
-/api/prices /functions/api/prices 200
-/api/* /functions/api/[[path]] 200
+/configuration* / 200

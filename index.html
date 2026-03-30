@@ -9706,47 +9706,87 @@
     async function loadCoins() {
       if (isL) return; isL = true;
       // DualMap: indexes by cmc_id (primary, unique per chain) AND symbol (secondary, first-match only)
-      // This prevents same-symbol coins on different chains from overwriting each other
-      const _primaryMap = new Map(); // cmc_id → coin (unique, never overwrites)
-      const _symFirstMap = new Map(); // symbol → first coin with that symbol (for legacy lookups)
+      const _primaryMap = new Map();
+      const _symFirstMap = new Map();
       const symMap = {
         has(key) { return _primaryMap.has(key) || _symFirstMap.has(key); },
         get(key) { return _primaryMap.get(key) || _symFirstMap.get(key) || undefined; },
         set(key, val) {
-          // If key looks like cmc_xxx, store in primary
           if (typeof key === 'string' && key.startsWith('cmc_')) {
             _primaryMap.set(key, val);
-            // Also set symbol first-match if not already set
             if (val.sy && !_symFirstMap.has(val.sy)) _symFirstMap.set(val.sy, val);
           } else {
-            // Legacy symbol key: only store if symbol not yet in first-match map
-            // This prevents overwriting different-chain coins
-            if (!_symFirstMap.has(key)) {
-              _symFirstMap.set(key, val);
-            }
-            // Always store by cmc_id if coin has one
-            if (val && val.cmc_id) {
-              _primaryMap.set('cmc_' + val.cmc_id, val);
-            }
+            if (!_symFirstMap.has(key)) _symFirstMap.set(key, val);
+            if (val && val.cmc_id) _primaryMap.set('cmc_' + val.cmc_id, val);
           }
         },
         get size() { return _primaryMap.size + _symFirstMap.size; },
       };
-      function _ck(c) { return c.cmc_id ? 'cmc_' + c.cmc_id : c.sy; } // coin key matching worker
-      const MIN_VOL = 0; // Load all coins without volume threshold
+      function _ck(c) { return c.cmc_id ? 'cmc_' + c.cmc_id : c.sy; }
+      const MIN_VOL = 0;
       try {
         $('lProg').classList.remove('hidden');
         $('pFill').style.width = '3%'; $('pTxt').textContent = t('loadingData');
 
-        // ===== PHASE 0: KV EDGE SNAPSHOT (single fetch → 10k coins from Cron Worker) =====
+        // ===== PHASE 0: SESSION CACHE FIRST (instant — 0ms) =====
+        const cached = cacheGet('cryptohub_coins');
+        if (cached && cached.length > 50) {
+          cached.forEach(c => { allC.push(c); symMap.set(_ck(c), c); });
+          applyKnownSupply(allC);
+          $('pFill').style.width = '100%';
+          assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
+          $('lProg').classList.add('hidden');
+          if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
+          if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
+          if ($('ldSt')) $('ldSt').textContent = allC.length + ' ' + t('coins') + ' ✓';
+          updateGlobalFromData(); initWS();
+          console.log('⚡ Instant cache:', allC.length, 'coins');
+          // Background: update from KV Worker silently
+          setTimeout(async () => {
+            try {
+              const kvR = await Promise.race([fetch(KV_WORKER + '/api/coins?start=0&limit=10000'), _tout(10000)]);
+              if (kvR.ok) {
+                const kvData = await kvR.json();
+                const kvCoins = kvData.coins || kvData;
+                if (kvCoins && Array.isArray(kvCoins) && kvCoins.length > allC.length * 0.8) {
+                  // Merge new data without resetting
+                  let updated = 0;
+                  kvCoins.forEach(c => {
+                    const key = _ck(c);
+                    const existing = symMap.get(key);
+                    if (existing) {
+                      if (c.pr > 0) existing.pr = c.pr;
+                      if (c.c24 && c.c24 !== 0) existing.c24 = c.c24;
+                      if (c.c1 && c.c1 !== 0) existing.c1 = c.c1;
+                      if (c.c7 && c.c7 !== 0) existing.c7 = c.c7;
+                      if (c.mc > 0) existing.mc = c.mc;
+                      if (c.vol > 0) existing.vol = c.vol;
+                      updated++;
+                    } else {
+                      if (c.c4 === undefined) c.c4 = 0;
+                      allC.push(c); symMap.set(key, c);
+                    }
+                  });
+                  reRank(); filtC = [...allC]; render(); buildTicker();
+                  cacheSet('cryptohub_coins', allC);
+                  console.log('🔄 Background KV update:', updated, 'updated,', allC.length, 'total');
+                }
+              }
+            } catch (e) { console.log('Background KV update skip:', e.message); }
+          }, 500);
+          setTimeout(refreshPrices, 1000);
+          setTimeout(loadMore1h7d, 6000);
+          setTimeout(persistFallbacks, 25000);
+          isL = false; return;
+        }
+
+        // ===== PHASE 1: KV WORKER (only if no cache — first visit) =====
         try {
           let kvCoins = null;
-          // Try KV Worker (primary)
           try {
             const kvR = await Promise.race([fetch(KV_WORKER + '/api/coins?start=0&limit=10000'), _tout(10000)]);
             if (kvR.ok) { const kvData = await kvR.json(); kvCoins = kvData.coins || kvData; }
           } catch (e1) { console.log('KV attempt 1 failed:', e1.message); }
-          // Retry once if failed
           if (!kvCoins || !Array.isArray(kvCoins) || kvCoins.length < 100) {
             try {
               console.log('KV retry...');
@@ -9754,7 +9794,6 @@
               if (kvR2.ok) { const kvData2 = await kvR2.json(); kvCoins = kvData2.coins || kvData2; }
             } catch (e2) { console.log('KV retry failed:', e2.message); }
           }
-          // Try CMC Worker as last resort
           if (!kvCoins || !Array.isArray(kvCoins) || kvCoins.length < 100) {
             try {
               console.log('Trying CMC Worker fallback...');
@@ -9772,7 +9811,6 @@
           }
           if (kvCoins && Array.isArray(kvCoins) && kvCoins.length > 100) {
               kvCoins.forEach(function(c) {
-                // Normalize fields (KV Worker uses same format but ensure c4 exists)
                 if (c.c4 === undefined) c.c4 = 0;
                 allC.push(c); symMap.set(_ck(c), c);
               });
@@ -9785,86 +9823,13 @@
               if ($('ldSt')) $('ldSt').textContent = allC.length + ' ' + t('coins') + ' ✓';
               updateGlobalFromData(); initWS();
               cacheSet('cryptohub_coins', allC);
-              console.log('⚡ KV edge snapshot:', allC.length, 'coins loaded instantly');
-              // Background: live price refresh via WebSocket + Binance ONLY
-              // NOTE: autoLoadMore and enrichFromCMCPro DISABLED — Worker handles enrichment
-              // This prevents symbol-based dedup from dropping coin count
+              console.log('⚡ KV edge snapshot:', allC.length, 'coins loaded');
               setTimeout(refreshPrices, 500);
               setTimeout(loadMore1h7d, 4000);
-              // setTimeout(enrichFromCMCPro, 15000); // Worker handles this
-              // setTimeout(autoLoadMore, 5000); // Worker handles this
               setTimeout(persistFallbacks, 20000);
               isL = false; return;
             }
         } catch (kvErr) { console.log('KV snapshot miss:', kvErr.message); }
-
-        // ===== CHECK SESSION CACHE (instant reload — fallback if KV miss) =====
-        const cached = cacheGet('cryptohub_coins');
-        if (cached && cached.length > 50) {
-          cached.forEach(c => { allC.push(c); symMap.set(_ck(c), c); });
-          // Fix any bad supply data in cache immediately
-          applyKnownSupply(allC);
-          $('pFill').style.width = '100%';
-          assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
-          $('lProg').classList.add('hidden');
-          if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
-          if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
-          if ($('ldSt')) $('ldSt').textContent = allC.length + ' ' + t('coins') + ' ✓';
-          updateGlobalFromData(); initWS();
-          setTimeout(refreshPrices, 1000);
-          setTimeout(loadMore1h7d, 6000);
-          // setTimeout(enrichFromCMCPro, 20000); // Worker handles this
-          // setTimeout(autoLoadMore, 5000); // Worker handles this
-          setTimeout(persistFallbacks, 25000);
-          console.log('Loaded from cache:', allC.length);
-          // Worker handles CMC enrichment — skip direct CMC fetch to prevent dedup issues
-          isL = false; return;
-          /* DISABLED — was causing coin count to drop due to symbol-based dedup
-          setTimeout(async () => {
-            try {
-              // Fire CMC requests in parallel (reduced to 10K coins for speed)
-              const allReqs = [];
-              for (let start = 1; start <= 10001; start += 2000) {
-                allReqs.push(fetchCMC(`https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=${start}&limit=2000&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all`, Math.floor(start / 2000) % PROXIES.length));
-              }
-              const results = await Promise.allSettled(allReqs);
-              let added = 0;
-              results.forEach(r => {
-                if (r.status !== 'fulfilled' || !r.value) return;
-                const d = r.value;
-                if (!d || !d.data || !d.data.cryptoCurrencyList) return;
-                d.data.cryptoCurrencyList.forEach(coin => {
-                  const qt = coin.quotes && coin.quotes.length ? coin.quotes.find(q => q.name === 'USD') : null;
-                  if (!qt) return;
-                  const sym = coin.symbol;
-                  const cmcKey = 'cmc_' + coin.id;
-                  const existing = symMap.get(cmcKey);
-                  if (existing) {
-                    if (qt.marketCap > 0 && (!existing.mc || existing.mc === 0)) existing.mc = qt.marketCap;
-                    if (qt.volume24h > 0 && (!existing.vol || existing.vol === 0)) existing.vol = qt.volume24h;
-                    if (qt.price > 0 && (!existing.pr || existing.pr === 0)) existing.pr = qt.price;
-                    if (qt.percentChange1h && existing.c1 === 0) existing.c1 = qt.percentChange1h;
-                    if (qt.percentChange7d && existing.c7 === 0) existing.c7 = qt.percentChange7d;
-                    if (coin.circulatingSupply && (!existing.sup || existing.sup === 0)) existing.sup = coin.circulatingSupply;
-                    if (coin.numMarketPairs > 0) existing.ex = coin.numMarketPairs;
-                    if (!existing.img || existing.img.includes('/0.png')) existing.img = `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`;
-                    saveFallback(existing);
-                    return;
-                  }
-                  const vol = qt.volume24h || 0; const mc = qt.marketCap || 0;
-                  const nc = { id: coin.slug || sym.toLowerCase(), cmc_id: coin.id, rk: allC.length + 1, nm: coin.name, sy: sym, pr: qt.price || 0, c1: qt.percentChange1h || 0, c4: 0, c24: qt.percentChange24h || 0, c7: qt.percentChange7d || 0, mc: mc, vol: vol, img: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, ex: coin.numMarketPairs || 0, sup: coin.circulatingSupply || 0, plat: coin.platform ? coin.platform.slug : null, tags: coin.tags || [] };
-                  allC.push(nc); symMap.set(cmcKey, nc); added++;
-                });
-              });
-              if (added > 0) { reRank(); filtC = [...allC]; render() }
-              assignExCounts(); filtC = [...allC]; render(); buildTicker(); updateGlobalFromData();
-              cacheSet('cryptohub_coins', allC);
-              persistFallbacks();
-              console.log('Cache+CMC enrichment done. Total:', allC.length);
-            } catch (e) { console.log('Cache CMC err:', e) }
-          }, 2000);
-          DISABLED — end of block */
-        }
 
         // ===== PHASE 1: CoinGecko top 250 + Binance in PARALLEL → correct ranking + live prices =====
         try {

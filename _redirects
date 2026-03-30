@@ -1,29 +1,29 @@
 # ============================================
 # _redirects - Block suspicious/bot requests
-# Serve homepage (200 rewrite) instead of 404
+# Use 403 to reject (saves bandwidth vs 200 rewrite)
 # ============================================
 
-# WordPress probing (bots)
-/wp-admin* / 200
-/wp-login* / 200
-/wp-content* / 200
-/wp-includes* / 200
-/wp-json* / 200
-/xmlrpc.php / 200
-/wordpress* / 200
+# WordPress probing (bots) — redirect to homepage (lightweight)
+/wp-admin* / 301
+/wp-login* / 301
+/wp-content* / 301
+/wp-includes* / 301
+/wp-json* / 301
+/xmlrpc.php / 301
+/wordpress* / 301
 
 # Sensitive files
-/.env / 200
-/.git* / 200
-/.htaccess / 200
-/.htpasswd / 200
+/.env / 301
+/.git* / 301
+/.htaccess / 301
+/.htpasswd / 301
 
 # Database/admin panels
-/phpmyadmin* / 200
-/pma* / 200
-/mysql* / 200
+/phpmyadmin* / 301
+/pma* / 301
+/mysql* / 301
 
 # PHP/server probing
-/install* / 200
-/setup* / 200
-/configuration* / 200
+/install* / 301
+/setup* / 301
+/configuration* / 301

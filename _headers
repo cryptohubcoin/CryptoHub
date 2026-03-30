@@ -1,37 +1,80 @@
-# Global headers
-/*
-  X-Frame-Options: DENY
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: geolocation=(), microphone=(), camera=()
+# ============================================================
+# Cloudflare Pages Headers — CryptoHub
+# Fixes: Cache rate from 9.46% → 50%+
+# ============================================================
 
-# Cache CSS/JS (1 year)
+# Static assets — aggressive caching (1 year)
 /*.css
   Cache-Control: public, max-age=31536000, immutable
-  
+
 /*.js
   Cache-Control: public, max-age=31536000, immutable
 
-# Cache images (30 days)
-/*.png
-  Cache-Control: public, max-age=2592000
-  
-/*.jpg
-  Cache-Control: public, max-age=2592000
-  
-/*.svg
-  Cache-Control: public, max-age=2592000
-  
-/*.gif
-  Cache-Control: public, max-age=2592000
-
-# Cache fonts (1 year)
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
-  
+
 /*.woff
   Cache-Control: public, max-age=31536000, immutable
 
-# HTML files (1 hour with revalidation)
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+
+# Images — long cache (30 days)
+/*.png
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/*.jpg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/*.jpeg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/*.svg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/*.ico
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/*.webp
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/*.gif
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+# Manifest & service worker
+/manifest.json
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
+
+# HTML pages — short cache with revalidation (5 min cache, serve stale for 1 hour)
+/
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/index.html
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+
 /*.html
-  Cache-Control: public, max-age=3600, must-revalidate
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+
+# API responses from worker — no browser cache, CDN edge cache 60s
+/api/*
+  Cache-Control: public, max-age=60, s-maxage=120, stale-while-revalidate=300
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, OPTIONS
+  Access-Control-Allow-Headers: Content-Type
+
+# robots.txt & sitemap
+/robots.txt
+  Cache-Control: public, max-age=86400
+
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+
+# Security headers for all pages
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

@@ -1,17 +1,14 @@
-{
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "cryptohub",
-  "compatibility_date": "2025-09-27",
-  "observability": {
-    "enabled": true
-  },
-  "assets": {
-    "directory": "."
-  },
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
-  "triggers": {
-    "crons": ["*/5 * * * *"]
-  }
-}
+name = "cryptohub-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# ✅ Route للـ API فقط - مفيش تعارض مع Pages
+routes = [
+  { pattern = "cryptohubcoin.com/api/*", zone_name = "cryptohubcoin.com" }
+]
+
+[env.production]
+vars = { ENVIRONMENT = "production" }
+
+# Secrets (لو عندك API keys)
+# wrangler secret put EXTERNAL_API_KEY

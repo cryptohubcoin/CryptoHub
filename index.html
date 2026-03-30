@@ -6951,166 +6951,66 @@
 
 
             <div class="stats-panel" id="statsPanel">
-              <div class="stats-panel-hd"
-                style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 40%,#312e81 70%,#4338ca 100%);padding:20px;position:relative;overflow:hidden">
-                <div
-                  style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:radial-gradient(circle,rgba(255,255,255,.08),transparent 70%);border-radius:50%">
-                </div><span class="sp-ico"
-                  style="background:rgba(255,255,255,.15);backdrop-filter:blur(8px);width:32px;height:32px;border-radius:10px"><i
-                    class="fas fa-rocket" style="font-size:14px"></i></span> <span data-i18n="navSections"
-                  style="font-size:13px;letter-spacing:1px">أقسام الموقع</span>
-              </div>
-              <div class="stats-panel-items">
+              <div class="stats-panel-items" style="padding-top:6px">
                 <a class="nav-item" onclick="navTo('crypto');return false" href="#">
                   <div class="nav-ico"><i class="fas fa-coins"></i></div>
-                  <div style="flex: 1;">
-                    <div class="nav-title" data-i18n="tabCrypto">العملات الرقمية</div>
-                  </div>
-                  <span class="nav-badge" id="navCryptoBadge">--</span>
+                  <div style="flex:1"><div class="nav-title" data-i18n="tabCrypto">العملات الرقمية</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" href="crypto-prediction">
                   <div class="nav-ico"><i class="fas fa-brain"></i></div>
-                  <div style="flex: 1;">
-                    <div class="nav-title" data-i18n="aiPredictorTitle"
-                      style="display:flex;align-items:center;gap:6px;">
-                      AI Price Predictor
-                      <i class="fas fa-sparkles" style="font-size:10px;color:var(--ac)"></i>
-                    </div>
-                    <div class="nav-desc" data-i18n="aiPredictorDesc" style="color:var(--t2)">48h price forecast •
-                      5-layer AI</div>
-                  </div>
-                  <span class="nav-badge" style="display:flex;align-items:center;gap:4px;">
-                    <span class="ld" style="width:5px;height:5px;background:var(--ac)"></span>
-                    <span data-i18n="aiPredictorBadge">NEW</span>
-                  </span>
+                  <div style="flex:1"><div class="nav-title" data-i18n="aiPredictorTitle">AI Price Predictor</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" href="token-vesting" target="_blank" rel="noopener">
                   <div class="nav-ico"><i class="fas fa-lock-open"></i></div>
-                  <div style="flex: 1;">
-                    <div class="nav-title" data-i18n="tokenVestingTitle"
-                      style="display:flex;align-items:center;gap:6px;">
-                      Token Vesting & Unlocks
-                      <i class="fas fa-calendar-alt" style="font-size:10px;color:var(--ac)"></i>
-                    </div>
-                    <div class="nav-desc" data-i18n="tokenVestingDesc" style="color:var(--t2)">Vesting schedules •
-                      Unlock dates</div>
-                  </div>
-                  <span class="nav-badge" style="display:flex;align-items:center;gap:4px;">
-                    <span class="ld" style="width:5px;height:5px;background:var(--ac)"></span>
-                    <span data-i18n="tokenVestingBadge">NEW</span>
-                  </span>
+                  <div style="flex:1"><div class="nav-title" data-i18n="tokenVestingTitle">Token Vesting & Unlocks</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
+                <div style="height:1px;background:var(--bc);margin:4px 16px"></div>
                 <a class="nav-item" onclick="navTo('exchanges');return false" href="#">
                   <div class="nav-ico"><i class="fas fa-crown"></i></div>
-                  <div style="flex: 1;">
-                    <div class="nav-title" data-i18n="tabExchanges"
-                      style="display: flex; align-items: center; gap: 6px;">جميع المنصات
-                      <i class="fas fa-fire" style="font-size: 10px; color: var(--ac);"></i>
-                    </div>
-                  </div>
-                  <span class="nav-badge" style="display: flex; align-items: center; gap: 4px;"><i class="fas fa-star"
-                      style="font-size: 8px;"></i>500</span>
+                  <div style="flex:1"><div class="nav-title" data-i18n="tabExchanges">جميع المنصات</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" onclick="navTo('commodities');return false" href="#">
                   <div class="nav-ico"><i class="fas fa-th"></i></div>
-                  <div style="flex: 1;">
-                    <div class="nav-title" data-i18n="tabCommodities">NFT Collections</div>
-                  </div>
-                  <span class="nav-badge"><span class="ld" style="width:5px;height:5px;background:var(--ac)"></span>
-                    <span data-i18n="live">مباشر</span></span>
+                  <div style="flex:1"><div class="nav-title" data-i18n="tabCommodities">NFT Collections</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" onclick="navTo('stocks');return false" href="#">
                   <div class="nav-ico"><i class="fas fa-chart-line"></i></div>
-                  <div style="flex: 1;">
-                    <div class="nav-title" data-i18n="tabStocks">الأسهم وETF</div>
-                  </div>
-                  <span class="nav-badge"><span class="ld" style="width:5px;height:5px;background:var(--ac)"></span>
-                    <span data-i18n="live">مباشر</span></span>
+                  <div style="flex:1"><div class="nav-title" data-i18n="tabStocks">الأسهم وETF</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
+                <div style="height:1px;background:var(--bc);margin:4px 16px"></div>
                 <a class="nav-item" onclick="toggleAnalysis();return false" href="#">
                   <div class="nav-ico"><i class="fas fa-robot"></i></div>
-                  <div style="flex: 1;">
-                    <div class="nav-title" data-i18n="aiTitle" style="display: flex; align-items: center; gap: 6px;">
-                      التحليل الفني
-                      <i class="fas fa-sparkles" style="font-size: 10px; color: var(--ac);"></i>
-                    </div>
-                    <div class="nav-desc" data-i18n="aiSub" style="color:var(--t2)">تحليل بالذكاء الاصطناعي</div>
-                  </div>
-                  <span class="nav-badge" style="display: flex; align-items: center; gap: 4px;">
-                    <span class="ld" style="width:5px;height:5px;background:var(--ac)"></span> AI
-                  </span>
+                  <div style="flex:1"><div class="nav-title" data-i18n="aiTitle">التحليل الفني</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" href="crypto-analyzer">
                   <div class="nav-ico"><i class="fas fa-chart-pie"></i></div>
-                  <div style="flex: 1;">
-                    <div class="nav-title" data-i18n="cryptoAnalyzer"
-                      style="display: flex; align-items: center; gap: 6px;">محلل السيولة
-                      <i class="fas fa-bolt" style="font-size: 10px; color: var(--ac);"></i>
-                    </div>
-                    <div class="nav-desc" data-i18n="cryptoAnalyzerDesc" style="color:var(--t2)">تحليل متقدم للسيولة
-                      والعملات</div>
-                  </div>
-                  <span class="nav-badge" style="display: flex; align-items: center; gap: 4px;">
-                    <span class="ld" style="width:5px;height:5px;background:var(--ac)"></span> PRO
-                  </span>
+                  <div style="flex:1"><div class="nav-title" data-i18n="cryptoAnalyzer">محلل السيولة</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" href="crypto-arbitrage">
                   <div class="nav-ico"><i class="fas fa-balance-scale"></i></div>
-                  <div style="flex: 1;">
-                    <div class="nav-title" data-i18n="cryptoArbitrage"
-                      style="display: flex; align-items: center; gap: 6px;">ماسح الفروقات
-                      <i class="fas fa-search" style="font-size: 10px; color: var(--ac);"></i>
-                    </div>
-                    <div class="nav-desc" data-i18n="cryptoArbitrageDesc" style="color:var(--t2)">مقارنة الأسعار بين 100
-                      منصة</div>
-                  </div>
-                  <span class="nav-badge" style="display: flex; align-items: center; gap: 4px;">
-                    <span class="ld" style="width:5px;height:5px;background:var(--ac)"></span> NEW
-                  </span>
+                  <div style="flex:1"><div class="nav-title" data-i18n="cryptoArbitrage">ماسح الفروقات</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" href="forex-analyzer.html">
                   <div class="nav-ico"><i class="fas fa-dollar-sign"></i></div>
-                  <div style="flex: 1;">
-                    <div class="nav-title" data-i18n="forexAnalyzer"
-                      style="display: flex; align-items: center; gap: 6px;">محلل الفوركس
-                      <i class="fas fa-chart-line" style="font-size: 10px; color: var(--ac);"></i>
-                    </div>
-                    <div class="nav-desc" data-i18n="forexAnalyzerDesc" style="color:var(--t2)">تحليل أزواج العملات
-                      الأجنبية</div>
-                  </div>
-                  <span class="nav-badge" style="display: flex; align-items: center; gap: 4px;">
-                    <span class="ld" style="width:5px;height:5px;background:var(--ac)"></span> NEW
-                  </span>
+                  <div style="flex:1"><div class="nav-title" data-i18n="forexAnalyzer">محلل الفوركس</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" href="blog">
-                  <div class="nav-ico" style="background:linear-gradient(135deg,var(--ac)22,var(--ac)11)"><i
-                      class="fas fa-newspaper" style="color:var(--ac)"></i></div>
-                  <div style="flex: 1;">
-                    <div class="nav-title" data-i18n="blogNav" style="display:flex;align-items:center;gap:6px;">المدونة
-                      <i class="fas fa-pen-nib" style="font-size:10px;color:var(--ac)"></i>
-                    </div>
-                    <div class="nav-desc" data-i18n="blogNavDesc" style="color:var(--t2)">مقالات وتحليلات سوق الكريبتو
-                    </div>
-                  </div>
-                  <span class="nav-badge"
-                    style="background:var(--ac)22;color:var(--ac);border:1px solid var(--ac)44;display:flex;align-items:center;gap:4px">
-                    <i class="fas fa-newspaper" style="font-size:8px"></i> Blog
-                  </span>
+                  <div class="nav-ico"><i class="fas fa-newspaper"></i></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="blogNav">المدونة</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
               </div>
-              <div class="stats-panel-ft"><i class="fas fa-shield-halved"></i> CryptoHub <span>•</span> <span
-                  data-i18n="secure">آمن</span></div>
+              <div class="stats-panel-ft"><i class="fas fa-shield-halved"></i> <span data-i18n="secure">آمن</span></div>
             </div>
           </div>
 
@@ -9481,8 +9381,8 @@
     }
     function buildLM() { $('lMenu').innerHTML = LANGS.map(l => `<div class="ddi ${l.c === cLang ? 'active' : ''}" data-lang="${l.c}" onclick="setLang('${l.c}')"><span class="flag">${l.f}</span><span>${l.l}</span><i class="fas fa-check ck"></i></div>`).join('') }
     function buildNS() { $('netSel').innerHTML = `<option value="all">${t('allNetworks')}</option>` + NETS.map(n => `<option value="${n.id}">${n.i} ${n.n}</option>`).join('') }
-    function toggleDD(id) { requestAnimationFrame(()=>{ const dd = $(id); if (!dd) return; const m = dd.querySelector('.ddm') || dd.querySelector('.stats-panel'); if (!m) return; const w = m.classList.contains('active'); closeDD(); if (!w) { m.classList.add('active'); if (id === 'statsDd') { const hb = dd.querySelector('.nav-hamburger'); if (hb) hb.classList.add('active'); } } }); }
-    function closeDD() { var active = document.querySelectorAll('.ddm.active,.stats-panel.active'); active.forEach(function(m) { m.classList.remove('active') }); document.querySelectorAll('.nav-hamburger.active').forEach(function(h) { h.classList.remove('active') }) }
+    function toggleDD(id) { requestAnimationFrame(()=>{ const dd = $(id); if (!dd) return; const m = dd.querySelector('.ddm') || dd.querySelector('.stats-panel'); if (!m) return; const w = m.classList.contains('active'); closeDD(); if (!w) { m.classList.add('active'); if (id === 'statsDd') { const hb = dd.querySelector('.nav-hamburger'); if (hb) hb.classList.add('active'); document.body.style.overflow='hidden'; } } }); }
+    function closeDD() { var active = document.querySelectorAll('.ddm.active,.stats-panel.active'); active.forEach(function(m) { m.classList.remove('active') }); document.querySelectorAll('.nav-hamburger.active').forEach(function(h) { h.classList.remove('active') }); document.body.style.overflow=''; }
     function navTo(section) { closeDD(); swTab(section); requestAnimationFrame(() => { setTimeout(() => { const el = $('tab_' + section); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 50); }); if (section === 'crypto' && $('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length ? allC.length.toLocaleString() : '--' }
     document.addEventListener('click', e => { if (!e.target.closest('.dropdown')) closeDD() }, { passive: true });
     document.addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSrch() } if (e.key === 'Escape') { closeSrch(); closeDD(); closeMod(); document.querySelectorAll('.legal-modal.active').forEach(m => m.classList.remove('active')) } });
@@ -9749,8 +9649,8 @@
                 const kvData = await kvR.json();
                 const kvCoins = kvData.coins || kvData;
                 if (kvCoins && Array.isArray(kvCoins) && kvCoins.length > allC.length * 0.8) {
-                  // Merge new data without resetting
-                  let updated = 0;
+                  // Only update prices + add NEW coins — never remove existing ones
+                  let updated = 0, added = 0;
                   kvCoins.forEach(c => {
                     const key = _ck(c);
                     const existing = symMap.get(key);
@@ -9765,11 +9665,13 @@
                     } else {
                       if (c.c4 === undefined) c.c4 = 0;
                       allC.push(c); symMap.set(key, c);
+                      added++;
                     }
                   });
-                  reRank(); filtC = [...allC]; render(); buildTicker();
+                  if (added > 0) { reRank(); filtC = [...allC]; render(); buildTicker(); }
+                  else if (updated > 0) { filtC = [...allC]; }
                   cacheSet('cryptohub_coins', allC);
-                  console.log('🔄 Background KV update:', updated, 'updated,', allC.length, 'total');
+                  console.log('🔄 Background KV update:', updated, 'updated,', added, 'added, total:', allC.length);
                 }
               }
             } catch (e) { console.log('Background KV update skip:', e.message); }

@@ -12,7 +12,6 @@ export default {
   }
 };
 
-
 async function handleAPI(request, env) {
   const url = new URL(request.url);
   const method = request.method;

@@ -7926,7 +7926,7 @@
 
     <!-- ===== INFO TABS SECTION (AdSense Compliance) ===== -->
     <div id="infoTabsSection"
-      style="margin:12px 0 8px;background:var(--bg1);border:1px solid var(--bc);border-radius:16px;overflow:hidden;box-shadow:var(--sh);min-height:200px;contain:layout style">
+      style="margin:12px 0 8px;background:var(--bg1);border:1px solid var(--bc);border-radius:16px;overflow:hidden;box-shadow:var(--sh);min-height:420px;contain:layout style paint">
 
       <!-- Tab Buttons -->
       <div style="display:flex;border-bottom:1px solid var(--bc);overflow-x:auto;scrollbar-width:none" id="infoTabBtns">
@@ -9760,11 +9760,13 @@
               updateGlobalFromData(); initWS();
               cacheSet('cryptohub_coins', allC);
               console.log('⚡ KV edge snapshot:', allC.length, 'coins loaded instantly');
-              // Background: live price refresh via WebSocket + Binance
+              // Background: live price refresh via WebSocket + Binance ONLY
+              // NOTE: autoLoadMore and enrichFromCMCPro DISABLED — Worker handles enrichment
+              // This prevents symbol-based dedup from dropping coin count
               setTimeout(refreshPrices, 500);
               setTimeout(loadMore1h7d, 4000);
-              setTimeout(enrichFromCMCPro, 15000);
-              setTimeout(autoLoadMore, 5000);
+              // setTimeout(enrichFromCMCPro, 15000); // Worker handles this
+              // setTimeout(autoLoadMore, 5000); // Worker handles this
               setTimeout(persistFallbacks, 20000);
               isL = false; return;
             }
@@ -9786,11 +9788,13 @@
           updateGlobalFromData(); initWS();
           setTimeout(refreshPrices, 1000);
           setTimeout(loadMore1h7d, 6000);
-          setTimeout(enrichFromCMCPro, 20000);
-          setTimeout(autoLoadMore, 5000);
+          // setTimeout(enrichFromCMCPro, 20000); // Worker handles this
+          // setTimeout(autoLoadMore, 5000); // Worker handles this
           setTimeout(persistFallbacks, 25000);
           console.log('Loaded from cache:', allC.length);
-          // Still run CMC enrichment in background to get MORE coins beyond cache
+          // Worker handles CMC enrichment — skip direct CMC fetch to prevent dedup issues
+          isL = false; return;
+          /* DISABLED — was causing coin count to drop due to symbol-based dedup
           setTimeout(async () => {
             try {
               // Fire CMC requests in parallel (reduced to 10K coins for speed)
@@ -9834,7 +9838,7 @@
               console.log('Cache+CMC enrichment done. Total:', allC.length);
             } catch (e) { console.log('Cache CMC err:', e) }
           }, 2000);
-          isL = false; return;
+          DISABLED — end of block */
         }
 
         // ===== PHASE 1: CoinGecko top 250 + Binance in PARALLEL → correct ranking + live prices =====
@@ -10123,8 +10127,8 @@
         initWS();
         setTimeout(loadMore1h7d, 6000);
         setTimeout(enrichMarketCap, 8000);
-        setTimeout(enrichFromCMCPro, 25000);
-        setTimeout(autoLoadMore, 10000);
+        // setTimeout(enrichFromCMCPro, 25000); // Worker handles this
+        // setTimeout(autoLoadMore, 10000); // Worker handles this
         setTimeout(persistFallbacks, 30000);
         console.log('Visible coins:', allC.length);
       } catch (e) {
@@ -10946,7 +10950,7 @@
       } catch (e) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + t('errorLoading') }
       setTimeout(() => $('lProg').classList.add('hidden'), 800); isL = false;
       setTimeout(enrichMarketCap, 1500);
-      setTimeout(enrichFromCMCPro, 5000);
+      // setTimeout(enrichFromCMCPro, 5000); // Worker handles this
       setTimeout(persistFallbacks, 8000)
     }
 
@@ -15656,23 +15660,82 @@
       const searchPool = allC.length > 10 ? allC : INSTANT_COINS;
       const coins = searchPool.filter(c =>
         (c.nm || '').toLowerCase().includes(q) || (c.sy || '').toLowerCase().includes(q)
-      ).slice(0, 10);
-      const exchanges = EX_DB.filter(ex => ex.n.toLowerCase().includes(q)).slice(0, 5);
+      ).slice(0, 8);
+      const exchanges = EX_DB.filter(ex => ex.n.toLowerCase().includes(q)).slice(0, 4);
+
+      // --- NFT Collections ---
+      const nfts = (typeof _nftAll !== 'undefined' && _nftAll.length > 0)
+        ? _nftAll.filter(n => (n.name || '').toLowerCase().includes(q) || (n.symbol || '').toLowerCase().includes(q)).slice(0, 4)
+        : [];
+
+      // --- Stocks & ETFs ---
+      const stocks = (typeof _STK !== 'undefined' && _STK.length > 0)
+        ? _STK.filter(s => (s.nm || '').toLowerCase().includes(q) || (s.sy || '').toLowerCase().includes(q) || (s.cat || '').toLowerCase().includes(q)).slice(0, 4)
+        : [];
+
+      // --- Blog Posts ---
+      const blogKeys = ['blogPost1Title','blogPost2Title','blogPost3Title','blogPost4Title','blogPost5Title','blogPost6Title'];
+      const blogDescKeys = ['blogPost1Desc','blogPost2Desc','blogPost3Desc','blogPost4Desc','blogPost5Desc','blogPost6Desc'];
+      const blogs = blogKeys.map((k, i) => {
+        const title = t(k) || '';
+        const desc = t(blogDescKeys[i]) || '';
+        if (title.toLowerCase().includes(q) || desc.toLowerCase().includes(q)) {
+          return { title, desc, idx: i + 1 };
+        }
+        return null;
+      }).filter(Boolean).slice(0, 3);
+
+      // --- Site Sections / Features (quick navigation) ---
+      const sitePages = [
+        { name: t('tabCrypto') || 'Cryptocurrencies', nameAlt: 'crypto currencies عملات رقمية كريبتو', icon: 'fas fa-coins', action: "closeSrch();navTo('crypto')" },
+        { name: t('tabExchanges') || 'All Exchanges', nameAlt: 'exchanges منصات بورصة', icon: 'fas fa-exchange-alt', action: "closeSrch();navTo('exchanges')" },
+        { name: 'NFT', nameAlt: 'nft collections مجموعات', icon: 'fas fa-palette', action: "closeSrch();navTo('nft')" },
+        { name: t('stocksTitle') || 'Stocks & ETFs', nameAlt: 'stocks etf أسهم صناديق', icon: 'fas fa-chart-line', action: "closeSrch();navTo('stocks')" },
+        { name: t('fearGreedTitle') || 'Fear & Greed Index', nameAlt: 'fear greed index خوف طمع مؤشر', icon: 'fas fa-tachometer-alt', action: "closeSrch();document.querySelector('[data-i18n=fearGreedTitle]')?.scrollIntoView({behavior:'smooth',block:'center'})" },
+        { name: t('aiTitle') || 'AI Analysis', nameAlt: 'ai analysis ذكاء اصطناعي تحليل', icon: 'fas fa-robot', action: "closeSrch();document.querySelector('[data-i18n=aiTitle]')?.closest('.card,.rounded-2xl,section')?.scrollIntoView({behavior:'smooth',block:'center'})" },
+        { name: t('blogNav') || 'Blog', nameAlt: 'blog مدونة مقالات articles', icon: 'fas fa-newspaper', action: "closeSrch();document.querySelector('[data-i18n=blogSectionTitle]')?.scrollIntoView({behavior:'smooth'})" },
+        { name: t('trendingTitle') || 'Trending', nameAlt: 'trending رائجة top 100', icon: 'fas fa-fire', action: "closeSrch();navTo('crypto')" },
+        { name: t('cryptoAnalyzer') || 'Liquidity Analyzer', nameAlt: 'liquidity analyzer محلل سيولة', icon: 'fas fa-flask', action: "closeSrch();if(typeof openAnalyzer==='function')openAnalyzer()" },
+        { name: t('cryptoArbitrage') || 'Arbitrage Scanner', nameAlt: 'arbitrage أربيتراج فروقات', icon: 'fas fa-random', action: "closeSrch();if(typeof openArbitrage==='function')openArbitrage()" },
+        { name: t('forexAnalyzer') || 'Forex Analyzer', nameAlt: 'forex فوركس عملات أجنبية', icon: 'fas fa-dollar-sign', action: "closeSrch();if(typeof openForex==='function')openForex()" },
+        { name: t('support') || 'Support', nameAlt: 'support contact دعم تواصل اتصال', icon: 'fas fa-headset', action: "closeSrch();switchInfoTab('contact');document.getElementById('infoSection')?.scrollIntoView({behavior:'smooth'})" },
+      ];
+      const pages = sitePages.filter(p =>
+        p.name.toLowerCase().includes(q) || p.nameAlt.toLowerCase().includes(q)
+      ).slice(0, 4);
 
       const body = document.getElementById('gsModalBody');
       if (!body) return;
 
-      // Show quick skeleton immediately so the response feels instant
-      if (coins.length === 0 && exchanges.length === 0) {
-        body.innerHTML = `<div class="gs-no-results"><i class="fas fa-search" style="font-size:24px;opacity:.3;display:block;margin-bottom:12px"></i>No results found for "${query}"</div>`;
+      // No results at all
+      if (coins.length === 0 && exchanges.length === 0 && nfts.length === 0 && stocks.length === 0 && blogs.length === 0 && pages.length === 0) {
+        body.innerHTML = `<div class="gs-no-results"><i class="fas fa-search" style="font-size:24px;opacity:.3;display:block;margin-bottom:12px"></i>${t('noResults') || 'No results found for'} "${query}"</div>`;
         return;
       }
 
       // Build and insert HTML in one shot (single reflow)
       let html = '';
 
+      // --- Site Pages/Features ---
+      if (pages.length > 0) {
+        html += `<div class="gs-section-hd"><span class="gs-section-title"><i class="fas fa-compass" style="margin-inline-end:6px;opacity:.6"></i>${cLang === 'ar' ? 'أقسام الموقع' : 'Site Sections'}</span></div>`;
+        html += pages.map(p => `<div class="gs-trending-item" onclick="${p.action}" style="cursor:pointer">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--ac);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <i class="${p.icon}" style="color:#fff;font-size:13px"></i>
+            </div>
+            <div class="gs-trending-info">
+              <div class="gs-trending-name">${p.name}</div>
+              <span class="gs-trending-sym" style="opacity:.5">${cLang === 'ar' ? 'انتقل إلى القسم' : 'Go to section'}</span>
+            </div>
+            <div class="gs-trending-right">
+              <i class="fas fa-arrow-${cLang === 'ar' ? 'left' : 'right'}" style="color:var(--ac);font-size:12px"></i>
+            </div>
+          </div>`).join('');
+      }
+
+      // --- Coins ---
       if (coins.length > 0) {
-        html += `<div class="gs-section-hd"><span class="gs-section-title">${t('tabCrypto')}</span></div>`;
+        html += `<div class="gs-section-hd"><span class="gs-section-title"><i class="fas fa-coins" style="margin-inline-end:6px;opacity:.6"></i>${t('tabCrypto')}</span></div>`;
         html += coins.map((c) => {
           const chg = c.c24 || 0;
           const mc = c.mc || 0;
@@ -15697,21 +15760,88 @@
         }).join('');
       }
 
+      // --- Exchanges ---
       if (exchanges.length > 0) {
-        html += `<div class="gs-section-hd"><span class="gs-section-title">${t('exchanges')}</span></div>`;
+        html += `<div class="gs-section-hd"><span class="gs-section-title"><i class="fas fa-exchange-alt" style="margin-inline-end:6px;opacity:.6"></i>${t('exchanges')}</span></div>`;
         html += exchanges.map(ex => {
-          const ref = getRef(ex.n, ex.u.replace(/{s}/g, 'BTC').replace(/{sl}/g, 'btc'));
-          return `<a href="${ref}" target="_blank" class="gs-trending-item no-underline" onclick="closeSrch()" style="text-decoration:none">
+          return `<div class="gs-trending-item" onclick="closeSrch();navTo('exchanges');setTimeout(()=>openExDetail('${ex.id}'),300)" style="cursor:pointer">
             <img class="gs-trending-img" src="${ex.l}" onerror="this.onerror=null;this.style.background='var(--bg3)'" loading="lazy" width="32" height="32">
             <div class="gs-trending-info">
               <div class="gs-trending-name">${ex.n}</div>
-              <span class="gs-trending-sym">${t('rank')}: #${ex.t}/10</span>
+              <span class="gs-trending-sym">${t('trustScore')}: ${ex.t}/10</span>
             </div>
             <div class="gs-trending-right">
-              <span style="color:var(--ac);font-weight:700;font-size:12px">${t('colTrade')} ←</span>
+              <span style="color:var(--ac);font-weight:700;font-size:12px">${cLang === 'ar' ? 'عرض التفاصيل' : 'View Details'} →</span>
             </div>
-          </a>`;
+          </div>`;
         }).join('');
+      }
+
+      // --- NFT Collections ---
+      if (nfts.length > 0) {
+        html += `<div class="gs-section-hd"><span class="gs-section-title"><i class="fas fa-palette" style="margin-inline-end:6px;opacity:.6"></i>NFT</span></div>`;
+        html += nfts.map(n => {
+          const chg = n.h24 || 0;
+          const safeName = (n.name||'').replace(/['"\\<>&]/g, '');
+          return `<div class="gs-trending-item" onclick="closeSrch();navTo('nft');setTimeout(function(){var el=document.getElementById('nftSearch');if(el){el.value='${safeName}';_filterNFT('${safeName}');}},200)" style="cursor:pointer">
+            <img class="gs-trending-img" src="${n.image}" onerror="this.onerror=null;this.style.background='var(--bg3)'" loading="lazy" width="32" height="32" style="border-radius:8px">
+            <div class="gs-trending-info">
+              <div class="gs-trending-name">${n.name}</div>
+              <div class="gs-trending-sym">${n.chain || 'ethereum'}</div>
+            </div>
+            <div class="gs-trending-right">
+              <div class="gs-trending-pr">${n.fpUsd ? '$' + (n.fpUsd < 1 ? n.fpUsd.toFixed(4) : n.fpUsd.toFixed(2)) : '—'}</div>
+              <div class="gs-trending-chg" style="color:${chg >= 0 ? 'var(--gn)' : 'var(--rd)'}">
+                <i class="fas fa-caret-${chg >= 0 ? 'up' : 'down'}" style="font-size:10px"></i>
+                ${Math.abs(chg).toFixed(2)}%
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+      }
+
+      // --- Stocks & ETFs ---
+      if (stocks.length > 0) {
+        html += `<div class="gs-section-hd"><span class="gs-section-title"><i class="fas fa-chart-line" style="margin-inline-end:6px;opacity:.6"></i>${t('stocksTitle') || 'Stocks & ETFs'}</span></div>`;
+        html += stocks.map(s => {
+          const stkInfo = (typeof _stkP !== 'undefined' && _stkP[s.sy]) ? _stkP[s.sy] : null;
+          const price = stkInfo ? stkInfo.pr : 0;
+          const chg = stkInfo ? (stkInfo.chg || 0) : 0;
+          const catLabel = s.cat === 'etf' ? 'ETF' : s.cat === 'commodity' ? (t('stkCommodity') || 'Commodity') : s.cat === 'index' ? (t('stkIndex') || 'Index') : (t('stkStock') || 'Stock');
+          return `<div class="gs-trending-item" onclick="closeSrch();navTo('stocks');setTimeout(()=>{const el=document.getElementById('stkSearch');if(el){el.value='${s.sy}';_stkFilter();}},200)" style="cursor:pointer">
+            <div style="width:32px;height:32px;border-radius:50%;background:${s.cl || 'var(--bg3)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">
+              ${s.ic || '📊'}
+            </div>
+            <div class="gs-trending-info">
+              <div class="gs-trending-name">${s.nm} <span class="gs-trending-rank">${s.sy}</span></div>
+              <div class="gs-trending-sym">${catLabel}</div>
+            </div>
+            <div class="gs-trending-right">
+              <div class="gs-trending-pr">${price > 0 ? '$' + price.toFixed(2) : '—'}</div>
+              ${chg ? `<div class="gs-trending-chg" style="color:${chg >= 0 ? 'var(--gn)' : 'var(--rd)'}">
+                <i class="fas fa-caret-${chg >= 0 ? 'up' : 'down'}" style="font-size:10px"></i>
+                ${Math.abs(chg).toFixed(2)}%
+              </div>` : ''}
+            </div>
+          </div>`;
+        }).join('');
+      }
+
+      // --- Blog Posts ---
+      if (blogs.length > 0) {
+        html += `<div class="gs-section-hd"><span class="gs-section-title"><i class="fas fa-newspaper" style="margin-inline-end:6px;opacity:.6"></i>${t('blogNav') || 'Blog'}</span></div>`;
+        html += blogs.map(b => `<div class="gs-trending-item" onclick="closeSrch();document.querySelector('[data-i18n=blogSectionTitle]')?.scrollIntoView({behavior:'smooth'});" style="cursor:pointer">
+            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--ac),#8b5cf6);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <i class="fas fa-book-open" style="color:#fff;font-size:13px"></i>
+            </div>
+            <div class="gs-trending-info">
+              <div class="gs-trending-name" style="font-size:12px">${b.title}</div>
+              <div class="gs-trending-sym" style="font-size:10px;opacity:.6;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${b.desc}</div>
+            </div>
+            <div class="gs-trending-right">
+              <span style="color:var(--ac);font-weight:700;font-size:11px">${t('blogRead') || 'Read →'}</span>
+            </div>
+          </div>`).join('');
       }
 
       body.innerHTML = html;
@@ -15739,7 +15869,7 @@
         <div class="gs-modal">
           <div class="gs-top">
             <i class="fas fa-search gs-top-icon"></i>
-            <input type="text" class="gs-top-input" id="gsModalInput" placeholder="Search coin, NFT, exchange..." autocomplete="off">
+            <input type="text" class="gs-top-input" id="gsModalInput" placeholder="Search coin, NFT, exchange, stocks, blog..." autocomplete="off">
             <button class="gs-top-close" onclick="closeSrch()" title="Close">✕</button>
           </div>
           <div class="gs-body" id="gsModalBody"></div>

@@ -1,43 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FTBNSF9WJT"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-FTBNSF9WJT');
-  </script>
-  <script>
-    // www redirect فقط (بدون non-www)
-    if (window.location.hostname === 'cryptohubcoin.com') {
-      window.location.replace('https://www.cryptohubcoin.com' + window.location.pathname + window.location.search);
-    }
-  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page Not Found - CryptoHub</title>
-  <meta name="robots" content="noindex, nofollow">
+  <title>الصفحة غير موجودة - CryptoHub</title>
+  <meta name="robots" content="noindex, follow">
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Inter',-apple-system,sans-serif;background:#0d1421;color:#e8eaed;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:20px}
-    .c{max-width:480px}
-    .code{font-size:120px;font-weight:800;background:linear-gradient(135deg,#3861fb,#6c5ce7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-    h1{font-size:24px;margin:16px 0 8px}
-    p{color:#8a919e;font-size:15px;margin-bottom:24px;line-height:1.5}
-    a{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:#3861fb;color:#fff;text-decoration:none;border-radius:12px;font-weight:600;font-size:15px;transition:background .2s}
-    a:hover{background:#2d4fd4}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #16213e 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    
+    .container {
+      position: relative;
+      z-index: 1;
+      padding: 2rem;
+      max-width: 600px;
+    }
+    
+    .glitch {
+      font-size: 8rem;
+      font-weight: 900;
+      color: #e94560;
+      text-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+      animation: glitch 2s infinite;
+      position: relative;
+    }
+    
+    @keyframes glitch {
+      0%, 90%, 100% { transform: translate(0); }
+      92% { transform: translate(-5px, 2px); }
+      94% { transform: translate(5px, -2px); }
+      96% { transform: translate(-3px, 1px); }
+    }
+    
+    h2 {
+      font-size: 2rem;
+      margin: 1rem 0;
+      color: #f0f0f0;
+    }
+    
+    p {
+      color: #a0a0a0;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(233, 69, 96, 0.4);
+    }
+    
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(233, 69, 96, 0.5);
+      border-radius: 50%;
+      animation: float 15s infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+    }
   </style>
 </head>
 <body>
-  <div class="c">
-    <div class="code">404</div>
-    <h1>Page Not Found</h1>
-    <p>The page you're looking for doesn't exist. Head back to CryptoHub to track live crypto prices.</p>
-    <a href="/">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M9 21V12h6v9"/></svg>
-      Back to CryptoHub
-    </a>
+  <div class="particles" id="particles"></div>
+  
+  <div class="container">
+    <div class="glitch">404</div>
+    <h2>الصفحة غير موجودة</h2>
+    <p>يبدو إن الصفحة اللي بتدور عليها مش موجودة أو اتنقلت لمكان تاني. ممكن تكون كتبت العنوان غلط أو الصفحة اتمسحت.</p>
+    <a href="/" class="btn">العودة للرئيسية</a>
   </div>
+  
+  <script>
+    // Create floating particles
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 15 + 's';
+      particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+      document.getElementById('particles').appendChild(particle);
+    }
+    
+    // Log 404 error for monitoring
+    console.error('404 Error:', window.location.pathname);
+  </script>
 </body>
 </html>

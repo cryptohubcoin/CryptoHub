@@ -15818,7 +15818,6 @@
     document.addEventListener('DOMContentLoaded', () => { $('exSrch')?.addEventListener('input', e => { const s = e.target.value.toLowerCase(); document.querySelectorAll('.ec-row').forEach(c => { c.style.display = c.textContent.toLowerCase().includes(s) ? 'table-row' : 'none' }) }) });
 
     function reRank() {
-      // Sanitize bad percentage values
       const MAX_PCT = 1000;
       allC.forEach(function(c) {
         if (Math.abs(c.c1  || 0) > MAX_PCT) c.c1  = 0;
@@ -15830,64 +15829,113 @@
         if ((parseFloat(c.mc)  || 0) < 0) c.mc  = 0;
       });
 
-      // Known canonical names for top symbols
-      var CANON = {BTC:'Bitcoin',ETH:'Ethereum',BNB:'BNB',SOL:'Solana',XRP:'XRP',ADA:'Cardano',AVAX:'Avalanche',DOT:'Polkadot',MATIC:'Polygon',DOGE:'Dogecoin',SHIB:'Shiba Inu',LTC:'Litecoin',BCH:'Bitcoin Cash',ATOM:'Cosmos',LINK:'Chainlink',UNI:'Uniswap',TRX:'TRON',TON:'Toncoin',USDT:'Tether',USDC:'USD Coin'};
+      // Canonical coins: symbol → {slug, name} — the REAL coin for each symbol
+      var CANON = {
+        BTC:{s:'bitcoin',n:'bitcoin'}, ETH:{s:'ethereum',n:'ethereum'}, BNB:{s:'bnb',n:'bnb'},
+        SOL:{s:'solana',n:'solana'}, XRP:{s:'xrp',n:'xrp'}, ADA:{s:'cardano',n:'cardano'},
+        AVAX:{s:'avalanche',n:'avalanche'}, DOT:{s:'polkadot',n:'polkadot'}, MATIC:{s:'polygon',n:'polygon'},
+        DOGE:{s:'dogecoin',n:'dogecoin'}, SHIB:{s:'shiba-inu',n:'shiba inu'}, LTC:{s:'litecoin',n:'litecoin'},
+        BCH:{s:'bitcoin-cash',n:'bitcoin cash'}, ATOM:{s:'cosmos',n:'cosmos'}, LINK:{s:'chainlink',n:'chainlink'},
+        UNI:{s:'uniswap',n:'uniswap'}, TRX:{s:'tron',n:'tron'}, TON:{s:'toncoin',n:'toncoin'},
+        USDT:{s:'tether',n:'tether'}, USDC:{s:'usd-coin',n:'usd coin'}, DAI:{s:'dai',n:'dai'},
+        NEAR:{s:'near-protocol',n:'near protocol'}, ICP:{s:'internet-computer',n:'internet computer'},
+        APT:{s:'aptos',n:'aptos'}, SUI:{s:'sui',n:'sui'}, ARB:{s:'arbitrum',n:'arbitrum'},
+        OP:{s:'optimism',n:'optimism'}, FIL:{s:'filecoin',n:'filecoin'}, AAVE:{s:'aave',n:'aave'},
+        MKR:{s:'maker',n:'maker'}, PEPE:{s:'pepe',n:'pepe'}, WIF:{s:'dogwifhat',n:'dogwifhat'},
+        BONK:{s:'bonk',n:'bonk'}, FLOKI:{s:'floki',n:'floki'}, FET:{s:'fetch-ai',n:'artificial superintelligence alliance'},
+        AR:{s:'arweave',n:'arweave'}, INJ:{s:'injective-protocol',n:'injective'},
+        SEI:{s:'sei-network',n:'sei'}, TIA:{s:'celestia',n:'celestia'}, STX:{s:'stacks',n:'stacks'},
+        KAS:{s:'kaspa',n:'kaspa'}, ALGO:{s:'algorand',n:'algorand'}, XLM:{s:'stellar',n:'stellar'},
+        HBAR:{s:'hedera',n:'hedera'}, VET:{s:'vechain',n:'vechain'}, FTM:{s:'fantom',n:'fantom'},
+        EOS:{s:'eos',n:'eos'}, XTZ:{s:'tezos',n:'tezos'}, ETC:{s:'ethereum-classic',n:'ethereum classic'},
+        NEO:{s:'neo',n:'neo'}, THETA:{s:'theta-network',n:'theta network'}, IOTA:{s:'iota',n:'iota'},
+      };
 
-      // Score: lower = better (more likely the "real" coin)
-      function coinScore(c) {
-        var nm = (c.nm || '').toLowerCase();
-        var score = 0;
-        // Bridged/Wrapped/Pegged = penalty
-        if (nm.includes('bridged')) score += 100;
-        if (nm.includes('wrapped') && !nm.startsWith('wrapped b')) score += 80;
-        if (nm.includes('pegged')) score += 80;
-        if (nm.includes('wormhole')) score += 90;
-        if (nm.includes('portal')) score += 90;
-        // Has platform (not native L1) = slight penalty
-        if (c.plat) score += 10;
-        // Canonical name match = big bonus
-        if (CANON[c.sy] && nm === CANON[c.sy].toLowerCase()) score -= 200;
-        // Shorter name usually = the real coin
-        score += Math.min((c.nm || '').length, 30);
-        // Higher market cap = slightly better
-        score -= Math.min(Math.log10(Math.max(parseFloat(c.mc) || 1, 1)), 15);
-        return score;
+      // BAD name patterns — these are NEVER the real coin
+      var BAD = ['bridged','wrapped','wormhole','portal','heco','bep2','binance-peg','pegged',
+                 'harrypotter','shrek','tiger','babydog','safemoon','elonmusk','catgirl'];
+
+      function isBad(nm) {
+        var low = (nm || '').toLowerCase();
+        for (var i = 0; i < BAD.length; i++) { if (low.includes(BAD[i])) return true; }
+        return false;
       }
 
-      // Dedup by symbol — keep best scored coin
-      var seen = new Map();
-      var clean = [];
-      // Sort by score first (best = lowest)
-      var sorted = [...allC].sort(function(a, b) { return coinScore(a) - coinScore(b); });
-      sorted.forEach(function (c) {
+      // Dedup: group by symbol, pick the REAL one
+      var groups = new Map();
+      allC.forEach(function(c) {
         var sy = (c.sy || '').toUpperCase();
         if (!sy) return;
-        var prev = seen.get(sy);
-        if (prev) {
-          // Merge secondary data into primary
-          if ((parseFloat(c.vol) || 0) > (parseFloat(prev.vol) || 0)) prev.vol = c.vol;
-          if (c.c1 && !prev.c1) prev.c1 = c.c1;
-          if (c.c4 && !prev.c4) prev.c4 = c.c4;
-          if (c.c24 && !prev.c24) prev.c24 = c.c24;
-          if (c.c7 && !prev.c7) prev.c7 = c.c7;
-          if (c.sup > 0 && (!prev.sup || prev.sup === 0)) prev.sup = c.sup;
-          if (c.ex > 0 && (!prev.ex || prev.ex === 0)) prev.ex = c.ex;
-          return;
-        }
-        // Fix name from canonical list if available
-        if (CANON[sy] && c.nm !== CANON[sy]) {
-          var nm = (c.nm || '').toLowerCase();
-          if (nm.includes('bridged') || nm.includes('wrapped') || nm.includes('pegged') || nm.includes('wormhole') || nm.length > CANON[sy].length + 10) {
-            c.nm = CANON[sy];
+        if (!groups.has(sy)) groups.set(sy, []);
+        groups.get(sy).push(c);
+      });
+
+      var clean = [];
+      groups.forEach(function(coins, sy) {
+        if (coins.length === 1) { clean.push(coins[0]); return; }
+
+        // Multiple coins with same symbol — pick the best one
+        var canon = CANON[sy];
+        var best = null;
+
+        if (canon) {
+          // Try exact slug match first
+          for (var i = 0; i < coins.length; i++) {
+            if ((coins[i].id || '').toLowerCase() === canon.s) { best = coins[i]; break; }
+          }
+          // Try exact name match
+          if (!best) {
+            for (var i = 0; i < coins.length; i++) {
+              if ((coins[i].nm || '').toLowerCase() === canon.n) { best = coins[i]; break; }
+            }
+          }
+          // Try name starts with canonical name
+          if (!best) {
+            for (var i = 0; i < coins.length; i++) {
+              if ((coins[i].nm || '').toLowerCase().startsWith(canon.n)) { best = coins[i]; break; }
+            }
           }
         }
-        seen.set(sy, c);
-        clean.push(c);
+
+        // No canonical match — pick non-bad coin with highest mc, then no-platform
+        if (!best) {
+          var candidates = coins.filter(function(c) { return !isBad(c.nm); });
+          if (candidates.length === 0) candidates = coins;
+          candidates.sort(function(a, b) {
+            // Prefer no platform (native)
+            var aN = a.plat ? 1 : 0, bN = b.plat ? 1 : 0;
+            if (aN !== bN) return aN - bN;
+            // Then highest market cap
+            return (parseFloat(b.mc) || 0) - (parseFloat(a.mc) || 0);
+          });
+          best = candidates[0];
+        }
+
+        // Merge data from all duplicates into best
+        coins.forEach(function(c) {
+          if (c === best) return;
+          if ((parseFloat(c.vol) || 0) > (parseFloat(best.vol) || 0)) best.vol = c.vol;
+          if (c.c1 && !best.c1) best.c1 = c.c1;
+          if (c.c4 && !best.c4) best.c4 = c.c4;
+          if (c.c24 && !best.c24) best.c24 = c.c24;
+          if (c.c7 && !best.c7) best.c7 = c.c7;
+          if (c.sup > 0 && !best.sup) best.sup = c.sup;
+          if (c.ex > 0 && !best.ex) best.ex = c.ex;
+          if (c.img && c.img.length > 15 && (!best.img || best.img.includes('/0.png'))) best.img = c.img;
+        });
+
+        // Fix name if needed
+        if (canon && best.nm && isBad(best.nm)) {
+          best.nm = canon.n.split(' ').map(function(w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(' ');
+        }
+
+        clean.push(best);
       });
+
       allC.length = 0;
-      clean.forEach(function (c) { allC.push(c); });
-      allC.sort(function (a, b) { return (parseFloat(b.mc) || 0) - (parseFloat(a.mc) || 0) || (parseFloat(b.vol) || 0) - (parseFloat(a.vol) || 0); });
-      allC.forEach(function (c, i) { c.rk = i + 1; });
+      clean.forEach(function(c) { allC.push(c); });
+      allC.sort(function(a, b) { return (parseFloat(b.mc) || 0) - (parseFloat(a.mc) || 0) || (parseFloat(b.vol) || 0) - (parseFloat(a.vol) || 0); });
+      allC.forEach(function(c, i) { c.rk = i + 1; });
     }
 
     // Filter/Sort/Render

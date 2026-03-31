@@ -7031,7 +7031,7 @@
 
 
     <!-- Precious Metals Live -->
-    <div class="mbar" id="metalBar">
+    <div class="mbar" id="metalBar" style="min-height:90px;contain:layout style">
       <div class="mbc" id="mGCard">
         <div class="mbi" style="background:linear-gradient(135deg,#FFD700,#FFA000)">🥇</div>
         <div class="flex-1 min-w-0">
@@ -7351,7 +7351,7 @@
 
     </div>
 
-    <div class="tab-content active" id="tab_crypto" style="min-height:600px;contain:layout style">
+    <div class="tab-content active" id="tab_crypto" style="min-height:1200px;contain:layout style">
       <!-- Top Gainers Orbital -->
       <div class="tg-section" id="tickerWrap" style="min-height:110px">
         <div class="tg-hdr">
@@ -7361,7 +7361,7 @@
             <span class="tg-live"><span class="ld" style="width:5px;height:5px"></span> LIVE</span>
           </div>
           <button
-            onclick="document.getElementById('tickerWrap').style.display='none';sessionStorage.setItem('hideGainers','1');"
+            onclick="requestAnimationFrame(()=>{document.getElementById('tickerWrap').style.display='none';sessionStorage.setItem('hideGainers','1')})"
             style="background:none;border:none;cursor:pointer;color:var(--t2);font-size:16px;padding:4px 8px;border-radius:6px;line-height:1;min-width:32px;min-height:32px;flex-shrink:0"
             title="Hide">✕</button>
         </div>
@@ -7396,7 +7396,7 @@
           style="color:var(--t2)"></span></div>
 
       <!-- Coins Section with integrated networks -->
-      <div class="ct mb-4" style="border-radius:14px;min-height:500px">
+      <div class="ct mb-4" style="border-radius:14px;min-height:800px;contain:layout style">
         <!-- CoinMarketCap-Style Horizontal Networks Bar (outside scroll area) -->
         <span id="ldSt" style="display:none"></span>
         <div class="cmc-net-bar">
@@ -7826,7 +7826,7 @@
 
     <!-- ===== INFO TABS SECTION (AdSense Compliance) ===== -->
     <div id="infoTabsSection"
-      style="margin:12px 0 8px;background:var(--bg1);border:1px solid var(--bc);border-radius:16px;overflow:hidden;box-shadow:var(--sh);min-height:420px;contain:layout style paint">
+      style="margin:12px 0 8px;background:var(--bg1);border:1px solid var(--bc);border-radius:16px;overflow:hidden;box-shadow:var(--sh);min-height:500px;contain:layout style paint">
 
       <!-- Tab Buttons -->
       <div style="display:flex;border-bottom:1px solid var(--bc);overflow-x:auto;scrollbar-width:none" id="infoTabBtns">
@@ -9634,7 +9634,7 @@
           cached.forEach(c => { allC.push(c); symMap.set(_ck(c), c); });
           applyKnownSupply(allC);
           $('pFill').style.width = '100%';
-          assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
+          reRank(); assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
           $('lProg').classList.add('hidden');
           if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
           if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
@@ -9669,7 +9669,7 @@
                     }
                   });
                   if (added > 0) { reRank(); filtC = [...allC]; render(); buildTicker(); }
-                  else if (updated > 0) { filtC = [...allC]; }
+                  else if (updated > 0) { filtC = [...allC]; render(); }
                   cacheSet('cryptohub_coins', allC);
                   console.log('🔄 Background KV update:', updated, 'updated,', added, 'added, total:', allC.length);
                 }
@@ -9718,7 +9718,7 @@
               });
               applyKnownSupply(allC);
               $('pFill').style.width = '100%';
-              assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
+              reRank(); assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
               $('lProg').classList.add('hidden');
               if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
               if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
@@ -9951,7 +9951,7 @@
         // Re-rank + re-render
         allC.sort((a, b) => (b.mc || 0) - (a.mc || 0) || (b.vol || 0) - (a.vol || 0));
         allC.forEach((c, i) => c.rk = i + 1);
-        assignExCounts(); filtC = [...allC]; render(); buildTrending(); buildTicker();
+        reRank(); assignExCounts(); filtC = [...allC]; render(); buildTrending(); buildTicker();
 
         // ===== PHASE 3: CoinMarketCap background enrichment (fast & parallel) =====
         $('pFill').style.width = '80%'; $('pTxt').textContent = t('loadingData') + ` (${allC.length})`;
@@ -10010,7 +10010,7 @@
         })();
 
         $('pFill').style.width = '100%';
-        assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
+        reRank(); assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
         $('lProg').classList.add('hidden');
         if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
         if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
@@ -15818,35 +15818,53 @@
     document.addEventListener('DOMContentLoaded', () => { $('exSrch')?.addEventListener('input', e => { const s = e.target.value.toLowerCase(); document.querySelectorAll('.ec-row').forEach(c => { c.style.display = c.textContent.toLowerCase().includes(s) ? 'table-row' : 'none' }) }) });
 
     function reRank() {
-      // Sanitize bad percentage values before dedup (e.g. +310,757,553% from divide-by-zero in APIs)
-      const MAX_PCT = 1000;  // ±1000% max realistic change
+      // Sanitize bad percentage values
+      const MAX_PCT = 1000;
       allC.forEach(function(c) {
         if (Math.abs(c.c1  || 0) > MAX_PCT) c.c1  = 0;
         if (Math.abs(c.c4  || 0) > MAX_PCT) c.c4  = 0;
         if (Math.abs(c.c24 || 0) > MAX_PCT) c.c24 = 0;
         if (Math.abs(c.c7  || 0) > MAX_PCT) c.c7  = 0;
-        // Sanitize price: negative or astronomically large prices are bad data
         if (c.pr < 0 || c.pr > 1e12) c.pr = 0;
-        // Sanitize volume: negative or impossibly large
         if ((parseFloat(c.vol) || 0) < 0) c.vol = 0;
         if ((parseFloat(c.mc)  || 0) < 0) c.mc  = 0;
       });
 
-      // Dedup: merge duplicate symbols into one entry with best data
+      // Known canonical names for top symbols
+      var CANON = {BTC:'Bitcoin',ETH:'Ethereum',BNB:'BNB',SOL:'Solana',XRP:'XRP',ADA:'Cardano',AVAX:'Avalanche',DOT:'Polkadot',MATIC:'Polygon',DOGE:'Dogecoin',SHIB:'Shiba Inu',LTC:'Litecoin',BCH:'Bitcoin Cash',ATOM:'Cosmos',LINK:'Chainlink',UNI:'Uniswap',TRX:'TRON',TON:'Toncoin',USDT:'Tether',USDC:'USD Coin'};
+
+      // Score: lower = better (more likely the "real" coin)
+      function coinScore(c) {
+        var nm = (c.nm || '').toLowerCase();
+        var score = 0;
+        // Bridged/Wrapped/Pegged = penalty
+        if (nm.includes('bridged')) score += 100;
+        if (nm.includes('wrapped') && !nm.startsWith('wrapped b')) score += 80;
+        if (nm.includes('pegged')) score += 80;
+        if (nm.includes('wormhole')) score += 90;
+        if (nm.includes('portal')) score += 90;
+        // Has platform (not native L1) = slight penalty
+        if (c.plat) score += 10;
+        // Canonical name match = big bonus
+        if (CANON[c.sy] && nm === CANON[c.sy].toLowerCase()) score -= 200;
+        // Shorter name usually = the real coin
+        score += Math.min((c.nm || '').length, 30);
+        // Higher market cap = slightly better
+        score -= Math.min(Math.log10(Math.max(parseFloat(c.mc) || 1, 1)), 15);
+        return score;
+      }
+
+      // Dedup by symbol — keep best scored coin
       var seen = new Map();
       var clean = [];
-      allC.forEach(function (c) {
-        var sy = c.sy.toUpperCase();
+      // Sort by score first (best = lowest)
+      var sorted = [...allC].sort(function(a, b) { return coinScore(a) - coinScore(b); });
+      sorted.forEach(function (c) {
+        var sy = (c.sy || '').toUpperCase();
+        if (!sy) return;
         var prev = seen.get(sy);
         if (prev) {
-          // Merge: take best value from each field
-          if (c.pr > 0 && (!prev.pr || prev.pr === 0)) prev.pr = c.pr;
-          if (c.pr > 0 && prev.pr > 0 && c.pr !== prev.pr) {
-            // Take the more precise price (further from round number)
-            var cDec = (c.pr + '').split('.')[1]; var pDec = (prev.pr + '').split('.')[1];
-            if ((cDec ? cDec.length : 0) > (pDec ? pDec.length : 0)) prev.pr = c.pr;
-          }
-          if ((parseFloat(c.mc) || 0) > (parseFloat(prev.mc) || 0)) prev.mc = c.mc;
+          // Merge secondary data into primary
           if ((parseFloat(c.vol) || 0) > (parseFloat(prev.vol) || 0)) prev.vol = c.vol;
           if (c.c1 && !prev.c1) prev.c1 = c.c1;
           if (c.c4 && !prev.c4) prev.c4 = c.c4;
@@ -15854,9 +15872,14 @@
           if (c.c7 && !prev.c7) prev.c7 = c.c7;
           if (c.sup > 0 && (!prev.sup || prev.sup === 0)) prev.sup = c.sup;
           if (c.ex > 0 && (!prev.ex || prev.ex === 0)) prev.ex = c.ex;
-          if (c.img && c.img.length > 15 && (!prev.img || prev.img.includes('/0.png') || prev.img.length < 10)) prev.img = c.img;
-          if (c.nm && c.nm.length > prev.nm.length) prev.nm = c.nm;
           return;
+        }
+        // Fix name from canonical list if available
+        if (CANON[sy] && c.nm !== CANON[sy]) {
+          var nm = (c.nm || '').toLowerCase();
+          if (nm.includes('bridged') || nm.includes('wrapped') || nm.includes('pegged') || nm.includes('wormhole') || nm.length > CANON[sy].length + 10) {
+            c.nm = CANON[sy];
+          }
         }
         seen.set(sy, c);
         clean.push(c);

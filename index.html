@@ -25,9 +25,22 @@
     body { opacity: 0; }
   </style>
   <script>
-    // Don't show body until applyLang has run — prevents language flash
-    // Fallback: show after 800ms max if applyLang hasn't run yet
+    // Show body fast — 150ms max wait for language, instant for returning users
     window._langApplied = false;
+    if (localStorage.getItem('lang')) {
+      // Returning user — lang is cached, show immediately
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          if (!window._langApplied) {
+            var b = document.body;
+            if (b) b.style.opacity = '1';
+            var af = document.getElementById('anti-flash');
+            if (af) af.remove();
+          }
+        }, 50);
+      });
+    }
+    // Hard fallback: show after 150ms no matter what (was 800ms)
     setTimeout(function() {
       if (!window._langApplied) {
         var b = document.body;
@@ -35,23 +48,18 @@
         var af = document.getElementById('anti-flash');
         if (af) af.remove();
       }
-    }, 800);
+    }, 150);
   </script>
-  <!-- Google tag (gtag.js) - deferred to not block FCP/LCP -->
+  <!-- Google tag (gtag.js) - fully deferred after page load -->
   <script>
-    (function() {
-      function loadGA() {
+    window.addEventListener('load', function() {
+      setTimeout(function() {
         var s = document.createElement('script');
         s.async = true;
         s.src = 'https://www.googletagmanager.com/gtag/js?id=G-FTBNSF9WJT';
         document.head.appendChild(s);
-      }
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(loadGA, { timeout: 3000 });
-      } else {
-        setTimeout(loadGA, 2000);
-      }
-    })();
+      }, 3000);
+    });
   </script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -79,11 +87,11 @@
   <!-- ============================================================ -->
   <!--  PRIMARY SEO META TAGS                                        -->
   <!-- ============================================================ -->
-  <title>CryptoHub — Live Cryptocurrency Prices, Charts & Market Cap | 10,000+ Coins</title>
+  <title>CryptoHub — Real-Time Crypto Prices, Charts & Market Cap | Track 10,000+ Coins Free</title>
   <meta name="description"
-    content="Track 10,000+ cryptocurrency prices in real-time. Bitcoin, Ethereum, Solana & altcoin charts, market cap rankings, AI-powered analysis, Fear & Greed Index, gold & silver prices. Free — no signup needed.">
+    content="Track 10,000+ cryptocurrency prices live. Bitcoin, Ethereum, Solana, XRP real-time charts, market cap rankings, AI analysis, Fear & Greed Index, top gainers & losers, gold & silver prices. Free — no signup.">
   <meta name="keywords"
-    content="cryptocurrency prices, crypto prices today, bitcoin price, BTC price, ethereum price, ETH price, solana price, crypto market cap, cryptocurrency tracker, live crypto prices, crypto charts, altcoin prices, DeFi coins, meme coins, NFT collections, crypto fear greed index, altcoin season index, gold price today, silver price, crypto exchange rankings, best crypto exchange, binance, bybit, coinbase, crypto AI analysis, crypto trading signals, bitcoin halving, crypto portfolio tracker, web3 tracker, blockchain explorer, token prices, BNB price, XRP price, ADA price, DOGE price, crypto market today, top gainers crypto, top losers crypto, trending crypto, new cryptocurrency, crypto news, cryptocurrency market cap, total crypto market cap, BTC dominance, ETH dominance, crypto volume 24h, cryptohub, crypto hub, كريبتو هاب, criptohub, cryptohub.co, cryptohub.ai, cryptoglowhub, cryptocurrency hub, bitcohub">
+    content="crypto prices, crypto prices today, bitcoin price, BTC price today, ethereum price, ETH price today, solana price, SOL price, XRP price, crypto market cap, cryptocurrency tracker, live crypto prices, crypto charts, bitcoin chart, altcoin prices, DeFi tokens, meme coins, top crypto gainers today, top crypto losers, crypto fear greed index, altcoin season index, gold price today, silver price today, best crypto exchange 2026, binance, bybit, coinbase, crypto trading, bitcoin halving, crypto portfolio, token prices, BNB price, ADA price, DOGE price, crypto market today, trending crypto, new cryptocurrency listing, crypto news today, total crypto market cap, BTC dominance, bitcoin prediction, crypto analysis, cryptocurrency prices live, best crypto to buy, crypto tracker app, bitcoin today, ethereum today, crypto market overview, cryptohub, crypto hub, كريبتو هاب">
   <meta name="author" content="CryptoHub">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
@@ -110,9 +118,9 @@
   <!--  ARABIC SEO META TAGS                                         -->
   <!-- ============================================================ -->
   <meta name="description" lang="ar"
-    content="كريبتوهاب — تتبع أكثر من 10,000 عملة رقمية مع أسعار لحظية، بيتكوين، إيثيريوم، سولانا، تحليل ذكاء اصطناعي، مؤشر الخوف والطمع، أسعار الذهب والفضة. مجاني بدون تسجيل.">
+    content="كريبتوهاب — تتبع أسعار أكثر من 10,000 عملة رقمية لحظياً. سعر البيتكوين، الإيثيريوم، سولانا، ريبل مع تحليل ذكاء اصطناعي، مؤشر الخوف والطمع، أسعار الذهب والفضة. مجاني بدون تسجيل.">
   <meta name="keywords" lang="ar"
-    content="أسعار العملات الرقمية, سعر البيتكوين, سعر الإيثيريوم, سعر سولانا, سوق الكريبتو, تحليل العملات الرقمية, مؤشر الخوف والطمع, موسم الألتكوين, سعر الذهب اليوم, سعر الفضة, أفضل منصات تداول, بينانس, بايبت, تداول العملات الرقمية, محفظة كريبتو, عملات رقمية جديدة, عملات ميم, NFT, ديفاي, بلوكتشين, سعر BNB, سعر XRP, سعر كاردانو, كريبتو هاب, cryptohub, متتبع العملات الرقمية, أرباح الكريبتو, تحليل فني, إشارات تداول, أسعار كريبتو مباشرة, القيمة السوقية للعملات الرقمية">
+    content="اسعار العملات الرقمية اليوم, سعر البيتكوين اليوم, سعر الايثيريوم, سعر سولانا, سعر الريبل, سوق الكريبتو, تحليل العملات الرقمية, مؤشر الخوف والطمع, سعر الذهب اليوم, سعر الفضة اليوم, افضل منصة تداول عملات رقمية 2026, بينانس, بايبت, تداول العملات الرقمية, افضل عملة رقمية للشراء, عملات رقمية جديدة, عملات ميم, توقعات البيتكوين, اخبار الكريبتو اليوم, القيمة السوقية للعملات الرقمية, هيمنة البيتكوين, موسم الالتكوين, كريبتو هاب, cryptohub, اسعار كريبتو مباشرة, تحليل فني, محفظة كريبتو, ارباح العملات الرقمية">
   <meta name="language" content="Arabic" lang="ar">
 
   <!-- Canonical URL -->
@@ -123,9 +131,9 @@
   <!-- ============================================================ -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CryptoHub">
-  <meta property="og:title" content="CryptoHub — Live Crypto Prices, Charts & Market Cap | 10,000+ Coins">
+  <meta property="og:title" content="CryptoHub — Real-Time Crypto Prices & Market Cap | 10,000+ Coins Free">
   <meta property="og:description"
-    content="Track 10,000+ crypto prices in real-time. Bitcoin, Ethereum, Solana charts, AI analysis, Fear & Greed Index, gold & silver prices. Free — no signup.">
+    content="Track 10,000+ crypto prices live. Bitcoin, Ethereum, Solana, XRP charts, AI analysis, Fear & Greed Index, top gainers & losers, gold & silver. Free — no signup.">
   <meta property="og:url" content="https://www.cryptohubcoin.com/">
   <meta property="og:image" content="https://www.cryptohubcoin.com/logo.png">
   <meta property="og:image:secure_url" content="https://www.cryptohubcoin.com/logo.png">
@@ -169,9 +177,9 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@cryptoHubcrypto1">
   <meta name="twitter:creator" content="@cryptoHubcrypto1">
-  <meta name="twitter:title" content="CryptoHub — Live Crypto Prices, Charts & Market Cap | 10,000+ Coins">
+  <meta name="twitter:title" content="CryptoHub — Real-Time Crypto Prices & Market Cap | 10,000+ Coins Free">
   <meta name="twitter:description"
-    content="Track 10,000+ crypto prices in real-time. Bitcoin, Ethereum, Solana charts, AI analysis, Fear & Greed Index, gold & silver. Free & no signup.">
+    content="Track 10,000+ crypto prices live. Bitcoin, Ethereum, Solana, XRP charts, AI analysis, Fear & Greed Index, top gainers & losers, gold & silver. Free — no signup.">
   <meta name="twitter:image" content="https://www.cryptohubcoin.com/logo.png">
   <meta name="twitter:image:alt" content="CryptoHub — Live Cryptocurrency Prices & Market Data">
 
@@ -361,20 +369,16 @@
   <!-- ============================================================ -->
   <!-- Performance & Resource Hints (deduped) -->
   <link rel="preconnect" href="https://api.binance.com" crossorigin>
-  <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
 
-  <link rel="dns-prefetch" href="https://api.binance.com">
   <link rel="dns-prefetch" href="https://api.bybit.com">
   <link rel="dns-prefetch" href="https://api.mexc.com">
   <link rel="dns-prefetch" href="https://api.gateio.ws">
   <link rel="dns-prefetch" href="https://www.okx.com">
   <link rel="dns-prefetch" href="https://forex-data-feed.swissquote.com">
-  <link rel="dns-prefetch" href="https://api.codetabs.com">
   <link rel="dns-prefetch" href="https://data-asg.goldprice.org">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
   <link rel="preconnect" href="https://late-wood-9120.bitcoinswapnet.workers.dev" crossorigin>
   <link rel="dns-prefetch" href="https://late-wood-9120.bitcoinswapnet.workers.dev">
-  <link rel="dns-prefetch" href="https://query1.finance.yahoo.com">
 
   <!-- Icons -->
   <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
@@ -6464,15 +6468,19 @@
         border-bottom: 1px solid var(--bc) !important;
         position: relative;
       }
-      /* Collection name — full width row */
+      /* Collection name — full width row, force truncation */
       #nftTable td:first-child {
         grid-column: 1 / -1;
         padding: 0 0 6px 0 !important;
         border: none !important;
+        overflow: hidden !important;
+        max-width: 100% !important;
       }
-      #nftTable td:first-child div { gap: 8px !important; }
-      #nftTable td:first-child img, #nftTable td:first-child div[style*="32px"] { width: 32px !important; height: 32px !important; border-radius: 8px !important; }
-      #nftTable td:first-child div div:last-child div:first-child { font-size: 13px !important; font-weight: 600 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+      #nftTable td:first-child div { gap: 8px !important; flex-wrap: nowrap !important; overflow: hidden !important; }
+      #nftTable td:first-child img, #nftTable td:first-child div[style*="32px"] { width: 32px !important; height: 32px !important; min-width: 32px !important; border-radius: 8px !important; }
+      #nftTable td:first-child div div:last-child { overflow: hidden !important; min-width: 0 !important; }
+      #nftTable td:first-child div div:last-child div:first-child { font-size: 13px !important; font-weight: 600 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; max-width: calc(100vw - 100px) !important; display: block !important; }
+      #nftTable td:first-child div div:last-child div:nth-child(2) { font-size: 10px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
       /* Floor price */
       #nftTable td:nth-child(2) { text-align: left !important; padding: 2px 0 !important; border: none !important; font-size: 12px !important; font-weight: 600 !important; }
       #nftTable td:nth-child(2)::before { content: 'Floor: '; font-weight: 400; color: var(--t2); font-size: 10px; }
@@ -6538,7 +6546,7 @@
     @media(max-width:480px) {
       /* NFT — minimal: Collection + Floor + 24H% only */
       #nftTable td:nth-child(5) { display: none !important; }
-      #nftTable td:first-child div div:last-child div:first-child { max-width: 140px; font-size: 12px !important; }
+      #nftTable td:first-child div div:last-child div:first-child { max-width: calc(100vw - 90px) !important; font-size: 12px !important; }
       nav .max-w-7xl {
         padding: 0 8px !important
       }

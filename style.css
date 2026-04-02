@@ -5949,61 +5949,9 @@
         display: none;
       }
 
-      /* ===== NFT TABLE MOBILE RESPONSIVE ===== */
-      #tab_commodities .ct { overflow-x: hidden !important; width: 100% !important; display: block !important; }
-      #nftTable { min-width: 0 !important; width: 100% !important; border-collapse: collapse !important; table-layout: fixed !important; }
-      #nftTable thead { display: none !important; }
-      #nftTable tbody tr {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: 2px 8px;
-        padding: 12px 10px !important;
-        border-bottom: 1px solid var(--bc) !important;
-        position: relative;
-      }
-      /* Collection name — full width row, force truncation */
-      #nftTable td:first-child {
-        grid-column: 1 / -1;
-        padding: 0 0 6px 0 !important;
-        border: none !important;
-        overflow: hidden !important;
-        max-width: 100% !important;
-        white-space: normal !important;
-      }
-      #nftTable td:first-child > div { gap: 8px !important; flex-wrap: nowrap !important; overflow: hidden !important; max-width: 100% !important; }
-      #nftTable td:first-child img, #nftTable td:first-child div[style*="32px"] { width: 32px !important; height: 32px !important; min-width: 32px !important; flex-shrink: 0 !important; border-radius: 8px !important; }
-      /* Name container */
-      #nftTable td:first-child > div > div:last-child,
-      #nftTable td:first-child > div > div:nth-child(3) { overflow: hidden !important; min-width: 0 !important; flex: 1 !important; max-width: calc(100vw - 120px) !important; }
-      /* Collection name text */
-      #nftTable td:first-child > div > div:last-child > div:first-child,
-      #nftTable td:first-child > div > div:nth-child(3) > div:first-child { 
-        font-size: 13px !important; font-weight: 600 !important; 
-        white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; 
-        max-width: calc(100vw - 130px) !important; display: block !important; 
-      }
-      /* Symbol + chain badge row */
-      #nftTable td:first-child > div > div:last-child > div:nth-child(2),
-      #nftTable td:first-child > div > div:nth-child(3) > div:nth-child(2) { 
-        font-size: 10px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; 
-        max-width: calc(100vw - 130px) !important;
-      }
-      /* Floor price */
-      #nftTable td:nth-child(2) { text-align: left !important; padding: 2px 0 !important; border: none !important; font-size: 12px !important; font-weight: 600 !important; }
-      #nftTable td:nth-child(2)::before { content: 'Floor: '; font-weight: 400; color: var(--t2); font-size: 10px; }
-      /* 24h change */
-      #nftTable td:nth-child(3) { text-align: right !important; padding: 2px 0 !important; border: none !important; font-size: 12px !important; font-weight: 600 !important; }
-      #nftTable td:nth-child(3)::before { content: '24h: '; font-weight: 400; color: var(--t2); font-size: 10px; }
-      /* 7d change */
-      #nftTable td:nth-child(4) { text-align: left !important; padding: 2px 0 !important; border: none !important; font-size: 11px !important; }
-      #nftTable td:nth-child(4)::before { content: '7d: '; font-weight: 400; color: var(--t2); font-size: 10px; }
-      /* Market cap */
-      #nftTable td:nth-child(5) { text-align: right !important; padding: 2px 0 !important; border: none !important; font-size: 11px !important; }
-      #nftTable td:nth-child(5)::before { content: 'MCap: '; font-weight: 400; color: var(--t2); font-size: 10px; }
-      /* Volume */
-      #nftTable td:nth-child(6) { text-align: left !important; padding: 2px 0 !important; border: none !important; font-size: 11px !important; }
-      #nftTable td:nth-child(6)::before { content: 'Vol: '; font-weight: 400; color: var(--t2); font-size: 10px; }
-      /* Hide owners & supply on mobile */
+      /* ===== NFT TABLE MOBILE RESPONSIVE — HORIZONTAL SCROLL ===== */
+      #tab_commodities .ct { overflow-x: auto !important; -webkit-overflow-scrolling: touch; width: 100% !important; }
+      #nftTable { min-width: 700px !important; table-layout: auto !important; }
       #nftTable td:nth-child(7), #nftTable td:nth-child(8) { display: none !important; }
       #tab_commodities .card { padding: 10px !important; }
       #nftSearch { max-width: 100% !important; }
@@ -6046,15 +5994,11 @@
         white-space: nowrap;
       }
 
-      /* NFT table — extra small: hide 7d + volume */
-      #nftTable td:nth-child(4), #nftTable td:nth-child(6) { display: none !important; }
+      /* NFT table — handled by horizontal scroll, no extra hiding needed */
     }
 
     @media(max-width:480px) {
-      /* NFT — minimal: Collection + Floor + 24H% only */
-      #nftTable td:nth-child(5) { display: none !important; }
-      #nftTable td:first-child > div > div:last-child > div:first-child,
-      #nftTable td:first-child > div > div:nth-child(3) > div:first-child { max-width: calc(100vw - 100px) !important; font-size: 12px !important; }
+      /* NFT — handled by horizontal scroll */
       nav .max-w-7xl {
         padding: 0 8px !important
       }

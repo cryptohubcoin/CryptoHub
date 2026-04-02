@@ -5949,8 +5949,8 @@
         display: none;
       }
 
-      /* ===== NFT TABLE MOBILE RESPONSIVE — HORIZONTAL SCROLL ===== */
-      #tab_commodities .ct { overflow-x: auto !important; -webkit-overflow-scrolling: touch; width: 100% !important; }
+      /* ===== NFT TABLE MOBILE — HORIZONTAL SCROLL ===== */
+      #tab_commodities .ct { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; width: 100% !important; }
       #nftTable { min-width: 700px !important; table-layout: auto !important; }
       #nftTable td:nth-child(7), #nftTable td:nth-child(8) { display: none !important; }
       #tab_commodities .card { padding: 10px !important; }

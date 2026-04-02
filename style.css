@@ -129,24 +129,13 @@
     }
 
     /* ============================================================
-       CLS FIX — #tab_crypto (score: 0.769 — highest priority)
-       Root cause: table grows as coins load, shifting page content
+       CLS FIX — #tab_crypto
+       Uses auto height — no blank space after data loads
     ============================================================ */
     #tab_crypto {
-      /* Reserve space: 75 rows × ~47px row height = ~3525px + controls */
-      min-height: calc(75 * 47px + 200px);
-    }
-
-    /* Lock the coins table wrapper height while loading */
-    #tab_crypto .ct.mb-4 {
-      min-height: calc(75 * 47px);
-    }
-
-    /* Remove reservation once data is loaded (added by JS) */
-    #tab_crypto.data-loaded {
       min-height: 0;
     }
-    #tab_crypto.data-loaded .ct.mb-4 {
+    #tab_crypto .ct.mb-4 {
       min-height: 0;
     }
 

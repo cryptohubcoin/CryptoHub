@@ -153,21 +153,17 @@
     }
 
     /* ============================================================
-       CLS FIX — html>body>section (score: 0.555)
-       Root cause: blog grid cards load async, shifting layout
+       CLS FIX — blog section
     ============================================================ */
     section[style*="max-width:1280px"] {
       contain: layout style;
-      /* Reserve height for 2-row blog grid */
-      min-height: 520px;
+      min-height: 0;
     }
     section[style*="max-width:1280px"] > div[style*="grid"] > a > div {
-      /* Explicit min-height prevents card expansion from shifting others */
       min-height: 230px;
       contain: layout style;
     }
     section[style*="max-width:1280px"] > div[style*="grid"] > a > div > div[style*="height:110px"] {
-      /* Lock image placeholder height */
       height: 110px;
       flex-shrink: 0;
     }

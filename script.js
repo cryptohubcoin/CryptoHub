@@ -689,7 +689,65 @@ function switchInfoTab(tab) {
         $('lProg').classList.remove('hidden');
         $('pFill').style.width = '3%'; $('pTxt').textContent = t('loadingData');
 
-        // ===== PHASE 0: SESSION CACHE FIRST (instant — 0ms) =====
+        // ===== PHASE 0: PRELOADED DATA (fetched in HTML <head> — instant) =====
+        if (window._preload && window._preload.coins) {
+          try {
+            const preData = await window._preload.coins;
+            if (preData && preData.coins && preData.coins.length > 50) {
+              preData.coins.forEach(c => { if (c.c4 === undefined) c.c4 = 0; allC.push(c); symMap.set(_ck(c), c); });
+              applyKnownSupply(allC);
+              $('pFill').style.width = '100%';
+              reRank(); assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
+              $('lProg').classList.add('hidden');
+              if ($('cBadge')) $('cBadge').textContent = allC.length.toLocaleString();
+              if ($('navCryptoBadge')) $('navCryptoBadge').textContent = allC.length.toLocaleString();
+              if ($('ldSt')) $('ldSt').textContent = allC.length + ' ' + t('coins') + ' ✓';
+              updateGlobalFromData(); initWS();
+              console.log('🚀 Preloaded:', allC.length, 'coins (fetched during HTML parse)');
+              // Background: load full 10K from KV silently
+              setTimeout(async () => {
+                try {
+                  const kvR = await Promise.race([fetch(KV_WORKER + '/api/coins?start=0&limit=10000'), _tout(10000)]);
+                  if (kvR.ok) {
+                    const kvData = await kvR.json();
+                    const kvCoins = kvData.coins || kvData;
+                    if (kvCoins && Array.isArray(kvCoins) && kvCoins.length > allC.length * 0.8) {
+                      let updated = 0, added = 0;
+                      kvCoins.forEach(c => {
+                        const key = _ck(c);
+                        const existing = symMap.get(key);
+                        if (existing) {
+                          if (c.pr > 0) existing.pr = c.pr;
+                          if (c.c24 && c.c24 !== 0) existing.c24 = c.c24;
+                          if (c.c1 && c.c1 !== 0) existing.c1 = c.c1;
+                          if (c.c7 && c.c7 !== 0) existing.c7 = c.c7;
+                          if (c.mc > 0) existing.mc = c.mc;
+                          if (c.vol > 0) existing.vol = c.vol;
+                          updated++;
+                        } else {
+                          if (c.c4 === undefined) c.c4 = 0;
+                          allC.push(c); symMap.set(key, c);
+                          added++;
+                        }
+                      });
+                      if (added > 0) { reRank(); filtC = [...allC]; render(); buildTicker(); }
+                      else if (updated > 0) { filtC = [...allC]; render(); }
+                      cacheSet('cryptohub_coins', allC);
+                      console.log('🔄 Full KV loaded:', updated, 'updated,', added, 'added, total:', allC.length);
+                    }
+                  }
+                } catch (e) { console.log('Background KV skip:', e.message); }
+              }, 300);
+              setTimeout(refreshPrices, 800);
+              setTimeout(loadMore1h7d, 5000);
+              setTimeout(persistFallbacks, 20000);
+              window._preload.coins = null; // clear preload
+              isL = false; return;
+            }
+          } catch(pe) { console.log('Preload miss:', pe.message); }
+        }
+
+        // ===== PHASE 0b: SESSION CACHE (instant — 0ms) =====
         const cached = cacheGet('cryptohub_coins');
         if (cached && cached.length > 50) {
           cached.forEach(c => { allC.push(c); symMap.set(_ck(c), c); });
@@ -7534,7 +7592,22 @@ function switchInfoTab(tab) {
     }
     async function loadMetals() {
       if (_mtInit) return; _mtInit = true; _initMtOpen();
-      // ===== KV FAST LOAD: Get metals from KV Worker instantly =====
+      // ===== PRELOADED METALS (fetched in HTML <head> — instant) =====
+      if (window._preload && window._preload.metals) {
+        try {
+          const md = await window._preload.metals;
+          if (md && md.gold && md.gold.price > 0) {
+            _mt.g = md.gold.price; _mt.gChg = md.gold.chg || 0; _saveMtOpen('g', _mt.g);
+            if (md.silver && md.silver.price > 0) { _mt.s = md.silver.price; _mt.sChg = md.silver.chg || 0; _saveMtOpen('s', _mt.s); }
+            if (md.platinum && md.platinum.price > 0) { _mt.pt = md.platinum.price; _mt.ptChg = md.platinum.chg || 0; _saveMtOpen('pt', _mt.pt); }
+            if (md.palladium && md.palladium.price > 0) { _mt.pd = md.palladium.price; _mt.pdChg = md.palladium.chg || 0; _saveMtOpen('pd', _mt.pd); }
+            _mt.lastUpd = Date.now(); _updMtl();
+            console.log('🚀 Metals preloaded: Gold $' + _mt.g.toFixed(2));
+          }
+          window._preload.metals = null;
+        } catch(pe) { console.log('Metals preload miss:', pe.message); }
+      }
+      // ===== KV FAST LOAD: Get metals from KV Worker (fallback if preload missed) =====
       try {
         const kvM = await Promise.race([fetch(KV_WORKER + '/api/metals'), _tout(3000)]);
         if (kvM.ok) {
@@ -7647,7 +7720,7 @@ function switchInfoTab(tab) {
         const fb='<div style="'+(n.image?'display:none;':'display:flex;')+'width:32px;height:32px;border-radius:8px;background:'+c[1]+';align-items:center;justify-content:center;font-weight:800;font-size:14px;color:'+c[0]+'">'+(n.name||'?').charAt(0).toUpperCase()+'</div>';
         const vPct=maxV>0?Math.min(100,Math.round(((n.vol||0)/maxV)*100)):0;
         const volH=n.vol>0?'<div style="display:inline-flex;align-items:center;gap:6px">'+fN(n.vol)+'<div style="width:50px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;display:inline-block"><div style="width:'+vPct+'%;height:100%;background:'+c[0]+';border-radius:2px"></div></div></div>':'--';
-        rows.push('<tr style="border-bottom:0.5px solid var(--bc)" onmouseenter="this.style.background=\'var(--bg2)\'" onmouseleave="this.style.background=\'\'">'+'<td style="padding:10px 12px;white-space:nowrap"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;color:var(--t2);min-width:22px;text-align:right">'+rank+'</span><div style="flex-shrink:0">'+img+fb+'</div><div><div style="font-weight:700;font-size:13px;color:var(--tx)">'+n.name+'</div><div style="display:flex;align-items:center;gap:4px;margin-top:2px"><span style="font-size:10px;color:var(--t2);font-weight:500">'+n.symbol+'</span><span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;background:'+c[1]+';color:'+c[0]+'">'+cname+'</span></div></div></div></td>'+'<td style="padding:10px 8px;font-weight:700;font-size:13px;white-space:nowrap;text-align:right">'+fp+'</td>'+'<td style="padding:10px 8px;text-align:right">'+fC(n.h24)+'</td>'+'<td style="padding:10px 8px;text-align:right">'+fC(n.h7d)+'</td>'+'<td style="padding:10px 8px;font-size:12px;color:var(--t2);font-weight:500;white-space:nowrap;text-align:right">'+fN(n.mcap)+'</td>'+'<td style="padding:10px 8px;font-size:12px;white-space:nowrap;text-align:right">'+volH+'</td>'+'<td style="padding:10px 8px;font-size:12px;color:var(--t2);text-align:right">'+fO(n.owners)+'</td>'+'<td style="padding:10px 8px;font-size:12px;color:var(--t2);text-align:right">'+fO(n.supply)+'</td></tr>');
+        rows.push('<tr style="border-bottom:0.5px solid var(--bc)" onmouseenter="this.style.background=\'var(--bg2)\'" onmouseleave="this.style.background=\'\'">'+'<td style="padding:10px 12px"><div style="display:flex;align-items:center;gap:10px;overflow:hidden"><span style="font-size:11px;color:var(--t2);min-width:22px;text-align:right;flex-shrink:0">'+rank+'</span><div style="flex-shrink:0">'+img+fb+'</div><div style="min-width:0;overflow:hidden"><div style="font-weight:700;font-size:13px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+n.name+'</div><div style="display:flex;align-items:center;gap:4px;margin-top:2px"><span style="font-size:10px;color:var(--t2);font-weight:500">'+n.symbol+'</span><span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;background:'+c[1]+';color:'+c[0]+';white-space:nowrap">'+cname+'</span></div></div></div></td>'+'<td style="padding:10px 8px;font-weight:700;font-size:13px;white-space:nowrap;text-align:right">'+fp+'</td>'+'<td style="padding:10px 8px;text-align:right">'+fC(n.h24)+'</td>'+'<td style="padding:10px 8px;text-align:right">'+fC(n.h7d)+'</td>'+'<td style="padding:10px 8px;font-size:12px;color:var(--t2);font-weight:500;white-space:nowrap;text-align:right">'+fN(n.mcap)+'</td>'+'<td style="padding:10px 8px;font-size:12px;white-space:nowrap;text-align:right">'+volH+'</td>'+'<td style="padding:10px 8px;font-size:12px;color:var(--t2);text-align:right">'+fO(n.owners)+'</td>'+'<td style="padding:10px 8px;font-size:12px;color:var(--t2);text-align:right">'+fO(n.supply)+'</td></tr>');
       });
       tb.innerHTML=rows.length?rows.join(''):'<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--t2)">No NFT collections found</td></tr>';
       const pw=$('nftPagWrap'),pb=$('nftPagBtns'),pi=$('nftPagInfo');
@@ -10656,22 +10729,40 @@ function switchInfoTab(tab) {
 
       // Load all data with CM tracking
       (async () => {
+        // === Use preloaded global stats immediately ===
+        if (window._preload && window._preload.global) {
+          try {
+            const gd = await window._preload.global;
+            if (gd && gd.totalMarketCap) {
+              if ($('tmcV')) $('tmcV').textContent = '$' + (gd.totalMarketCap / 1e12).toFixed(2) + 'T';
+              if ($('tVolV')) $('tVolV').textContent = '$' + (gd.totalVolume24h / 1e9).toFixed(2) + 'B';
+              if ($('btcD')) $('btcD').textContent = gd.btcDominance + '%';
+              console.log('🚀 Global stats preloaded');
+            }
+            window._preload.global = null;
+          } catch(e) {}
+        }
+
+        // === Use preloaded fear-greed immediately ===
+        if (window._preload && window._preload.fearGreed) {
+          try {
+            const fg = await window._preload.fearGreed;
+            if (fg && fg.now) {
+              fgD = { n: fg.now, y: fg.yesterday, w: fg.lastWeek, m: fg.lastMonth };
+              _fgBase = fgD;
+              updFG();
+              console.log('🚀 Fear & Greed preloaded:', fg.now);
+            }
+            window._preload.fearGreed = null;
+          } catch(e) {}
+        }
+
         // Phase 1: Core crypto data (critical - load immediately)
         _CM.loading('binance_rest');
         _CM.loading('cmc');
         loadCoins(); // this internally fetches from CMC, CoinCap, Binance etc
 
-        // Phase 2: Auxiliary data deferred to reduce TBT
-        setTimeout(async () => {
-          const auxLoads = [
-            _CM._execFetch('fear_greed'),
-            _CM._execFetch('binance_ai'),
-            _CM._execFetch('coingecko_exchanges'),
-          ];
-          await Promise.allSettled(auxLoads);
-        }, 4000);
-
-        // Phase 3: Metals deferred further (non-critical for initial render)
+        // Phase 2: Metals — start immediately (was 4s delay), preload already has data
         setTimeout(() => {
           _CM.loading('swissquote');
           _CM.loading('binance_metal_ws');
@@ -10680,6 +10771,16 @@ function switchInfoTab(tab) {
             if (_mt.s > 0) _CM.ok('swissquote', 0);
             if (_mt.g > 0) { _CM.ok('binance_metal_ws', 0); _CM.ok('binance_rest', 0); }
           }, 6000);
+        }, 100); // was 4000ms — now 100ms because preload has data
+
+        // Phase 3: Auxiliary data deferred to reduce TBT
+        setTimeout(async () => {
+          const auxLoads = [
+            _CM._execFetch('fear_greed'),
+            _CM._execFetch('binance_ai'),
+            _CM._execFetch('coingecko_exchanges'),
+          ];
+          await Promise.allSettled(auxLoads);
         }, 4000);
 
         // Phase 4: Start periodic CM polling for non-WS sources

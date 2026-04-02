@@ -463,6 +463,16 @@
 
   <!-- Linked Styles -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- Preload critical data BEFORE script.js loads -->
+  <script>
+    window._preload = {};
+    var _API = 'https://late-wood-9120.bitcoinswapnet.workers.dev';
+    window._preload.coins = fetch(_API + '/api/coins?start=0&limit=10000').then(function(r){return r.json()}).catch(function(){return null});
+    window._preload.metals = fetch(_API + '/api/metals').then(function(r){return r.json()}).catch(function(){return null});
+    window._preload.global = fetch(_API + '/api/global').then(function(r){return r.json()}).catch(function(){return null});
+    window._preload.fearGreed = fetch(_API + '/api/fear-greed').then(function(r){return r.json()}).catch(function(){return null});
+  </script>
 </head>
 
 <body>

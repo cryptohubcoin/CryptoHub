@@ -22,20 +22,20 @@
     })();
   </script>
   <style id="anti-flash">
-    body { opacity: 0; }
+    body { opacity: 0; transition: opacity 0.15s; }
   </style>
   <script>
-    // CRITICAL: Don't show page until applyLang runs (prevents Arabic flash)
-    // script.js sets _langApplied=true after applyLang() completes
+    // CRITICAL: Don't show page until applyLang runs (prevents language flash)
+    // script.js sets _langApplied=true after applyLang() completes, then reveals body
     window._langApplied = false;
-    // Hard fallback: show after 500ms max if script.js hasn't loaded yet
+    // Hard fallback: show after 2.5s max if script.js is very slow
     setTimeout(function() {
       if (!window._langApplied) {
         if (document.body) document.body.style.opacity = '1';
         var af = document.getElementById('anti-flash');
         if (af) af.remove();
       }
-    }, 500);
+    }, 2500);
   </script>
   
   <!-- Google tag (gtag.js) - fully deferred after page load -->
@@ -2446,7 +2446,7 @@
 
 
   <!-- Linked Scripts -->
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 
 </html>

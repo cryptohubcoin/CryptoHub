@@ -6113,6 +6113,11 @@ function switchInfoTab(tab) {
     }
 
     async function showEx(cid, cn, cs, cl) {
+      // RESET: Clear previous coin data
+      exData = [];
+      exPage = 1;
+      if (window.exUpdTimer) { clearInterval(window.exUpdTimer); window.exUpdTimer = null; }
+      
       // Fallback: use COIN_NAMES for proper name if cn is just the symbol
       if ((!cn || cn === cs || cn.length <= 5) && COIN_NAMES[cs]) cn = COIN_NAMES[cs];
       // Fallback: use CMC image if logo is missing or broken
@@ -6361,6 +6366,22 @@ function switchInfoTab(tab) {
         if (p(bitgetR?.data?.[0]?.lastPr) > 0) addResult('bitget', 'Bitget', sym + '/USDT', p(bitgetR.data[0].lastPr), p(bitgetR.data[0].quoteVolume));
 
         // Non-BTC: real data only — no simulation
+        // Validate: remove results where price is wildly different from coin price (wrong coin data)
+        if (sym !== 'BTC' && cd) {
+          const coinPrice = cd.pr || 0;
+          if (coinPrice > 0) {
+            // Remove entries where price differs by more than 50% from the coin's known price
+            for (let i = results.length - 1; i >= 0; i--) {
+              const r = results[i];
+              if (r.pr > 0 && coinPrice > 0) {
+                const diff = Math.abs(r.pr - coinPrice) / coinPrice;
+                if (diff > 0.5) {
+                  results.splice(i, 1);
+                }
+              }
+            }
+          }
+        }
 
         // ── STEP 3 final: for BTC, ensure ALL BTC_IDS are in results ──
         if (sym === 'BTC') {
@@ -6466,10 +6487,31 @@ function switchInfoTab(tab) {
       const m = $('exMod');
       if (!m) return;
       m.classList.remove('active');
+      // Clear timer
+      if (window.exUpdTimer) { clearInterval(window.exUpdTimer); window.exUpdTimer = null; }
+      // Reset all modal data to prevent stale data on next open
+      exData = [];
+      exPage = 1;
       requestAnimationFrame(() => {
         document.documentElement.style.overflow = '';
         document.body.style.overflow = '';
-        if (window.exUpdTimer) clearInterval(window.exUpdTimer);
+        // Clear modal content
+        if ($('mName')) $('mName').textContent = '';
+        if ($('mSym')) $('mSym').textContent = '';
+        if ($('mRank')) $('mRank').textContent = '';
+        if ($('cdPrice')) $('cdPrice').textContent = '';
+        if ($('cdChg')) $('cdChg').textContent = '';
+        if ($('cdMcap')) $('cdMcap').textContent = '--';
+        if ($('cdVol')) $('cdVol').textContent = '--';
+        if ($('cdVM')) $('cdVM').textContent = '--';
+        if ($('exLst')) $('exLst').innerHTML = '';
+        if ($('exCt')) $('exCt').textContent = '0';
+        if ($('exTotVol')) $('exTotVol').textContent = '';
+        if ($('exPagination')) $('exPagination').innerHTML = '';
+        if ($('cdLinks')) $('cdLinks').innerHTML = '';
+        if ($('cdPerfWrap')) $('cdPerfWrap').style.display = 'none';
+        if ($('cdAthWrap')) $('cdAthWrap').style.display = 'none';
+        document.body.style.overflow = '';
       });
     }
     function openSrch() {

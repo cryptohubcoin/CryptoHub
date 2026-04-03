@@ -6207,7 +6207,7 @@ function switchInfoTab(tab) {
             exData.forEach(r => {
               const v = (Math.random() * 10 - 5) / 10000;
               r.pr = r.pr > 0 ? r.pr * (1 + v) : liveCoin.pr * (1 + v);
-              if (!r.isSim && r.vol > 0) r.vol = r.vol * (1 + (Math.random() * 4 - 2) / 1000);
+              if (r.vol > 0) r.vol = r.vol * (1 + (Math.random() * 4 - 2) / 1000);
             });
             const totalVol = exData.reduce((s, r) => s + (r.vol > 0 ? r.vol : 0), 0);
             $('exTotVol').innerHTML = totalVol > 0 ? `💰 Total Volume: <b>$${fN(totalVol)}</b>` : '';
@@ -6248,9 +6248,6 @@ function switchInfoTab(tab) {
     }
 
     async function loadExchangesForCoin(cid, cn, cs) {
-      // BTC exchange IDs (184 centralized exchanges)
-      const BTC_IDS = ["binance", "gate", "gdax", "bybit_spot", "okex", "kraken", "bitget", "mxc", "kucoin", "crypto_com", "bullish_com", "bingx", "huobi", "bitfinex", "bitstamp", "hashkey_exchange", "gemini", "cex", "backpack_exchange", "bitmart", "coinw", "lbank", "coinstore", "tapbit", "weex", "toobit", "digifinex", "ourbit", "whitebit", "hibt", "upbit", "phemex", "bitunix", "bitrue", "cryptology", "coinex", "nonkyc_io", "levex", "bitbank", "coinspro", "bitcointry_exchange", "valr", "bybit-eu", "deribit_spot", "bitso", "binance_us", "luno", "indodax", "bitlo", "hashkey-global", "gate_us", "pionex", "biconomy", "xt", "kcex", "orangex", "hotcoin_global", "p2pb2b", "bitvenus_spot", "bitmax", "blofin_spot", "bitdelta", "bitcastle", "zoomex", "bithumb", "bitvavo", "bydfi", "bitbaby-exchange", "dextrade", "aivora-exchange", "hyperliquid-spot", "bitkan", "cointr", "btse", "bitflyer", "exmo", "pointpay", "ondo_global_markets", "korbit", "bitopro", "max_maicoin", "foxbit", "huobi_japan", "bitpanda", "earnbit", "wootrade", "nami_exchange", "young-platform", "inx_one", "coinup", "azbit", "grovex", "bigone", "trubit", "latoken", "deepcoin", "qmall", "bitcoin_com", "humidifi", "bitci", "project-x", "native", "subnet-tokens", "supernova-cl", "gmo_japan", "okcoin-japan", "figure_markets", "cetus", "bitstorage", "near-intents", "bluefin", "bitazza", "itbit", "hyperion", "bittime", "grxswap", "independent_reserve", "aster-spot", "coin_metro", "btcmarkets", "lighter-spot", "byte-exchange", "mercado_bitcoin", "byreal", "first-ledger", "native-bsc", "momentum", "o2", "lcx", "magma-finance", "sodex", "hydrex-integral", "etherex", "kumbaya", "honeypop-dex", "nest", "coinzoom", "kinesis_money", "native-base", "emirex", "sailfish", "metalx", "capricorn-monad", "dswap", "fastex", "fullsail-finance", "minswap", "cryptal", "w-dex-polygon", "delta_spot", "dnax", "nbx", "bitmex_spot", "inex", "miaswap", "zkswap-finance", "gt3", "cube", "gliquid", "zkswap-finance-stableswap", "websea", "poloniex", "difx", "bit2me", "coinone", "paribu", "coincheck", "bilaxy", "icrypex", "koinpark", "tokpie", "xbo_com", "merchant-moe-liquidity-book-mantle", "toko_crypto", "kanga", "novadax", "turbos-finance", "sologenic", "coinjar", "vvs", "gopax", "cypher", "bitzy", "valiant", "prism-megaeth", "lithos", "atlantis-monad", "wazirx", "hata", "saucerswap", "paymium", "kayen", "tiktokfun", "nostra", "etherex-legacy", "tigris", "yuzu", "kongswap", "dooar-polygon", "xflows", "beam-swap", "mute", "zkswap-finance", "ruji-trade", "bex", "meridian", "balanced_network", "10kswap-starknet-alpha", "upheaval-finance", "pools-finance", "jaine", "dyorswap-x-layer", "everyswap", "arbswap_arbitrum_one", "sonex", "invariant_eclipse", "melegaswap", "story-hunt", "fluxion", "zuno", "obsidian-finance", "dragonswap", "machinex", "winnieswap", "alcor", "dooar_bsc", "apertureswap", "eddyfinance", "steam-exchange-rails-network", "inkyswap", "thirdfy", "rooster-protocol", "comet-swap", "ubeswap", "sega", "chainex"];
-
       try {
         const sym = cs.toUpperCase();
         const results = [];
@@ -6258,9 +6255,9 @@ function switchInfoTab(tab) {
         const nameMap = new Map();
         const normN = n => n.toLowerCase().replace(/[\s\-.]+/g, '');
 
-        function addResult(eid, name, pair, pr, vol, isSim) {
+        function addResult(eid, name, pair, pr, vol) {
           const parts = pair.split('/');
-          const cleanedPair = parts.length === 2 ? cleanPair(parts[0], parts[1], sym) : sym + '/USDT';
+          const cleanedPair = parts.length === 2 ? cleanPair(parts[0], parts[1], sym) : pair;
           const nn = normN(name);
           const dupIdx = eidMap.has(eid) ? eidMap.get(eid) : (nameMap.has(nn) ? nameMap.get(nn) : -1);
           if (dupIdx >= 0) {
@@ -6268,44 +6265,20 @@ function switchInfoTab(tab) {
             return;
           }
           const idx = results.length;
-          results.push({ n: name, eid, pair: cleanedPair, pr: pr || 0, vol: vol || 0, isSim: !!isSim });
+          results.push({ n: name, eid, pair: cleanedPair, pr: pr || 0, vol: vol || 0 });
           eidMap.set(eid, idx);
           nameMap.set(nn, idx);
         }
 
-        // ── STEP 1: For BTC, pre-fill ALL exchanges immediately (before any API calls) ──
-        if (sym === 'BTC') {
-          const btcCoin = allC.find(c => c.sy === 'BTC' || c.id === 'bitcoin');
-          // Get price from multiple sources
-          const bp = btcCoin?.pr || parseFloat($('cdPrice')?.textContent?.replace(/[^0-9.]/g, '')) || 83000;
-          const bv = btcCoin?.vol || 14000000000;
-          console.log('[BTC] Pre-filling', BTC_IDS.length, 'exchanges, base price:', bp);
-          BTC_IDS.forEach(eid => {
-            const dbEx = EX_DB.find(e => e.id === eid);
-            if (!dbEx) return;
-            const hash = dbEx.n.split('').reduce((a, ch) => a + ch.charCodeAt(0), 0);
-            const pr = bp > 0 ? bp * (1 + (hash % 20 - 10) / 10000) : bp || 83000;
-            const vol = bv * Math.pow(dbEx.t / 10, 2.2) * 0.032 * ((hash % 40 + 80) / 100);
-            const idx = results.length;
-            results.push({ n: dbEx.n, eid, pair: 'BTC/USDT', pr, vol, isSim: true });
-            eidMap.set(eid, idx);
-            nameMap.set(normN(dbEx.n), idx);
-          });
-          // Render immediately so user sees all exchanges right away
-          const tmpFinal = [...results].sort((a, b) => b.vol - a.vol);
-          exData = tmpFinal; exPage = 1;
-          $('exCt').textContent = tmpFinal.length;
-          renderExLst();
-        }
+        // ── Detect stablecoins (they need different API query pairs) ──
+        const STABLES = ['USDT','USDC','DAI','TUSD','BUSD','FDUSD','PYUSD','USDP','GUSD','FRAX','LUSD','USDD','CRVUSD','GHO','SUSD','EURC'];
+        const isStable = STABLES.includes(sym);
 
-        // ── STEP 2: Fetch from CMC (via proxy) + direct APIs ──
+        // ── STEP 1: Fetch from CMC (covers most exchanges accurately) ──
         const slug = cid.toLowerCase();
         const coinObj = allC.find(c => c.id === cid);
-
-        // Extract CMC numeric ID from image URL
         const cmcId = coinObj?.img ? (coinObj.img.match(/\/coins\/64x64\/(\d+)\.png/)?.[1] || '') : '';
 
-        // Fetch CMC market pairs (most reliable — covers all exchanges)
         let cmcMarkets = null;
         if (cmcId) {
           const cmcUrl = `https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?id=${cmcId}&start=1&limit=100&category=spot&centerType=all&sort=cmc_rank_advanced&direction=desc&spotUntracked=true`;
@@ -6323,7 +6296,7 @@ function switchInfoTab(tab) {
           });
         }
 
-        // Also try CoinGecko + CoinCap as backup
+        // ── STEP 2: CoinGecko + CoinCap as backup ──
         const [ccR, cgR] = await Promise.all([
           fetchJSON(`https://api.coincap.io/v2/assets/${slug}/markets?limit=200`).catch(() => null),
           fetchJSON(`https://api.coingecko.com/api/v3/coins/${slug}/tickers?depth=false&order=volume_desc&per_page=100`).catch(() => null)
@@ -6340,92 +6313,40 @@ function switchInfoTab(tab) {
           ccR.data.forEach(m => addResult(mapEid(m.exchangeId), m.exchangeId, m.baseSymbol + '/' + m.quoteSymbol, parseFloat(m.priceUsd) || 0, parseFloat(m.volumeUsd24Hr) || 0));
         }
 
-        // Direct exchange APIs — only adds if coin exists (returns valid price)
+        // ── STEP 3: Direct exchange APIs (real data only) ──
         const p = v => parseFloat(v) || 0;
-        const STABLECOINS = ['USDT', 'USDC', 'DAI', 'TUSD', 'BUSD', 'FDUSD', 'PYUSD', 'USDP', 'GUSD', 'FRAX', 'LUSD', 'USDD', 'CRVUSD', 'GHO', 'SUSD', 'EURC'];
-        const isStable = STABLECOINS.includes(sym);
 
         if (isStable) {
-          // ── Stablecoin-specific exchange queries ──
-          // For USDT: query BTC/USDT, ETH/USDT (reverse-map to show exchange lists USDT)
-          // For USDC: query USDC/USDT + BTC/USDC pairs
-          // For others: query {SYM}/USDT pairs
-          const stableQuotes = sym === 'USDT'
-            ? [{ q: 'BUSD', binSym: 'BUSDUSDT' }, { q: 'TUSD', binSym: 'TUSDUSDT' }]
-            : [{ q: 'USDT', binSym: `${sym}USDT` }];
-          // Also query popular base pairs where this stablecoin is the quote
-          const stableBasePairs = sym === 'USDT'
-            ? ['BTC', 'ETH', 'BNB', 'SOL', 'XRP', 'DOGE', 'ADA', 'AVAX', 'DOT', 'LINK', 'MATIC', 'UNI', 'SHIB', 'LTC', 'TRX']
-            : sym === 'USDC'
-              ? ['BTC', 'ETH', 'SOL', 'XRP', 'DOGE', 'ADA', 'AVAX', 'LINK', 'DOT', 'LTC']
-              : ['BTC', 'ETH', 'SOL'];
+          // For stablecoins: query the right pairs
+          // USDT → can't query USDTUSDT, so query BTC/USDT to prove exchange supports it
+          // USDC → query USDC/USDT (exists on most exchanges)
+          // Others → query {SYM}/USDT
+          const qSym = sym === 'USDT' ? 'BTC' : sym;
+          const qQuote = sym === 'USDT' ? 'USDT' : 'USDT';
+          const pairLabel = sym === 'USDT' ? 'BTC/USDT' : sym + '/USDT';
 
-          // Fetch reverse pairs (where stablecoin is quote) from Binance to prove exchange lists it
-          const stableFetches = stableBasePairs.slice(0, 8).map(base =>
-            fetchJSON(`https://api.binance.com/api/v3/ticker/24hr?symbol=${base}${sym}`).catch(() => null)
-          );
-          // Also fetch direct pair if not USDT (e.g., USDC/USDT)
-          const directFetches = sym !== 'USDT' ? [
-            fetchJSON(`https://api.binance.com/api/v3/ticker/24hr?symbol=${sym}USDT`).catch(() => null),
-            fetchJSON(`https://api.mexc.com/api/v3/ticker/24hr?symbol=${sym}USDT`).catch(() => null),
-            fetchJSON(`https://api.gateio.ws/api/v4/spot/tickers?currency_pair=${sym}_USDT`).catch(() => null),
-            fetchJSON(`https://api.bybit.com/v5/market/tickers?category=spot&symbol=${sym}USDT`).catch(() => null),
-            fetchJSON(`https://www.okx.com/api/v5/market/ticker?instId=${sym}-USDT`).catch(() => null),
-            fetchJSON(`https://api.kucoin.com/api/v1/market/stats?symbol=${sym}-USDT`).catch(() => null),
-            fetchJSON(`https://api.bitget.com/api/v2/spot/market/tickers?symbol=${sym}USDT`).catch(() => null)
-          ] : [];
-
-          const [stableResults, directResults] = await Promise.all([
-            Promise.all(stableFetches),
-            Promise.all(directFetches)
+          const [binR, mexR, gateR, bybitR, okxR, kucoinR, bitgetR] = await Promise.all([
+            fetchJSON(`https://api.binance.com/api/v3/ticker/24hr?symbol=${qSym}${qQuote}`).catch(() => null),
+            fetchJSON(`https://api.mexc.com/api/v3/ticker/24hr?symbol=${qSym}${qQuote}`).catch(() => null),
+            fetchJSON(`https://api.gateio.ws/api/v4/spot/tickers?currency_pair=${qSym}_${qQuote}`).catch(() => null),
+            fetchJSON(`https://api.bybit.com/v5/market/tickers?category=spot&symbol=${qSym}${qQuote}`).catch(() => null),
+            fetchJSON(`https://www.okx.com/api/v5/market/ticker?instId=${qSym}-${qQuote}`).catch(() => null),
+            fetchJSON(`https://api.kucoin.com/api/v1/market/stats?symbol=${qSym}-${qQuote}`).catch(() => null),
+            fetchJSON(`https://api.bitget.com/api/v2/spot/market/tickers?symbol=${qSym}${qQuote}`).catch(() => null)
           ]);
 
-          // Process reverse pairs — each valid result proves that exchange lists this stablecoin
-          let binanceHasIt = false;
-          stableResults.forEach((r, i) => {
-            if (r && p(r.lastPrice) > 0 && p(r.quoteVolume) > 0) {
-              binanceHasIt = true;
-            }
-          });
-          // If Binance has any pair with this stablecoin, add it
-          if (binanceHasIt) {
-            // Sum up total volume across all pairs for this stablecoin on Binance
-            let totalBinVol = 0;
-            stableResults.forEach(r => { if (r && p(r.quoteVolume) > 0) totalBinVol += p(r.quoteVolume); });
-            addResult('binance', 'Binance', sym === 'USDT' ? 'BTC/USDT' : sym + '/USDT', 1, totalBinVol);
-          }
-
-          // Process direct pairs for non-USDT stablecoins
-          if (sym !== 'USDT' && directResults.length >= 7) {
-            const [dBin, dMex, dGate, dBybit, dOkx, dKucoin, dBitget] = directResults;
-            if (p(dBin?.lastPrice) > 0) addResult('binance', 'Binance', sym + '/USDT', p(dBin.lastPrice), p(dBin.quoteVolume));
-            if (p(dMex?.lastPrice) > 0) addResult('mxc', 'MEXC', sym + '/USDT', p(dMex.lastPrice), p(dMex.quoteVolume));
-            if (p(dGate?.[0]?.last) > 0) addResult('gate', 'Gate.io', sym + '/USDT', p(dGate[0].last), p(dGate[0].quote_volume));
-            if (p(dBybit?.result?.list?.[0]?.lastPrice) > 0) addResult('bybit_spot', 'Bybit', sym + '/USDT', p(dBybit.result.list[0].lastPrice), p(dBybit.result.list[0].turnover24h));
-            if (p(dOkx?.data?.[0]?.last) > 0) { const o = dOkx.data[0]; addResult('okex', 'OKX', sym + '/USDT', p(o.last), p(o.volCcy24h)); }
-            if (p(dKucoin?.data?.last) > 0) addResult('kucoin', 'KuCoin', sym + '/USDT', p(dKucoin.data.last), p(dKucoin.data.volValue));
-            if (p(dBitget?.data?.[0]?.lastPr) > 0) addResult('bitget', 'Bitget', sym + '/USDT', p(dBitget.data[0].lastPr), p(dBitget.data[0].quoteVolume));
-          }
-
-          // For USDT specifically: also fetch from other exchanges using reverse pairs
-          if (sym === 'USDT') {
-            const [mexBtc, gateBtc, bybitBtc, okxBtc, kucoinBtc, bitgetBtc] = await Promise.all([
-              fetchJSON(`https://api.mexc.com/api/v3/ticker/24hr?symbol=BTCUSDT`).catch(() => null),
-              fetchJSON(`https://api.gateio.ws/api/v4/spot/tickers?currency_pair=BTC_USDT`).catch(() => null),
-              fetchJSON(`https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT`).catch(() => null),
-              fetchJSON(`https://www.okx.com/api/v5/market/ticker?instId=BTC-USDT`).catch(() => null),
-              fetchJSON(`https://api.kucoin.com/api/v1/market/stats?symbol=BTC-USDT`).catch(() => null),
-              fetchJSON(`https://api.bitget.com/api/v2/spot/market/tickers?symbol=BTCUSDT`).catch(() => null)
-            ]);
-            if (p(mexBtc?.lastPrice) > 0) addResult('mxc', 'MEXC', 'BTC/USDT', p(mexBtc.lastPrice), p(mexBtc.quoteVolume));
-            if (p(gateBtc?.[0]?.last) > 0) addResult('gate', 'Gate.io', 'BTC/USDT', p(gateBtc[0].last), p(gateBtc[0].quote_volume));
-            if (p(bybitBtc?.result?.list?.[0]?.lastPrice) > 0) addResult('bybit_spot', 'Bybit', 'BTC/USDT', p(bybitBtc.result.list[0].lastPrice), p(bybitBtc.result.list[0].turnover24h));
-            if (p(okxBtc?.data?.[0]?.last) > 0) { const o = okxBtc.data[0]; addResult('okex', 'OKX', 'BTC/USDT', p(o.last), p(o.volCcy24h)); }
-            if (p(kucoinBtc?.data?.last) > 0) addResult('kucoin', 'KuCoin', 'BTC/USDT', p(kucoinBtc.data.last), p(kucoinBtc.data.volValue));
-            if (p(bitgetBtc?.data?.[0]?.lastPr) > 0) addResult('bitget', 'Bitget', 'BTC/USDT', p(bitgetBtc.data[0].lastPr), p(bitgetBtc.data[0].quoteVolume));
-          }
+          // For USDT: the price shown is the BTC price (proves the exchange has USDT pairs)
+          // Volume = the USDT volume on that pair
+          const stPr = isStable ? 1 : 0;
+          if (p(binR?.lastPrice) > 0) addResult('binance', 'Binance', pairLabel, stPr || p(binR.lastPrice), p(binR.quoteVolume));
+          if (p(mexR?.lastPrice) > 0) addResult('mxc', 'MEXC', pairLabel, stPr || p(mexR.lastPrice), p(mexR.quoteVolume));
+          if (p(gateR?.[0]?.last) > 0) addResult('gate', 'Gate.io', pairLabel, stPr || p(gateR[0].last), p(gateR[0].quote_volume));
+          if (p(bybitR?.result?.list?.[0]?.lastPrice) > 0) addResult('bybit_spot', 'Bybit', pairLabel, stPr || p(bybitR.result.list[0].lastPrice), p(bybitR.result.list[0].turnover24h));
+          if (p(okxR?.data?.[0]?.last) > 0) { const o = okxR.data[0]; addResult('okex', 'OKX', pairLabel, stPr || p(o.last), p(o.volCcy24h)); }
+          if (p(kucoinR?.data?.last) > 0) addResult('kucoin', 'KuCoin', pairLabel, stPr || p(kucoinR.data.last), p(kucoinR.data.volValue));
+          if (p(bitgetR?.data?.[0]?.lastPr) > 0) addResult('bitget', 'Bitget', pairLabel, stPr || p(bitgetR.data[0].lastPr), p(bitgetR.data[0].quoteVolume));
         } else {
-          // ── Normal (non-stablecoin) exchange queries ──
+          // Normal coins: query {SYM}/USDT as before
           const [binR, mexR, gateR, bybitR, okxR, kucoinR, bitgetR] = await Promise.all([
             fetchJSON(`https://api.binance.com/api/v3/ticker/24hr?symbol=${sym}USDT`).catch(() => null),
             fetchJSON(`https://api.mexc.com/api/v3/ticker/24hr?symbol=${sym}USDT`).catch(() => null),
@@ -6445,33 +6366,12 @@ function switchInfoTab(tab) {
           if (p(bitgetR?.data?.[0]?.lastPr) > 0) addResult('bitget', 'Bitget', sym + '/USDT', p(bitgetR.data[0].lastPr), p(bitgetR.data[0].quoteVolume));
         }
 
-        // Non-BTC: real data only — no simulation
-
-        // ── STEP 3 final: for BTC, ensure ALL BTC_IDS are in results ──
-        if (sym === 'BTC') {
-          const btcCoin = allC.find(c => c.sy === 'BTC' || c.id === 'bitcoin');
-          const bp = btcCoin?.pr || parseFloat($('cdPrice')?.textContent?.replace(/[^0-9.]/g, '')) || 83000;
-          const bv = btcCoin?.vol || 14000000000;
-          BTC_IDS.forEach(eid => {
-            if (eidMap.has(eid)) return; // already in results (real or estimated)
-            const dbEx = EX_DB.find(e => e.id === eid);
-            if (!dbEx) return;
-            const hash = dbEx.n.split('').reduce((a, ch) => a + ch.charCodeAt(0), 0);
-            const pr = bp * (1 + (hash % 20 - 10) / 10000);
-            const vol = bv * Math.pow(dbEx.t / 10, 2.2) * 0.032 * ((hash % 40 + 80) / 100);
-            const idx = results.length;
-            results.push({ n: dbEx.n, eid, pair: 'BTC/USDT', pr, vol, isSim: true });
-            eidMap.set(eid, idx);
-          });
-        }
-
-        const realData = results.filter(r => !r.isSim && r.vol > 0).sort((a, b) => b.vol - a.vol);
-        const simData = results.filter(r => r.isSim && r.vol > 0).sort((a, b) => b.vol - a.vol);
-        const final = [...realData, ...simData];
-        const totalVol = final.reduce((s, r) => s + (r.vol > 0 ? r.vol : 0), 0);
+        // ── FINAL: Sort by volume, show real data only ──
+        const final = results.filter(r => r.vol > 0).sort((a, b) => b.vol - a.vol);
+        const totalVol = final.reduce((s, r) => s + r.vol, 0);
 
         exData = final; exPage = 1;
-        console.log('[CryptoHub] exchanges loaded:', final.length, '| real:', realData.length, '| estimated:', simData.length, '| coin:', cid);
+        console.log('[CryptoHub] exchanges loaded:', final.length, '| coin:', cid);
         $('exCt').textContent = final.length;
         $('exTotVol').innerHTML = totalVol > 0 ? `💰 Total Volume: <b>$${fN(totalVol)}</b>` : '';
 

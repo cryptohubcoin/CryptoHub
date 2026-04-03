@@ -7658,7 +7658,7 @@ function switchInfoTab(tab) {
       if ($('mPdP')) $('mPdP').innerHTML = f2(_mt.pd) + oz; flash('mPdCard', _mtPrev.pd, _mt.pd);
       if (_mt.pdChg !== 0) fChg(_mt.pdChg, $('mPdC')); else if (_mt.pd > 0 && $('mPdC')) $('mPdC').innerHTML = '<span style="color:var(--ac)">Live \u2713</span>';
       if (_mt.g > 0 && _mt.pd > 0 && $('mPdHL')) $('mPdHL').textContent = 'Au/Pd ' + (_mt.g / _mt.pd).toFixed(2);
-      if (_mt.lastUpd) { const ts = new Date(_mt.lastUpd).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });['mGT', 'mST', 'mPtT', 'mPdT'].forEach(id => { if ($(id)) $(id).textContent = ts }) }
+      if (_mt.lastUpd) { const ts = new Date(_mt.lastUpd).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });['mGT', 'mST', 'mPtT', 'mPdT'].forEach(id => { if ($(id)) $(id).textContent = ts }) }
       _updMtlExPrices();
     }
 
@@ -10327,7 +10327,7 @@ function switchInfoTab(tab) {
       // Add log entry
       _addLog(type, msg) {
         const now = new Date();
-        const ts = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const ts = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         this._log.unshift({ type, msg, ts });
         if (this._log.length > this._maxLog) this._log.length = this._maxLog;
         this._renderLog();

@@ -20,7 +20,7 @@ document.addEventListener('contextmenu', e => e.preventDefault());
       var aiInput = document.getElementById('aiChatInput');
 
       function setAIDirDynamic() {
-        var lang = document.documentElement.lang || document.body.lang || navigator.language || 'ar';
+        var lang = document.documentElement.lang || document.body.lang || navigator.language || 'en';
         lang = lang.toLowerCase();
 
         if (lang.startsWith('ar') || lang.startsWith('fa')) {

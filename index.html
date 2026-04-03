@@ -25,26 +25,17 @@
     body { opacity: 0; }
   </style>
   <script>
-    // CRITICAL: This must stay inline — reveals page before script.js loads
+    // CRITICAL: Don't show page until applyLang runs (prevents Arabic flash)
+    // script.js sets _langApplied=true after applyLang() completes
     window._langApplied = false;
-    if (localStorage.getItem('lang')) {
-      document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(function() {
-          if (!window._langApplied) {
-            if (document.body) document.body.style.opacity = '1';
-            var af = document.getElementById('anti-flash');
-            if (af) af.remove();
-          }
-        }, 50);
-      });
-    }
+    // Hard fallback: show after 500ms max if script.js hasn't loaded yet
     setTimeout(function() {
       if (!window._langApplied) {
         if (document.body) document.body.style.opacity = '1';
         var af = document.getElementById('anti-flash');
         if (af) af.remove();
       }
-    }, 150);
+    }, 500);
   </script>
   
   <!-- Google tag (gtag.js) - fully deferred after page load -->

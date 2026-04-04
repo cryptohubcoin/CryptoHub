@@ -2452,7 +2452,12 @@
 
       .cd-st {
         font-size: 10px !important;
-        padding: 5px 0 !important;
+        padding: 6px 8px !important;
+      }
+
+      .cd-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 4px !important
       }
     }
 
@@ -5744,33 +5749,41 @@
     }
 
     .cd-stats {
-      display: flex;
-      flex-direction: column
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 4px
     }
 
     .cd-st {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 7px 0;
-      border-bottom: 1px solid var(--bc);
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--bg2);
       font-size: 12px;
       user-select: none;
       -webkit-user-select: none;
+      border: 1px solid var(--bc)
     }
 
     .cd-st:last-child {
-      border: none
+      border: 1px solid var(--bc)
     }
 
     .cd-st span:first-child {
       color: var(--t2);
-      font-weight: 500
+      font-weight: 500;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .4px
     }
 
     .cd-st span:last-child {
       font-weight: 700;
-      color: var(--t1)
+      color: var(--t1);
+      font-size: 13px
     }
 
     .cd-right {
@@ -5839,7 +5852,15 @@
     }
 
     .ec-row td {
+      border-bottom: 1px solid var(--bc) !important;
+    }
+
+    .ec-row:last-child td {
       border-bottom: none !important;
+    }
+
+    .ec-row:hover td {
+      background: var(--bg2);
     }
 
     .cd-tbl-wrap::-webkit-scrollbar {
@@ -6071,8 +6092,13 @@
       }
 
       .cd-st {
-        padding: 7px 0 !important;
+        padding: 8px 10px !important;
         font-size: 11px !important
+      }
+
+      .cd-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 6px !important
       }
 
       .cd-lnk {

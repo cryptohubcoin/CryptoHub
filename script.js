@@ -1995,9 +1995,6 @@ function switchInfoTab(tab) {
       const tvl = allC.reduce((s, c) => s + (parseFloat(c.vol) || 0), 0);
       const btc = allC.find(c => c.sy === 'BTC');
       const eth = allC.find(c => c.sy === 'ETH');
-      // Cryptos count
-      h.push(`<span class="cmc-item"><svg viewBox="0 0 24 24" fill="none" stroke="var(--ac)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Cryptos: <span class="cmc-val">${allC.length.toLocaleString()}</span></span>`);
-      h.push('<span class="cmc-sep"></span>');
       // Market Cap + 24h change
       const mcChg = btc ? btc.c24 : 0;
       h.push(`<span class="cmc-item"><svg viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>${t('totalMarketCap')}: <span class="cmc-val">${fN(tmc)}</span> ${chg(mcChg)}</span>`);

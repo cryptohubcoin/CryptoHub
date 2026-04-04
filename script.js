@@ -315,7 +315,7 @@ function switchInfoTab(tab) {
       console.log('[NetTokens] Total', tokens.length, 'tokens for', netId);
     }
 
-    let cLang = (function() { try { var s = localStorage.getItem('lang'); return (s && s !== '') ? s : 'en'; } catch(e) { return 'en'; } })(), allC = [], filtC = [], cPage = 1, iPP = 75,
+    let cLang = (function() { try { var s = localStorage.getItem('lang'); return (s && s !== '') ? s : 'en'; } catch(e) { return 'en'; } })(), allC = [], filtC = [], cPage = 1, iPP = 100,
       cSort = 'rank', sortDir = 'asc', cNet = 'all', bWs = null, uInt = null, isL = false, cBatch = 0, maxB = 40,
       exData = [], exPage = 1, exIPP = 10;
     /* iPP: always 50 */
@@ -7136,7 +7136,7 @@ function switchInfoTab(tab) {
 <td class="text-end pr-4 col-vol" style="color:var(--t2);font-size:12px;font-weight:500;white-space:nowrap">${fN(parseFloat(c.vol) || 0)}</td>
 </tr>`;
       }).join('');
-      rPages(); $('sRange').textContent = `${st + 1} - ${Math.min(en, filtC.length)} `; $('tCoins').textContent = filtC.length.toLocaleString();
+      rPages();
       // Release height reservation after first real data render (CLS fix)
       const tc = $('tab_crypto'); if (tc && filtC.length > 5 && !tc.classList.contains('data-loaded')) tc.classList.add('data-loaded');
     }
@@ -10923,7 +10923,7 @@ function switchInfoTab(tab) {
             // Throttle AI polling by simulating idle time
             _aiLastAct = 0;
             // Reduce render batch size if not already minimal
-            if (iPP > 50) { iPP = 75; if (cPage === 1) render(); }
+            if (iPP > 100) { iPP = 100; if (cPage === 1) render(); }
           }
         });
         pObs.observe({ entryTypes: ['longtask'] });

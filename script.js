@@ -317,7 +317,7 @@ function switchInfoTab(tab) {
 
     let cLang = (function() { try { var s = localStorage.getItem('lang'); return (s && s !== '') ? s : 'en'; } catch(e) { return 'en'; } })(), allC = [], filtC = [], cPage = 1, iPP = 100,
       cSort = 'rank', sortDir = 'asc', cNet = 'all', bWs = null, uInt = null, isL = false, cBatch = 0, maxB = 40,
-      exData = [], exPage = 1, exIPP = 15;
+      exData = [], exPage = 1, exIPP = 10;
     /* iPP: always 50 */
     // Clear old truncated cache (v2 upgrade)
     try { const ov = sessionStorage.getItem('cryptohub_v'); if (ov !== '14') { sessionStorage.removeItem('cryptohub_coins'); sessionStorage.removeItem('ch_fallback'); sessionStorage.setItem('cryptohub_v', '14') } } catch (e) { }
@@ -6462,19 +6462,23 @@ function switchInfoTab(tab) {
 
       $('exLst').innerHTML = pg.map((ex, i) => {
         const db = _exDbIdx.get(ex.eid) || _exDbIdx.get(ex.eid.replace(/_spot|_exchange/g, '')) || null;
-        const logo = db ? db.l : `https://www.google.com/s2/favicons?domain=${ex.n.toLowerCase().replace(/[\s.]+/g, '')}.com&sz=32`;
+        const logo = db ? db.l : `https://www.google.com/s2/favicons?domain=${ex.n.toLowerCase().replace(/[\s.]+/g, '')}.com&sz=64`;
+        const fallbackLogo = `https://www.google.com/s2/favicons?domain=${ex.n.toLowerCase().replace(/[\s.()]+/g, '')}.com&sz=64`;
         const url = db ? db.u.replace(/{s}/g, sym).replace(/{sl}/g, sym.toLowerCase()) : '#';
         const volPct = totalVol > 0 && ex.vol > 0 ? ((ex.vol / totalVol) * 100) : 0;
-        const priceDisp = ex.pr > 0 ? (ex.pr >= 1 ? ex.pr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : parseFloat(ex.pr.toFixed(8))) : '--';
-        const volDisp = ex.vol > 0 ? '$' + fN(ex.vol) : (ex.vol < 0 ? 'Available' : '--');
+        const priceDisp = ex.pr > 0 ? (ex.pr >= 1 ? '$' + ex.pr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '$' + parseFloat(ex.pr.toFixed(8))) : '--';
+        const volDisp = ex.vol > 0 ? '$' + fN(ex.vol) : '--';
         const indexNum = st + i + 1;
+        const esc = ex.n.replace(/'/g, "\\'");
+        const letterFallback = `this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${ex.n.charAt(0).toUpperCase()}',style:'display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;background:var(--bg3);color:var(--t2);font-size:12px;font-weight:600;flex-shrink:0'}))`;
+        const logoFallback = logo === fallbackLogo ? letterFallback : `this.onerror=function(){${letterFallback}};this.src='${fallbackLogo}'`;
 
         return `<tr class="ec-row">
-          <td class="px-3 py-0.5"><div class="flex items-center gap-2"><span class="text-t2 text-xs font-bold w-4">${indexNum}</span><img alt="icon" src="${logo}" class="w-5 h-5 rounded" width="20" height="20" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${ex.n.charAt(0).toUpperCase()}',style:'display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:4px;background:var(--bg3);color:var(--t2);font-size:11px;font-weight:600;flex-shrink:0'}))"><span class="font-semibold text-sm">${ex.n}</span></div></td>
-          <td class="px-3 py-0.5"><a href="${url}" target="_blank" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px"><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3)">${ex.pair}</span><i class="fas fa-external-link-alt" style="font-size:9px;color:var(--ac);opacity:.7"></i></a></td>
-          <td class="px-3 py-0.5 text-end font-bold text-ac">${priceDisp !== '--' ? '$' + priceDisp : '--'}</td>
-          <td class="px-3 py-0.5 text-end"><div class="font-bold text-sm">${volDisp}</div></td>
-          <td class="px-3 py-0.5 text-end text-sm text-t2">${volPct > 0 ? volPct.toFixed(2) + '%' : '--'}</td>
+          <td class="px-3 py-2.5"><div class="flex items-center gap-2.5"><span class="text-t2 text-xs font-bold" style="width:18px">${indexNum}</span><img alt="" src="${logo}" style="width:24px;height:24px;border-radius:6px;flex-shrink:0" loading="lazy" onerror="${logoFallback}"><span class="font-semibold" style="font-size:14px">${ex.n}</span></div></td>
+          <td class="px-3 py-2.5"><a href="${url}" target="_blank" style="text-decoration:none;display:inline-flex;align-items:center;gap:5px"><span style="background:var(--bg3);padding:3px 8px;border-radius:5px;font-size:12px;font-weight:500">${ex.pair}</span><i class="fas fa-external-link-alt" style="font-size:9px;color:var(--ac);opacity:.7"></i></a></td>
+          <td class="px-3 py-2.5 text-end font-bold" style="font-size:14px;color:var(--ac)">${priceDisp}</td>
+          <td class="px-3 py-2.5 text-end font-bold" style="font-size:14px">${volDisp}</td>
+          <td class="px-3 py-2.5 text-end" style="font-size:14px;color:var(--t2)">${volPct > 0 ? volPct.toFixed(2) + '%' : '--'}</td>
         </tr>`;
       }).join('');
       renderExPages();
@@ -7394,7 +7398,7 @@ function switchInfoTab(tab) {
             <td class="text-start py-4" style="padding:12px 16px;">
                 <div class="flex items-center gap-3">
                     <div style="width:36px;height:36px;border-radius:10px;overflow:hidden;flex-shrink:0;background:var(--bg3);border:1px solid var(--bc);display:flex;align-items:center;justify-content:center;">
-                      <img alt="icon" loading="lazy" src="${ex.l}" style="width:28px;height:28px;object-fit:contain;border-radius:6px;" onerror="this.onerror=null;this.parentElement.innerHTML='<span style=\\'font-weight:700;font-size:13px;color:var(--ac)\\'>${encodeURIComponent(ex.n[0])}</span>'" alt="${ex.n}">
+                      <img alt="icon" loading="lazy" src="${ex.l}" style="width:28px;height:28px;object-fit:contain;border-radius:6px;" onerror="this.onerror=function(){this.onerror=null;this.parentElement.innerHTML='<span style=\\'font-weight:700;font-size:13px;color:var(--ac)\\'>${encodeURIComponent(ex.n[0])}</span>'};this.src='https://www.google.com/s2/favicons?domain=${ex.n.toLowerCase().replace(/[\s.()]+/g, '')}.com&sz=64'" alt="${ex.n}">
                     </div>
                     <div>
                       <div style="font-weight:700;font-size:14px;color:var(--t1);">${ex.n}</div>

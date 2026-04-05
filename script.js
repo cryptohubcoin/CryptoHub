@@ -6191,8 +6191,8 @@ function switchInfoTab(tab) {
       // Trigger Smart Fetch for missing data
       fetchCoinDetails(cd);
 
-      // Trigger Exchange Fetch
-      loadExchangesForCoin(cid, cn, cs);
+      // Trigger Exchange Fetch — pass cd.cmc_id directly for reliability
+      loadExchangesForCoin(cid, cn, cs, cd?.cmc_id || null);
 
       // Real-time updates disabled — prices stay stable from API data
       if (window.exUpdTimer) { clearInterval(window.exUpdTimer); }
@@ -6228,7 +6228,7 @@ function switchInfoTab(tab) {
       return b + '/' + q;
     }
 
-    async function loadExchangesForCoin(cid, cn, cs) {
+    async function loadExchangesForCoin(cid, cn, cs, directCmcId) {
       // BTC exchange IDs (184 centralized exchanges)
       const BTC_IDS = ["binance", "gate", "gdax", "bybit_spot", "okex", "kraken", "bitget", "mxc", "kucoin", "crypto_com", "bullish_com", "bingx", "huobi", "bitfinex", "bitstamp", "hashkey_exchange", "gemini", "cex", "backpack_exchange", "bitmart", "coinw", "lbank", "coinstore", "tapbit", "weex", "toobit", "digifinex", "ourbit", "whitebit", "hibt", "upbit", "phemex", "bitunix", "bitrue", "cryptology", "coinex", "nonkyc_io", "levex", "bitbank", "coinspro", "bitcointry_exchange", "valr", "bybit-eu", "deribit_spot", "bitso", "binance_us", "luno", "indodax", "bitlo", "hashkey-global", "gate_us", "pionex", "biconomy", "xt", "kcex", "orangex", "hotcoin_global", "p2pb2b", "bitvenus_spot", "bitmax", "blofin_spot", "bitdelta", "bitcastle", "zoomex", "bithumb", "bitvavo", "bydfi", "bitbaby-exchange", "dextrade", "aivora-exchange", "hyperliquid-spot", "bitkan", "cointr", "btse", "bitflyer", "exmo", "pointpay", "ondo_global_markets", "korbit", "bitopro", "max_maicoin", "foxbit", "huobi_japan", "bitpanda", "earnbit", "wootrade", "nami_exchange", "young-platform", "inx_one", "coinup", "azbit", "grovex", "bigone", "trubit", "latoken", "deepcoin", "qmall", "bitcoin_com", "humidifi", "bitci", "project-x", "native", "subnet-tokens", "supernova-cl", "gmo_japan", "okcoin-japan", "figure_markets", "cetus", "bitstorage", "near-intents", "bluefin", "bitazza", "itbit", "hyperion", "bittime", "grxswap", "independent_reserve", "aster-spot", "coin_metro", "btcmarkets", "lighter-spot", "byte-exchange", "mercado_bitcoin", "byreal", "first-ledger", "native-bsc", "momentum", "o2", "lcx", "magma-finance", "sodex", "hydrex-integral", "etherex", "kumbaya", "honeypop-dex", "nest", "coinzoom", "kinesis_money", "native-base", "emirex", "sailfish", "metalx", "capricorn-monad", "dswap", "fastex", "fullsail-finance", "minswap", "cryptal", "w-dex-polygon", "delta_spot", "dnax", "nbx", "bitmex_spot", "inex", "miaswap", "zkswap-finance", "gt3", "cube", "gliquid", "zkswap-finance-stableswap", "websea", "poloniex", "difx", "bit2me", "coinone", "paribu", "coincheck", "bilaxy", "icrypex", "koinpark", "tokpie", "xbo_com", "merchant-moe-liquidity-book-mantle", "toko_crypto", "kanga", "novadax", "turbos-finance", "sologenic", "coinjar", "vvs", "gopax", "cypher", "bitzy", "valiant", "prism-megaeth", "lithos", "atlantis-monad", "wazirx", "hata", "saucerswap", "paymium", "kayen", "tiktokfun", "nostra", "etherex-legacy", "tigris", "yuzu", "kongswap", "dooar-polygon", "xflows", "beam-swap", "mute", "zkswap-finance", "ruji-trade", "bex", "meridian", "balanced_network", "10kswap-starknet-alpha", "upheaval-finance", "pools-finance", "jaine", "dyorswap-x-layer", "everyswap", "arbswap_arbitrum_one", "sonex", "invariant_eclipse", "melegaswap", "story-hunt", "fluxion", "zuno", "obsidian-finance", "dragonswap", "machinex", "winnieswap", "alcor", "dooar_bsc", "apertureswap", "eddyfinance", "steam-exchange-rails-network", "inkyswap", "thirdfy", "rooster-protocol", "comet-swap", "ubeswap", "sega", "chainex"];
 
@@ -6256,9 +6256,14 @@ function switchInfoTab(tab) {
 
         // ── All sources fetched in parallel for maximum speed ──
         const slug = cid.toLowerCase();
-        const coinObj = allC.find(c => c.id === cid);
-        const cmcId = coinObj?.img ? (coinObj.img.match(/\/coins\/64x64\/(\d+)\.png/)?.[1] || '') : '';
+        const coinObj = allC.find(c => c.id === cid) || allC.find(c => c.sy.toUpperCase() === cs.toUpperCase());
+        // Cascading cmcId resolution: direct param → coin property → image URL → CMC_IDS map
+        let cmcId = directCmcId ? String(directCmcId) : '';
+        if (!cmcId && coinObj?.cmc_id) cmcId = String(coinObj.cmc_id);
+        if (!cmcId && coinObj?.img) cmcId = coinObj.img.match(/\/coins\/64x64\/(\d+)\.png/)?.[1] || '';
+        if (!cmcId && typeof CMC_IDS !== 'undefined' && CMC_IDS[cs.toUpperCase()]) cmcId = String(CMC_IDS[cs.toUpperCase()]);
         const p = v => parseFloat(v) || 0;
+        if (!cmcId) console.warn('[CryptoHub] No CMC ID for', cid, cs, '— exchange coverage will be limited');
 
         // ── Fix slugs for different APIs ──
         // CoinGecko uses "avalanche-2", "matic-network" — other APIs use different formats
@@ -6270,7 +6275,7 @@ function switchInfoTab(tab) {
         const fetchProxyMarkets = async () => {
           if (!cmcId) return null;
           try {
-            const proxyUrl = 'https://exchange-tickers.bitcoinswapnet.workers.dev/api/markets?id=' + cmcId;
+            const proxyUrl = 'https://exchange-tickers.bitcoinswapnet.workers.dev/api/markets?id=' + cmcId + '&slug=' + encodeURIComponent(slug);
             const r = await Promise.race([fetch(proxyUrl), _tout(12000)]);
             if (r.ok) return await r.json();
           } catch (e) { console.log('[CryptoHub] Proxy worker failed:', e.message); }
@@ -6410,6 +6415,25 @@ function switchInfoTab(tab) {
         // HTX (Huobi)
         if (p(htxU?.tick?.close) > 0) addResult('huobi', 'HTX', sym + '/USDT', p(htxU.tick.close), p(htxU.tick.vol) * p(htxU.tick.close));
 
+        // ── Fix 3: If proxy returned weak results (<5 exchanges), try CORS CMC fallback ──
+        if (results.length < 5 && cmcId) {
+          console.log('[CryptoHub] Low coverage (' + results.length + ' exchanges), trying CORS fallback for cmcId=' + cmcId);
+          const cmcUrl = `https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?id=${cmcId}&start=1&limit=500&category=spot&centerType=all&sort=volume_24h_strict&direction=desc&spotUntracked=true`;
+          const corsData = await fetchCMC(cmcUrl).catch(() => null);
+          if (corsData?.data?.marketPairs) {
+            corsData.data.marketPairs.forEach(mp => {
+              const exName = mp.exchangeName || '';
+              if (!_isSpotEx(exName)) return;
+              const eid = mapEid(exName.toLowerCase().replace(/[\s.]+/g, '_'));
+              const pr = parseFloat(mp.price) || 0;
+              const vol = _saneVol(parseFloat(mp.volumeUsd) || 0);
+              const pair = (mp.baseSymbol || sym) + '/' + (mp.quoteSymbol || 'USDT');
+              if (pr > 0) addResult(eid, exName, pair, pr, vol);
+            });
+            console.log('[CryptoHub] CORS fallback added, now ' + results.length + ' exchanges');
+          }
+        }
+
         // Only real exchange data from APIs — no simulation for any coin
 
         // ── Trusted Exchange Tiers (CMC free API doesn't include trust scores) ──
@@ -6430,7 +6454,7 @@ function switchInfoTab(tab) {
         const totalVol = final.filter(r => r._t > 0).reduce((s, r) => s + r.vol, 0) || final.reduce((s, r) => s + r.vol, 0);
 
         exData = final; exPage = 1;
-        console.log('[CryptoHub] exchanges loaded:', final.length, '| coin:', cid);
+        console.log('[CryptoHub] exchanges loaded:', final.length, '| coin:', cid, '| cmcId:', cmcId, '| sources: CMC=' + (cmcMarkets?.data?.marketPairs?.length || 0) + ' CoinCap=' + (ccR?.data?.length || 0) + ' Paprika=' + (Array.isArray(papR) ? papR.length : 0) + ' Direct=8');
         $('exCt').textContent = final.length;
         $('exTotVol').innerHTML = totalVol > 0 ? `💰 Total Volume: <b>$${fN(totalVol)}</b>` : '';
 
@@ -6593,7 +6617,8 @@ function switchInfoTab(tab) {
 
     function gsGetCoinData(sy) {
       const pool = allC.length > 10 ? allC : INSTANT_COINS;
-      return pool.find(c => c.sy.toUpperCase() === sy.toUpperCase());
+      const q = sy.toUpperCase();
+      return pool.find(c => c.sy.toUpperCase() === q) || pool.find(c => c.nm.toUpperCase() === q) || pool.find(c => c.nm.toLowerCase().includes(sy.toLowerCase()));
     }
 
     function gsFmtPrice(pr) {
@@ -6625,10 +6650,11 @@ function switchInfoTab(tab) {
         <div class="gs-chips">
           ${hist.map(q => {
           const coin = gsGetCoinData(q);
+          const displayName = coin ? coin.nm : q;
           const imgHtml = coin ? `<img src="${coin.img}" onerror="this.style.display='none'" width="20" height="20" style="border-radius:50%">` : `<i class="fas fa-history" style="font-size:12px;color:var(--t2)"></i>`;
           return `<div class="gs-chip" onclick="document.getElementById('gsModalInput').value='${q.replace(/'/g, "\\'")}';gsLiveSearch('${q.replace(/'/g, "\\'")}')">
               ${imgHtml}
-              <span>${q}</span>
+              <span>${displayName}</span>
               <button class="gs-chip-del" onclick="event.stopPropagation();deleteSrchHistoryItem('${q.replace(/'/g, "\\'")}')" title="${t('deleteItem')}"><i class="fas fa-times"></i></button>
             </div>`;
         }).join('')}

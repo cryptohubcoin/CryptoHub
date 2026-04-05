@@ -317,7 +317,7 @@ function switchInfoTab(tab) {
 
     let cLang = (function() { try { var s = localStorage.getItem('lang'); return (s && s !== '') ? s : 'en'; } catch(e) { return 'en'; } })(), allC = [], filtC = [], cPage = 1, iPP = 100,
       cSort = 'rank', sortDir = 'asc', cNet = 'all', bWs = null, uInt = null, isL = false, cBatch = 0, maxB = 40,
-      exData = [], exPage = 1, exIPP = 10;
+      exData = [], exPage = 1, exIPP = 15;
     /* iPP: always 50 */
     // Clear old truncated cache (v2 upgrade)
     try { const ov = sessionStorage.getItem('cryptohub_v'); if (ov !== '14') { sessionStorage.removeItem('cryptohub_coins'); sessionStorage.removeItem('ch_fallback'); sessionStorage.setItem('cryptohub_v', '14') } } catch (e) { }
@@ -6194,24 +6194,8 @@ function switchInfoTab(tab) {
       // Trigger Exchange Fetch
       loadExchangesForCoin(cid, cn, cs);
 
-      // Real-time Ex List updates
+      // Real-time updates disabled — prices stay stable from API data
       if (window.exUpdTimer) { clearInterval(window.exUpdTimer); }
-      window.exUpdTimer = setInterval(() => {
-        if (!$('exMod').classList.contains('active')) { clearInterval(window.exUpdTimer); return; }
-        if (typeof exData !== 'undefined' && exData && exData.length > 0) {
-          const liveCoin = allC.find(c => c.id === cid);
-          if (liveCoin && liveCoin.pr > 0) {
-            exData.forEach(r => {
-              const v = (Math.random() * 10 - 5) / 10000;
-              r.pr = r.pr > 0 ? r.pr * (1 + v) : liveCoin.pr * (1 + v);
-              if (!r.isSim && r.vol > 0) r.vol = r.vol * (1 + (Math.random() * 4 - 2) / 1000);
-            });
-            const totalVol = exData.reduce((s, r) => s + (r.vol > 0 ? r.vol : 0), 0);
-            $('exTotVol').innerHTML = totalVol > 0 ? `💰 Total Volume: <b>$${fN(totalVol)}</b>` : '';
-            renderExLst();
-          }
-        }
-      }, 3000);
     }
 
     function _fillSup(circ, total, maxS, fdv, sym) {
@@ -6253,7 +6237,7 @@ function switchInfoTab(tab) {
         const results = [];
         const eidMap = new Map();
         const nameMap = new Map();
-        const normN = n => n.toLowerCase().replace(/[\s\-.]+/g, '');
+        const normN = n => n.toLowerCase().replace(/[\s\-.()\[\]]+/g, '').replace(/spot|exchange/g, '');
 
         function addResult(eid, name, pair, pr, vol, isSim) {
           const parts = pair.split('/');
@@ -6265,125 +6249,188 @@ function switchInfoTab(tab) {
             return;
           }
           const idx = results.length;
-          results.push({ n: name, eid, pair: cleanedPair, pr: pr || 0, vol: vol || 0, isSim: !!isSim });
+          results.push({ n: name.replace(/\s*\(Spot\)/i, ''), eid, pair: cleanedPair, pr: pr || 0, vol: vol || 0, isSim: !!isSim });
           eidMap.set(eid, idx);
           nameMap.set(nn, idx);
         }
 
-        // ── STEP 1: For BTC, pre-fill ALL exchanges immediately (before any API calls) ──
-        if (sym === 'BTC') {
-          const btcCoin = allC.find(c => c.sy === 'BTC' || c.id === 'bitcoin');
-          // Get price from multiple sources
-          const bp = btcCoin?.pr || parseFloat($('cdPrice')?.textContent?.replace(/[^0-9.]/g, '')) || 83000;
-          const bv = btcCoin?.vol || 14000000000;
-          console.log('[BTC] Pre-filling', BTC_IDS.length, 'exchanges, base price:', bp);
-          BTC_IDS.forEach(eid => {
-            const dbEx = EX_DB.find(e => e.id === eid);
-            if (!dbEx) return;
-            const hash = dbEx.n.split('').reduce((a, ch) => a + ch.charCodeAt(0), 0);
-            const pr = bp > 0 ? bp * (1 + (hash % 20 - 10) / 10000) : bp || 83000;
-            const vol = bv * Math.pow(dbEx.t / 10, 2.2) * 0.032 * ((hash % 40 + 80) / 100);
-            const idx = results.length;
-            results.push({ n: dbEx.n, eid, pair: 'BTC/USDT', pr, vol, isSim: true });
-            eidMap.set(eid, idx);
-            nameMap.set(normN(dbEx.n), idx);
-          });
-          // Render immediately so user sees all exchanges right away
-          const tmpFinal = [...results].sort((a, b) => b.vol - a.vol);
-          exData = tmpFinal; exPage = 1;
-          $('exCt').textContent = tmpFinal.length;
-          renderExLst();
-        }
-
-        // ── STEP 2: Fetch from CMC (via proxy) + direct APIs ──
+        // ── All sources fetched in parallel for maximum speed ──
         const slug = cid.toLowerCase();
         const coinObj = allC.find(c => c.id === cid);
-
-        // Extract CMC numeric ID from image URL
         const cmcId = coinObj?.img ? (coinObj.img.match(/\/coins\/64x64\/(\d+)\.png/)?.[1] || '') : '';
+        const p = v => parseFloat(v) || 0;
 
-        // Fetch CMC market pairs (most reliable — covers all exchanges)
-        let cmcMarkets = null;
-        if (cmcId) {
-          const cmcUrl = `https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?id=${cmcId}&start=1&limit=100&category=spot&centerType=all&sort=cmc_rank_advanced&direction=desc&spotUntracked=true`;
-          cmcMarkets = await fetchCMC(cmcUrl).catch(() => null);
-        }
+        // ── Fix slugs for different APIs ──
+        // CoinGecko uses "avalanche-2", "matic-network" — other APIs use different formats
+        const ccSlug = slug.replace(/-\d+$/, ''); // CoinCap: strip trailing -N → "avalanche"
+        const coinName = (coinObj?.nm || cn || '').toLowerCase().replace(/[\s]+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const papSlug = (coinObj?.sy || cs).toLowerCase() + '-' + coinName.replace(/-\d+$/, ''); // CoinPaprika: "avax-avalanche"
+
+        // ── SOURCE A: CMC via Proxy Worker (primary — most comprehensive) ──
+        const fetchProxyMarkets = async () => {
+          if (!cmcId) return null;
+          try {
+            const proxyUrl = 'https://exchange-tickers.bitcoinswapnet.workers.dev/api/markets?id=' + cmcId;
+            const r = await Promise.race([fetch(proxyUrl), _tout(12000)]);
+            if (r.ok) return await r.json();
+          } catch (e) { console.log('[CryptoHub] Proxy worker failed:', e.message); }
+          // Fallback: try slug-based lookup
+          try {
+            const proxyUrl2 = 'https://exchange-tickers.bitcoinswapnet.workers.dev/api/markets?slug=' + slug;
+            const r2 = await Promise.race([fetch(proxyUrl2), _tout(8000)]);
+            if (r2.ok) return await r2.json();
+          } catch (e) { }
+          // Last resort: CORS proxies to CMC direct
+          const cmcUrl = `https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?id=${cmcId}&start=1&limit=500&category=spot&centerType=all&sort=volume_24h_strict&direction=desc&spotUntracked=true`;
+          return fetchCMC(cmcUrl).catch(() => null);
+        };
+
+        // ── SOURCE B: Aggregator APIs (CoinCap + CoinPaprika) ──
+        const fetchAggregators = () => Promise.all([
+          // CoinCap: try cleaned slug, then original, then by symbol search
+          fetchJSON(`https://api.coincap.io/v2/assets/${ccSlug}/markets?limit=500`).catch(() =>
+            fetchJSON(`https://api.coincap.io/v2/assets/${slug}/markets?limit=500`).catch(() => null)
+          ),
+          // CoinPaprika: get markets directly
+          fetchJSON(`https://api.coinpaprika.com/v1/coins/${papSlug}/markets?quotes=USD`, 8000).catch(() =>
+            fetchJSON(`https://api.coinpaprika.com/v1/coins/${(coinObj?.sy || cs).toLowerCase() + '-' + ccSlug}/markets?quotes=USD`, 8000).catch(() => null)
+          )
+        ]);
+
+        // ── SOURCE C: Direct Exchange APIs (USDT + BTC + ETH pairs) ──
+        const fetchDirectAPIs = () => Promise.all([
+          // Binance — 3 pairs
+          fetchJSON(`https://api.binance.com/api/v3/ticker/24hr?symbol=${sym}USDT`).catch(() => null),
+          fetchJSON(`https://api.binance.com/api/v3/ticker/24hr?symbol=${sym}BTC`).catch(() => null),
+          fetchJSON(`https://api.binance.com/api/v3/ticker/24hr?symbol=${sym}ETH`).catch(() => null),
+          // MEXC — 2 pairs
+          fetchJSON(`https://api.mexc.com/api/v3/ticker/24hr?symbol=${sym}USDT`).catch(() => null),
+          fetchJSON(`https://api.mexc.com/api/v3/ticker/24hr?symbol=${sym}BTC`).catch(() => null),
+          // Gate.io — 2 pairs
+          fetchJSON(`https://api.gateio.ws/api/v4/spot/tickers?currency_pair=${sym}_USDT`).catch(() => null),
+          fetchJSON(`https://api.gateio.ws/api/v4/spot/tickers?currency_pair=${sym}_BTC`).catch(() => null),
+          // Bybit — 2 pairs
+          fetchJSON(`https://api.bybit.com/v5/market/tickers?category=spot&symbol=${sym}USDT`).catch(() => null),
+          fetchJSON(`https://api.bybit.com/v5/market/tickers?category=spot&symbol=${sym}BTC`).catch(() => null),
+          // OKX — 2 pairs
+          fetchJSON(`https://www.okx.com/api/v5/market/ticker?instId=${sym}-USDT`).catch(() => null),
+          fetchJSON(`https://www.okx.com/api/v5/market/ticker?instId=${sym}-BTC`).catch(() => null),
+          // KuCoin — 2 pairs
+          fetchJSON(`https://api.kucoin.com/api/v1/market/stats?symbol=${sym}-USDT`).catch(() => null),
+          fetchJSON(`https://api.kucoin.com/api/v1/market/stats?symbol=${sym}-BTC`).catch(() => null),
+          // Bitget — 2 pairs
+          fetchJSON(`https://api.bitget.com/api/v2/spot/market/tickers?symbol=${sym}USDT`).catch(() => null),
+          fetchJSON(`https://api.bitget.com/api/v2/spot/market/tickers?symbol=${sym}BTC`).catch(() => null),
+          // HTX (Huobi) — 1 pair
+          fetchJSON(`https://api.huobi.pro/market/detail/merged?symbol=${sym.toLowerCase()}usdt`).catch(() => null)
+        ]);
+
+        // ── FIRE ALL 3 SOURCES IN PARALLEL ──
+        const [cmcMarkets, [ccR, papR], directResults] = await Promise.all([
+          fetchProxyMarkets(),
+          fetchAggregators(),
+          fetchDirectAPIs()
+        ]);
+
+        // ── PROCESS SOURCE A: CMC Market Pairs ──
+        // Filter: derivatives/futures keywords to exclude
+        const _derivKW = /futures|derivative|perp|swap|margin|leverag|perpetual/i;
+        const _isSpotEx = name => !_derivKW.test(name);
+        // Volume sanity cap: no single exchange can have more than $200B/day realistically
+        const _volCap = 200000000000;
+        const _saneVol = v => (v > 0 && v < _volCap) ? v : (v >= _volCap ? 0 : v);
 
         if (cmcMarkets?.data?.marketPairs) {
           cmcMarkets.data.marketPairs.forEach(mp => {
             const exName = mp.exchangeName || '';
+            if (!_isSpotEx(exName)) return; // Skip derivatives
             const eid = mapEid(exName.toLowerCase().replace(/[\s.]+/g, '_'));
             const pr = parseFloat(mp.price) || 0;
-            const vol = parseFloat(mp.volumeUsd) || 0;
+            const vol = _saneVol(parseFloat(mp.volumeUsd) || 0);
             const pair = (mp.baseSymbol || sym) + '/' + (mp.quoteSymbol || 'USDT');
             if (pr > 0) addResult(eid, exName, pair, pr, vol);
           });
         }
 
-        // Also try CoinGecko + CoinCap as backup
-        const [ccR, cgR] = await Promise.all([
-          fetchJSON(`https://api.coincap.io/v2/assets/${slug}/markets?limit=200`).catch(() => null),
-          fetchJSON(`https://api.coingecko.com/api/v3/coins/${slug}/tickers?depth=false&order=volume_desc&per_page=100`).catch(() => null)
-        ]);
-
-        if (cgR?.tickers) {
-          cgR.tickers.forEach(tk => {
-            const eid = mapEid(tk.market?.identifier || '');
-            if (!eid) return;
-            addResult(eid, tk.market?.name || eid, tk.base + '/' + tk.target, tk.converted_last?.usd || 0, tk.converted_volume?.usd || 0);
-          });
-        }
+        // ── PROCESS SOURCE B1: CoinCap ──
         if (ccR?.data) {
-          ccR.data.forEach(m => addResult(mapEid(m.exchangeId), m.exchangeId, m.baseSymbol + '/' + m.quoteSymbol, parseFloat(m.priceUsd) || 0, parseFloat(m.volumeUsd24Hr) || 0));
-        }
-
-        // Direct exchange APIs — only adds if coin exists (returns valid price)
-        const p = v => parseFloat(v) || 0;
-        const [binR, mexR, gateR, bybitR, okxR, kucoinR, bitgetR] = await Promise.all([
-          fetchJSON(`https://api.binance.com/api/v3/ticker/24hr?symbol=${sym}USDT`).catch(() => null),
-          fetchJSON(`https://api.mexc.com/api/v3/ticker/24hr?symbol=${sym}USDT`).catch(() => null),
-          fetchJSON(`https://api.gateio.ws/api/v4/spot/tickers?currency_pair=${sym}_USDT`).catch(() => null),
-          fetchJSON(`https://api.bybit.com/v5/market/tickers?category=spot&symbol=${sym}USDT`).catch(() => null),
-          fetchJSON(`https://www.okx.com/api/v5/market/ticker?instId=${sym}-USDT`).catch(() => null),
-          fetchJSON(`https://api.kucoin.com/api/v1/market/stats?symbol=${sym}-USDT`).catch(() => null),
-          fetchJSON(`https://api.bitget.com/api/v2/spot/market/tickers?symbol=${sym}USDT`).catch(() => null)
-        ]);
-
-        if (p(binR?.lastPrice) > 0) addResult('binance', 'Binance', sym + '/USDT', p(binR.lastPrice), p(binR.quoteVolume));
-        if (p(mexR?.lastPrice) > 0) addResult('mxc', 'MEXC', sym + '/USDT', p(mexR.lastPrice), p(mexR.quoteVolume));
-        if (p(gateR?.[0]?.last) > 0) addResult('gate', 'Gate.io', sym + '/USDT', p(gateR[0].last), p(gateR[0].quote_volume));
-        if (p(bybitR?.result?.list?.[0]?.lastPrice) > 0) addResult('bybit_spot', 'Bybit', sym + '/USDT', p(bybitR.result.list[0].lastPrice), p(bybitR.result.list[0].turnover24h));
-        if (p(okxR?.data?.[0]?.last) > 0) { const o = okxR.data[0]; addResult('okex', 'OKX', sym + '/USDT', p(o.last), p(o.volCcy24h)); }
-        if (p(kucoinR?.data?.last) > 0) addResult('kucoin', 'KuCoin', sym + '/USDT', p(kucoinR.data.last), p(kucoinR.data.volValue));
-        if (p(bitgetR?.data?.[0]?.lastPr) > 0) addResult('bitget', 'Bitget', sym + '/USDT', p(bitgetR.data[0].lastPr), p(bitgetR.data[0].quoteVolume));
-
-        // Non-BTC: real data only — no simulation
-
-        // ── STEP 3 final: for BTC, ensure ALL BTC_IDS are in results ──
-        if (sym === 'BTC') {
-          const btcCoin = allC.find(c => c.sy === 'BTC' || c.id === 'bitcoin');
-          const bp = btcCoin?.pr || parseFloat($('cdPrice')?.textContent?.replace(/[^0-9.]/g, '')) || 83000;
-          const bv = btcCoin?.vol || 14000000000;
-          BTC_IDS.forEach(eid => {
-            if (eidMap.has(eid)) return; // already in results (real or estimated)
-            const dbEx = EX_DB.find(e => e.id === eid);
-            if (!dbEx) return;
-            const hash = dbEx.n.split('').reduce((a, ch) => a + ch.charCodeAt(0), 0);
-            const pr = bp * (1 + (hash % 20 - 10) / 10000);
-            const vol = bv * Math.pow(dbEx.t / 10, 2.2) * 0.032 * ((hash % 40 + 80) / 100);
-            const idx = results.length;
-            results.push({ n: dbEx.n, eid, pair: 'BTC/USDT', pr, vol, isSim: true });
-            eidMap.set(eid, idx);
+          ccR.data.forEach(m => {
+            if (!_isSpotEx(m.exchangeId)) return;
+            addResult(mapEid(m.exchangeId), m.exchangeId, m.baseSymbol + '/' + m.quoteSymbol, parseFloat(m.priceUsd) || 0, _saneVol(parseFloat(m.volumeUsd24Hr) || 0));
           });
         }
 
-        const realData = results.filter(r => !r.isSim && r.vol > 0).sort((a, b) => b.vol - a.vol);
-        const simData = results.filter(r => r.isSim && r.vol > 0).sort((a, b) => b.vol - a.vol);
-        const final = [...realData, ...simData];
-        const totalVol = final.reduce((s, r) => s + (r.vol > 0 ? r.vol : 0), 0);
+        // ── PROCESS SOURCE B2: CoinPaprika (now fetched as markets array directly) ──
+        if (papR && Array.isArray(papR)) {
+          papR.forEach(m => {
+            if (!m.exchange_id || !m.pair) return;
+            if (!_isSpotEx(m.exchange_name || m.exchange_id)) return;
+            const eid = mapEid(m.exchange_id);
+            const exName = m.exchange_name || m.exchange_id;
+            const pr = parseFloat(m.quotes?.USD?.price) || 0;
+            const vol = _saneVol(parseFloat(m.quotes?.USD?.volume_24h) || 0);
+            if (pr > 0) addResult(eid, exName, m.pair.replace('-', '/'), pr, vol);
+          });
+        }
+
+        // ── PROCESS SOURCE C: Direct Exchange APIs ──
+        const [
+          binU, binB, binE,
+          mexU, mexB,
+          gateU, gateB,
+          bybitU, bybitB,
+          okxU, okxB,
+          kucoinU, kucoinB,
+          bitgetU, bitgetB,
+          htxU
+        ] = directResults;
+
+        // Binance
+        if (p(binU?.lastPrice) > 0) addResult('binance', 'Binance', sym + '/USDT', p(binU.lastPrice), p(binU.quoteVolume));
+        if (p(binB?.lastPrice) > 0) addResult('binance', 'Binance', sym + '/BTC', p(binB.lastPrice), p(binB.quoteVolume));
+        if (p(binE?.lastPrice) > 0) addResult('binance', 'Binance', sym + '/ETH', p(binE.lastPrice), p(binE.quoteVolume));
+        // MEXC
+        if (p(mexU?.lastPrice) > 0) addResult('mxc', 'MEXC', sym + '/USDT', p(mexU.lastPrice), p(mexU.quoteVolume));
+        if (p(mexB?.lastPrice) > 0) addResult('mxc', 'MEXC', sym + '/BTC', p(mexB.lastPrice), p(mexB.quoteVolume));
+        // Gate.io
+        if (p(gateU?.[0]?.last) > 0) addResult('gate', 'Gate.io', sym + '/USDT', p(gateU[0].last), p(gateU[0].quote_volume));
+        if (p(gateB?.[0]?.last) > 0) addResult('gate', 'Gate.io', sym + '/BTC', p(gateB[0].last), p(gateB[0].quote_volume));
+        // Bybit
+        if (p(bybitU?.result?.list?.[0]?.lastPrice) > 0) addResult('bybit_spot', 'Bybit', sym + '/USDT', p(bybitU.result.list[0].lastPrice), p(bybitU.result.list[0].turnover24h));
+        if (p(bybitB?.result?.list?.[0]?.lastPrice) > 0) addResult('bybit_spot', 'Bybit', sym + '/BTC', p(bybitB.result.list[0].lastPrice), p(bybitB.result.list[0].turnover24h));
+        // OKX
+        if (p(okxU?.data?.[0]?.last) > 0) { const o = okxU.data[0]; addResult('okex', 'OKX', sym + '/USDT', p(o.last), p(o.volCcy24h)); }
+        if (p(okxB?.data?.[0]?.last) > 0) { const o = okxB.data[0]; addResult('okex', 'OKX', sym + '/BTC', p(o.last), p(o.volCcy24h)); }
+        // KuCoin
+        if (p(kucoinU?.data?.last) > 0) addResult('kucoin', 'KuCoin', sym + '/USDT', p(kucoinU.data.last), p(kucoinU.data.volValue));
+        if (p(kucoinB?.data?.last) > 0) addResult('kucoin', 'KuCoin', sym + '/BTC', p(kucoinB.data.last), p(kucoinB.data.volValue));
+        // Bitget
+        if (p(bitgetU?.data?.[0]?.lastPr) > 0) addResult('bitget', 'Bitget', sym + '/USDT', p(bitgetU.data[0].lastPr), p(bitgetU.data[0].quoteVolume));
+        if (p(bitgetB?.data?.[0]?.lastPr) > 0) addResult('bitget', 'Bitget', sym + '/BTC', p(bitgetB.data[0].lastPr), p(bitgetB.data[0].quoteVolume));
+        // HTX (Huobi)
+        if (p(htxU?.tick?.close) > 0) addResult('huobi', 'HTX', sym + '/USDT', p(htxU.tick.close), p(htxU.tick.vol) * p(htxU.tick.close));
+
+        // Only real exchange data from APIs — no simulation for any coin
+
+        // ── Trusted Exchange Tiers (CMC free API doesn't include trust scores) ──
+        const _tier1 = new Set(['binance','coinbase','gdax','bybit','bybit_spot','okex','okx','kraken','upbit','bitfinex','kucoin','gate','htx','huobi','mexc','mxc','bitget','crypto_com','bithumb','bitstamp','gemini']);
+        const _tier2 = new Set(['bitflyer','bitbank','bitvavo','luno','coinex','phemex','btse','whitebit','bitmart','bitrue','independent','btcmarkets','mercado','bitso','coinone','korbit','indodax','bitopro','valr','paribu','bitpanda','bullish_com','hashkey_exchange','hashkey-global','binance_us','gate_us','cex','backpack_exchange','coinw','lbank','digifinex','exmo','bingx','xt','pionex','bitkan','cointr','deribit_spot','bitlo','coinspro','bitcointry_exchange','bitcastle']);
+        const _getTier = eid => _tier1.has(eid) ? 2 : (_tier2.has(eid) ? 1 : 0);
+
+        // Volume sanity: cap at $100B/day per exchange (real max is Binance ~$20-40B)
+        const _maxRealVol = 100000000000;
+        const final = results
+          .map(r => ({ ...r, vol: (r.vol > _maxRealVol) ? 0 : r.vol, _t: _getTier(r.eid) }))
+          .filter(r => r.vol > 0 && _isSpotEx(r.n))
+          .sort((a, b) => {
+            if (a._t !== b._t) return b._t - a._t; // higher tier first
+            return b.vol - a.vol; // then by volume within same tier
+          });
+        // Total volume from trusted exchanges only (tier 1+2) for accurate Volume %
+        const totalVol = final.filter(r => r._t > 0).reduce((s, r) => s + r.vol, 0) || final.reduce((s, r) => s + r.vol, 0);
 
         exData = final; exPage = 1;
-        console.log('[CryptoHub] exchanges loaded:', final.length, '| real:', realData.length, '| estimated:', simData.length, '| coin:', cid);
+        console.log('[CryptoHub] exchanges loaded:', final.length, '| coin:', cid);
         $('exCt').textContent = final.length;
         $('exTotVol').innerHTML = totalVol > 0 ? `💰 Total Volume: <b>$${fN(totalVol)}</b>` : '';
 
@@ -6392,14 +6439,30 @@ function switchInfoTab(tab) {
       } catch (e) { console.error('loadExchangesForCoin err', e); $('exLst').innerHTML = `<tr><td colspan="7" class="text-center py-6">${t('errorLoading')}</td></tr>`; }
     }
 
+    // ── Pre-build EX_DB lookup map (handles aliases: okx→okex, htx→huobi, etc.) ──
+    const _exDbIdx = new Map();
+    EX_DB.forEach(e => _exDbIdx.set(e.id, e));
+    Object.entries(EX_ALIAS).forEach(([from, to]) => {
+      // If DB has 'okex' and alias 'okex'→'okx', also index under 'okx'
+      if (_exDbIdx.has(from) && !_exDbIdx.has(to)) _exDbIdx.set(to, _exDbIdx.get(from));
+      // If DB has 'huobi' and alias 'huobi'→'htx', also index under 'htx'
+      if (_exDbIdx.has(to) && !_exDbIdx.has(from)) _exDbIdx.set(from, _exDbIdx.get(to));
+    });
+    // Extra common aliases not in EX_ALIAS
+    [['bybit','bybit_spot'],['coinbase','gdax'],['okx','okex'],['htx','huobi'],['mexc','mxc']].forEach(([a,b]) => {
+      if (_exDbIdx.has(b) && !_exDbIdx.has(a)) _exDbIdx.set(a, _exDbIdx.get(b));
+      if (_exDbIdx.has(a) && !_exDbIdx.has(b)) _exDbIdx.set(b, _exDbIdx.get(a));
+    });
+
     function renderExLst() {
       const st = (exPage - 1) * exIPP, en = st + exIPP, pg = exData.slice(st, en);
-      const totalVol = exData.reduce((s, r) => s + (r.vol > 0 ? r.vol : 0), 0);
+      const trustedVol = exData.filter(r => r._t > 0).reduce((s, r) => s + r.vol, 0);
+      const totalVol = trustedVol || exData.reduce((s, r) => s + (r.vol > 0 ? r.vol : 0), 0);
       const sym = $('mSym').textContent;
 
       $('exLst').innerHTML = pg.map((ex, i) => {
-        const db = EX_DB.find(e => e.id === ex.eid || ex.eid.includes(e.id));
-        const logo = db ? db.l : `https://www.google.com/s2/favicons?domain=${ex.eid}.com&sz=32`;
+        const db = _exDbIdx.get(ex.eid) || _exDbIdx.get(ex.eid.replace(/_spot|_exchange/g, '')) || null;
+        const logo = db ? db.l : `https://www.google.com/s2/favicons?domain=${ex.n.toLowerCase().replace(/[\s.]+/g, '')}.com&sz=32`;
         const url = db ? db.u.replace(/{s}/g, sym).replace(/{sl}/g, sym.toLowerCase()) : '#';
         const volPct = totalVol > 0 && ex.vol > 0 ? ((ex.vol / totalVol) * 100) : 0;
         const priceDisp = ex.pr > 0 ? (ex.pr >= 1 ? ex.pr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : parseFloat(ex.pr.toFixed(8))) : '--';
@@ -6407,12 +6470,11 @@ function switchInfoTab(tab) {
         const indexNum = st + i + 1;
 
         return `<tr class="ec-row">
-          <td class="px-3 py-0.5"><div class="flex items-center gap-2"><span class="text-t2 text-xs font-bold w-4">${indexNum}</span><img alt="icon" src="${logo}" class="w-5 h-5 rounded" width="20" height="20" loading="lazy" onerror="this.style.display='none'"><span class="font-semibold text-sm">${ex.n}</span></div></td>
-          <td class="px-3 py-0.5"><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3)">${ex.pair}</span></td>
+          <td class="px-3 py-0.5"><div class="flex items-center gap-2"><span class="text-t2 text-xs font-bold w-4">${indexNum}</span><img alt="icon" src="${logo}" class="w-5 h-5 rounded" width="20" height="20" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${ex.n.charAt(0).toUpperCase()}',style:'display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:4px;background:var(--bg3);color:var(--t2);font-size:11px;font-weight:600;flex-shrink:0'}))"><span class="font-semibold text-sm">${ex.n}</span></div></td>
+          <td class="px-3 py-0.5"><a href="${url}" target="_blank" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px"><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3)">${ex.pair}</span><i class="fas fa-external-link-alt" style="font-size:9px;color:var(--ac);opacity:.7"></i></a></td>
           <td class="px-3 py-0.5 text-end font-bold text-ac">${priceDisp !== '--' ? '$' + priceDisp : '--'}</td>
-          <td class="px-3 py-0.5 text-end"><div class="font-semibold text-xs">${volDisp}</div></td>
-          <td class="px-3 py-0.5 text-end text-xs text-t2">${volPct > 0 ? volPct.toFixed(2) + '%' : '--'}</td>
-          <td class="px-3 py-0.5 text-center"><a href="${url}" target="_blank" class="ebtn">${t('visit')}</a></td>
+          <td class="px-3 py-0.5 text-end"><div class="font-bold text-sm">${volDisp}</div></td>
+          <td class="px-3 py-0.5 text-end text-sm text-t2">${volPct > 0 ? volPct.toFixed(2) + '%' : '--'}</td>
         </tr>`;
       }).join('');
       renderExPages();

@@ -1,9 +1,9 @@
-# ============================================
+# ==========================================
 # _redirects - Block suspicious/bot requests
 # Use 403 to reject (saves bandwidth vs 200 rewrite)
-# ============================================
+# ==========================================
 
-# WordPress probing (bots) — redirect to homepage (lightweight)
+# WordPress probing (bots) - redirect to homepage (lightweight)
 /wp-admin* / 301
 /wp-login* / 301
 /wp-content* / 301
@@ -27,3 +27,9 @@
 /install* / 301
 /setup* / 301
 /configuration* / 301
+
+# ==========================================
+# Redirect all traffic to main domain
+# ==========================================
+
+/*  https://cryptohubcoin.com/:splat  301

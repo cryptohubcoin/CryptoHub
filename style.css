@@ -6284,7 +6284,24 @@
     }
 
     .ct table {
-      min-width: 780px;
+      min-width: 1000px;
+    }
+
+    .cn-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    @media (min-width: 1200px) {
+      .cn-name { max-width: 220px; }
+    }
+
+    @media (min-width: 1400px) {
+      .cn-name { max-width: 300px; }
     }
 
     @media (max-width: 768px) {
@@ -6338,6 +6355,16 @@
       }
 
       .col-4h {
+        display: none !important;
+      }
+
+      .col-spark {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .col-spark {
         display: none !important;
       }
     }

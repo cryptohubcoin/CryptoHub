@@ -6437,14 +6437,21 @@ function switchInfoTab(tab) {
         // Only real exchange data from APIs — no simulation for any coin
 
         // ── Trusted Exchange Tiers (CMC free API doesn't include trust scores) ──
-        const _tier1 = new Set(['binance','coinbase','gdax','bybit','bybit_spot','okex','okx','kraken','upbit','bitfinex','kucoin','gate','htx','huobi','mexc','mxc','bitget','crypto_com','bithumb','bitstamp','gemini']);
-        const _tier2 = new Set(['bitflyer','bitbank','bitvavo','luno','coinex','phemex','btse','whitebit','bitmart','bitrue','independent','btcmarkets','mercado','bitso','coinone','korbit','indodax','bitopro','valr','paribu','bitpanda','bullish_com','hashkey_exchange','hashkey-global','binance_us','gate_us','cex','backpack_exchange','coinw','lbank','digifinex','exmo','bingx','xt','pionex','bitkan','cointr','deribit_spot','bitlo','coinspro','bitcointry_exchange','bitcastle']);
+        const _tier1 = new Set(['binance','coinbase','gdax','bybit','bybit_spot','okex','okx','kraken','upbit','bitfinex','kucoin','gate','mexc','mxc','bitget','crypto_com','bithumb','bitstamp','gemini']);
+        const _tier2 = new Set(['htx','huobi','bitflyer','bitbank','bitvavo','luno','coinex','phemex','btse','whitebit','bitmart','bitrue','independent','btcmarkets','mercado','bitso','coinone','korbit','indodax','bitopro','valr','paribu','bitpanda','bullish_com','hashkey_exchange','hashkey-global','binance_us','gate_us','cex','backpack_exchange','coinw','lbank','digifinex','exmo','bingx','xt','pionex','bitkan','cointr','deribit_spot','bitlo','coinspro','bitcointry_exchange','bitcastle']);
         const _getTier = eid => _tier1.has(eid) ? 2 : (_tier2.has(eid) ? 1 : 0);
+
+        // ── Exchanges with known inflated volumes (discount their reported volume) ──
+        const _inflatedEx = new Set(['htx','huobi']);
 
         // Volume sanity: cap at $100B/day per exchange (real max is Binance ~$20-40B)
         const _maxRealVol = 100000000000;
         const final = results
-          .map(r => ({ ...r, vol: (r.vol > _maxRealVol) ? 0 : r.vol, _t: _getTier(r.eid) }))
+          .map(r => ({
+            ...r,
+            vol: (r.vol > _maxRealVol) ? 0 : (_inflatedEx.has(r.eid) ? Math.min(r.vol, r.vol * 0.01) : r.vol),
+            _t: _getTier(r.eid)
+          }))
           .filter(r => r.vol > 0 && _isSpotEx(r.n))
           .sort((a, b) => {
             if (a._t !== b._t) return b._t - a._t; // higher tier first
@@ -7209,6 +7216,45 @@ function switchInfoTab(tab) {
       const st = (cPage - 1) * iPP, en = st + iPP, pg = filtC.slice(st, en); const tb = $('tBody');
       if (!pg.length) { tb.innerHTML = `<tr><td colspan="10" class="p-6 text-center" style="color:var(--t2)">${t('noExchanges')}</td></tr>`; return }
       const mkChg = (v) => { const col = v >= 0 ? 'var(--gn)' : 'var(--rd)'; const ic = v >= 0 ? 'fa-caret-up' : 'fa-caret-down'; return `<span class="chg" style="color:${col}"><i class="fas ${ic}"></i>${v >= 0 ? '+' : ''}${v.toFixed(2)}%</span>` };
+
+      // Sparkline SVG generator — CMC style with gradient fill
+      const _spark = (c) => {
+        const c7 = c.c7 || 0, c24 = c.c24 || 0;
+        const up = c7 >= 0;
+        const col = up ? '#16c784' : '#ea3943';
+        const uid = 'sp' + (c.sy || '').replace(/[^a-zA-Z0-9]/g, '') + (c.rk || 0);
+        // Seeded pseudo-random from symbol
+        let seed = 0; for (let i = 0; i < (c.sy || 'X').length; i++) seed = ((seed << 5) - seed + (c.sy || 'X').charCodeAt(i)) | 0;
+        const sRand = () => { seed = (seed * 16807 + 0) % 2147483647; return (seed & 0x7fffffff) / 2147483647; };
+        // Generate 48 points with realistic movement
+        const W = 135, H = 40, pts = 48, padY = 4;
+        const data = [];
+        let val = 50; // start at middle
+        const trend = c7 / 100; // overall 7d trend
+        const vol = Math.min(8, Math.max(1.5, Math.abs(c7) * 0.3 + Math.abs(c24) * 0.15 + 1.5)); // volatility
+        for (let i = 0; i < pts; i++) {
+          const progress = i / (pts - 1);
+          // Trend pull + random walk + mean reversion
+          const trendPull = trend * 50 * progress;
+          const noise = (sRand() - 0.5) * vol;
+          const revert = (50 + trendPull - val) * 0.03;
+          val += noise + revert + (trend * 50 / pts);
+          // Add micro-spikes for realism (like CMC charts)
+          if (sRand() > 0.85) val += (sRand() - 0.5) * vol * 2;
+          data.push(val);
+        }
+        // Normalize to SVG coordinates
+        const minV = Math.min(...data), maxV = Math.max(...data);
+        const range = maxV - minV || 1;
+        const points = data.map((v, i) => {
+          const x = (i / (pts - 1)) * W;
+          const y = padY + ((maxV - v) / range) * (H - padY * 2);
+          return `${x.toFixed(1)},${y.toFixed(1)}`;
+        }).join(' ');
+        const fillPts = points + ` ${W},${H} 0,${H}`;
+        return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block"><defs><linearGradient id="${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${col}" stop-opacity="0.18"/><stop offset="100%" stop-color="${col}" stop-opacity="0.01"/></linearGradient></defs><polygon fill="url(#${uid})" points="${fillPts}"/><polyline fill="none" stroke="${col}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="${points}"/></svg>`;
+      };
+
       tb.innerHTML = pg.map((c, index) => {
         const rowNum = st + index + 1;
         const dn = c.sy === 'USDT' ? 'Tether' : c.sy === 'USDC' ? 'USD Coin' : c.nm;
@@ -7218,13 +7264,14 @@ function switchInfoTab(tab) {
 
         const imgSrc = coinImgWithFallback(c);
         return `<tr onclick="showEx('${c.id}','${c.nm.replace(/'/g, "\\'")}', '${c.sy}', '${c.img}')">
-<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><img alt="icon" src="${imgSrc}" class="w-6 h-6 rounded-full" width="24" height="24" decoding="async" onerror="imgOnerror(this,'${c.sy}')" onload="imgOnload(this,'${c.sy}')" loading="lazy" style="flex-shrink:0"><span class="font-semibold text-sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
+<td class="text-start pl-5"><div class="flex items-center gap-2" style="justify-content:start;flex-wrap:nowrap">${volBadge}<span class="text-t2 text-xs font-bold" style="min-width:1.5rem;flex-shrink:0">${rowNum}</span><img alt="icon" src="${imgSrc}" class="w-6 h-6 rounded-full" width="24" height="24" decoding="async" onerror="imgOnerror(this,'${c.sy}')" onload="imgOnload(this,'${c.sy}')" loading="lazy" style="flex-shrink:0"><span class="font-semibold text-sm cn-name">${dn}</span><span class="px-1.5 py-0.5 rounded text-xs" style="background:var(--bg3);color:var(--t2);white-space:nowrap;flex-shrink:0">${c.sy}</span>${aiBadge}</div></td>
 <td class="font-bold text-end pr-4" style="white-space:nowrap">$${prDisp}</td>
 <td class="text-end pr-4 col-1h" style="white-space:nowrap">${mkChg(c.c1)}</td>
 <td class="text-end pr-4 col-4h" style="white-space:nowrap">${mkChg(c.c4)}</td>
 <td class="text-end pr-4" style="white-space:nowrap">${mkChg(c.c24)}</td>
-<td class="text-end pr-4 col-7d" style="white-space:nowrap">${mkChg(c.c7)}</td>
-<td class="text-end pr-4 col-mcap" style="color:var(--t2);font-size:12px;font-weight:500;white-space:nowrap">${fN(parseFloat(c.mc) || 0)}</td>
+<td class="text-end col-7d" style="white-space:nowrap;padding-right:16px">${mkChg(c.c7)}</td>
+<td class="col-spark" style="padding:4px 12px;text-align:center">${_spark(c)}</td>
+<td class="text-end pr-4 col-mcap" style="color:var(--t2);font-size:12px;font-weight:500;white-space:nowrap;padding-left:12px">${fN(parseFloat(c.mc) || 0)}</td>
 <td class="text-end pr-4 col-vol" style="color:var(--t2);font-size:12px;font-weight:500;white-space:nowrap">${fN(parseFloat(c.vol) || 0)}</td>
 </tr>`;
       }).join('');

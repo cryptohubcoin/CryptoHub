@@ -1096,10 +1096,10 @@
         </div>
 
         <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
-          <table class="w-full crypto-table" style="min-width:780px;table-layout:fixed">
+          <table class="w-full crypto-table" style="min-width:1000px;table-layout:fixed">
             <thead>
               <tr>
-                <th onclick="doSort('name')" id="th_name" class="text-start" style="width:180px"><span
+                <th onclick="doSort('name')" id="th_name" class="text-start" style="width:220px"><span
                     data-i18n="colName">الاسم</span>
                 </th>
                 <th onclick="doSort('price')" id="th_price" style="width:90px"><span data-i18n="colPrice">السعر</span>
@@ -1112,6 +1112,7 @@
                       class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
                 <th onclick="doSort('change_7d')" id="th_change_7d" class="col-7d" style="width:62px">7d% <span
                     class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
+                <th class="col-spark" style="width:150px;text-align:center">Last 7 Days</th>
                 <th onclick="doSort('market_cap')" id="th_market_cap" class="col-mcap" style="width:95px"><span
                     data-i18n="colMarketCap">القيمة السوقية</span> <span class="sort-icon"><i
                       class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
@@ -1129,6 +1130,7 @@
                 <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
                 <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
                 <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
               </tr>
@@ -1139,6 +1141,7 @@
                 <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
                 <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
                 <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
               </tr>
@@ -1149,6 +1152,7 @@
                 <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
                 <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
                 <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
               </tr>
@@ -1159,6 +1163,7 @@
                 <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
                 <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
                 <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
               </tr>
@@ -1169,6 +1174,7 @@
                 <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
                 <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
                 <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
               </tr>
@@ -1179,6 +1185,7 @@
                 <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
                 <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
                 <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
               </tr>
@@ -1189,6 +1196,7 @@
                 <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
                 <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
                 <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
               </tr>
@@ -1199,6 +1207,7 @@
                 <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
                 <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
                 <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
               </tr>
@@ -1209,6 +1218,7 @@
                 <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
                 <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
                 <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
               </tr>
@@ -1219,6 +1229,7 @@
                 <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
                 <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
+                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
                 <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
                 <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
               </tr>

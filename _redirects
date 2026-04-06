@@ -32,4 +32,4 @@
 # Redirect all traffic to main domain
 # ==========================================
 
-/*  https://cryptohubcoin.com/:splat  301
+/*  https://cryptohubcoin.com/  301

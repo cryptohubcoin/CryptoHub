@@ -3679,7 +3679,7 @@
       }
 
       .ct table {
-        min-width: auto
+        min-width: 600px !important
       }
 
       .ct th {
@@ -6341,7 +6341,7 @@
 
     @media (max-width: 480px) {
       .ct table {
-        min-width: 620px;
+        min-width: 480px !important;
       }
 
       .ct th,
@@ -6354,18 +6354,31 @@
         padding-left: 6px;
       }
 
-      .col-4h {
+      .col-1h, .col-4h, .col-7d, .col-spark, .col-vol {
         display: none !important;
       }
 
-      .col-spark {
-        display: none !important;
+      .cn-name {
+        max-width: 90px;
+      }
+
+      .ct th:first-child,
+      .ct td:first-child {
+        width: 140px !important;
       }
     }
 
     @media (max-width: 768px) {
-      .col-spark {
+      .ct table {
+        min-width: 600px !important;
+      }
+
+      .col-1h, .col-4h, .col-spark {
         display: none !important;
+      }
+
+      .cn-name {
+        max-width: 110px;
       }
     }
 

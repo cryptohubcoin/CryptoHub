@@ -6474,9 +6474,18 @@ function switchInfoTab(tab) {
           if (p(mexU?.lastPrice) > 0) _livePrices.push({ n: 'MEXC', pr: p(mexU.lastPrice), vol: p(mexU.quoteVolume) });
           if (p(kucoinU?.data?.last) > 0) _livePrices.push({ n: 'KuCoin', pr: p(kucoinU.data.last), vol: p(kucoinU.data.volValue) });
           if (p(bitgetU?.data?.[0]?.lastPr) > 0) _livePrices.push({ n: 'Bitget', pr: p(bitgetU.data[0].lastPr), vol: p(bitgetU.data[0].quoteVolume) });
-          // Sort by volume desc — highest volume = most reliable price
           _livePrices.sort((a, b) => (b.vol || 0) - (a.vol || 0));
-          const _bestLive = _livePrices[0] || null;
+
+          // Fallback: if no live API data, use CMC proxy prices (better than wrong CMC listing price)
+          let _bestLive = _livePrices[0] || null;
+          if (!_bestLive) {
+            const _cmcUsdt = final.filter(r => r.pr > 0 && /usdt|usd|busd/i.test(r.pair) && r._t >= 1);
+            if (_cmcUsdt.length > 0) _bestLive = { n: _cmcUsdt[0].n, pr: _cmcUsdt[0].pr, vol: _cmcUsdt[0].vol };
+            if (!_bestLive) {
+              const _anyUsdt = final.filter(r => r.pr > 0 && /usdt|usd|busd/i.test(r.pair));
+              if (_anyUsdt.length > 0) _bestLive = { n: _anyUsdt[0].n, pr: _anyUsdt[0].pr, vol: _anyUsdt[0].vol };
+            }
+          }
 
           if (_bestLive && _bestLive.pr > 0) {
             const cdPriceEl = $('cdPrice');
@@ -6491,7 +6500,6 @@ function switchInfoTab(tab) {
                 cdPriceEl.style.transition = 'color 0.3s';
                 cdPriceEl.style.color = '#16c784';
                 setTimeout(() => { cdPriceEl.style.color = ''; }, 1500);
-                // Update allC so search & table show corrected price
                 const coinInArr = allC.find(c => c.id === cid) || allC.find(c => c.sy.toUpperCase() === cs.toUpperCase());
                 if (coinInArr) {
                   coinInArr.pr = exPr;
@@ -6502,6 +6510,17 @@ function switchInfoTab(tab) {
                 }
               }
             }
+          }
+
+          // ── Also update exchange table prices from live APIs ──
+          if (_livePrices.length > 0) {
+            const _liveMap = {};
+            _livePrices.forEach(lp => { _liveMap[lp.n.toLowerCase()] = lp.pr; });
+            final.forEach(r => {
+              const lk = r.n.toLowerCase().replace(/\.io|\.com/g, '');
+              const livePrice = _liveMap[lk] || _liveMap[r.n.toLowerCase()];
+              if (livePrice && livePrice > 0 && /usdt/i.test(r.pair)) r.pr = livePrice;
+            });
           }
         } catch (syncErr) { }
 

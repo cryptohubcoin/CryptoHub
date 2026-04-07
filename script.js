@@ -6462,6 +6462,49 @@ function switchInfoTab(tab) {
 
         exData = final; exPage = 1;
         console.log('[CryptoHub] exchanges loaded:', final.length, '| coin:', cid, '| cmcId:', cmcId, '| sources: CMC=' + (cmcMarkets?.data?.marketPairs?.length || 0) + ' CoinCap=' + (ccR?.data?.length || 0) + ' Paprika=' + (Array.isArray(papR) ? papR.length : 0) + ' Direct=8');
+
+        // ── Sync coin price from LIVE exchange data only (not cached CMC) ──
+        try {
+          // Build live prices array from direct API responses (these are real-time)
+          const _livePrices = [];
+          if (p(binU?.lastPrice) > 0) _livePrices.push({ n: 'Binance', pr: p(binU.lastPrice), vol: p(binU.quoteVolume) });
+          if (p(okxU?.data?.[0]?.last) > 0) _livePrices.push({ n: 'OKX', pr: p(okxU.data[0].last), vol: p(okxU.data[0].volCcy24h) });
+          if (p(bybitU?.result?.list?.[0]?.lastPrice) > 0) _livePrices.push({ n: 'Bybit', pr: p(bybitU.result.list[0].lastPrice), vol: p(bybitU.result.list[0].turnover24h) });
+          if (p(gateU?.[0]?.last) > 0) _livePrices.push({ n: 'Gate', pr: p(gateU[0].last), vol: p(gateU[0].quote_volume) });
+          if (p(mexU?.lastPrice) > 0) _livePrices.push({ n: 'MEXC', pr: p(mexU.lastPrice), vol: p(mexU.quoteVolume) });
+          if (p(kucoinU?.data?.last) > 0) _livePrices.push({ n: 'KuCoin', pr: p(kucoinU.data.last), vol: p(kucoinU.data.volValue) });
+          if (p(bitgetU?.data?.[0]?.lastPr) > 0) _livePrices.push({ n: 'Bitget', pr: p(bitgetU.data[0].lastPr), vol: p(bitgetU.data[0].quoteVolume) });
+          // Sort by volume desc — highest volume = most reliable price
+          _livePrices.sort((a, b) => (b.vol || 0) - (a.vol || 0));
+          const _bestLive = _livePrices[0] || null;
+
+          if (_bestLive && _bestLive.pr > 0) {
+            const cdPriceEl = $('cdPrice');
+            if (cdPriceEl) {
+              const currentText = cdPriceEl.textContent || '';
+              const currentPr = parseFloat(currentText.replace(/[$,\s]/g, '')) || 0;
+              const exPr = _bestLive.pr;
+              const diff = currentPr > 0 ? Math.abs(exPr - currentPr) / currentPr : 1;
+              if (currentPr <= 0 || diff > 0.05) {
+                const prDisp = exPr >= 1 ? exPr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : parseFloat(exPr.toFixed(8));
+                cdPriceEl.textContent = '$' + prDisp;
+                cdPriceEl.style.transition = 'color 0.3s';
+                cdPriceEl.style.color = '#16c784';
+                setTimeout(() => { cdPriceEl.style.color = ''; }, 1500);
+                // Update allC so search & table show corrected price
+                const coinInArr = allC.find(c => c.id === cid) || allC.find(c => c.sy.toUpperCase() === cs.toUpperCase());
+                if (coinInArr) {
+                  coinInArr.pr = exPr;
+                  if (coinInArr.sup > 0) coinInArr.mc = exPr * coinInArr.sup;
+                  const _fdv = (coinInArr.ms || coinInArr.ts || coinInArr.sup || 0) * exPr;
+                  const fdvEl = $('cdFdv'); if (fdvEl && _fdv > 0) fdvEl.textContent = fN(_fdv);
+                  const mcEl = $('cdMcap'); if (mcEl && coinInArr.mc > 0) mcEl.textContent = fN(coinInArr.mc);
+                }
+              }
+            }
+          }
+        } catch (syncErr) { }
+
         $('exCt').textContent = final.length;
         $('exTotVol').innerHTML = totalVol > 0 ? `💰 Total Volume: <b>$${fN(totalVol)}</b>` : '';
 

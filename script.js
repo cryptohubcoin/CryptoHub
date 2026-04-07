@@ -335,18 +335,20 @@ function switchInfoTab(tab) {
       { sy: 'DOGE', nm: 'Dogecoin', id: 'dogecoin', rk: 8, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/74.png' },
       { sy: 'ADA', nm: 'Cardano', id: 'cardano', rk: 9, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png' },
       { sy: 'TRX', nm: 'TRON', id: 'tron', rk: 10, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1958.png' },
-      { sy: 'AVAX', nm: 'Avalanche', id: 'avalanche-2', rk: 11, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png' },
-      { sy: 'LINK', nm: 'Chainlink', id: 'chainlink', rk: 12, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1975.png' },
-      { sy: 'TON', nm: 'Toncoin', id: 'the-open-network', rk: 13, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png' },
-      { sy: 'SHIB', nm: 'Shiba Inu', id: 'shiba-inu', rk: 14, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png' },
-      { sy: 'DOT', nm: 'Polkadot', id: 'polkadot', rk: 15, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png' },
-      { sy: 'NEAR', nm: 'NEAR Protocol', id: 'near', rk: 16, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6535.png' },
-      { sy: 'SUI', nm: 'Sui', id: 'sui', rk: 17, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png' },
-      { sy: 'PEPE', nm: 'Pepe', id: 'pepe', rk: 18, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/24478.png' },
-      { sy: 'LTC', nm: 'Litecoin', id: 'litecoin', rk: 19, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2.png' },
-      { sy: 'BCH', nm: 'Bitcoin Cash', id: 'bitcoin-cash', rk: 20, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1831.png' },
-      { sy: 'APT', nm: 'Aptos', id: 'aptos', rk: 21, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/21794.png' },
-      { sy: 'UNI', nm: 'Uniswap', id: 'uniswap', rk: 22, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png' },
+      { sy: 'AIA', nm: 'DeAgentAI', id: 'deagentai', rk: 11, pr: 0, c24: 0, img: 'https://coin-images.coingecko.com/coins/images/69053/large/DA-AIA.png' },
+      { sy: 'MMT', nm: 'Momentum', id: 'momentum-3', rk: 12, pr: 0, c24: 0, img: 'https://coin-images.coingecko.com/coins/images/69899/large/4_icon_PFP_RGB.png' },
+      { sy: 'AVAX', nm: 'Avalanche', id: 'avalanche-2', rk: 13, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png' },
+      { sy: 'LINK', nm: 'Chainlink', id: 'chainlink', rk: 14, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1975.png' },
+      { sy: 'TON', nm: 'Toncoin', id: 'the-open-network', rk: 15, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png' },
+      { sy: 'SHIB', nm: 'Shiba Inu', id: 'shiba-inu', rk: 16, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png' },
+      { sy: 'DOT', nm: 'Polkadot', id: 'polkadot', rk: 17, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png' },
+      { sy: 'NEAR', nm: 'NEAR Protocol', id: 'near', rk: 18, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6535.png' },
+      { sy: 'SUI', nm: 'Sui', id: 'sui', rk: 19, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png' },
+      { sy: 'PEPE', nm: 'Pepe', id: 'pepe', rk: 20, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/24478.png' },
+      { sy: 'LTC', nm: 'Litecoin', id: 'litecoin', rk: 21, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2.png' },
+      { sy: 'BCH', nm: 'Bitcoin Cash', id: 'bitcoin-cash', rk: 22, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1831.png' },
+      { sy: 'APT', nm: 'Aptos', id: 'aptos', rk: 23, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/21794.png' },
+      { sy: 'UNI', nm: 'Uniswap', id: 'uniswap', rk: 24, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png' },
       { sy: 'ARB', nm: 'Arbitrum', id: 'arbitrum', rk: 23, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/11841.png' },
       { sy: 'OP', nm: 'Optimism', id: 'optimism', rk: 24, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/11840.png' },
       { sy: 'ATOM', nm: 'Cosmos', id: 'cosmos', rk: 25, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png' },
@@ -1211,10 +1213,13 @@ function switchInfoTab(tab) {
         let updated = 0;
         allC.forEach(c => {
           const pr = prMap.get(c.sy);
-          // SAFETY: don't overwrite if price differs by >90%
+          // SAFETY: don't overwrite if price differs by >90%, EXCEPT for known collisions
           if (pr && pr > 0) {
-            if (c.pr > 0 && Math.abs(pr - c.pr) / c.pr > 0.9) { /* skip wild price change */ }
-            else { c.pr = pr; updated++; }
+            const isCollisionException = (c.sy === 'AIA') || (c.sy === 'MMT');
+            if (c.pr > 0 && Math.abs(pr - c.pr) / c.pr > 0.9 && !isCollisionException) { /* skip wild price change */ }
+            else { 
+               c.pr = pr; updated++; 
+            }
           }
           const chg = chgMap.get(c.sy);
           if (chg !== undefined) c.c24 = chg;
@@ -1230,7 +1235,7 @@ function switchInfoTab(tab) {
     }
 
     // Common coin names for Binance fallback
-    const COIN_NAMES = { DAI: 'Dai', USDT: 'Tether', USDC: 'USD Coin', BUSD: 'Binance USD', TUSD: 'TrueUSD', FRAX: 'Frax', LUSD: 'Liquity USD', USDP: 'Pax Dollar', GUSD: 'Gemini Dollar', PYUSD: 'PayPal USD', USDD: 'USDD', FDUSD: 'First Digital USD', WBTC: 'Wrapped Bitcoin', STETH: 'Lido Staked ETH', WSTETH: 'Wrapped stETH', RETH: 'Rocket Pool ETH', CBETH: 'Coinbase Wrapped ETH', WETH: 'Wrapped Ether', WEETH: 'Wrapped eETH', PAXG: 'PAX Gold', BTC: 'Bitcoin', ETH: 'Ethereum', BNB: 'BNB', SOL: 'Solana', XRP: 'XRP', DOGE: 'Dogecoin', ADA: 'Cardano', AVAX: 'Avalanche', DOT: 'Polkadot', LINK: 'Chainlink', MATIC: 'Polygon', UNI: 'Uniswap', SHIB: 'Shiba Inu', LTC: 'Litecoin', BCH: 'Bitcoin Cash', ATOM: 'Cosmos', FIL: 'Filecoin', APT: 'Aptos', ARB: 'Arbitrum', OP: 'Optimism', SUI: 'Sui', SEI: 'Sei', TIA: 'Celestia', INJ: 'Injective', JUP: 'Jupiter', NEAR: 'NEAR', ICP: 'Internet Computer', RNDR: 'Render', FET: 'Fetch.ai', GRT: 'The Graph', IMX: 'Immutable X', MKR: 'Maker', AAVE: 'Aave', SNX: 'Synthetix', CRV: 'Curve', LDO: 'Lido', RPL: 'Rocket Pool', ENS: 'ENS', SAND: 'The Sandbox', MANA: 'Decentraland', AXS: 'Axie Infinity', APE: 'ApeCoin', PEPE: 'Pepe', FLOKI: 'Floki', WLD: 'Worldcoin', BONK: 'Bonk', WIF: 'dogwifhat', TRX: 'TRON', ETC: 'Ethereum Classic', ALGO: 'Algorand', XLM: 'Stellar', VET: 'VeChain', HBAR: 'Hedera', THETA: 'Theta', EOS: 'EOS', XTZ: 'Tezos', FLOW: 'Flow', MINA: 'Mina', NEO: 'NEO', EGLD: 'MultiversX', KAVA: 'Kava', ONE: 'Harmony', ROSE: 'Oasis', FTM: 'Fantom', CKB: 'Nervos', KAS: 'Kaspa', TON: 'Toncoin', ORDI: 'ORDI', STX: 'Stacks', RUNE: 'THORChain', BLUR: 'Blur', GMX: 'GMX', PENDLE: 'Pendle', JTO: 'Jito', PYTH: 'Pyth', RAY: 'Raydium', CAKE: 'PancakeSwap', JASMY: 'JasmyCoin', CHZ: 'Chiliz', GMT: 'STEPN', GAL: 'Galxe', CFX: 'Conflux', ACH: 'Alchemy Pay', AGLD: 'Adventure Gold', AGIX: 'SingularityNET', AI: 'Sleepless AI', ALICE: 'My Neighbor Alice', ALPHA: 'Alpha Finance', ANKR: 'Ankr', ANT: 'Aragon', AR: 'Arweave', AUDIO: 'Audius', BAND: 'Band Protocol', BAT: 'Basic Attention', BOME: 'BOOK OF MEME', CELO: 'Celo', COMP: 'Compound', DASH: 'Dash', DYDX: 'dYdX', DYM: 'Dymension', ENJ: 'Enjin', GNO: 'Gnosis', ICX: 'ICON', IOTA: 'IOTA', LINA: 'Linear', MASK: 'Mask Network', OCEAN: 'Ocean Protocol', OMG: 'OMG Network', ONT: 'Ontology', QNT: 'Quant', QTUM: 'Qtum', SC: 'Siacoin', SKL: 'SKALE', STORJ: 'Storj', SUSHI: 'SushiSwap', SXP: 'Solar', YFI: 'yearn.finance', ZEC: 'Zcash', ZIL: 'Zilliqa', ZRX: '0x', MMT: 'Momentum' };
+    const COIN_NAMES = { DAI: 'Dai', USDT: 'Tether', USDC: 'USD Coin', BUSD: 'Binance USD', TUSD: 'TrueUSD', FRAX: 'Frax', LUSD: 'Liquity USD', USDP: 'Pax Dollar', GUSD: 'Gemini Dollar', PYUSD: 'PayPal USD', USDD: 'USDD', FDUSD: 'First Digital USD', WBTC: 'Wrapped Bitcoin', STETH: 'Lido Staked ETH', WSTETH: 'Wrapped stETH', RETH: 'Rocket Pool ETH', CBETH: 'Coinbase Wrapped ETH', WETH: 'Wrapped Ether', WEETH: 'Wrapped eETH', PAXG: 'PAX Gold', BTC: 'Bitcoin', ETH: 'Ethereum', BNB: 'BNB', SOL: 'Solana', XRP: 'XRP', DOGE: 'Dogecoin', ADA: 'Cardano', AVAX: 'Avalanche', DOT: 'Polkadot', LINK: 'Chainlink', MATIC: 'Polygon', UNI: 'Uniswap', SHIB: 'Shiba Inu', LTC: 'Litecoin', BCH: 'Bitcoin Cash', ATOM: 'Cosmos', FIL: 'Filecoin', APT: 'Aptos', ARB: 'Arbitrum', OP: 'Optimism', SUI: 'Sui', SEI: 'Sei', TIA: 'Celestia', INJ: 'Injective', JUP: 'Jupiter', NEAR: 'NEAR', ICP: 'Internet Computer', RNDR: 'Render', FET: 'Fetch.ai', GRT: 'The Graph', IMX: 'Immutable X', MKR: 'Maker', AAVE: 'Aave', SNX: 'Synthetix', CRV: 'Curve', LDO: 'Lido', RPL: 'Rocket Pool', ENS: 'ENS', SAND: 'The Sandbox', MANA: 'Decentraland', AXS: 'Axie Infinity', APE: 'ApeCoin', PEPE: 'Pepe', FLOKI: 'Floki', WLD: 'Worldcoin', BONK: 'Bonk', WIF: 'dogwifhat', TRX: 'TRON', ETC: 'Ethereum Classic', ALGO: 'Algorand', XLM: 'Stellar', VET: 'VeChain', HBAR: 'Hedera', THETA: 'Theta', EOS: 'EOS', XTZ: 'Tezos', FLOW: 'Flow', MINA: 'Mina', NEO: 'NEO', EGLD: 'MultiversX', KAVA: 'Kava', ONE: 'Harmony', ROSE: 'Oasis', FTM: 'Fantom', CKB: 'Nervos', KAS: 'Kaspa', TON: 'Toncoin', ORDI: 'ORDI', STX: 'Stacks', RUNE: 'THORChain', BLUR: 'Blur', GMX: 'GMX', PENDLE: 'Pendle', JTO: 'Jito', PYTH: 'Pyth', RAY: 'Raydium', CAKE: 'PancakeSwap', JASMY: 'JasmyCoin', CHZ: 'Chiliz', GMT: 'STEPN', GAL: 'Galxe', CFX: 'Conflux', ACH: 'Alchemy Pay', AGLD: 'Adventure Gold', AGIX: 'SingularityNET', AI: 'Sleepless AI', ALICE: 'My Neighbor Alice', ALPHA: 'Alpha Finance', ANKR: 'Ankr', ANT: 'Aragon', AR: 'Arweave', AUDIO: 'Audius', BAND: 'Band Protocol', BAT: 'Basic Attention', BOME: 'BOOK OF MEME', CELO: 'Celo', COMP: 'Compound', DASH: 'Dash', DYDX: 'dYdX', DYM: 'Dymension', ENJ: 'Enjin', GNO: 'Gnosis', ICX: 'ICON', IOTA: 'IOTA', LINA: 'Linear', MASK: 'Mask Network', OCEAN: 'Ocean Protocol', OMG: 'OMG Network', ONT: 'Ontology', QNT: 'Quant', QTUM: 'Qtum', SC: 'Siacoin', SKL: 'SKALE', STORJ: 'Storj', SUSHI: 'SushiSwap', SXP: 'Solar', YFI: 'yearn.finance', ZEC: 'Zcash', ZIL: 'Zilliqa', ZRX: '0x', MMT: 'Momentum', AIA: 'DeAgentAI' };
     // CMC coin IDs for image URLs
     const CMC_IDS = {
       BTC: 1, ETH: 1027, USDT: 825, BNB: 1839, SOL: 5426, XRP: 52, USDC: 3408, DOGE: 74, ADA: 2010, TRX: 1958, AVAX: 5805, LINK: 1975, DOT: 6636, SHIB: 5994, TON: 11419, UNI: 7083, LTC: 2, BCH: 1831, NEAR: 6535, ATOM: 3794, XLM: 512, HBAR: 4642, APT: 21794, FIL: 2280, ARB: 11841, OP: 11840, SUI: 20947, SEI: 23149, INJ: 7226, FET: 5681, RNDR: 5690, GRT: 6719, IMX: 10603, MKR: 1518, AAVE: 7278, PEPE: 24478, WIF: 28752, BONK: 23095, FLOKI: 10804, WLD: 13502, STX: 4847, RUNE: 4157, ETC: 1321, ALGO: 4030, VET: 3077, FTM: 3513, MANA: 1966, SAND: 6210, AXS: 6783, APE: 18876, EOS: 1765, XTZ: 2011, NEO: 1376, THETA: 2416, IOTA: 1720, DASH: 131, ZEC: 1437, COMP: 5692, SNX: 2586, CRV: 6538, LDO: 8000, ENJ: 2130, CHZ: 4066, GMT: 18069, CAKE: 7186, SUSHI: 6758, YFI: 5864, KAS: 20396, EGLD: 6892, DYDX: 28324, GMX: 11857, PENDLE: 9481, JUP: 29210, PYTH: 28177, TIA: 22861, QNT: 3155, AR: 5632, PAXG: 4705, DAI: 4943, WBTC: 3717, STETH: 8085, KCS: 2087, CRO: 3635, GALA: 7080, FLOW: 4558, MINA: 8646, KAVA: 4846, ONE: 3945, ROSE: 7653, CKB: 4948, ORDI: 25028, SXP: 4279, BAT: 1697, ZIL: 2469, ICX: 2099, ONT: 2566, QTUM: 1684, SC: 1042, SKL: 5765, STORJ: 1772, ZRX: 1896, ANKR: 3783, BAND: 4679, CELO: 5567, CFX: 7334, JASMY: 8425, AUDIO: 7455, GNO: 1659, MASK: 8536, OMG: 1808, BLUR: 23121, RAY: 8526, ALICE: 8766, BOME: 29870, DYM: 28932, ENS: 13855, RPL: 2943, ACH: 6958, LINA: 7102, AGLD: 11568,
@@ -1944,13 +1949,115 @@ function switchInfoTab(tab) {
             okData.data.forEach(t => {
               if (!t.instId || !t.instId.endsWith('-USDT')) return;
               const sy = t.instId.replace('-USDT', '').toUpperCase();
-              if (existSyms.has(sy)) return;
+              
+              if (existSyms.has(sy)) {
+                  const existC = allC.find(c => c.sy === sy);
+                  if (existC && (!existC.pr || existC.pr === 0)) {
+                      existC.pr = parseFloat(t.last) || 0;
+                  }
+                  return;
+              }
               const vol = parseFloat(t.volCcy24h) || 0;
               existSyms.add(sy);
               allC.push({ id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: t.open24h > 0 ? ((parseFloat(t.last) - parseFloat(t.open24h)) / parseFloat(t.open24h) * 100) : 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 });
             });
           }
         } catch (e) { }
+
+        // Fallback: Gate.io for coins (like AIA) missing or broken in CMC
+        try {
+          const gateData = await fetchJSON('https://api.gateio.ws/api/v4/spot/tickers');
+          if (gateData && Array.isArray(gateData)) {
+            gateData.forEach(t => {
+              if (!t.currency_pair || !t.currency_pair.endsWith('_USDT')) return;
+              const sy = t.currency_pair.replace('_USDT', '').toUpperCase();
+              
+              if (existSyms.has(sy)) {
+                  const existC = allC.find(c => c.sy === sy);
+                  if (existC && (!existC.pr || existC.pr === 0)) {
+                      existC.pr = parseFloat(t.last) || 0;
+                      existC.c24 = parseFloat(t.change_percentage) || 0;
+                  }
+                  return;
+              }
+              const vol = parseFloat(t.quote_volume) || 0;
+              if (vol < 50000) return; // Skip very low vol
+              existSyms.add(sy);
+              allC.push({ id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: parseFloat(t.change_percentage) || 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 1, sup: 0 });
+            });
+          }
+        } catch (e) { }
+
+        // Fallback: Binance (to fix broken prices for MMT, etc, if CMC fails)
+        try {
+          const binData = await fetchJSON('https://api.binance.com/api/v3/ticker/24hr');
+          if (binData && Array.isArray(binData)) {
+            binData.forEach(t => {
+              if (!t.symbol || !t.symbol.endsWith('USDT')) return;
+              const sy = t.symbol.replace('USDT', '').toUpperCase();
+              
+              if (existSyms.has(sy)) {
+                  const existC = allC.find(c => c.sy === sy);
+                  if (existC && (!existC.pr || existC.pr === 0)) {
+                      existC.pr = parseFloat(t.lastPrice) || 0;
+                      existC.c24 = parseFloat(t.priceChangePercent) || 0;
+                  }
+                  return;
+              }
+              const vol = parseFloat(t.quoteVolume) || 0;
+              if (vol < 50000) return;
+              existSyms.add(sy);
+              allC.push({ id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 1, sup: 0 });
+            });
+          }
+        } catch (e) { }
+
+        // OVERRIDE: Fix DeAgentAI (AIA) which collides with AIA Chain on CMC
+        try {
+          const gateAia = await fetchJSON('https://api.gateio.ws/api/v4/spot/tickers?currency_pair=AIA_USDT');
+          if (gateAia && gateAia[0]) {
+             const t = gateAia[0];
+             const pr = parseFloat(t.last) || 0;
+             const c24 = parseFloat(t.change_percentage) || 0;
+             const vol = parseFloat(t.quote_volume) || 0;
+             const aiaCoin = allC.find(c => c.sy === 'AIA' || c.id === 'deagentai');
+             if (aiaCoin && pr > 0) {
+                 aiaCoin.pr = pr;
+                 aiaCoin.c24 = c24;
+                 aiaCoin.vol = vol;
+                 aiaCoin.numMarketPairs = aiaCoin.numMarketPairs || 3;
+             }
+          } else {
+             const bybitAia = await fetchJSON('https://api.bybit.com/v5/market/tickers?category=spot&symbol=AIAUSDT');
+             if (bybitAia && bybitAia.result && bybitAia.result.list && bybitAia.result.list[0]) {
+                 const t = bybitAia.result.list[0];
+                 const pr = parseFloat(t.lastPrice) || 0;
+                 const aiaCoin = allC.find(c => c.sy === 'AIA' || c.id === 'deagentai');
+                 if (aiaCoin && pr > 0) {
+                     aiaCoin.pr = pr;
+                     aiaCoin.c24 = parseFloat(t.price24hPcnt) * 100 || 0;
+                     aiaCoin.vol = parseFloat(t.turnover24h) || 0;
+                 }
+             }
+          }
+        } catch(e) {}
+
+        // OVERRIDE: Enforce Momentum (MMT) price from Gate.io to bypass CMC collisions (MyMasterWar)
+        try {
+          const mmtObj = allC.find(c => c.sy === 'MMT');
+          if (mmtObj) {
+              const mmtGate = await fetchJSON('https://api.gateio.ws/api/v4/spot/tickers?currency_pair=MMT_USDT');
+              if (mmtGate && mmtGate[0]) {
+                  const pr = parseFloat(mmtGate[0].last) || 0;
+                  if (pr > 0) {
+                      mmtObj.pr = pr;
+                      mmtObj.c24 = parseFloat(mmtGate[0].change_percentage) || 0;
+                      mmtObj.vol = parseFloat(mmtGate[0].quote_volume) || mmtObj.vol;
+                  }
+              }
+          }
+        } catch(e) {}
+
         // Re-rank
         allC.sort((a, b) => (b.mc || 0) - (a.mc || 0) || (b.vol || 0) - (a.vol || 0));
         allC.forEach((c, i) => c.rk = i + 1);
@@ -6233,7 +6340,10 @@ function switchInfoTab(tab) {
       const BTC_IDS = ["binance", "gate", "gdax", "bybit_spot", "okex", "kraken", "bitget", "mxc", "kucoin", "crypto_com", "bullish_com", "bingx", "huobi", "bitfinex", "bitstamp", "hashkey_exchange", "gemini", "cex", "backpack_exchange", "bitmart", "coinw", "lbank", "coinstore", "tapbit", "weex", "toobit", "digifinex", "ourbit", "whitebit", "hibt", "upbit", "phemex", "bitunix", "bitrue", "cryptology", "coinex", "nonkyc_io", "levex", "bitbank", "coinspro", "bitcointry_exchange", "valr", "bybit-eu", "deribit_spot", "bitso", "binance_us", "luno", "indodax", "bitlo", "hashkey-global", "gate_us", "pionex", "biconomy", "xt", "kcex", "orangex", "hotcoin_global", "p2pb2b", "bitvenus_spot", "bitmax", "blofin_spot", "bitdelta", "bitcastle", "zoomex", "bithumb", "bitvavo", "bydfi", "bitbaby-exchange", "dextrade", "aivora-exchange", "hyperliquid-spot", "bitkan", "cointr", "btse", "bitflyer", "exmo", "pointpay", "ondo_global_markets", "korbit", "bitopro", "max_maicoin", "foxbit", "huobi_japan", "bitpanda", "earnbit", "wootrade", "nami_exchange", "young-platform", "inx_one", "coinup", "azbit", "grovex", "bigone", "trubit", "latoken", "deepcoin", "qmall", "bitcoin_com", "humidifi", "bitci", "project-x", "native", "subnet-tokens", "supernova-cl", "gmo_japan", "okcoin-japan", "figure_markets", "cetus", "bitstorage", "near-intents", "bluefin", "bitazza", "itbit", "hyperion", "bittime", "grxswap", "independent_reserve", "aster-spot", "coin_metro", "btcmarkets", "lighter-spot", "byte-exchange", "mercado_bitcoin", "byreal", "first-ledger", "native-bsc", "momentum", "o2", "lcx", "magma-finance", "sodex", "hydrex-integral", "etherex", "kumbaya", "honeypop-dex", "nest", "coinzoom", "kinesis_money", "native-base", "emirex", "sailfish", "metalx", "capricorn-monad", "dswap", "fastex", "fullsail-finance", "minswap", "cryptal", "w-dex-polygon", "delta_spot", "dnax", "nbx", "bitmex_spot", "inex", "miaswap", "zkswap-finance", "gt3", "cube", "gliquid", "zkswap-finance-stableswap", "websea", "poloniex", "difx", "bit2me", "coinone", "paribu", "coincheck", "bilaxy", "icrypex", "koinpark", "tokpie", "xbo_com", "merchant-moe-liquidity-book-mantle", "toko_crypto", "kanga", "novadax", "turbos-finance", "sologenic", "coinjar", "vvs", "gopax", "cypher", "bitzy", "valiant", "prism-megaeth", "lithos", "atlantis-monad", "wazirx", "hata", "saucerswap", "paymium", "kayen", "tiktokfun", "nostra", "etherex-legacy", "tigris", "yuzu", "kongswap", "dooar-polygon", "xflows", "beam-swap", "mute", "zkswap-finance", "ruji-trade", "bex", "meridian", "balanced_network", "10kswap-starknet-alpha", "upheaval-finance", "pools-finance", "jaine", "dyorswap-x-layer", "everyswap", "arbswap_arbitrum_one", "sonex", "invariant_eclipse", "melegaswap", "story-hunt", "fluxion", "zuno", "obsidian-finance", "dragonswap", "machinex", "winnieswap", "alcor", "dooar_bsc", "apertureswap", "eddyfinance", "steam-exchange-rails-network", "inkyswap", "thirdfy", "rooster-protocol", "comet-swap", "ubeswap", "sega", "chainex"];
 
       try {
-        const sym = cs.toUpperCase();
+        let sym = cs.toUpperCase();
+        if (sym === 'MOMENTUM') sym = 'MMT';
+        if (sym === 'DEAGENTAI' || sym === 'DEAGENT') sym = 'AIA';
+
         const results = [];
         const eidMap = new Map();
         const nameMap = new Map();
@@ -6330,11 +6440,14 @@ function switchInfoTab(tab) {
           fetchJSON(`https://api.huobi.pro/market/detail/merged?symbol=${sym.toLowerCase()}usdt`).catch(() => null)
         ]);
 
+        // Never skip direct APIs for MMT: generic exchanges have the real tokens now
+        const skipDirect = false;
+
         // ── FIRE ALL 3 SOURCES IN PARALLEL ──
         const [cmcMarkets, [ccR, papR], directResults] = await Promise.all([
           fetchProxyMarkets(),
           fetchAggregators(),
-          fetchDirectAPIs()
+          skipDirect ? Promise.resolve([]) : fetchDirectAPIs()
         ]);
 
         // ── PROCESS SOURCE A: CMC Market Pairs ──

@@ -525,6 +525,11 @@ function switchInfoTab(tab) {
       DAI: 1, USDT: 1, USDC: 1, TUSD: 1, BUSD: 1, FRAX: 1, LUSD: 1, USDP: 1, GUSD: 1, PYUSD: 1, USDD: 1, FDUSD: 1, CRVUSD: 1, GHO: 1, SUSD: 1,
       WBTC: 97000, STETH: 3200, WSTETH: 3700, RETH: 3500, CBETH: 3300, WETH: 3200, WEETH: 3400, PAXG: 3000, TBTC: 97000, HBTC: 97000, RENBTC: 97000, SBTC: 97000
     };
+    // Fix coins with duplicate symbols — force correct CoinGecko ID + CMC ID
+    const COIN_ID_FIX = {
+      'AIA': { correctId: 'deagentai', cmcId: '38430', wrongIds: ['aia','aia-chain','aia-token'] },
+      'MMT': { correctId: 'momentum-3', cmcId: '38231', wrongIds: ['momentum-safe','msafe','mmt','momentum'] },
+    };
     // Approximate market caps (in billions) for correct initial ranking — updated periodically
     const KNOWN_MCAP = {
       BTC: 1350e9, ETH: 250e9, USDT: 145e9, XRP: 75e9, BNB: 87e9, USDC: 45e9, SOL: 42e9, DOGE: 13e9, ADA: 12e9, TRX: 11e9,
@@ -715,9 +720,14 @@ function switchInfoTab(tab) {
                       let updated = 0, added = 0;
                       kvCoins.forEach(c => {
                         const key = _ck(c);
+                        // Fix wrong coin IDs from KV cache
+                        const _fix = COIN_ID_FIX[c.sy?.toUpperCase()];
+                        if (_fix) { c.id = _fix.correctId; c.cmc_id = _fix.cmcId; }
                         const existing = symMap.get(key);
                         if (existing) {
-                          if (c.pr > 0) existing.pr = c.pr;
+                          // Don't overwrite corrected prices with stale KV data
+                          const _isFixed = COIN_ID_FIX[existing.sy?.toUpperCase()];
+                          if (c.pr > 0 && !(_isFixed && c.pr < 0.01 && existing.pr > 0.01)) existing.pr = c.pr;
                           if (c.c24 && c.c24 !== 0) existing.c24 = c.c24;
                           if (c.c1 && c.c1 !== 0) existing.c1 = c.c1;
                           if (c.c7 && c.c7 !== 0) existing.c7 = c.c7;
@@ -772,9 +782,12 @@ function switchInfoTab(tab) {
                   let updated = 0, added = 0;
                   kvCoins.forEach(c => {
                     const key = _ck(c);
+                    const _fix = COIN_ID_FIX[c.sy?.toUpperCase()];
+                    if (_fix) { c.id = _fix.correctId; c.cmc_id = _fix.cmcId; }
                     const existing = symMap.get(key);
                     if (existing) {
-                      if (c.pr > 0) existing.pr = c.pr;
+                      const _isFixed = COIN_ID_FIX[existing.sy?.toUpperCase()];
+                      if (c.pr > 0 && !(_isFixed && c.pr < 0.01 && existing.pr > 0.01)) existing.pr = c.pr;
                       if (c.c24 && c.c24 !== 0) existing.c24 = c.c24;
                       if (c.c1 && c.c1 !== 0) existing.c1 = c.c1;
                       if (c.c7 && c.c7 !== 0) existing.c7 = c.c7;
@@ -833,6 +846,9 @@ function switchInfoTab(tab) {
           if (kvCoins && Array.isArray(kvCoins) && kvCoins.length > 100) {
               kvCoins.forEach(function(c) {
                 if (c.c4 === undefined) c.c4 = 0;
+                // Fix wrong coin IDs from KV cache
+                var _f = COIN_ID_FIX[c.sy ? c.sy.toUpperCase() : ''];
+                if (_f) { c.id = _f.correctId; c.cmc_id = _f.cmcId; if (c.pr > 0 && c.pr < 0.01 && _f.correctId === 'deagentai') { c.pr = 0.14; c.mc = 0.14 * (c.sup || 189000000); } }
                 allC.push(c); symMap.set(_ck(c), c);
               });
               applyKnownSupply(allC);
@@ -1078,19 +1094,13 @@ function switchInfoTab(tab) {
         allC.sort((a, b) => (b.mc || 0) - (a.mc || 0) || (b.vol || 0) - (a.vol || 0));
 
         // ── Fix: Replace wrong coins with correct versions ──
-        // Some symbols have multiple tokens (old vs new). Force the correct CoinGecko ID + CMC ID.
-        const COIN_ID_FIX = {
-          'AIA': { correctId: 'deagentai', cmcId: '38430', wrongIds: ['aia','aia-chain','aia-token'] },
-          'MMT': { correctId: 'momentum-3', cmcId: '38231', wrongIds: ['momentum-safe','msafe','mmt','momentum'] },
-        };
         allC.forEach(c => {
           const fix = COIN_ID_FIX[c.sy?.toUpperCase()];
           if (fix && c.id !== fix.correctId) {
             c.id = fix.correctId;
             c.cmc_id = fix.cmcId;
-            // Reset price so it gets fetched correctly from CMC enrichment
             if (c.pr > 0 && c.pr < 0.01 && fix.correctId === 'deagentai') {
-              c.pr = 0.14; c.mc = 0.14 * (c.sup || 189000000); // Approximate until CMC enrichment updates it
+              c.pr = 0.14; c.mc = 0.14 * (c.sup || 189000000);
             }
           }
         });

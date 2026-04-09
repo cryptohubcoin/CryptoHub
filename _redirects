@@ -52,4 +52,3 @@
 # Redirect all traffic to main domain
 # ==========================================
 
-https://cryptohub-dtm.pages.dev/* https://cryptohubcoin.com/:splat 301

@@ -1,9 +1,29 @@
 # ==========================================
-# _redirects - Block suspicious/bot requests
-# Use 403 to reject (saves bandwidth vs 200 rewrite)
+# _redirects - CryptoHub
 # ==========================================
 
-# WordPress probing (bots) - redirect to homepage (lightweight)
+# ==========================================
+# Fix 404 errors - April 2025 (أولوية قصوى)
+# ==========================================
+
+# صفحات Blog مفقودة → صفحات موجودة
+/blog/real-world-assets-rwa /blog/what-is-rwa 301
+/token-unlock-calendar /token-vesting 301
+
+# صفحات API/Chart قديمة → صفحات جديدة
+/market_char / 301
+/candles /crypto-analyzer 301
+/v3/kline /crypto-analyzer 301
+
+# باراميترات البحث واللغة → الصفحة الرئيسية
+/?q=* / 301
+/?lang=* / 301
+
+# ==========================================
+# Block suspicious/bot requests
+# ==========================================
+
+# WordPress probing (bots) - redirect to homepage
 /wp-admin* / 301
 /wp-login* / 301
 /wp-content* / 301
@@ -32,3 +52,4 @@
 # Redirect all traffic to main domain
 # ==========================================
 
+https://cryptohub-dtm.pages.dev/* https://cryptohubcoin.com/:splat 301

@@ -335,20 +335,18 @@ function switchInfoTab(tab) {
       { sy: 'DOGE', nm: 'Dogecoin', id: 'dogecoin', rk: 8, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/74.png' },
       { sy: 'ADA', nm: 'Cardano', id: 'cardano', rk: 9, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png' },
       { sy: 'TRX', nm: 'TRON', id: 'tron', rk: 10, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1958.png' },
-      { sy: 'AIA', nm: 'DeAgentAI', id: 'deagentai', rk: 11, pr: 0, c24: 0, cmc_id: 33358, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/33358.png' },
-      { sy: 'MMT', nm: 'Momentum', id: 'momentum-3', rk: 12, pr: 0, c24: 0, cmc_id: 33068, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/33068.png' },
-      { sy: 'AVAX', nm: 'Avalanche', id: 'avalanche-2', rk: 13, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png' },
-      { sy: 'LINK', nm: 'Chainlink', id: 'chainlink', rk: 14, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1975.png' },
-      { sy: 'TON', nm: 'Toncoin', id: 'the-open-network', rk: 15, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png' },
-      { sy: 'SHIB', nm: 'Shiba Inu', id: 'shiba-inu', rk: 16, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png' },
-      { sy: 'DOT', nm: 'Polkadot', id: 'polkadot', rk: 17, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png' },
-      { sy: 'NEAR', nm: 'NEAR Protocol', id: 'near', rk: 18, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6535.png' },
-      { sy: 'SUI', nm: 'Sui', id: 'sui', rk: 19, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png' },
-      { sy: 'PEPE', nm: 'Pepe', id: 'pepe', rk: 20, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/24478.png' },
-      { sy: 'LTC', nm: 'Litecoin', id: 'litecoin', rk: 21, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2.png' },
-      { sy: 'BCH', nm: 'Bitcoin Cash', id: 'bitcoin-cash', rk: 22, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1831.png' },
-      { sy: 'APT', nm: 'Aptos', id: 'aptos', rk: 23, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/21794.png' },
-      { sy: 'UNI', nm: 'Uniswap', id: 'uniswap', rk: 24, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png' },
+      { sy: 'AVAX', nm: 'Avalanche', id: 'avalanche-2', rk: 11, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png' },
+      { sy: 'LINK', nm: 'Chainlink', id: 'chainlink', rk: 12, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1975.png' },
+      { sy: 'TON', nm: 'Toncoin', id: 'the-open-network', rk: 13, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png' },
+      { sy: 'SHIB', nm: 'Shiba Inu', id: 'shiba-inu', rk: 14, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png' },
+      { sy: 'DOT', nm: 'Polkadot', id: 'polkadot', rk: 15, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png' },
+      { sy: 'NEAR', nm: 'NEAR Protocol', id: 'near', rk: 16, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6535.png' },
+      { sy: 'SUI', nm: 'Sui', id: 'sui', rk: 17, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png' },
+      { sy: 'PEPE', nm: 'Pepe', id: 'pepe', rk: 18, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/24478.png' },
+      { sy: 'LTC', nm: 'Litecoin', id: 'litecoin', rk: 19, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2.png' },
+      { sy: 'BCH', nm: 'Bitcoin Cash', id: 'bitcoin-cash', rk: 20, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1831.png' },
+      { sy: 'APT', nm: 'Aptos', id: 'aptos', rk: 21, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/21794.png' },
+      { sy: 'UNI', nm: 'Uniswap', id: 'uniswap', rk: 22, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png' },
       { sy: 'ARB', nm: 'Arbitrum', id: 'arbitrum', rk: 23, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/11841.png' },
       { sy: 'OP', nm: 'Optimism', id: 'optimism', rk: 24, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/11840.png' },
       { sy: 'ATOM', nm: 'Cosmos', id: 'cosmos', rk: 25, pr: 0, c24: 0, img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png' },
@@ -543,7 +541,6 @@ function switchInfoTab(tab) {
     };
     const _lastGood = {};
     function saveFallback(c) {
-      if ((c.sy === 'AIA' || c.sy === 'MMT') && c.pr < 0.05) return; // Prevent saving fake price as fallback
       if (c.pr > 0 || c.vol > 0 || c.mc > 0 || c.ex > 0) {
         _lastGood[c.sy] = {
           pr: c.pr || _lastGood[c.sy]?.pr || 0,
@@ -582,12 +579,7 @@ function switchInfoTab(tab) {
     // Load fallbacks from sessionStorage on startup
     try {
       const fb = sessionStorage.getItem('ch_fallback');
-      if (fb) { 
-        const parsed = JSON.parse(fb); 
-        if (parsed.AIA && parsed.AIA.pr < 0.05) delete parsed.AIA;
-        if (parsed.MMT && parsed.MMT.pr < 0.05) delete parsed.MMT;
-        Object.assign(_lastGood, parsed); 
-      }
+      if (fb) { const parsed = JSON.parse(fb); Object.assign(_lastGood, parsed); }
     } catch (e) { }
 
     // ── Hard-coded supply facts — these ALWAYS override API data ──────────────
@@ -702,11 +694,7 @@ function switchInfoTab(tab) {
           try {
             const preData = await window._preload.coins;
             if (preData && preData.coins && preData.coins.length > 50) {
-              preData.coins.forEach(c => { 
-                if ((c.sy === 'AIA' || c.sy === 'MMT') && c.cmc_id) return;
-                if (c.c4 === undefined) c.c4 = 0; 
-                allC.push(c); symMap.set(_ck(c), c); 
-              });
+              preData.coins.forEach(c => { if (c.c4 === undefined) c.c4 = 0; allC.push(c); symMap.set(_ck(c), c); });
               applyKnownSupply(allC);
               $('pFill').style.width = '100%';
               reRank(); assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
@@ -726,7 +714,6 @@ function switchInfoTab(tab) {
                     if (kvCoins && Array.isArray(kvCoins) && kvCoins.length > allC.length * 0.8) {
                       let updated = 0, added = 0;
                       kvCoins.forEach(c => {
-                        if ((c.sy === 'AIA' || c.sy === 'MMT') && c.cmc_id) return; // Prevent CMC duplicates
                         const key = _ck(c);
                         const existing = symMap.get(key);
                         if (existing) {
@@ -763,11 +750,7 @@ function switchInfoTab(tab) {
         // ===== PHASE 0b: SESSION CACHE (instant — 0ms) =====
         const cached = cacheGet('cryptohub_coins');
         if (cached && cached.length > 50) {
-          cached.forEach(c => { 
-            if ((c.sy === 'AIA' || c.sy === 'MMT') && c.cmc_id) return;
-            if ((c.sy === 'AIA' || c.sy === 'MMT') && c.pr < 0.05) c.pr = 0; // Purge bad cached price
-            allC.push(c); symMap.set(_ck(c), c); 
-          });
+          cached.forEach(c => { allC.push(c); symMap.set(_ck(c), c); });
           applyKnownSupply(allC);
           $('pFill').style.width = '100%';
           reRank(); assignExCounts(); cBatch = 2; filtC = [...allC]; render(); buildTrending(); buildTicker();
@@ -788,7 +771,6 @@ function switchInfoTab(tab) {
                   // Only update prices + add NEW coins — never remove existing ones
                   let updated = 0, added = 0;
                   kvCoins.forEach(c => {
-                    if ((c.sy === 'AIA' || c.sy === 'MMT') && c.cmc_id) return; // Prevent CMC duplicates
                     const key = _ck(c);
                     const existing = symMap.get(key);
                     if (existing) {
@@ -850,15 +832,6 @@ function switchInfoTab(tab) {
           }
           if (kvCoins && Array.isArray(kvCoins) && kvCoins.length > 100) {
               kvCoins.forEach(function(c) {
-                // Precise Filter: If it's AIA/MMT, only allow if it has the correct CMC ID OR a valid price
-                if (c.sy === 'AIA') {
-                  if (c.cmc_id && c.cmc_id != 33358) return;
-                  if (c.pr > 0 && c.pr < 0.05) return;
-                }
-                if (c.sy === 'MMT') {
-                  if (c.cmc_id && c.cmc_id != 33068) return;
-                  if (c.pr > 0 && c.pr < 0.05) return;
-                }
                 if (c.c4 === undefined) c.c4 = 0;
                 allC.push(c); symMap.set(_ck(c), c);
               });
@@ -891,7 +864,7 @@ function switchInfoTab(tab) {
             cgTop.forEach(c => {
               const sy = (c.symbol || '').toUpperCase();
               if (!sy || symMap.has(sy)) return;
-              const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: sanitizePct(c.price_change_percentage_1h_in_currency), c4: 0, c24: sanitizePct(c.price_change_percentage_24h), c7: sanitizePct(c.price_change_percentage_7d_in_currency), mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
+              const coin = { id: c.id, cmc_id: CMC_IDS[sy] || 0, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: sanitizePct(c.price_change_percentage_1h_in_currency), c4: 0, c24: sanitizePct(c.price_change_percentage_24h), c7: sanitizePct(c.price_change_percentage_7d_in_currency), mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
               allC.push(coin); symMap.set(sy, coin);
             });
           }
@@ -901,15 +874,20 @@ function switchInfoTab(tab) {
           if (bData && Array.isArray(bData)) {
             bData.forEach(t => {
               if (!t.symbol || !t.symbol.endsWith('USDT')) return;
-              let sy = t.symbol.replace('USDT', '');
-              if (sy === 'MMT') return; // MMT on Binance is MyMasterWar
+              const sy = t.symbol.replace('USDT', '');
               const vol = parseFloat(t.quoteVolume) || 0;
               const pr = parseFloat(t.lastPrice) || 0;
               if (pr <= 0) return;
               bMap.set(sy, t);
               const existing = symMap.get(sy);
               if (existing) {
-                // SAFETY: don't overwrite if price differs by >90% (prevents Bridged BTC $0.001 overwriting real BTC $83K)
+                // SAFETY: don't overwrite if this is likely a DIFFERENT token with same symbol
+                // If CoinGecko gave us a price+mcap, it identified the token correctly — Binance only matches by symbol
+                if (existing.pr > 0 && existing.mc > 0) {
+                  const pctDiff = Math.abs(pr - existing.pr) / existing.pr;
+                  if (pctDiff > 0.5) return; // >50% diff with authoritative source = different token
+                }
+                // Original >90% safety for coins without mcap
                 if (existing.pr > 0 && Math.abs(pr - existing.pr) / existing.pr > 0.9) return;
                 existing.pr = pr;
                 if (existing.c24 === 0) existing.c24 = sanitizePct(t.priceChangePercent);
@@ -941,21 +919,14 @@ function switchInfoTab(tab) {
               const sup = parseFloat(c.supply) || 0;
               let mc = parseFloat(c.marketCapUsd) || 0;
               if (!mc && sup > 0 && pr > 0) mc = sup * pr;
+              const existing = symMap.get(sym);
               if (existing) {
                 if (mc > 0 && (!existing.mc || existing.mc === 0)) existing.mc = mc;
                 if (sup > 0 && (!existing.sup || existing.sup === 0)) existing.sup = sup;
-                if (pr > 0 && (!existing.pr || existing.pr === 0)) {
-                   // Only update AIA/MMT price if it's realistic
-                   if (sym === 'AIA' || sym === 'MMT') { if (pr > 0.05) existing.pr = pr; }
-                   else existing.pr = pr;
-                }
+                if (pr > 0 && (!existing.pr || existing.pr === 0)) existing.pr = pr;
                 if (!existing.img || existing.img.includes('/0.png')) existing.img = `https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`;
                 if (existing.nm === existing.sy && c.name) existing.nm = c.name;
                 return;
-              }
-              // Prevent adding "fake" AIA/MMT tokens as new entries from CoinCap
-              if (sym === 'AIA' || sym === 'MMT') {
-                if (pr > 0 && pr < 0.05) return;
               }
               const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sym, pr: pr, c1: 0, c4: 0, c24: sanitizePct(c.changePercent24Hr), c7: 0, mc: mc, vol: vol, img: `https://assets.coincap.io/assets/icons/${c.symbol.toLowerCase()}@2x.png`, ex: 0, sup: sup };
               allC.push(coin); symMap.set(sym, coin);
@@ -977,15 +948,12 @@ function switchInfoTab(tab) {
         if (mData && Array.isArray(mData)) {
           mData.forEach(t => {
             if (!t.symbol || !t.symbol.endsWith('USDT')) return;
-            let sy = t.symbol.replace('USDT', '');
-            if (sy === 'AIA') return; // AIA on MEXC is AIA Chain
+            const sy = t.symbol.replace('USDT', '');
             const vol = parseFloat(t.quoteVolume) || 0;
             const existing = symMap.get(sy);
             if (existing) {
               if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
-              const p = parseFloat(t.lastPrice) || 0;
-              if (sy === 'MMT') { if (p > 0.05) existing.pr = p; } // MXC doesn't have AIA but just in case
-              else if ((!existing.pr || existing.pr === 0) && p > 0) existing.pr = p;
+              if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.lastPrice) || 0; if (p > 0) existing.pr = p; }
               return;
             }
             const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: sanitizePct(t.priceChangePercent), c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
@@ -1001,9 +969,7 @@ function switchInfoTab(tab) {
             const existing = symMap.get(sy);
             if (existing) {
               if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
-              const p = parseFloat(t.last) || 0;
-              if (sy === 'AIA' || sy === 'MMT') { if (p > 0.05) existing.pr = p; }
-              else if ((!existing.pr || existing.pr === 0) && p > 0) existing.pr = p;
+              if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.last) || 0; if (p > 0) existing.pr = p; }
               return;
             }
             const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: sanitizePct(t.change_percentage), c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
@@ -1014,15 +980,12 @@ function switchInfoTab(tab) {
         if (okData && okData.data) {
           okData.data.forEach(t => {
             if (!t.instId || !t.instId.endsWith('-USDT')) return;
-            let sy = t.instId.replace('-USDT', '').toUpperCase();
-            if (sy === 'MMT') return; // MMT on OKX is MyMasterWar
+            const sy = t.instId.replace('-USDT', '').toUpperCase();
             const vol = parseFloat(t.volCcy24h) || 0;
             const existing = symMap.get(sy);
             if (existing) {
               if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
-              const p = parseFloat(t.last) || 0;
-              if (sy === 'AIA' || sy === 'MMT') { if (p > 0.05) existing.pr = p; }
-              else if ((!existing.pr || existing.pr === 0) && p > 0) existing.pr = p;
+              if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.last) || 0; if (p > 0) existing.pr = p; }
               return;
             }
             const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: t.open24h > 0 ? ((parseFloat(t.last) - parseFloat(t.open24h)) / parseFloat(t.open24h) * 100) : 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
@@ -1035,15 +998,12 @@ function switchInfoTab(tab) {
           if (byData && byData.result && byData.result.list) {
             byData.result.list.forEach(t => {
               if (!t.symbol || !t.symbol.endsWith('USDT')) return;
-              let sy = t.symbol.replace('USDT', '');
-              if (sy === 'MMT') return; // MMT on Bybit is MyMasterWar
+              const sy = t.symbol.replace('USDT', '');
               const vol = parseFloat(t.turnover24h) || 0;
               const existing = symMap.get(sy);
               if (existing) {
                 if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
-                const p = parseFloat(t.lastPrice) || 0;
-                if (sy === 'AIA' || sy === 'MMT') { if (p > 0.05) existing.pr = p; }
-                else if ((!existing.pr || existing.pr === 0) && p > 0) existing.pr = p;
+                if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.lastPrice) || 0; if (p > 0) existing.pr = p; }
                 return;
               }
               const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: sanitizePct(sanitizePct(parseFloat(t.price24hPcnt) * 100)), c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
@@ -1062,9 +1022,7 @@ function switchInfoTab(tab) {
               const existing = symMap.get(sy);
               if (existing) {
                 if (vol > 0 && (!existing.vol || existing.vol === 0)) existing.vol = vol;
-                const p = parseFloat(t.last) || 0;
-                if (sy === 'AIA' || sy === 'MMT') { if (p > 0.05) existing.pr = p; }
-                else if ((!existing.pr || existing.pr === 0) && p > 0) existing.pr = p;
+                if ((!existing.pr || existing.pr === 0)) { const p = parseFloat(t.last) || 0; if (p > 0) existing.pr = p; }
                 return;
               }
               const coin = { id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: sanitizePct(parseFloat(t.changeRate) * 100), c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 };
@@ -1118,7 +1076,18 @@ function switchInfoTab(tab) {
 
         // Re-rank + re-render
         allC.sort((a, b) => (b.mc || 0) - (a.mc || 0) || (b.vol || 0) - (a.vol || 0));
-        allC.forEach((c, i) => c.rk = i + 1);
+        allC.forEach((c, i) => {
+          c.rk = i + 1;
+          // Auto-extract cmc_id from image URL if not already set
+          if (!c.cmc_id && c.img) {
+            const m = c.img.match(/\/coins\/64x64\/(\d+)\.png/);
+            if (m) c.cmc_id = m[1];
+          }
+          // Also populate from CMC_IDS map
+          if (!c.cmc_id && c.sy && CMC_IDS[c.sy.toUpperCase()]) {
+            c.cmc_id = String(CMC_IDS[c.sy.toUpperCase()]);
+          }
+        });
         reRank(); assignExCounts(); filtC = [...allC]; render(); buildTrending(); buildTicker();
 
         // ===== PHASE 3: CoinMarketCap background enrichment (fast & parallel) =====
@@ -1141,7 +1110,6 @@ function switchInfoTab(tab) {
                 var qt = coin.quotes && coin.quotes.length ? coin.quotes.find(function (q) { return q.name === 'USD'; }) : null;
                 if (!qt) return;
                 var sym = coin.symbol;
-                if (sym === 'AIA' || sym === 'MMT') return; // Enforce platform prices, prevent CMC duplicates
                 var cmcKey = 'cmc_' + coin.id;
                 var existing = symMap.get(cmcKey);
                 if (existing) {
@@ -1215,8 +1183,7 @@ function switchInfoTab(tab) {
         if (bData && Array.isArray(bData)) {
           bData.forEach(t => {
             if (!t.symbol || !t.symbol.endsWith('USDT')) return;
-            let sy = t.symbol.replace('USDT', '');
-            if (sy === 'MMT') return; // MMT on Binance is MyMasterWar
+            const sy = t.symbol.replace('USDT', '');
             const vol = parseFloat(t.quoteVolume) || 0;
             const pr = parseFloat(t.lastPrice) || 0;
             if (pr > 0) prMap.set(sy, pr);
@@ -1228,8 +1195,7 @@ function switchInfoTab(tab) {
         if (mData && Array.isArray(mData)) {
           mData.forEach(t => {
             if (!t.symbol || !t.symbol.endsWith('USDT')) return;
-            let sy = t.symbol.replace('USDT', '');
-            if (sy === 'AIA') return; // AIA on MEXC is AIA Chain
+            const sy = t.symbol.replace('USDT', '');
             const vol = parseFloat(t.quoteVolume) || 0;
             if (!prMap.has(sy)) { const pr = parseFloat(t.lastPrice) || 0; if (pr > 0) prMap.set(sy, pr); }
             if (vol > 0) volMap.set(sy, (volMap.get(sy) || 0) + vol);
@@ -1251,8 +1217,7 @@ function switchInfoTab(tab) {
         if (byData && byData.result && byData.result.list) {
           byData.result.list.forEach(t => {
             if (!t.symbol || !t.symbol.endsWith('USDT')) return;
-            let sy = t.symbol.replace('USDT', '');
-            if (sy === 'MMT') return; // MMT on Bybit is MyMasterWar
+            const sy = t.symbol.replace('USDT', '');
             const vol = parseFloat(t.turnover24h) || 0;
             if (!prMap.has(sy)) { const pr = parseFloat(t.lastPrice) || 0; if (pr > 0) prMap.set(sy, pr); }
             if (vol > 0) volMap.set(sy, (volMap.get(sy) || 0) + vol);
@@ -1265,8 +1230,7 @@ function switchInfoTab(tab) {
           const pr = prMap.get(c.sy);
           // SAFETY: don't overwrite if price differs by >90%
           if (pr && pr > 0) {
-            const isWhitelist = (c.sy === 'AIA' || c.sy === 'MMT');
-            if (!isWhitelist && c.pr > 0 && Math.abs(pr - c.pr) / c.pr > 0.9) { /* skip wild price change */ }
+            if (c.pr > 0 && Math.abs(pr - c.pr) / c.pr > 0.9) { /* skip wild price change */ }
             else { c.pr = pr; updated++; }
           }
           const chg = chgMap.get(c.sy);
@@ -1283,12 +1247,12 @@ function switchInfoTab(tab) {
     }
 
     // Common coin names for Binance fallback
-    const COIN_NAMES = { DAI: 'Dai', USDT: 'Tether', USDC: 'USD Coin', BUSD: 'Binance USD', TUSD: 'TrueUSD', FRAX: 'Frax', LUSD: 'Liquity USD', USDP: 'Pax Dollar', GUSD: 'Gemini Dollar', PYUSD: 'PayPal USD', USDD: 'USDD', FDUSD: 'First Digital USD', WBTC: 'Wrapped Bitcoin', STETH: 'Lido Staked ETH', WSTETH: 'Wrapped stETH', RETH: 'Rocket Pool ETH', CBETH: 'Coinbase Wrapped ETH', WETH: 'Wrapped Ether', WEETH: 'Wrapped eETH', PAXG: 'PAX Gold', BTC: 'Bitcoin', ETH: 'Ethereum', BNB: 'BNB', SOL: 'Solana', XRP: 'XRP', DOGE: 'Dogecoin', ADA: 'Cardano', AVAX: 'Avalanche', DOT: 'Polkadot', LINK: 'Chainlink', MATIC: 'Polygon', UNI: 'Uniswap', SHIB: 'Shiba Inu', LTC: 'Litecoin', BCH: 'Bitcoin Cash', ATOM: 'Cosmos', FIL: 'Filecoin', APT: 'Aptos', ARB: 'Arbitrum', OP: 'Optimism', SUI: 'Sui', SEI: 'Sei', TIA: 'Celestia', INJ: 'Injective', JUP: 'Jupiter', NEAR: 'NEAR', ICP: 'Internet Computer', RNDR: 'Render', FET: 'Fetch.ai', GRT: 'The Graph', IMX: 'Immutable X', MKR: 'Maker', AAVE: 'Aave', SNX: 'Synthetix', CRV: 'Curve', LDO: 'Lido', RPL: 'Rocket Pool', ENS: 'ENS', SAND: 'The Sandbox', MANA: 'Decentraland', AXS: 'Axie Infinity', APE: 'ApeCoin', PEPE: 'Pepe', FLOKI: 'Floki', WLD: 'Worldcoin', BONK: 'Bonk', WIF: 'dogwifhat', TRX: 'TRON', ETC: 'Ethereum Classic', ALGO: 'Algorand', XLM: 'Stellar', VET: 'VeChain', HBAR: 'Hedera', THETA: 'Theta', EOS: 'EOS', XTZ: 'Tezos', FLOW: 'Flow', MINA: 'Mina', NEO: 'NEO', EGLD: 'MultiversX', KAVA: 'Kava', ONE: 'Harmony', ROSE: 'Oasis', FTM: 'Fantom', CKB: 'Nervos', KAS: 'Kaspa', TON: 'Toncoin', ORDI: 'ORDI', STX: 'Stacks', RUNE: 'THORChain', BLUR: 'Blur', GMX: 'GMX', PENDLE: 'Pendle', JTO: 'Jito', PYTH: 'Pyth', RAY: 'Raydium', CAKE: 'PancakeSwap', JASMY: 'JasmyCoin', CHZ: 'Chiliz', GMT: 'STEPN', GAL: 'Galxe', CFX: 'Conflux', ACH: 'Alchemy Pay', AGLD: 'Adventure Gold', AGIX: 'SingularityNET', AI: 'Sleepless AI', ALICE: 'My Neighbor Alice', ALPHA: 'Alpha Finance', ANKR: 'Ankr', ANT: 'Aragon', AR: 'Arweave', AUDIO: 'Audius', BAND: 'Band Protocol', BAT: 'Basic Attention', BOME: 'BOOK OF MEME', CELO: 'Celo', COMP: 'Compound', DASH: 'Dash', DYDX: 'dYdX', DYM: 'Dymension', ENJ: 'Enjin', GNO: 'Gnosis', ICX: 'ICON', IOTA: 'IOTA', LINA: 'Linear', MASK: 'Mask Network', OCEAN: 'Ocean Protocol', OMG: 'OMG Network', ONT: 'Ontology', QNT: 'Quant', QTUM: 'Qtum', SC: 'Siacoin', SKL: 'SKALE', STORJ: 'Storj', SUSHI: 'SushiSwap', SXP: 'Solar', YFI: 'yearn.finance', ZEC: 'Zcash', ZIL: 'Zilliqa', ZRX: '0x', MMT: 'Momentum', AIA: 'DeAgentAI' };
+    const COIN_NAMES = { DAI: 'Dai', USDT: 'Tether', USDC: 'USD Coin', BUSD: 'Binance USD', TUSD: 'TrueUSD', FRAX: 'Frax', LUSD: 'Liquity USD', USDP: 'Pax Dollar', GUSD: 'Gemini Dollar', PYUSD: 'PayPal USD', USDD: 'USDD', FDUSD: 'First Digital USD', WBTC: 'Wrapped Bitcoin', STETH: 'Lido Staked ETH', WSTETH: 'Wrapped stETH', RETH: 'Rocket Pool ETH', CBETH: 'Coinbase Wrapped ETH', WETH: 'Wrapped Ether', WEETH: 'Wrapped eETH', PAXG: 'PAX Gold', BTC: 'Bitcoin', ETH: 'Ethereum', BNB: 'BNB', SOL: 'Solana', XRP: 'XRP', DOGE: 'Dogecoin', ADA: 'Cardano', AVAX: 'Avalanche', DOT: 'Polkadot', LINK: 'Chainlink', MATIC: 'Polygon', UNI: 'Uniswap', SHIB: 'Shiba Inu', LTC: 'Litecoin', BCH: 'Bitcoin Cash', ATOM: 'Cosmos', FIL: 'Filecoin', APT: 'Aptos', ARB: 'Arbitrum', OP: 'Optimism', SUI: 'Sui', SEI: 'Sei', TIA: 'Celestia', INJ: 'Injective', JUP: 'Jupiter', NEAR: 'NEAR', ICP: 'Internet Computer', RNDR: 'Render', FET: 'Fetch.ai', GRT: 'The Graph', IMX: 'Immutable X', MKR: 'Maker', AAVE: 'Aave', SNX: 'Synthetix', CRV: 'Curve', LDO: 'Lido', RPL: 'Rocket Pool', ENS: 'ENS', SAND: 'The Sandbox', MANA: 'Decentraland', AXS: 'Axie Infinity', APE: 'ApeCoin', PEPE: 'Pepe', FLOKI: 'Floki', WLD: 'Worldcoin', BONK: 'Bonk', WIF: 'dogwifhat', TRX: 'TRON', ETC: 'Ethereum Classic', ALGO: 'Algorand', XLM: 'Stellar', VET: 'VeChain', HBAR: 'Hedera', THETA: 'Theta', EOS: 'EOS', XTZ: 'Tezos', FLOW: 'Flow', MINA: 'Mina', NEO: 'NEO', EGLD: 'MultiversX', KAVA: 'Kava', ONE: 'Harmony', ROSE: 'Oasis', FTM: 'Fantom', CKB: 'Nervos', KAS: 'Kaspa', TON: 'Toncoin', ORDI: 'ORDI', STX: 'Stacks', RUNE: 'THORChain', BLUR: 'Blur', GMX: 'GMX', PENDLE: 'Pendle', JTO: 'Jito', PYTH: 'Pyth', RAY: 'Raydium', CAKE: 'PancakeSwap', JASMY: 'JasmyCoin', CHZ: 'Chiliz', GMT: 'STEPN', GAL: 'Galxe', CFX: 'Conflux', ACH: 'Alchemy Pay', AGLD: 'Adventure Gold', AGIX: 'SingularityNET', AI: 'Sleepless AI', ALICE: 'My Neighbor Alice', ALPHA: 'Alpha Finance', ANKR: 'Ankr', ANT: 'Aragon', AR: 'Arweave', AUDIO: 'Audius', BAND: 'Band Protocol', BAT: 'Basic Attention', BOME: 'BOOK OF MEME', CELO: 'Celo', COMP: 'Compound', DASH: 'Dash', DYDX: 'dYdX', DYM: 'Dymension', ENJ: 'Enjin', GNO: 'Gnosis', ICX: 'ICON', IOTA: 'IOTA', LINA: 'Linear', MASK: 'Mask Network', OCEAN: 'Ocean Protocol', OMG: 'OMG Network', ONT: 'Ontology', QNT: 'Quant', QTUM: 'Qtum', SC: 'Siacoin', SKL: 'SKALE', STORJ: 'Storj', SUSHI: 'SushiSwap', SXP: 'Solar', YFI: 'yearn.finance', ZEC: 'Zcash', ZIL: 'Zilliqa', ZRX: '0x', MMT: 'Momentum' };
     // CMC coin IDs for image URLs
     const CMC_IDS = {
       BTC: 1, ETH: 1027, USDT: 825, BNB: 1839, SOL: 5426, XRP: 52, USDC: 3408, DOGE: 74, ADA: 2010, TRX: 1958, AVAX: 5805, LINK: 1975, DOT: 6636, SHIB: 5994, TON: 11419, UNI: 7083, LTC: 2, BCH: 1831, NEAR: 6535, ATOM: 3794, XLM: 512, HBAR: 4642, APT: 21794, FIL: 2280, ARB: 11841, OP: 11840, SUI: 20947, SEI: 23149, INJ: 7226, FET: 5681, RNDR: 5690, GRT: 6719, IMX: 10603, MKR: 1518, AAVE: 7278, PEPE: 24478, WIF: 28752, BONK: 23095, FLOKI: 10804, WLD: 13502, STX: 4847, RUNE: 4157, ETC: 1321, ALGO: 4030, VET: 3077, FTM: 3513, MANA: 1966, SAND: 6210, AXS: 6783, APE: 18876, EOS: 1765, XTZ: 2011, NEO: 1376, THETA: 2416, IOTA: 1720, DASH: 131, ZEC: 1437, COMP: 5692, SNX: 2586, CRV: 6538, LDO: 8000, ENJ: 2130, CHZ: 4066, GMT: 18069, CAKE: 7186, SUSHI: 6758, YFI: 5864, KAS: 20396, EGLD: 6892, DYDX: 28324, GMX: 11857, PENDLE: 9481, JUP: 29210, PYTH: 28177, TIA: 22861, QNT: 3155, AR: 5632, PAXG: 4705, DAI: 4943, WBTC: 3717, STETH: 8085, KCS: 2087, CRO: 3635, GALA: 7080, FLOW: 4558, MINA: 8646, KAVA: 4846, ONE: 3945, ROSE: 7653, CKB: 4948, ORDI: 25028, SXP: 4279, BAT: 1697, ZIL: 2469, ICX: 2099, ONT: 2566, QTUM: 1684, SC: 1042, SKL: 5765, STORJ: 1772, ZRX: 1896, ANKR: 3783, BAND: 4679, CELO: 5567, CFX: 7334, JASMY: 8425, AUDIO: 7455, GNO: 1659, MASK: 8536, OMG: 1808, BLUR: 23121, RAY: 8526, ALICE: 8766, BOME: 29870, DYM: 28932, ENS: 13855, RPL: 2943, ACH: 6958, LINA: 7102, AGLD: 11568,
       // Extended coverage — top 200-400 by market cap
-      PI: 31730, TAO: 22974, ONDO: 18626, FDUSD: 26081, AERO: 29270, ROBO: 30273, XUSD: 26688, A2Z: 32287,
+      PI: 31730, TAO: 22974, ONDO: 18626, FDUSD: 26081, AERO: 29270, ROBO: 30273, XUSD: 26688, A2Z: 32287, MMT: 33068, AIA: 33358,
       JTO: 29469, PYUSD: 28298, ETHFI: 29814, ENA: 30171, W: 29587, STRK: 22691, MANTA: 28301, ALT: 29737,
       PORTAL: 29971, PIXEL: 30832, WEN: 30126, MYRO: 29045, BCUT: 30564, SLERF: 30602, TRUMP: 35788, MELANIA: 35951,
       PNUT: 33575, LUCE: 34168, MOODENG: 32982, GOAT: 33960, NEIRO: 34506, ACT: 34988, CHILLGUY: 34887,
@@ -1736,7 +1700,6 @@ function switchInfoTab(tab) {
           list.forEach(coin => {
             const sym = coin.symbol ? coin.symbol.toUpperCase() : null;
             if (!sym) return;
-            if (sym === 'AIA' || sym === 'MMT') return; // Prevent CMC duplicates
             const qt = coin.quote && coin.quote.USD ? coin.quote.USD : null;
             if (!qt) return;
             const existing = symIdx.get(sym);
@@ -1791,7 +1754,6 @@ function switchInfoTab(tab) {
 
       function addOrEnrich(sy, nm, pr, c24, mc, vol, img, sup, c1, c7, nmp) {
         sy = sy.toUpperCase();
-        if (sy === 'AIA' || sy === 'MMT') return; // Prevent CMC duplicates
         var existing = symIdx.get(sy);
         if (existing) {
           if (pr > 0 && (!existing.pr || existing.pr === 0)) existing.pr = pr;
@@ -1999,65 +1961,10 @@ function switchInfoTab(tab) {
             okData.data.forEach(t => {
               if (!t.instId || !t.instId.endsWith('-USDT')) return;
               const sy = t.instId.replace('-USDT', '').toUpperCase();
-              
-              if (existSyms.has(sy)) {
-                  const existC = allC.find(c => c.sy === sy);
-                  if (existC && (!existC.pr || existC.pr === 0)) {
-                      existC.pr = parseFloat(t.last) || 0;
-                  }
-                  return;
-              }
+              if (existSyms.has(sy)) return;
               const vol = parseFloat(t.volCcy24h) || 0;
               existSyms.add(sy);
               allC.push({ id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: t.open24h > 0 ? ((parseFloat(t.last) - parseFloat(t.open24h)) / parseFloat(t.open24h) * 100) : 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 0, sup: 0 });
-            });
-          }
-        } catch (e) { }
-
-        // Fallback: Gate.io for coins (like AIA) missing or broken in CMC
-        try {
-          const gateData = await fetchJSON('https://api.gateio.ws/api/v4/spot/tickers');
-          if (gateData && Array.isArray(gateData)) {
-            gateData.forEach(t => {
-              if (!t.currency_pair || !t.currency_pair.endsWith('_USDT')) return;
-              const sy = t.currency_pair.replace('_USDT', '').toUpperCase();
-              
-              if (existSyms.has(sy)) {
-                  const existC = allC.find(c => c.sy === sy);
-                  if (existC && (!existC.pr || existC.pr === 0)) {
-                      existC.pr = parseFloat(t.last) || 0;
-                      existC.c24 = parseFloat(t.change_percentage) || 0;
-                  }
-                  return;
-              }
-              const vol = parseFloat(t.quote_volume) || 0;
-              if (vol < 50000) return; // Skip very low vol
-              existSyms.add(sy);
-              allC.push({ id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.last) || 0, c1: 0, c4: 0, c24: parseFloat(t.change_percentage) || 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 1, sup: 0 });
-            });
-          }
-        } catch (e) { }
-
-        // Fallback: Binance (to fix broken prices for MMT, etc, if CMC fails)
-        try {
-          const binData = await fetchJSON('https://api.binance.com/api/v3/ticker/24hr');
-          if (binData && Array.isArray(binData)) {
-            binData.forEach(t => {
-              if (!t.symbol || !t.symbol.endsWith('USDT')) return;
-              const sy = t.symbol.replace('USDT', '').toUpperCase();
-              
-              if (existSyms.has(sy)) {
-                  const existC = allC.find(c => c.sy === sy);
-                  if (existC && (!existC.pr || existC.pr === 0)) {
-                      existC.pr = parseFloat(t.lastPrice) || 0;
-                      existC.c24 = parseFloat(t.priceChangePercent) || 0;
-                  }
-                  return;
-              }
-              const vol = parseFloat(t.quoteVolume) || 0;
-              if (vol < 50000) return;
-              existSyms.add(sy);
-              allC.push({ id: sy.toLowerCase(), rk: allC.length + 1, nm: COIN_NAMES[sy] || sy, sy: sy, pr: parseFloat(t.lastPrice) || 0, c1: 0, c4: 0, c24: parseFloat(t.priceChangePercent) || 0, c7: 0, mc: 0, vol: vol, img: cmcImg(sy) || `https://assets.coincap.io/assets/icons/${sy.toLowerCase()}@2x.png`, ex: 1, sup: 0 });
             });
           }
         } catch (e) { }
@@ -6343,11 +6250,8 @@ function switchInfoTab(tab) {
       const BTC_IDS = ["binance", "gate", "gdax", "bybit_spot", "okex", "kraken", "bitget", "mxc", "kucoin", "crypto_com", "bullish_com", "bingx", "huobi", "bitfinex", "bitstamp", "hashkey_exchange", "gemini", "cex", "backpack_exchange", "bitmart", "coinw", "lbank", "coinstore", "tapbit", "weex", "toobit", "digifinex", "ourbit", "whitebit", "hibt", "upbit", "phemex", "bitunix", "bitrue", "cryptology", "coinex", "nonkyc_io", "levex", "bitbank", "coinspro", "bitcointry_exchange", "valr", "bybit-eu", "deribit_spot", "bitso", "binance_us", "luno", "indodax", "bitlo", "hashkey-global", "gate_us", "pionex", "biconomy", "xt", "kcex", "orangex", "hotcoin_global", "p2pb2b", "bitvenus_spot", "bitmax", "blofin_spot", "bitdelta", "bitcastle", "zoomex", "bithumb", "bitvavo", "bydfi", "bitbaby-exchange", "dextrade", "aivora-exchange", "hyperliquid-spot", "bitkan", "cointr", "btse", "bitflyer", "exmo", "pointpay", "ondo_global_markets", "korbit", "bitopro", "max_maicoin", "foxbit", "huobi_japan", "bitpanda", "earnbit", "wootrade", "nami_exchange", "young-platform", "inx_one", "coinup", "azbit", "grovex", "bigone", "trubit", "latoken", "deepcoin", "qmall", "bitcoin_com", "humidifi", "bitci", "project-x", "native", "subnet-tokens", "supernova-cl", "gmo_japan", "okcoin-japan", "figure_markets", "cetus", "bitstorage", "near-intents", "bluefin", "bitazza", "itbit", "hyperion", "bittime", "grxswap", "independent_reserve", "aster-spot", "coin_metro", "btcmarkets", "lighter-spot", "byte-exchange", "mercado_bitcoin", "byreal", "first-ledger", "native-bsc", "momentum", "o2", "lcx", "magma-finance", "sodex", "hydrex-integral", "etherex", "kumbaya", "honeypop-dex", "nest", "coinzoom", "kinesis_money", "native-base", "emirex", "sailfish", "metalx", "capricorn-monad", "dswap", "fastex", "fullsail-finance", "minswap", "cryptal", "w-dex-polygon", "delta_spot", "dnax", "nbx", "bitmex_spot", "inex", "miaswap", "zkswap-finance", "gt3", "cube", "gliquid", "zkswap-finance-stableswap", "websea", "poloniex", "difx", "bit2me", "coinone", "paribu", "coincheck", "bilaxy", "icrypex", "koinpark", "tokpie", "xbo_com", "merchant-moe-liquidity-book-mantle", "toko_crypto", "kanga", "novadax", "turbos-finance", "sologenic", "coinjar", "vvs", "gopax", "cypher", "bitzy", "valiant", "prism-megaeth", "lithos", "atlantis-monad", "wazirx", "hata", "saucerswap", "paymium", "kayen", "tiktokfun", "nostra", "etherex-legacy", "tigris", "yuzu", "kongswap", "dooar-polygon", "xflows", "beam-swap", "mute", "zkswap-finance", "ruji-trade", "bex", "meridian", "balanced_network", "10kswap-starknet-alpha", "upheaval-finance", "pools-finance", "jaine", "dyorswap-x-layer", "everyswap", "arbswap_arbitrum_one", "sonex", "invariant_eclipse", "melegaswap", "story-hunt", "fluxion", "zuno", "obsidian-finance", "dragonswap", "machinex", "winnieswap", "alcor", "dooar_bsc", "apertureswap", "eddyfinance", "steam-exchange-rails-network", "inkyswap", "thirdfy", "rooster-protocol", "comet-swap", "ubeswap", "sega", "chainex"];
 
       try {
-        let sym = cs.toUpperCase();
-        if (sym === 'MOMENTUM') sym = 'MMT';
-        if (sym === 'DEAGENTAI' || sym === 'DEAGENT') sym = 'AIA';
-
-        let results = [];
+        const sym = cs.toUpperCase();
+        const results = [];
         const eidMap = new Map();
         const nameMap = new Map();
         const normN = n => n.toLowerCase().replace(/[\s\-.()\[\]]+/g, '').replace(/spot|exchange/g, '');
@@ -6373,8 +6277,10 @@ function switchInfoTab(tab) {
         // Cascading cmcId resolution: direct param → coin property → image URL → CMC_IDS map
         let cmcId = directCmcId ? String(directCmcId) : '';
         if (!cmcId && coinObj?.cmc_id) cmcId = String(coinObj.cmc_id);
-        if (!cmcId && coinObj?.img) cmcId = coinObj.img.match(/\/coins\/64x64\/(\d+)\.png/)?.[1] || '';
+        // CMC_IDS lookup BEFORE image URL — more reliable
         if (!cmcId && typeof CMC_IDS !== 'undefined' && CMC_IDS[cs.toUpperCase()]) cmcId = String(CMC_IDS[cs.toUpperCase()]);
+        // Image URL as last resort
+        if (!cmcId && coinObj?.img) cmcId = coinObj.img.match(/\/coins\/64x64\/(\d+)\.png/)?.[1] || '';
         const p = v => parseFloat(v) || 0;
         if (!cmcId) console.warn('[CryptoHub] No CMC ID for', cid, cs, '— exchange coverage will be limited');
 
@@ -6407,7 +6313,13 @@ function switchInfoTab(tab) {
         const fetchAggregators = () => Promise.all([
           // CoinCap: try cleaned slug, then original, then by symbol search
           fetchJSON(`https://api.coincap.io/v2/assets/${ccSlug}/markets?limit=500`).catch(() =>
-            fetchJSON(`https://api.coincap.io/v2/assets/${slug}/markets?limit=500`).catch(() => null)
+            fetchJSON(`https://api.coincap.io/v2/assets/${slug}/markets?limit=500`).catch(() =>
+              // Symbol-based search fallback: find the asset first, then get markets
+              fetchJSON(`https://api.coincap.io/v2/assets?search=${sym}&limit=1`).then(sr => {
+                const assetId = sr?.data?.[0]?.id;
+                return assetId ? fetchJSON(`https://api.coincap.io/v2/assets/${assetId}/markets?limit=500`) : null;
+              }).catch(() => null)
+            )
           ),
           // CoinPaprika: get markets directly
           fetchJSON(`https://api.coinpaprika.com/v1/coins/${papSlug}/markets?quotes=USD`, 8000).catch(() =>
@@ -6443,11 +6355,36 @@ function switchInfoTab(tab) {
           fetchJSON(`https://api.huobi.pro/market/detail/merged?symbol=${sym.toLowerCase()}usdt`).catch(() => null)
         ]);
 
-        // ── FIRE ALL 3 SOURCES IN PARALLEL ──
-        const [cmcMarkets, [ccR, papR], directResults] = await Promise.all([
+        // ── SOURCE D: CoinGecko Tickers (great exchange coverage) ──
+        const fetchCGTickers = async () => {
+          try {
+            const r = await Promise.race([
+              fetch(`https://api.coingecko.com/api/v3/coins/${slug}/tickers?include_exchange_logo=false&depth=false&order=volume_desc&page=1`, 
+                { headers: { 'Accept': 'application/json' } }),
+              _tout(10000)
+            ]);
+            if (r.ok) return await r.json();
+          } catch (e) { }
+          // Try alternative slugs
+          if (ccSlug !== slug) {
+            try {
+              const r2 = await Promise.race([
+                fetch(`https://api.coingecko.com/api/v3/coins/${ccSlug}/tickers?include_exchange_logo=false&depth=false&order=volume_desc&page=1`,
+                  { headers: { 'Accept': 'application/json' } }),
+                _tout(8000)
+              ]);
+              if (r2.ok) return await r2.json();
+            } catch (e) { }
+          }
+          return null;
+        };
+
+        // ── FIRE ALL 4 SOURCES IN PARALLEL ──
+        const [cmcMarkets, [ccR, papR], directResults, cgTickers] = await Promise.all([
           fetchProxyMarkets(),
           fetchAggregators(),
-          fetchDirectAPIs()
+          fetchDirectAPIs(),
+          fetchCGTickers()
         ]);
 
         // ── PROCESS SOURCE A: CMC Market Pairs ──
@@ -6488,6 +6425,20 @@ function switchInfoTab(tab) {
             const pr = parseFloat(m.quotes?.USD?.price) || 0;
             const vol = _saneVol(parseFloat(m.quotes?.USD?.volume_24h) || 0);
             if (pr > 0) addResult(eid, exName, m.pair.replace('-', '/'), pr, vol);
+          });
+        }
+
+        // ── PROCESS SOURCE D: CoinGecko Tickers ──
+        if (cgTickers?.tickers) {
+          cgTickers.tickers.forEach(t => {
+            if (!t.market?.name) return;
+            const exName = t.market.name;
+            if (!_isSpotEx(exName)) return;
+            const eid = mapEid((t.market.identifier || exName).toLowerCase().replace(/[\s.]+/g, '_'));
+            const pr = parseFloat(t.converted_last?.usd) || 0;
+            const vol = _saneVol(parseFloat(t.converted_volume?.usd) || 0);
+            const pair = (t.base || sym) + '/' + (t.target || 'USDT');
+            if (pr > 0) addResult(eid, exName, pair, pr, vol);
           });
         }
 
@@ -6547,13 +6498,7 @@ function switchInfoTab(tab) {
           }
         }
 
-        // Precise price-based filtering to eliminate fake/manipulated tokens entirely out of the Modal no matter the exchange
-        if (sym === 'MMT') {
-           results = results.filter(r => r.pr > 0.05);
-        }
-        if (sym === 'AIA') {
-           results = results.filter(r => r.pr > 0.05);
-        }
+        // Only real exchange data from APIs — no simulation for any coin
 
         // ── Trusted Exchange Tiers (CMC free API doesn't include trust scores) ──
         const _tier1 = new Set(['binance','coinbase','gdax','bybit','bybit_spot','okex','okx','kraken','upbit','bitfinex','kucoin','gate','mexc','mxc','bitget','crypto_com','bithumb','bitstamp','gemini']);
@@ -6580,68 +6525,75 @@ function switchInfoTab(tab) {
         const totalVol = final.filter(r => r._t > 0).reduce((s, r) => s + r.vol, 0) || final.reduce((s, r) => s + r.vol, 0);
 
         exData = final; exPage = 1;
-        console.log('[CryptoHub] exchanges loaded:', final.length, '| coin:', cid, '| cmcId:', cmcId, '| sources: CMC=' + (cmcMarkets?.data?.marketPairs?.length || 0) + ' CoinCap=' + (ccR?.data?.length || 0) + ' Paprika=' + (Array.isArray(papR) ? papR.length : 0) + ' Direct=8');
+        console.log('[CryptoHub] exchanges loaded:', final.length, '| coin:', cid, '| cmcId:', cmcId, '| sources: CMC=' + (cmcMarkets?.data?.marketPairs?.length || 0) + ' CoinCap=' + (ccR?.data?.length || 0) + ' Paprika=' + (Array.isArray(papR) ? papR.length : 0) + ' CG=' + (cgTickers?.tickers?.length || 0) + ' Direct=8');
 
-        // ── Sync coin price from LIVE exchange data only (not cached CMC) ──
-        try {
-          // Build live prices array from direct API responses (these are real-time)
-          const _livePrices = [];
-          if (p(binU?.lastPrice) > 0) _livePrices.push({ n: 'Binance', pr: p(binU.lastPrice), vol: p(binU.quoteVolume) });
-          if (p(okxU?.data?.[0]?.last) > 0) _livePrices.push({ n: 'OKX', pr: p(okxU.data[0].last), vol: p(okxU.data[0].volCcy24h) });
-          if (p(bybitU?.result?.list?.[0]?.lastPrice) > 0) _livePrices.push({ n: 'Bybit', pr: p(bybitU.result.list[0].lastPrice), vol: p(bybitU.result.list[0].turnover24h) });
-          if (p(gateU?.[0]?.last) > 0) _livePrices.push({ n: 'Gate', pr: p(gateU[0].last), vol: p(gateU[0].quote_volume) });
-          if (p(mexU?.lastPrice) > 0) _livePrices.push({ n: 'MEXC', pr: p(mexU.lastPrice), vol: p(mexU.quoteVolume) });
-          if (p(kucoinU?.data?.last) > 0) _livePrices.push({ n: 'KuCoin', pr: p(kucoinU.data.last), vol: p(kucoinU.data.volValue) });
-          if (p(bitgetU?.data?.[0]?.lastPr) > 0) _livePrices.push({ n: 'Bitget', pr: p(bitgetU.data[0].lastPr), vol: p(bitgetU.data[0].quoteVolume) });
-          _livePrices.sort((a, b) => (b.vol || 0) - (a.vol || 0));
+        // ── Price Sync: Fix header price + exchange table prices ──
+        // Step A: Collect live prices from Direct APIs (real-time, most reliable)
+        const _liveMap = new Map(); // eid → live USDT price
+        if (p(binU?.lastPrice) > 0) _liveMap.set('binance', p(binU.lastPrice));
+        if (p(okxU?.data?.[0]?.last) > 0) _liveMap.set('okex', p(okxU.data[0].last));
+        if (p(bybitU?.result?.list?.[0]?.lastPrice) > 0) _liveMap.set('bybit_spot', p(bybitU.result.list[0].lastPrice));
+        if (p(gateU?.[0]?.last) > 0) _liveMap.set('gate', p(gateU[0].last));
+        if (p(mexU?.lastPrice) > 0) _liveMap.set('mxc', p(mexU.lastPrice));
+        if (p(kucoinU?.data?.last) > 0) _liveMap.set('kucoin', p(kucoinU.data.last));
+        if (p(bitgetU?.data?.[0]?.lastPr) > 0) _liveMap.set('bitget', p(bitgetU.data[0].lastPr));
 
-          // Fallback: if no live API data, use CMC proxy prices (better than wrong CMC listing price)
-          let _bestLive = _livePrices[0] || null;
-          if (!_bestLive) {
-            const _cmcUsdt = final.filter(r => r.pr > 0 && /usdt|usd|busd/i.test(r.pair) && r._t >= 1);
-            if (_cmcUsdt.length > 0) _bestLive = { n: _cmcUsdt[0].n, pr: _cmcUsdt[0].pr, vol: _cmcUsdt[0].vol };
-            if (!_bestLive) {
-              const _anyUsdt = final.filter(r => r.pr > 0 && /usdt|usd|busd/i.test(r.pair));
-              if (_anyUsdt.length > 0) _bestLive = { n: _anyUsdt[0].n, pr: _anyUsdt[0].pr, vol: _anyUsdt[0].vol };
-            }
+        // Step B: Override cached exchange table prices with live data
+        final.forEach(r => {
+          if (/usdt/i.test(r.pair)) {
+            const live = _liveMap.get(r.eid);
+            if (live && live > 0) r.pr = live;
           }
+        });
 
-          if (_bestLive && _bestLive.pr > 0) {
+        // Step C: Calculate median USDT price from all exchanges (for header sync)
+        const _allUsdtPrices = final.filter(r => r.pr > 0 && /usdt/i.test(r.pair)).map(r => r.pr).sort((a, b) => a - b);
+        let _medianPrice = 0;
+        if (_allUsdtPrices.length > 0) {
+          const mid = Math.floor(_allUsdtPrices.length / 2);
+          _medianPrice = _allUsdtPrices.length % 2 === 0 ? (_allUsdtPrices[mid - 1] + _allUsdtPrices[mid]) / 2 : _allUsdtPrices[mid];
+        }
+
+        // Step D: Remove outlier exchange prices (>20% off from median)
+        if (_medianPrice > 0) {
+          final.forEach(r => {
+            if (r.pr > 0 && /usdt/i.test(r.pair)) {
+              const off = Math.abs(r.pr - _medianPrice) / _medianPrice;
+              if (off > 0.20) r.pr = _medianPrice; // replace outlier with median
+            }
+          });
+        }
+
+        // Step E: Update header price if it's wrong
+        if (_medianPrice > 0) {
+          try {
             const cdPriceEl = $('cdPrice');
             if (cdPriceEl) {
-              const currentText = cdPriceEl.textContent || '';
-              const currentPr = parseFloat(currentText.replace(/[$,\s]/g, '')) || 0;
-              const exPr = _bestLive.pr;
-              const diff = currentPr > 0 ? Math.abs(exPr - currentPr) / currentPr : 1;
-              if (currentPr <= 0 || diff > 0.05) {
-                const prDisp = exPr >= 1 ? exPr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : parseFloat(exPr.toFixed(8));
+              const currentPr = parseFloat((cdPriceEl.textContent || '').replace(/[$,\s]/g, '')) || 0;
+              const diff = currentPr > 0 ? Math.abs(_medianPrice - currentPr) / currentPr : 1;
+              if (diff > 0.05) {
+                const prDisp = _medianPrice >= 1
+                  ? _medianPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                  : parseFloat(_medianPrice.toFixed(8));
                 cdPriceEl.textContent = '$' + prDisp;
                 cdPriceEl.style.transition = 'color 0.3s';
                 cdPriceEl.style.color = '#16c784';
                 setTimeout(() => { cdPriceEl.style.color = ''; }, 1500);
+                // Update allC array too
                 const coinInArr = allC.find(c => c.id === cid) || allC.find(c => c.sy.toUpperCase() === cs.toUpperCase());
                 if (coinInArr) {
-                  coinInArr.pr = exPr;
-                  if (coinInArr.sup > 0) coinInArr.mc = exPr * coinInArr.sup;
-                  const _fdv = (coinInArr.ms || coinInArr.ts || coinInArr.sup || 0) * exPr;
-                  const fdvEl = $('cdFdv'); if (fdvEl && _fdv > 0) fdvEl.textContent = fN(_fdv);
-                  const mcEl = $('cdMcap'); if (mcEl && coinInArr.mc > 0) mcEl.textContent = fN(coinInArr.mc);
+                  coinInArr.pr = _medianPrice;
+                  if (coinInArr.sup > 0) coinInArr.mc = _medianPrice * coinInArr.sup;
+                  const mcEl = $('cdMcap');
+                  if (mcEl && coinInArr.mc > 0) mcEl.textContent = fN(coinInArr.mc);
+                  const _fdv = (coinInArr.ms || coinInArr.ts || coinInArr.sup || 0) * _medianPrice;
+                  const fdvEl = $('cdFdv');
+                  if (fdvEl && _fdv > 0) fdvEl.textContent = fN(_fdv);
                 }
               }
             }
-          }
-
-          // ── Also update exchange table prices from live APIs ──
-          if (_livePrices.length > 0) {
-            const _liveMap = {};
-            _livePrices.forEach(lp => { _liveMap[lp.n.toLowerCase()] = lp.pr; });
-            final.forEach(r => {
-              const lk = r.n.toLowerCase().replace(/\.io|\.com/g, '');
-              const livePrice = _liveMap[lk] || _liveMap[r.n.toLowerCase()];
-              if (livePrice && livePrice > 0 && /usdt/i.test(r.pair)) r.pr = livePrice;
-            });
-          }
-        } catch (syncErr) { }
+          } catch (e) { }
+        }
 
         $('exCt').textContent = final.length;
         $('exTotVol').innerHTML = totalVol > 0 ? `💰 Total Volume: <b>$${fN(totalVol)}</b>` : '';
@@ -6948,10 +6900,9 @@ function switchInfoTab(tab) {
       }
       const q = query.toLowerCase();
       const searchPool = allC.length > 10 ? allC : INSTANT_COINS;
-      const coins = searchPool.filter(c => {
-        if ((c.sy === 'AIA' || c.sy === 'MMT') && c.cmc_id) return false; // Prevent duplicates in Search
-        return (c.nm || '').toLowerCase().includes(q) || (c.sy || '').toLowerCase().includes(q);
-      }).slice(0, 8);
+      const coins = searchPool.filter(c =>
+        (c.nm || '').toLowerCase().includes(q) || (c.sy || '').toLowerCase().includes(q)
+      ).slice(0, 8);
       const exchanges = EX_DB.filter(ex => ex.n.toLowerCase().includes(q)).slice(0, 4);
 
       // --- NFT Collections ---

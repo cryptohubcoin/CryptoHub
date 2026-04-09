@@ -1,21 +1,12 @@
 # ==========================================
-# _redirects - CryptoHub
+# Fix 404 errors - April 2025
 # ==========================================
 
-# ==========================================
-# Fix 404 errors - April 2025 (أولوية قصوى)
-# ==========================================
-
-# صفحات Blog مفقودة → صفحات موجودة
 /blog/real-world-assets-rwa /blog/what-is-rwa 301
 /token-unlock-calendar /token-vesting 301
-
-# صفحات API/Chart قديمة → صفحات جديدة
 /market_char / 301
 /candles /crypto-analyzer 301
 /v3/kline /crypto-analyzer 301
-
-# باراميترات البحث واللغة → الصفحة الرئيسية
 /?q=* / 301
 /?lang=* / 301
 
@@ -23,7 +14,6 @@
 # Block suspicious/bot requests
 # ==========================================
 
-# WordPress probing (bots) - redirect to homepage
 /wp-admin* / 301
 /wp-login* / 301
 /wp-content* / 301
@@ -31,24 +21,13 @@
 /wp-json* / 301
 /xmlrpc.php / 301
 /wordpress* / 301
-
-# Sensitive files
 /.env / 301
 /.git* / 301
 /.htaccess / 301
 /.htpasswd / 301
-
-# Database/admin panels
 /phpmyadmin* / 301
 /pma* / 301
 /mysql* / 301
-
-# PHP/server probing
 /install* / 301
 /setup* / 301
 /configuration* / 301
-
-# ==========================================
-# Redirect all traffic to main domain
-# ==========================================
-

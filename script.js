@@ -1076,6 +1076,25 @@ function switchInfoTab(tab) {
 
         // Re-rank + re-render
         allC.sort((a, b) => (b.mc || 0) - (a.mc || 0) || (b.vol || 0) - (a.vol || 0));
+
+        // ── Fix: Replace wrong coins with correct versions ──
+        // Some symbols have multiple tokens (old vs new). Force the correct CoinGecko ID + CMC ID.
+        const COIN_ID_FIX = {
+          'AIA': { correctId: 'deagentai', cmcId: '38430', wrongIds: ['aia','aia-chain','aia-token'] },
+          'MMT': { correctId: 'momentum-3', cmcId: '38231', wrongIds: ['momentum-safe','msafe','mmt','momentum'] },
+        };
+        allC.forEach(c => {
+          const fix = COIN_ID_FIX[c.sy?.toUpperCase()];
+          if (fix && c.id !== fix.correctId) {
+            c.id = fix.correctId;
+            c.cmc_id = fix.cmcId;
+            // Reset price so it gets fetched correctly from CMC enrichment
+            if (c.pr > 0 && c.pr < 0.01 && fix.correctId === 'deagentai') {
+              c.pr = 0.14; c.mc = 0.14 * (c.sup || 189000000); // Approximate until CMC enrichment updates it
+            }
+          }
+        });
+
         allC.forEach((c, i) => {
           c.rk = i + 1;
           // Auto-extract cmc_id from image URL if not already set

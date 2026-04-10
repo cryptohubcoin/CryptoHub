@@ -1,5 +1,10 @@
 # ==========================================
-# Fix 404 errors - April 2025
+# Cloudflare Pages Redirects - CryptoHub
+# Format: source destination [code]
+# ==========================================
+
+# ==========================================
+# SEO Redirects - 301 Permanent
 # ==========================================
 
 /blog/real-world-assets-rwa /blog/what-is-rwa 301
@@ -7,27 +12,43 @@
 /market_char / 301
 /candles /crypto-analyzer 301
 /v3/kline /crypto-analyzer 301
-/?q=* / 301
-/?lang=* / 301
 
 # ==========================================
-# Block suspicious/bot requests
+# API Redirects (لو عندك API worker)
 # ==========================================
 
-/wp-admin* / 301
-/wp-login* / 301
-/wp-content* / 301
-/wp-includes* / 301
-/wp-json* / 301
-/xmlrpc.php / 301
-/wordpress* / 301
-/.env / 301
-/.git* / 301
-/.htaccess / 301
-/.htpasswd / 301
-/phpmyadmin* / 301
-/pma* / 301
-/mysql* / 301
-/install* / 301
-/setup* / 301
-/configuration* / 301
+/api/* https://late-wood-9120.bitcoinswapnet.workers.dev/api/:splat 200
+
+# ==========================================
+# Block WordPress/Bot Attacks - 404
+# ==========================================
+
+/wp-admin* /404 404
+/wp-login* /404 404
+/wp-content* /404 404
+/wp-includes* /404 404
+/wp-json* /404 404
+/xmlrpc.php /404 404
+/wordpress* /404 404
+
+# ==========================================
+# Block Sensitive Files - 404
+# ==========================================
+
+/.env /404 404
+/.git* /404 404
+/.htaccess /404 404
+/.htpasswd /404 404
+/phpmyadmin* /404 404
+/pma* /404 404
+/mysql* /404 404
+/admin* /404 404
+/config* /404 404
+/setup* /404 404
+/install* /404 404
+
+# ==========================================
+# SPA Fallback (لو React/Vue app)
+# ==========================================
+
+/* /index.html 200

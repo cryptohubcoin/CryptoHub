@@ -2072,6 +2072,14 @@ function switchInfoTab(tab) {
       }
       const bar = $('cmcBar');
       if (bar) bar.innerHTML = h.join('');
+      // Scroll arrows setup
+      const arrS = $('cmcArrStart');
+      const arrE = $('cmcArrEnd');
+      if (bar) {
+        var isRtl = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+        if (arrS) arrS.onclick = function() { bar.scrollBy({ left: isRtl ? 200 : -200, behavior: 'smooth' }); };
+        if (arrE) arrE.onclick = function() { bar.scrollBy({ left: isRtl ? -200 : 200, behavior: 'smooth' }); };
+      }
     }
 
     // WebSocket + Auto-Reconnect
@@ -2096,6 +2104,8 @@ function switchInfoTab(tab) {
       if (!wsStms.length) return; doWS();
       if (!uInt) uInt = setInterval(() => { if (cPage === 1 && document.querySelector('#tab_crypto.active')) { const _upd = () => { try { updatePricesInPlace() } catch (e) { render() } }; if ('requestIdleCallback' in window) { requestIdleCallback(_upd, { timeout: 2000 }) } else { setTimeout(_upd, 0) } } }, 5000);
       setInterval(() => { if (wsOk && Date.now() - wsLst > 25000) { wsOk = false; reWS() } }, 12000);
+      // Periodic full price refresh (covers coins outside WebSocket top 100)
+      setInterval(() => refreshPrices().catch(() => {}), 30000);
       // Fetch accurate global market data from CoinGecko every 30s
       _fetchGlobalMarketData();
       setInterval(_fetchGlobalMarketData, 30000);
@@ -6226,6 +6236,39 @@ function switchInfoTab(tab) {
         $('cdVol').textContent = cd.vol > 0 ? fN(cd.vol) : '--';
         $('cdVM').textContent = (cd.mc > 0 && cd.vol > 0) ? ((cd.vol / cd.mc) * 100).toFixed(2) + '%' : '--';
       }
+
+      // ── Live price for ANY coin: fetch from exchanges directly ──
+      if (window.exUpdTimer) clearInterval(window.exUpdTimer);
+      const _lSy = cs.toUpperCase();
+      const _fetchLive = async () => {
+        try {
+          const results = await Promise.allSettled([
+            fetch('https://api.mexc.com/api/v3/ticker/24hr?symbol=' + _lSy + 'USDT').then(r => r.ok ? r.json() : null),
+            fetch('https://api.gateio.ws/api/v4/spot/tickers?currency_pair=' + _lSy + '_USDT').then(r => r.ok ? r.json() : null),
+            fetch('https://api.bitget.com/api/v2/spot/market/tickers?symbol=' + _lSy + 'USDT').then(r => r.ok ? r.json() : null),
+          ]);
+          let pr = 0, chg = 0;
+          for (const res of results) {
+            if (res.status !== 'fulfilled' || !res.value) continue;
+            const r = res.value;
+            if (r.lastPrice) { pr = parseFloat(r.lastPrice); chg = parseFloat(r.priceChangePercent) || 0; break; }
+            if (Array.isArray(r) && r[0]?.last) { pr = parseFloat(r[0].last); chg = parseFloat(r[0].change_percentage) || 0; break; }
+            if (r.data?.[0]?.lastPr) { pr = parseFloat(r.data[0].lastPr); chg = parseFloat(r.data[0].change24h) * 100 || 0; break; }
+          }
+          if (pr > 0 && $('exMod')?.classList.contains('active')) {
+            const el = $('cdPrice');
+            if (el) {
+              const old = parseFloat((el.textContent || '').replace(/[$,\s]/g, '')) || 0;
+              el.textContent = '$' + (pr >= 1 ? pr.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : parseFloat(pr.toFixed(8)));
+              if (old > 0 && Math.abs(pr - old) > 0.00001) { el.style.color = pr > old ? '#16c784' : '#ea3943'; setTimeout(() => { el.style.color = ''; }, 600); }
+            }
+            $('cdChg').innerHTML = `<span style="color:${chg>=0?'var(--gn)':'var(--rd)'}">${chg>=0?'▲':'▼'} ${Math.abs(chg).toFixed(2)}% (24h)</span>`;
+            const _c = allC.find(c => c.sy === _lSy); if (_c) { _c.pr = pr; _c.c24 = chg; }
+          }
+        } catch (e) {}
+      };
+      _fetchLive(); // fetch immediately
+      window.exUpdTimer = setInterval(_fetchLive, 8000); // then every 8s
       $('mRank').textContent = '#' + (cd.rk || '--');
       $('cdMktName').textContent = cn;
 
@@ -6239,9 +6282,6 @@ function switchInfoTab(tab) {
 
       // Trigger Exchange Fetch — pass cd.cmc_id directly for reliability
       loadExchangesForCoin(cid, cn, cs, cd?.cmc_id || null);
-
-      // Real-time updates disabled — prices stay stable from API data
-      if (window.exUpdTimer) { clearInterval(window.exUpdTimer); }
     }
 
     function _fillSup(circ, total, maxS, fdv, sym) {

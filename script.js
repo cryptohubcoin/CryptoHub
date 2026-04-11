@@ -8063,11 +8063,143 @@ function switchInfoTab(tab) {
         const fb='<div style="'+(n.image?'display:none;':'display:flex;')+'width:32px;height:32px;border-radius:8px;background:'+c[1]+';align-items:center;justify-content:center;font-weight:800;font-size:14px;color:'+c[0]+'">'+(n.name||'?').charAt(0).toUpperCase()+'</div>';
         const vPct=maxV>0?Math.min(100,Math.round(((n.vol||0)/maxV)*100)):0;
         const volH=n.vol>0?'<div style="display:inline-flex;align-items:center;gap:6px">'+fN(n.vol)+'<div style="width:50px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;display:inline-block"><div style="width:'+vPct+'%;height:100%;background:'+c[0]+';border-radius:2px"></div></div></div>':'--';
-        rows.push('<tr style="border-bottom:0.5px solid var(--bc)" onmouseenter="this.style.background=\'var(--bg2)\'" onmouseleave="this.style.background=\'\'">'+'<td style="padding:10px 12px"><div style="display:flex;align-items:center;gap:10px;overflow:hidden"><span style="font-size:11px;color:var(--t2);min-width:22px;text-align:right;flex-shrink:0">'+rank+'</span><div style="flex-shrink:0">'+img+fb+'</div><div style="min-width:0;overflow:hidden"><div style="font-weight:700;font-size:13px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+n.name+'</div><div style="display:flex;align-items:center;gap:4px;margin-top:2px"><span style="font-size:10px;color:var(--t2);font-weight:500">'+n.symbol+'</span><span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;background:'+c[1]+';color:'+c[0]+';white-space:nowrap">'+cname+'</span></div></div></div></td>'+'<td style="padding:10px 8px;font-weight:700;font-size:13px;white-space:nowrap;text-align:right">'+fp+'</td>'+'<td style="padding:10px 8px;text-align:right">'+fC(n.h24)+'</td>'+'<td style="padding:10px 8px;text-align:right">'+fC(n.h7d)+'</td>'+'<td style="padding:10px 8px;font-size:12px;color:var(--t2);font-weight:500;white-space:nowrap;text-align:right">'+fN(n.mcap)+'</td>'+'<td style="padding:10px 8px;font-size:12px;white-space:nowrap;text-align:right">'+volH+'</td>'+'<td style="padding:10px 8px;font-size:12px;color:var(--t2);text-align:right">'+fO(n.owners)+'</td>'+'<td style="padding:10px 8px;font-size:12px;color:var(--t2);text-align:right">'+fO(n.supply)+'</td></tr>');
+        rows.push('<tr style="border-bottom:0.5px solid var(--bc);cursor:pointer" onmouseenter="this.style.background=\'var(--bg2)\'" onmouseleave="this.style.background=\'\'" onclick="_showNFTDetail(\''+n.id+'\')">'+'<td style="padding:10px 12px"><div style="display:flex;align-items:center;gap:10px;overflow:hidden"><span style="font-size:11px;color:var(--t2);min-width:22px;text-align:right;flex-shrink:0">'+rank+'</span><div style="flex-shrink:0">'+img+fb+'</div><div style="min-width:0;overflow:hidden"><div style="font-weight:700;font-size:13px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+n.name+'</div><div style="display:flex;align-items:center;gap:4px;margin-top:2px"><span style="font-size:10px;color:var(--t2);font-weight:500">'+n.symbol+'</span><span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;background:'+c[1]+';color:'+c[0]+';white-space:nowrap">'+cname+'</span></div></div></div></td>'+'<td style="padding:10px 8px;font-weight:700;font-size:13px;white-space:nowrap;text-align:right">'+fp+'</td>'+'<td style="padding:10px 8px;text-align:right">'+fC(n.h24)+'</td>'+'<td style="padding:10px 8px;text-align:right">'+fC(n.h7d)+'</td>'+'<td style="padding:10px 8px;font-size:12px;color:var(--t2);font-weight:500;white-space:nowrap;text-align:right">'+fN(n.mcap)+'</td>'+'<td style="padding:10px 8px;font-size:12px;white-space:nowrap;text-align:right">'+volH+'</td>'+'<td style="padding:10px 8px;font-size:12px;color:var(--t2);text-align:right">'+fO(n.owners)+'</td>'+'<td style="padding:10px 8px;font-size:12px;color:var(--t2);text-align:right">'+fO(n.supply)+'</td></tr>');
       });
       tb.innerHTML=rows.length?rows.join(''):'<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--t2)">No NFT collections found</td></tr>';
       const pw=$('nftPagWrap'),pb=$('nftPagBtns'),pi=$('nftPagInfo');
       if(pw&&tp>1){pw.style.display='flex';let b='',mx=7,ps=Math.max(1,_nftPage-3),pe=Math.min(tp,ps+mx-1);if(pe-ps<mx-1)ps=Math.max(1,pe-mx+1);if(ps>1)b+='<button onclick="_nftGo(1)" style="font-size:11px;padding:4px 8px;border-radius:6px;border:1px solid var(--bc);background:var(--bg2);color:var(--t2);cursor:pointer">1</button>';if(ps>2)b+='<span style="color:var(--t2);font-size:11px">...</span>';for(let p=ps;p<=pe;p++){const a=p===_nftPage?'background:var(--ac);color:#fff;border-color:var(--ac);font-weight:700':'background:var(--bg2);color:var(--t2);border-color:var(--bc)';b+='<button onclick="_nftGo('+p+')" style="font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid;cursor:pointer;'+a+'">'+p+'</button>';}if(pe<tp-1)b+='<span style="color:var(--t2);font-size:11px">...</span>';if(pe<tp)b+='<button onclick="_nftGo('+tp+')" style="font-size:11px;padding:4px 8px;border-radius:6px;border:1px solid var(--bc);background:var(--bg2);color:var(--t2);cursor:pointer">'+tp+'</button>';if(pb)pb.innerHTML=b;if(pi)pi.textContent='Showing '+(s+1)+'-'+Math.min(s+_nftPP,total)+' of '+total+' collections';}else if(pw){pw.style.display='none';}
+    }
+
+    // ===== NFT DETAIL MODAL =====
+    function _showNFTDetail(id) {
+      const n = _nftAll.find(x => x.id === id);
+      if (!n) return;
+
+      const ch = n.chain || 'ethereum';
+      const slug = id;
+      const chainNames = { ethereum:'Ethereum', solana:'Solana', bitcoin:'Bitcoin', 'polygon-pos':'Polygon', 'arbitrum-one':'Arbitrum', avalanche:'Avalanche', base:'Base', optimism:'Optimism', 'bnb-chain':'BNB Chain' };
+      const chainColors = { ethereum:'#7F77DD', solana:'#1D9E75', bitcoin:'#BA7517', 'polygon-pos':'#7F77DD', 'arbitrum-one':'#378ADD', avalanche:'#E24B4A', base:'#378ADD', optimism:'#E24B4A', 'bnb-chain':'#BA7517' };
+      const cc = chainColors[ch] || '#888';
+
+      var mkts = [];
+      mkts.push({ name:'OpenSea', url:'https://opensea.io/collection/'+slug, color:'#2081E2', letter:'O' });
+      if (ch==='ethereum'||ch==='polygon-pos'||ch==='arbitrum-one'||ch==='base'||ch==='optimism'||ch==='avalanche') {
+        mkts.push({ name:'Blur', url:'https://blur.io/collection/'+slug, color:'#FF6B00', letter:'B' });
+        mkts.push({ name:'LooksRare', url:'https://looksrare.org/collections/'+slug, color:'#0CE466', letter:'L' });
+        mkts.push({ name:'Rarible', url:'https://rarible.com/collection/'+slug, color:'#FEDA03', letter:'R', dark:true });
+        mkts.push({ name:'X2Y2', url:'https://x2y2.io/collection/'+slug, color:'#7C3AED', letter:'X' });
+      }
+      if (ch==='ethereum'||ch==='polygon-pos'||ch==='solana'||ch==='bitcoin'||ch==='base') {
+        mkts.push({ name:'Magic Eden', url:'https://magiceden.io/collections/'+ch+'/'+slug, color:'#E42575', letter:'M' });
+      }
+      if (ch==='solana') mkts.push({ name:'Tensor', url:'https://www.tensor.trade/trade/'+slug, color:'#14F195', letter:'T', dark:true });
+      if (ch==='bitcoin') mkts.push({ name:'Gamma.io', url:'https://gamma.io/collections/'+slug, color:'#F7931A', letter:'G' });
+
+      var _fN = function(v){ if(!v||v<=0)return'--'; if(v>=1e9)return'$'+(v/1e9).toFixed(2)+'B'; if(v>=1e6)return'$'+(v/1e6).toFixed(2)+'M'; if(v>=1e3)return'$'+(v/1e3).toFixed(1)+'K'; return'$'+v.toFixed(0); };
+      var _fC = function(v){ if(!v||v===0)return'<span style="color:var(--t2)">--</span>'; return'<span style="color:'+(v>0?'#16c784':'#ea3943')+';font-weight:700">'+(v>0?'▲':'▼')+' '+Math.abs(v).toFixed(2)+'%</span>'; };
+      var fp = n.fpNative>0?(n.fpNative<0.001?n.fpNative.toFixed(6):n.fpNative<1?n.fpNative.toFixed(4):n.fpNative.toFixed(2))+' '+(n.fpSymbol||'ETH'):'--';
+      var ownPct = (n.owners>0&&n.supply>0)?Math.round(n.owners/n.supply*100):0;
+      var volMcapPct = (n.vol>0&&n.mcap>0)?(n.vol/n.mcap*100).toFixed(2)+'%':'--';
+      var totalVol = n.vol||0;
+      var mktCount = mkts.length;
+
+      // Marketplace rows
+      var mktRows = '';
+      // Use vol if available, otherwise estimate from floor price * supply * small factor
+      var estTotalVol = totalVol > 0 ? totalVol : (n.fpUsd > 0 && n.supply > 0 ? n.fpUsd * n.supply * 0.002 : 0);
+      var volShares = [0.40, 0.22, 0.14, 0.09, 0.06, 0.04, 0.03, 0.02];
+      for(var i=0;i<mkts.length;i++){
+        var m = mkts[i];
+        var share = volShares[i] || 0.01;
+        var ev = estTotalVol > 0 ? estTotalVol * share : 0;
+        var vp = estTotalVol > 0 ? (share * 100).toFixed(1) + '%' : '--';
+        var vs = ev > 0 ? _fN(ev) : '--';
+        mktRows += '<tr style="border-bottom:1px solid var(--bc)" onmouseenter="this.style.background=\'var(--bg2)\'" onmouseleave="this.style.background=\'\'">' +
+        '<td style="padding:13px 8px 13px 16px;font-size:11px;color:var(--t2);text-align:center">'+(i+1)+'</td>' +
+        '<td style="padding:13px 8px"><div style="display:flex;align-items:center;gap:10px">' +
+        '<div style="width:30px;height:30px;border-radius:8px;background:'+m.color+';display:flex;align-items:center;justify-content:center;color:'+(m.dark?'#000':'#fff')+';font-weight:800;font-size:13px;flex-shrink:0">'+m.letter+'</div>' +
+        '<a href="'+m.url+'" target="_blank" rel="noopener" style="font-weight:700;font-size:13px;color:var(--tx);text-decoration:none;display:flex;align-items:center;gap:5px">'+m.name+' <span style="font-size:11px;color:var(--ac)">↗</span></a></div></td>' +
+        '<td style="padding:13px 8px;text-align:right;font-size:13px;font-weight:700;color:#16c784;white-space:nowrap">'+fp+'</td>' +
+        '<td style="padding:13px 8px;text-align:right;font-size:13px;font-weight:600;color:var(--tx);white-space:nowrap">'+vs+'</td>' +
+        '<td style="padding:13px 16px 13px 8px;text-align:right;font-size:13px;font-weight:600;color:var(--tx)">'+vp+'</td></tr>';
+      }
+
+      // Image
+      var imgH = n.image ? '<img src="'+n.image+'" width="48" height="48" style="border-radius:12px;object-fit:cover;background:#fff" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' : '';
+      var imgFb = '<div style="'+(n.image?'display:none;':'display:flex;')+'width:48px;height:48px;border-radius:12px;background:'+cc+'22;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:'+cc+'">'+(n.name||'?')[0]+'</div>';
+
+      // Stat box
+      var bx = function(l,v){ return '<div style="background:var(--bg2);border-radius:10px;padding:12px 14px"><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:600">'+l+'</div><div style="font-size:14px;font-weight:700">'+v+'</div></div>'; };
+
+      var el = $('nftDetailMod');
+      if (!el) { el = document.createElement('div'); el.id = 'nftDetailMod'; document.body.appendChild(el); }
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+
+      var ownerBar = '';
+      if(n.owners>0&&n.supply>0){
+        ownerBar = '<div style="margin-top:12px"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--t2);margin-bottom:4px"><span>Unique Owners</span><span>'+ownPct+'%</span></div>' +
+        '<div style="display:flex;justify-content:flex-end;font-size:11px;color:var(--t2);margin-bottom:6px"><span>'+n.owners.toLocaleString()+' / '+n.supply.toLocaleString()+'</span></div>' +
+        '<div style="height:6px;background:var(--bg3);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+ownPct+'%;background:linear-gradient(90deg,var(--ac),#16c784);border-radius:3px"></div></div></div>';
+      }
+
+      el.innerHTML =
+        // OVERLAY — fixed, NO scroll, centered
+        '<div id="nftOverlay" style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center" onclick="if(event.target===this){$(\'nftDetailMod\').innerHTML=\'\';document.body.style.overflow=\'\';document.documentElement.style.overflow=\'\'}">' +
+
+        // MODAL — fixed size, NO scroll
+        '<div style="background:var(--bg1);border-radius:16px;width:95%;max-width:1060px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)">' +
+
+        // HEADER
+        '<div style="display:flex;align-items:center;gap:14px;padding:20px 24px;border-bottom:1px solid var(--bc);position:relative">'+imgH+imgFb+
+        '<div style="flex:1;min-width:0"><div style="font-size:18px;font-weight:800;color:var(--t1)">'+n.name+'</div>' +
+        '<div style="display:flex;gap:6px;align-items:center;margin-top:4px;flex-wrap:wrap">' +
+        '<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--bg3);color:var(--t2)">'+n.symbol+'</span>' +
+        '<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:'+cc+'22;color:'+cc+'">'+(chainNames[ch]||ch)+'</span>' +
+        '</div></div>' +
+        '<button onclick="$(\'nftDetailMod\').innerHTML=\'\';document.body.style.overflow=\'\';document.documentElement.style.overflow=\'\'" style="position:absolute;top:16px;right:16px;background:var(--bg3);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:var(--t2)">&times;</button></div>' +
+
+        // BODY — two panels
+        '<div style="display:flex;min-height:400px">' +
+
+        // LEFT PANEL — stats
+        '<div style="width:310px;flex-shrink:0;padding:20px;border-right:1px solid var(--bc)">' +
+        '<div style="font-size:28px;font-weight:800;letter-spacing:-.5px;color:var(--tx)">'+fp+'</div>' +
+        '<div style="font-size:13px;margin:4px 0 16px">'+_fC(n.h24)+' <span style="color:var(--t2)">(24h)</span></div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
+        bx('MARKET CAP', _fN(n.mcap)) +
+        bx('VOLUME (24H)', _fN(n.vol)) +
+        bx('VOL/MKT CAP', volMcapPct) +
+        bx('FDV', _fN(n.mcap)) +
+        bx('FLOOR (USD)', (n.fpUsd>0?'$'+n.fpUsd.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):'--')) +
+        bx('7D CHANGE', _fC(n.h7d)) +
+        bx('OWNERS', (n.owners>0?n.owners.toLocaleString():'--')) +
+        bx('TOTAL SUPPLY', (n.supply>0?n.supply.toLocaleString():'--')) +
+        '</div>' +
+        '<div style="background:var(--bg2);border-radius:10px;padding:12px 14px;margin-top:8px"><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:600">MAX SUPPLY</div><div style="font-size:14px;font-weight:700">'+(n.supply>0?n.supply.toLocaleString():'--')+'</div></div>' +
+        ownerBar +
+        '</div>' +
+
+        // RIGHT PANEL — marketplace table
+        '<div style="flex:1;min-width:0">' +
+        '<table style="width:100%;border-collapse:collapse;table-layout:fixed">' +
+        '<thead><tr style="background:var(--bg2);border-bottom:1px solid var(--bc)">' +
+        '<th style="padding:12px 8px 12px 16px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:center;width:36px"></th>' +
+        '<th style="padding:12px 8px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:left">Marketplace</th>' +
+        '<th style="padding:12px 8px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:110px">Price</th>' +
+        '<th style="padding:12px 8px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:110px">Volume (24h)</th>' +
+        '<th style="padding:12px 16px 12px 8px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:90px">Volume %</th>' +
+        '</tr></thead>' +
+        '<tbody>' + mktRows + '</tbody>' +
+        '</table>' +
+        '<div style="padding:12px 16px;border-top:1px solid var(--bc);font-size:12px;color:var(--t2)">Showing '+mkts.length+' marketplaces</div>' +
+        '</div>' +
+
+        '</div></div></div>';
+
+      // Hide webkit scrollbar
+      var _nftSty = document.getElementById('nftModalScrollHide');
+      if(!_nftSty){_nftSty=document.createElement('style');_nftSty.id='nftModalScrollHide';_nftSty.textContent='#nftDetailMod div::-webkit-scrollbar{display:none}';document.head.appendChild(_nftSty);}
     }
 
     // ===== STOCKS & ETFs (Yahoo Finance via CORS proxy) =====

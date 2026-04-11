@@ -1,14 +1,21 @@
 # ============================================================
 # Cloudflare Pages Headers — CryptoHub
-# Fixes: Cache rate from 9.46% → 50%+
+# For Frequent Updates — Cache Rate Target: 50%+
 # ============================================================
 
-# Static assets — short cache (files don't have content hashes in names)
+# ==========================================
+# CSS/JS — 1 Hour Cache + Stale for 24h (للـ Updates المتكررة)
+# ==========================================
+
 /*.css
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 
 /*.js
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+# ==========================================
+# Fonts — Long Cache (مش بتتغير)
+# ==========================================
 
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
@@ -19,60 +26,78 @@
 /*.ttf
   Cache-Control: public, max-age=31536000, immutable
 
-# Images — long cache (30 days)
+# ==========================================
+# Images — 7 Days (لو بتتغير كتير خليها 1 يوم)
+# ==========================================
+
 /*.png
-  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
 /*.jpg
-  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
 /*.jpeg
-  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
 /*.svg
-  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
 /*.ico
-  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
 /*.webp
-  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
 /*.gif
-  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
-# Manifest & service worker
-/manifest.json
-  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
+# ==========================================
+# HTML — 5 Min + CDN 1 Hour
+# ==========================================
 
-# HTML pages — short cache with revalidation (5 min cache, serve stale for 1 hour)
 /
-  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+  Cache-Control: public, max-age=300
+  CDN-Cache-Control: public, max-age=3600
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
 
 /index.html
-  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+  Cache-Control: public, max-age=300
+  CDN-Cache-Control: public, max-age=3600
 
 /*.html
-  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+  Cache-Control: public, max-age=300
+  CDN-Cache-Control: public, max-age=3600
 
-# API responses from worker — no browser cache, CDN edge cache 60s
+# ==========================================
+# API — Browser 60s, CDN 2min
+# ==========================================
+
 /api/*
-  Cache-Control: public, max-age=60, s-maxage=120, stale-while-revalidate=300
+  Cache-Control: public, max-age=60
+  CDN-Cache-Control: public, max-age=120, stale-while-revalidate=300
   Access-Control-Allow-Origin: *
   Access-Control-Allow-Methods: GET, OPTIONS
   Access-Control-Allow-Headers: Content-Type
 
-# robots.txt & sitemap
+# ==========================================
+# Config Files
+# ==========================================
+
+/manifest.json
+  Cache-Control: public, max-age=3600
+
 /robots.txt
   Cache-Control: public, max-age=86400
 
 /sitemap.xml
   Cache-Control: public, max-age=86400
 
-# Security headers for all pages
+# ==========================================
+# Security Headers
+# ==========================================
+
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN

@@ -1,12 +1,8 @@
-# ============================================================
-# Cloudflare Pages Headers — CryptoHub
-# ============================================================
-
 /*.css
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: public, max-age=3600
 
 /*.js
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: public, max-age=3600
 
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
@@ -18,32 +14,29 @@
   Cache-Control: public, max-age=31536000, immutable
 
 /*.png
-  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800
 
 /*.jpg
-  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800
 
 /*.jpeg
-  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800
 
 /*.svg
-  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800
 
 /*.ico
-  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800
 
 /*.webp
-  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800
 
 /*.gif
-  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800
 
 /
   Cache-Control: public, max-age=300
   CDN-Cache-Control: public, max-age=3600
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: SAMEORIGIN
-  Referrer-Policy: strict-origin-when-cross-origin
 
 /index.html
   Cache-Control: public, max-age=300
@@ -53,24 +46,7 @@
   Cache-Control: public, max-age=300
   CDN-Cache-Control: public, max-age=3600
 
-/api/*
-  Cache-Control: public, max-age=60
-  CDN-Cache-Control: public, max-age=120, stale-while-revalidate=300
-  Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET, OPTIONS
-  Access-Control-Allow-Headers: Content-Type
-
-/manifest.json
-  Cache-Control: public, max-age=3600
-
-/robots.txt
-  Cache-Control: public, max-age=86400
-
-/sitemap.xml
-  Cache-Control: public, max-age=86400
-
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=()

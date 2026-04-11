@@ -1,4 +1,5 @@
-Parsed 0 valid header rules.
-Found invalid header lines:
-  - #6:  /blog/real-world-assets-rwa /blog/what-is-rwa 301
-    No headers specified
+name = "cryptohub"
+compatibility_date = "2024-01-01"
+
+# Pages Config
+pages_build_output_dir = "."

@@ -1,22 +1,8 @@
-# ==========================================
-# SEO Redirects - 301
-# ==========================================
-
 /blog/real-world-assets-rwa /blog/what-is-rwa 301
 /token-unlock-calendar /token-vesting 301
 /market_char / 301
 /candles /crypto-analyzer 301
 /v3/kline /crypto-analyzer 301
-
-# ==========================================
-# API - استخدم Function مش Redirect
-# ==========================================
-
-# /api/* شيله من هنا واستخدم /functions/api.js
-
-# ==========================================
-# Block WordPress/Bot - 200 to /404.html
-# ==========================================
 
 /wp-admin* /404.html 200
 /wp-login* /404.html 200
@@ -25,10 +11,6 @@
 /wp-json* /404.html 200
 /xmlrpc.php /404.html 200
 /wordpress* /404.html 200
-
-# ==========================================
-# Block Sensitive Files
-# ==========================================
 
 /.env /404.html 200
 /.git* /404.html 200
@@ -41,9 +23,5 @@
 /config* /404.html 200
 /setup* /404.html 200
 /install* /404.html 200
-
-# ==========================================
-# SPA Fallback - آخر حاجة
-# ==========================================
 
 /* /index.html 200

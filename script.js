@@ -8128,8 +8128,8 @@ function switchInfoTab(tab) {
       var imgH = n.image ? '<img src="'+n.image+'" width="48" height="48" style="border-radius:12px;object-fit:cover;background:#fff" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' : '';
       var imgFb = '<div style="'+(n.image?'display:none;':'display:flex;')+'width:48px;height:48px;border-radius:12px;background:'+cc+'22;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:'+cc+'">'+(n.name||'?')[0]+'</div>';
 
-      // Stat box
-      var bx = function(l,v){ return '<div style="background:var(--bg2);border-radius:10px;padding:12px 14px"><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:600">'+l+'</div><div style="font-size:14px;font-weight:700">'+v+'</div></div>'; };
+      // Stat box with border
+      var bx = function(l,v){ return '<div style="border:1px solid var(--bc);border-radius:10px;padding:12px 14px"><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:600">'+l+'</div><div style="font-size:14px;font-weight:700">'+v+'</div></div>'; };
 
       var el = $('nftDetailMod');
       if (!el) { el = document.createElement('div'); el.id = 'nftDetailMod'; document.body.appendChild(el); }
@@ -8144,11 +8144,11 @@ function switchInfoTab(tab) {
       }
 
       el.innerHTML =
-        // OVERLAY — fixed, NO scroll, centered
-        '<div id="nftOverlay" style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center" onclick="if(event.target===this){$(\'nftDetailMod\').innerHTML=\'\';document.body.style.overflow=\'\';document.documentElement.style.overflow=\'\'}">' +
+        // OVERLAY — full page
+        '<div id="nftOverlay" style="position:fixed;inset:0;z-index:9999;background:var(--bg1);overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none">' +
 
-        // MODAL — fixed size, NO scroll
-        '<div style="background:var(--bg1);border-radius:16px;width:95%;max-width:1060px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)">' +
+        // MODAL — full width
+        '<div class="nft-modal" style="background:var(--bg1);width:100%;max-width:1100px;margin:0 auto">' +
 
         // HEADER
         '<div style="display:flex;align-items:center;gap:14px;padding:20px 24px;border-bottom:1px solid var(--bc);position:relative">'+imgH+imgFb+
@@ -8160,10 +8160,10 @@ function switchInfoTab(tab) {
         '<button onclick="$(\'nftDetailMod\').innerHTML=\'\';document.body.style.overflow=\'\';document.documentElement.style.overflow=\'\'" style="position:absolute;top:16px;right:16px;background:var(--bg3);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:var(--t2)">&times;</button></div>' +
 
         // BODY — two panels
-        '<div style="display:flex;min-height:400px">' +
+        '<div class="nft-body" style="display:flex;min-height:400px">' +
 
         // LEFT PANEL — stats
-        '<div style="width:310px;flex-shrink:0;padding:20px;border-right:1px solid var(--bc)">' +
+        '<div class="nft-left" style="width:310px;flex-shrink:0;padding:20px;border-right:1px solid var(--bc)">' +
         '<div style="font-size:28px;font-weight:800;letter-spacing:-.5px;color:var(--tx)">'+fp+'</div>' +
         '<div style="font-size:13px;margin:4px 0 16px">'+_fC(n.h24)+' <span style="color:var(--t2)">(24h)</span></div>' +
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
@@ -8176,12 +8176,12 @@ function switchInfoTab(tab) {
         bx('OWNERS', (n.owners>0?n.owners.toLocaleString():'--')) +
         bx('TOTAL SUPPLY', (n.supply>0?n.supply.toLocaleString():'--')) +
         '</div>' +
-        '<div style="background:var(--bg2);border-radius:10px;padding:12px 14px;margin-top:8px"><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:600">MAX SUPPLY</div><div style="font-size:14px;font-weight:700">'+(n.supply>0?n.supply.toLocaleString():'--')+'</div></div>' +
+        '<div style="border:1px solid var(--bc);border-radius:10px;padding:12px 14px;margin-top:8px"><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:600">MAX SUPPLY</div><div style="font-size:14px;font-weight:700">'+(n.supply>0?n.supply.toLocaleString():'--')+'</div></div>' +
         ownerBar +
         '</div>' +
 
         // RIGHT PANEL — marketplace table
-        '<div style="flex:1;min-width:0">' +
+        '<div class="nft-right" style="flex:1;min-width:0">' +
         '<table style="width:100%;border-collapse:collapse;table-layout:fixed">' +
         '<thead><tr style="background:var(--bg2);border-bottom:1px solid var(--bc)">' +
         '<th style="padding:12px 8px 12px 16px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:center;width:36px"></th>' +
@@ -8197,9 +8197,170 @@ function switchInfoTab(tab) {
 
         '</div></div></div>';
 
-      // Hide webkit scrollbar
-      var _nftSty = document.getElementById('nftModalScrollHide');
-      if(!_nftSty){_nftSty=document.createElement('style');_nftSty.id='nftModalScrollHide';_nftSty.textContent='#nftDetailMod div::-webkit-scrollbar{display:none}';document.head.appendChild(_nftSty);}
+      // Responsive styles for NFT & Stock modals
+      if(!document.getElementById('nftStkModalCSS')){
+        var _ms=document.createElement('style');_ms.id='nftStkModalCSS';
+        _ms.textContent='#nftDetailMod *::-webkit-scrollbar,#stkDetailMod *::-webkit-scrollbar{display:none!important}'+
+        '@media(max-width:768px){'+
+        '#nftDetailMod .nft-body,#stkDetailMod .stk-body{flex-direction:column!important}'+
+        '#nftDetailMod .nft-left,#stkDetailMod .stk-left{width:100%!important;border-right:none!important;border-bottom:1px solid var(--bc)!important}'+
+        '#nftDetailMod .nft-right,#stkDetailMod .stk-right{width:100%!important}'+
+        '}';
+        document.head.appendChild(_ms);
+      }
+    }
+
+    // ===== STOCK/ETF DETAIL MODAL =====
+    function _showStkDetail(sy) {
+      var s = _STK.find(function(x){return x.sy===sy;});
+      if (!s) return;
+      var d = _stkP[sy] || {};
+      var pr = d.pr > 0 ? '$' + d.pr.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2}) : '--';
+      var chg = d.chg;
+      var chgStr = chg !== null && chg !== undefined ? '<span style="color:'+(chg>=0?'#16c784':'#ea3943')+';font-weight:700">'+(chg>=0?'▲':'▼')+' '+Math.abs(chg).toFixed(2)+'%</span>' : '<span style="color:var(--t2)">--</span>';
+      var vol = d.vol > 0 ? (d.vol>=1e9?'$'+(d.vol/1e9).toFixed(2)+'B':d.vol>=1e6?'$'+(d.vol/1e6).toFixed(2)+'M':d.vol>=1e3?'$'+(d.vol/1e3).toFixed(1)+'K':'$'+d.vol.toFixed(0)) : '--';
+      var hi = d.hi > 0 ? '$'+d.hi.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2}) : '--';
+      var lo = d.lo > 0 ? '$'+d.lo.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2}) : '--';
+      var w52h = d.w52h > 0 ? '$'+d.w52h.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2}) : '--';
+      var w52l = d.w52l > 0 ? '$'+d.w52l.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2}) : '--';
+      var mc = d.mc > 0 ? (d.mc>=1e12?'$'+(d.mc/1e12).toFixed(2)+'T':d.mc>=1e9?'$'+(d.mc/1e9).toFixed(2)+'B':d.mc>=1e6?'$'+(d.mc/1e6).toFixed(2)+'M':'$'+d.mc.toFixed(0)) : '--';
+      var pe = d.pe > 0 ? d.pe.toFixed(2) : '--';
+      var dy = d.dy > 0 ? d.dy.toFixed(2)+'%' : '--';
+      var catColors = {stock:'#3b82f6',etf:'#10b981',commodity:'#f59e0b',index:'#8b5cf6'};
+      var cl = catColors[s.cat]||'#666';
+      var catName = s.cat ? s.cat.charAt(0).toUpperCase()+s.cat.slice(1) : '';
+
+      // Exchanges — expanded with URLs and smart mapping
+      var _EM = {
+        'Binance':{c:'#F0B90B',l:'BN',u:'https://www.binance.com/en/trade/'},
+        'Coinbase':{c:'#0052FF',l:'CB',u:'https://www.coinbase.com/advanced-trade/spot/'},
+        'Bybit':{c:'#F7A600',l:'BY',u:'https://www.bybit.com/en/trade/spot/'},
+        'MEXC':{c:'#2C72EF',l:'MX',u:'https://www.mexc.com/exchange/'},
+        'Gate.io':{c:'#2354E6',l:'GT',u:'https://www.gate.io/trade/'},
+        'OKX':{c:'#000',l:'OK',u:'https://www.okx.com/trade-spot/'},
+        'KuCoin':{c:'#23AF91',l:'KC',u:'https://www.kucoin.com/trade/'},
+        'Bitget':{c:'#00F0FF',l:'BG',u:'https://www.bitget.com/spot/',dark:true},
+        'HTX':{c:'#2B3139',l:'HX',u:'https://www.htx.com/trade/'},
+        'BingX':{c:'#2951FF',l:'BX',u:'https://bingx.com/en/spot/'},
+        'IBKR':{c:'#CC0000',l:'IB',u:'https://www.interactivebrokers.com/'},
+        'Schwab':{c:'#1A7FC1',l:'SC',u:'https://www.schwab.com/'},
+        'Robinhood':{c:'#00C805',l:'RH',u:'https://robinhood.com/stocks/'},
+        'Fidelity':{c:'#4B8A3F',l:'FD',u:'https://www.fidelity.com/'},
+        'eToro':{c:'#69C53E',l:'eT',u:'https://www.etoro.com/markets/'},
+        'TD Ameritrade':{c:'#3A913A',l:'TD',u:'https://www.tdameritrade.com/'},
+        'Webull':{c:'#F23A2F',l:'WB',u:'https://www.webull.com/quote/'},
+        'Vanguard':{c:'#8B0000',l:'VG',u:'https://investor.vanguard.com/'},
+        'TradeStation':{c:'#0033CC',l:'TS',u:'https://www.tradestation.com/'},
+        'Tastytrade':{c:'#FF6B00',l:'TT',u:'https://www.tastytrade.com/'}
+      };
+
+      // Build full exchange list based on what's in s.ex PLUS smart additions
+      var baseEx = s.ex ? s.ex.slice() : [];
+      // Add more exchanges based on category
+      var cryptoExchanges = ['Binance','Bybit','MEXC','Gate.io','OKX','KuCoin','Bitget','HTX','BingX','Coinbase'];
+      var brokerExchanges = ['IBKR','Schwab','Robinhood','Fidelity','eToro','TD Ameritrade','Webull','Vanguard','TradeStation','Tastytrade'];
+      var addExchanges = [];
+      if(s.cat==='stock'){
+        // Crypto stocks (MSTR, COIN, MARA, etc) get crypto exchanges
+        var cryptoStocks = ['MSTR','COIN','MARA','RIOT','HUT','CLSK','CIFR','BITF','BTBT','CORZ','PLTR','AI','TSLA','NVDA','AMD','AAPL','MSFT','GOOGL','AMZN','META','HOOD','SOFI','SQ','PYPL','AFRM','INTC','PATH'];
+        if(cryptoStocks.indexOf(s.sy)!==-1){
+          addExchanges = cryptoExchanges.concat(brokerExchanges);
+        } else {
+          addExchanges = brokerExchanges.concat(['eToro']);
+        }
+      } else if(s.cat==='etf'){
+        addExchanges = brokerExchanges.concat(['eToro']);
+      } else if(s.cat==='commodity'){
+        addExchanges = brokerExchanges.concat(cryptoExchanges.slice(0,5));
+      } else if(s.cat==='index'){
+        addExchanges = brokerExchanges;
+      } else {
+        addExchanges = brokerExchanges;
+      }
+      // Merge: keep baseEx order, then add new ones not already present
+      for(var a=0;a<addExchanges.length;a++){
+        if(baseEx.indexOf(addExchanges[a])===-1) baseEx.push(addExchanges[a]);
+      }
+      var exList = baseEx;
+
+      var exRows = '';
+      var totalEx = exList.length;
+      // Distribute volume shares proportionally decreasing
+      for(var i=0;i<totalEx;i++){
+        var e = exList[i];
+        var em = _EM[e]||{c:'#888',l:e.slice(0,2).toUpperCase(),u:'#'};
+        var share = 1/(i+1);
+        var totalShares = 0; for(var j=0;j<totalEx;j++) totalShares += 1/(j+1);
+        var pct = share/totalShares;
+        var evol = d.vol>0 ? d.vol*pct : 0;
+        var evStr = evol>0?(evol>=1e9?'$'+(evol/1e9).toFixed(2)+'B':evol>=1e6?'$'+(evol/1e6).toFixed(2)+'M':evol>=1e3?'$'+(evol/1e3).toFixed(1)+'K':'$'+evol.toFixed(0)):'--';
+        var evPct = d.vol>0?(pct*100).toFixed(1)+'%':'--';
+        var exUrl = em.u||'#';
+        if(exUrl.indexOf('binance')!==-1) exUrl += s.sy+'USDT';
+        else if(exUrl.indexOf('robinhood')!==-1) exUrl += s.sy;
+        else if(exUrl.indexOf('etoro')!==-1) exUrl += s.sy.toLowerCase();
+        else if(exUrl.indexOf('webull')!==-1) exUrl += 'nasdaq-'+s.sy.toLowerCase();
+        exRows += '<tr style="border-bottom:1px solid var(--bc)" onmouseenter="this.style.background=\'var(--bg2)\'" onmouseleave="this.style.background=\'\'">' +
+        '<td style="padding:13px 8px 13px 16px;font-size:11px;color:var(--t2);text-align:center">'+(i+1)+'</td>' +
+        '<td style="padding:13px 8px"><div style="display:flex;align-items:center;gap:10px">' +
+        '<div style="width:30px;height:30px;border-radius:8px;background:'+em.c+';display:flex;align-items:center;justify-content:center;color:'+(em.dark?'#000':'#fff')+';font-weight:800;font-size:11px;flex-shrink:0">'+em.l+'</div>' +
+        '<a href="'+exUrl+'" target="_blank" rel="noopener" style="font-weight:700;font-size:13px;color:var(--tx);text-decoration:none;display:flex;align-items:center;gap:5px">'+e+' <span style="font-size:11px;color:var(--ac)">↗</span></a></div></td>' +
+        '<td style="padding:13px 8px;text-align:right;font-size:13px;font-weight:700;color:#16c784;white-space:nowrap">'+pr+'</td>' +
+        '<td style="padding:13px 8px;text-align:right;font-size:13px;font-weight:600;color:var(--tx);white-space:nowrap">'+evStr+'</td>' +
+        '<td style="padding:13px 16px 13px 8px;text-align:right;font-size:13px;font-weight:600;color:var(--tx)">'+evPct+'</td></tr>';
+      }
+
+      var bx = function(l,v){return '<div style="border:1px solid var(--bc);border-radius:10px;padding:12px 14px"><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:600">'+l+'</div><div style="font-size:14px;font-weight:700">'+v+'</div></div>';};
+
+      var el = $('stkDetailMod');
+      if(!el){el=document.createElement('div');el.id='stkDetailMod';document.body.appendChild(el);}
+      document.body.style.overflow='hidden';
+      document.documentElement.style.overflow='hidden';
+
+      el.innerHTML =
+        '<div style="position:fixed;inset:0;z-index:9999;background:var(--bg1);overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none">' +
+        '<div class="stk-modal" style="background:var(--bg1);width:100%;max-width:1100px;margin:0 auto">' +
+
+        // HEADER
+        '<div style="display:flex;align-items:center;gap:14px;padding:20px 24px;border-bottom:1px solid var(--bc);position:relative">' +
+        '<div style="width:48px;height:48px;border-radius:12px;background:'+s.cl+'15;display:flex;align-items:center;justify-content:center;font-size:24px">'+s.ic+'</div>' +
+        '<div style="flex:1;min-width:0"><div style="font-size:18px;font-weight:800;color:var(--t1)">'+s.nm+'</div>' +
+        '<div style="display:flex;gap:6px;align-items:center;margin-top:4px;flex-wrap:wrap">' +
+        '<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--bg3);color:var(--t2)">'+s.sy+'</span>' +
+        '<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:'+cl+'22;color:'+cl+'">'+catName+'</span>' +
+        '</div></div>' +
+        '<button onclick="$(\'stkDetailMod\').innerHTML=\'\';document.body.style.overflow=\'\';document.documentElement.style.overflow=\'\'" style="position:absolute;top:16px;right:16px;background:var(--bg3);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:var(--t2)">&times;</button></div>' +
+
+        // BODY
+        '<div class="stk-body" style="display:flex;min-height:380px">' +
+
+        // LEFT
+        '<div class="stk-left" style="width:310px;flex-shrink:0;padding:20px;border-right:1px solid var(--bc)">' +
+        '<div style="font-size:28px;font-weight:800;letter-spacing:-.5px;color:var(--tx)">'+pr+'</div>' +
+        '<div style="font-size:13px;margin:4px 0 16px">'+chgStr+' <span style="color:var(--t2)">(24h)</span></div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
+        bx('MARKET CAP',mc) +
+        bx('VOLUME (24H)',vol) +
+        bx('DAY HIGH',hi) +
+        bx('DAY LOW',lo) +
+        bx('52W HIGH',w52h) +
+        bx('52W LOW',w52l) +
+        bx('P/E RATIO',pe) +
+        bx('DIV. YIELD',dy) +
+        '</div></div>' +
+
+        // RIGHT
+        '<div class="stk-right" style="flex:1;min-width:0;overflow-y:auto;max-height:80vh;scrollbar-width:none;-ms-overflow-style:none">' +
+        '<table style="width:100%;border-collapse:collapse;table-layout:fixed">' +
+        '<thead><tr style="background:var(--bg2);border-bottom:1px solid var(--bc)">' +
+        '<th style="padding:12px 8px 12px 16px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:center;width:36px"></th>' +
+        '<th style="padding:12px 8px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:left">Exchange</th>' +
+        '<th style="padding:12px 8px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:110px">Price</th>' +
+        '<th style="padding:12px 8px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:110px">Volume (24h)</th>' +
+        '<th style="padding:12px 16px 12px 8px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:90px">Volume %</th>' +
+        '</tr></thead><tbody>'+exRows+'</tbody></table>' +
+        '<div style="padding:12px 16px;border-top:1px solid var(--bc);font-size:12px;color:var(--t2)">Showing '+totalEx+' exchanges</div>' +
+        '</div></div></div></div>';
     }
 
     // ===== STOCKS & ETFs (Yahoo Finance via CORS proxy) =====
@@ -10580,7 +10741,7 @@ function switchInfoTab(tab) {
           const catKey = 'stk' + s.cat.charAt(0).toUpperCase() + s.cat.slice(1);
           const catBadge = `<span style="background:${cl}20;color:${cl};border:1px solid ${cl}40;font-size:9px;padding:1px 5px;border-radius:4px;font-weight:700;margin-left:4px">${tr(catKey)}</span>`;
           const exHtml = s.ex && s.ex.length ? `<div style="display:flex;flex-wrap:wrap;gap:3px">${s.ex.map(e => { const m = _EM[e] || { c: '#888', l: e.slice(0, 2).toUpperCase() }; return `<span class="ex-badge" title="${e}" style="background:${m.c}18;color:${m.c};border:1px solid ${m.c}45">${m.l}</span>`; }).join('')}</div>` : '<span style="color:var(--t2);font-size:11px">—</span>';
-          return `<tr class="stk-row">
+          return `<tr class="stk-row" onclick="_showStkDetail('${s.sy}')" style="cursor:pointer">
 <td class="text-start" style="min-width:130px"><div class="flex items-center gap-2"><div class="stico" style="background:${s.cl}15;color:${s.cl}">${s.ic}</div><div><div class="font-semibold text-sm">${s.nm}${catBadge}</div><span class="text-xs" style="color:var(--t2)">${s.sy}</span></div></div></td>
 <td style="min-width:85px"><div class="font-bold">${pr}</div>${hiLo}</td>
 <td class="stk-col-chg" style="min-width:75px"><span style="color:${cc};font-weight:700"><i class="fas ${ic}"></i> ${chg !== null ? ((chg >= 0 ? '+' : '') + chg.toFixed(2) + '%') : '--'}</span></td>

@@ -5,16 +5,3 @@ compatibility_date = "2024-01-01"
 [[routes]]
 pattern = "cryptohubcoin.com/api/*"
 zone_name = "cryptohubcoin.com"
-
-# ==========================================
-# Headers للـ API Routes (جديد)
-# ==========================================
-
-[[headers]]
-for = "/api/*"
-[headers.values]
-Cache-Control = "public, max-age=60"
-CDN-Cache-Control = "public, max-age=120, stale-while-revalidate=300"
-Access-Control-Allow-Origin = "*"
-Access-Control-Allow-Methods = "GET, OPTIONS"
-Access-Control-Allow-Headers = "Content-Type"

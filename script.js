@@ -880,6 +880,9 @@ function switchInfoTab(tab) {
             cgTop.forEach(c => {
               const sy = (c.symbol || '').toUpperCase();
               if (!sy || symMap.has(sy)) return;
+              // Block wrong coins that have canonical overrides
+              const _cf = COIN_ID_FIX[sy];
+              if (_cf && c.id !== _cf.correctId) return; // skip fake/old token
               const coin = { id: c.id, cmc_id: CMC_IDS[sy] || 0, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: sanitizePct(c.price_change_percentage_1h_in_currency), c4: 0, c24: sanitizePct(c.price_change_percentage_24h), c7: sanitizePct(c.price_change_percentage_7d_in_currency), mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
               allC.push(coin); symMap.set(sy, coin);
             });
@@ -1082,6 +1085,8 @@ function switchInfoTab(tab) {
               r.value.forEach(c => {
                 const sy = (c.symbol || '').toUpperCase();
                 if (!sy || symMap.has(sy)) return;
+                const _cf = COIN_ID_FIX[sy];
+                if (_cf && c.id !== _cf.correctId) return;
                 const coin = { id: c.id, rk: allC.length + 1, nm: c.name, sy: sy, pr: c.current_price || 0, c1: 0, c4: 0, c24: sanitizePct(c.price_change_percentage_24h), c7: 0, mc: c.market_cap || 0, vol: c.total_volume || 0, img: c.image || '', ex: 0, sup: c.circulating_supply || 0 };
                 allC.push(coin); symMap.set(sy, coin);
               });

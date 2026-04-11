@@ -1035,6 +1035,8 @@
       position: relative;
       display: flex;
       align-items: center;
+      border-bottom: 1px solid var(--bc);
+      margin-bottom: 16px;
     }
     .cmc-bar-arrow {
       flex-shrink: 0;
@@ -1072,8 +1074,6 @@
       font-size: 12px;
       font-weight: 500;
       white-space: nowrap;
-      border-bottom: 1px solid var(--bc);
-      margin-bottom: 16px;
       flex: 1;
       min-width: 0;
       -webkit-overflow-scrolling: touch

@@ -28,12 +28,36 @@ export default {
     // Non-API → static assets
     if (!p.startsWith('/api/')) {
       const lp = p.toLowerCase();
-      // Block bot probing with 403 (not 200 rewrite — saves bandwidth)
+      // Block bot probing with 403
       if (lp.includes('wp-admin') || lp.includes('wp-login') || lp.includes('wp-content') ||
           lp.includes('xmlrpc') || lp.includes('phpmyadmin') || lp.includes('.env') || lp.includes('.git')) {
         return new Response('', { status: 403, headers: { 'Cache-Control': 'public, max-age=86400' } });
       }
-      return env.ASSETS.fetch(request);
+      
+      // Static assets with Cache Headers
+      const response = await env.ASSETS.fetch(request);
+      
+      // Add cache headers based on file type
+      const newHeaders = new Headers(response.headers);
+      
+      if (p.endsWith('.css') || p.endsWith('.js')) {
+        newHeaders.set('Cache-Control', 'public, max-age=3600');
+        newHeaders.set('CDN-Cache-Control', 'public, max-age=7200');
+      } else if (p.endsWith('.png') || p.endsWith('.jpg') || p.endsWith('.jpeg') || p.endsWith('.svg') || p.endsWith('.webp') || p.endsWith('.gif')) {
+        newHeaders.set('Cache-Control', 'public, max-age=604800');
+        newHeaders.set('CDN-Cache-Control', 'public, max-age=604800');
+      } else if (p.endsWith('.woff2') || p.endsWith('.woff') || p.endsWith('.ttf')) {
+        newHeaders.set('Cache-Control', 'public, max-age=31536000, immutable');
+      } else {
+        newHeaders.set('Cache-Control', 'public, max-age=300');
+        newHeaders.set('CDN-Cache-Control', 'public, max-age=3600');
+      }
+      
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: newHeaders
+      });
     }
 
     if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
@@ -85,7 +109,6 @@ export default {
 /* ── API Handlers ────────────────────────────────── */
 
 async function handleNFTs(env, ctx) {
-  // Try to get master list — with timeout protection on KV
   let master = null;
   try {
     master = await kvGet(env, 'master');
@@ -98,7 +121,6 @@ async function handleNFTs(env, ctx) {
     ctx.waitUntil(safe(() => fetchMasterList(env)));
   }
 
-  // Get enriched data — with timeout protection
   let enriched = [];
   try {
     enriched = await kvGet(env, 'enriched') || [];
@@ -106,7 +128,6 @@ async function handleNFTs(env, ctx) {
     console.warn('KV read failed for enriched:', e.message);
   }
 
-  // Background enrichment if needed (non-blocking)
   if (master.ids.length > 0 && enriched.length < master.ids.length * 0.5) {
     ctx.waitUntil(safe(() => enrichBatch(env, 4)));
   }
@@ -202,7 +223,6 @@ async function enrichBatch(env, size) {
   });
 
   if (!pending.length) {
-    // Refresh 2 oldest entries
     enriched.sort((a, b) => (a._ts || 0) - (b._ts || 0));
     const toRefresh = enriched.slice(0, 2);
     const res = await Promise.allSettled(toRefresh.map(n => fetchDetail(n.id)));
@@ -220,7 +240,6 @@ async function enrichBatch(env, size) {
   const batch = pending.slice(0, size);
   let anyNew = false;
 
-  // Process in pairs with delay between
   for (let i = 0; i < batch.length; i += 2) {
     const chunk = batch.slice(i, i + 2);
     const res = await Promise.allSettled(chunk.map(n => fetchDetail(n.id)));
@@ -230,7 +249,6 @@ async function enrichBatch(env, size) {
         anyNew = true;
       }
     });
-    // Only delay if there are more chunks
     if (i + 2 < batch.length) await sleep(2500);
   }
 
@@ -285,7 +303,6 @@ async function fetchDetail(id) {
 async function handleOne(id, env) {
   if (!id) return jr({ error: 'ID required' }, 400);
 
-  // Try cache first
   let enriched;
   try {
     enriched = await kvGet(env, 'enriched') || [];
@@ -296,7 +313,6 @@ async function handleOne(id, env) {
   const cached = enriched.find(n => n.id === id);
   if (cached) return jr({ data: cached, _cached: true }, 200, 300);
 
-  // Fetch fresh — with timeout protection
   try {
     const data = await fetchDetail(id);
     return data ? jr({ data, _cached: false }) : jr({ error: 'Not found' }, 404);

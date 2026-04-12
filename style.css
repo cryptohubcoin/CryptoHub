@@ -3248,13 +3248,28 @@
       .stk-col-vol,
       .stk-col-52w,
       .stk-col-hdr-vol,
-      .stk-col-hdr-52w {
+      .stk-col-hdr-52w,
+      .stk-col-chg,
+      .stk-col-hdr-chg {
         display: none !important;
       }
 
-      .stk-table th,
-      .stk-table td {
-        padding: 8px 4px !important;
+      /* Hide columns 3,4,5,6 (Change, Volume, 52W, Exchanges) by position */
+      .stk-table tr th:nth-child(n+3),
+      .stk-table tr td:nth-child(n+3) {
+        display: none !important;
+      }
+
+      /* Hide hi/lo sub-text under price */
+      .stk-hl {
+        display: none !important;
+      }
+
+      /* Remove all min-width so columns fill naturally */
+      .stk-table tr th,
+      .stk-table tr td {
+        min-width: 0 !important;
+        padding: 10px 8px !important;
       }
     }
 
@@ -3800,7 +3815,17 @@
       /* Stock Table */
       .stk-table td {
         padding: 8px 4px;
-        font-size: 11px
+        font-size: 11px;
+        min-width: 0 !important
+      }
+
+      .stk-table tr th:nth-child(n+3),
+      .stk-table tr td:nth-child(n+3) {
+        display: none !important
+      }
+
+      .stk-hl {
+        display: none !important
       }
 
       .stk-badge {

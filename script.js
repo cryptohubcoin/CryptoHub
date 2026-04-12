@@ -8249,7 +8249,7 @@ function switchInfoTab(tab) {
       for(var a=0;a<addExchanges.length;a++){
         if(baseEx.indexOf(addExchanges[a])===-1) baseEx.push(addExchanges[a]);
       }
-      var exList = baseEx;
+      var exList = baseEx.slice(0, 10);
 
       var exRows = '';
       var totalEx = exList.length;

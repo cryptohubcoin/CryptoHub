@@ -7738,7 +7738,7 @@ function switchInfoTab(tab) {
     const EXD_PROXY = 'https://exchange-tickers.bitcoinswapnet.workers.dev';
 
     let _exdT = [], _exdPg = 1, _exdSY = 0;
-    const _exdPP = 10;
+    const _exdPP = 25;
     const _exdCgMap = {binance:'binance',gate:'gate',gdax:'gdax',bybit_spot:'bybit_spot',okex:'okex',kraken:'kraken',kucoin:'kucoin',bitfinex:'bitfinex',mexc:'mxc',huobi:'huobi',crypto_com:'crypto_com',bitstamp:'bitstamp',gemini:'gemini',lbank:'lbank',bitget:'bitget',bingx:'bingx',htx:'huobi',upbit:'upbit',bitmart:'bitmart',poloniex:'poloniex',ascendex:'ascendex',phemex:'phemex',whitebit:'whitebit',bitrue:'bitrue',digifinex:'digifinex',probit:'probit_exchange',xt:'xt',coinw:'coinw',bithumb:'bithumb',coinone:'coinone',btcturk:'btcturk',bitvavo:'bitvavo',exmo:'exmo',bitflyer:'bitflyer',blockchain_com:'blockchain_com_exchange',cex_io:'cex',bitpanda:'bitpanda_pro',independent:'independent_reserve',nicehash:'nicehash',btcmarkets:'btc_markets',okcoin:'okcoin'};
 
     function _vf(n){if(!n||isNaN(n)||n===0)return'--';if(n>=1e12)return'$'+(n/1e12).toFixed(2)+'T';if(n>=1e9)return'$'+(n/1e9).toFixed(2)+'B';if(n>=1e6)return'$'+(n/1e6).toFixed(2)+'M';if(n>=1e3)return'$'+(n/1e3).toFixed(1)+'K';return'$'+n.toFixed(2)}
@@ -7746,9 +7746,11 @@ function switchInfoTab(tab) {
     function openExDetail(exId){
       const ex=EX_DB.find(e=>e.id===exId);if(!ex)return;
       _exdSY=window.scrollY;document.body.style.overflow='hidden';document.documentElement.style.overflow='hidden';document.body.classList.add('exd-open');
-      const m=$('exDetailMod');m.style.display='block';
+      const m=$('exDetailMod');m.style.display='flex';setTimeout(()=>m.classList.add('active'),10);
 
       const h=dHash(ex.n),ds=(ex.t-(h%5)*0.1).toFixed(1);
+      const tc=parseFloat(ds)>=9?'exd-th':parseFloat(ds)>=7?'exd-tm':'exd-tl';
+      const tv=parseFloat(ds)>=9?'10/10':(Math.round(parseFloat(ds))+'/10');
 
       // Logo: CoinGecko HD → Google 128px → letter fallback
       const cgId=_exdCgMap[ex.id]||ex.id;
@@ -7759,18 +7761,18 @@ function switchInfoTab(tab) {
         i.onerror=function(){this.onerror=null;this.parentElement.innerHTML='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(56,97,251,.12),rgba(108,92,231,.08));border-radius:inherit;font-weight:800;font-size:'+Math.round(sz*.45)+'px;color:var(--ac)">'+ex.n[0]+'</div>';};
         return i;
       }
-      // Single logo in header only - no duplicate
-      $('exdLogo').innerHTML='';$('exdLogo').appendChild(_mki(initLogo,34));
+      $('exdLogo').innerHTML='';$('exdLogo').appendChild(_mki(initLogo,22));
+      $('exdLogoLg').innerHTML='';$('exdLogoLg').appendChild(_mki(initLogo,38));
       fetch('https://api.coingecko.com/api/v3/exchanges/'+cgId).then(r=>r.ok?r.json():null).then(d=>{
-        if(d&&d.image){$('exdLogo').innerHTML='';$('exdLogo').appendChild(_mki(d.image,34));}
+        if(d&&d.image){$('exdLogo').innerHTML='';$('exdLogo').appendChild(_mki(d.image,22));$('exdLogoLg').innerHTML='';$('exdLogoLg').appendChild(_mki(d.image,38));}
       }).catch(()=>{});
-      $('exdName').textContent=ex.n;
+      $('exdName').textContent=ex.n;$('exdNameLg').textContent=ex.n;
 
       const ref=getRef(ex.n,ex.u.replace(/{s}/g,'BTC').replace(/{sl}/g,'btc'));
       const host=exHost;
       $('exdLinks').innerHTML=[
-        `<a href="https://${host}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ac);text-decoration:none;padding:4px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--bc)"><i class="fas fa-globe" style="font-size:11px"></i>${host}</a>`,
-        `<a href="https://x.com/${ex.n.replace(/[\s.]+/g,'')}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ac);text-decoration:none;padding:4px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--bc)"><i class="fab fa-x-twitter" style="font-size:11px"></i>@${ex.n.replace(/[\s.]+/g,'')}</a>`
+        `<a class="exd-lnk" href="https://${host}" target="_blank"><i class="fas fa-globe"></i>${host}</a>`,
+        `<a class="exd-lnk" href="https://x.com/${ex.n.replace(/[\s.]+/g,'')}" target="_blank"><i class="fab fa-x-twitter"></i>@${ex.n.replace(/[\s.]+/g,'')}</a>`
       ].join('');
       $('exdRegBtn').href=ref;
 
@@ -7859,13 +7861,13 @@ function switchInfoTab(tab) {
         const vp=tv>0?((v/tv)*100).toFixed(1)+'%':'--';
         const ic=tk._im?`<img src="${tk._im}" class="exd-ci" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="exd-fb" style="display:none">${tk.base[0]}</div>`:`<div class="exd-fb">${tk.base[0]}</div>`;
         const url=tk.trade_url||'#';
-        return`<tr style="border-bottom:1px solid var(--bc)">
-          <td style="text-align:center;color:var(--t2);font-size:10px;font-weight:600;padding:10px 6px">${s+i+1}</td>
-          <td style="text-align:left;padding:10px 8px"><div class="exd-cc">${ic}<span class="exd-cn">${tk._nm||tk.base}</span></div></td>
-          <td style="text-align:left;padding:10px 8px"><a href="${url}" target="_blank" class="exd-pr">${tk.base}/${tk.target} <i class="fas fa-external-link-alt" style="font-size:7px;opacity:.35"></i></a></td>
-          <td style="text-align:right;font-weight:600;color:var(--t1);font-size:12px;padding:10px 8px">${pf}</td>
-          <td style="text-align:right;color:var(--t2);font-size:10.5px;padding:10px 8px">${vp}</td>
-          <td style="text-align:right;font-weight:600;color:var(--t1);font-size:12px;padding:10px 8px">${_vf(v)}</td>
+        return`<tr>
+          <td style="text-align:center;color:var(--t2);font-size:10px;font-weight:600">${s+i+1}</td>
+          <td style="text-align:left"><div class="exd-cc">${ic}<span class="exd-cn">${tk._nm||tk.base}</span></div></td>
+          <td style="text-align:left"><a href="${url}" target="_blank" class="exd-pr">${tk.base}/${tk.target} <i class="fas fa-external-link-alt" style="font-size:7px;opacity:.35"></i></a></td>
+          <td style="text-align:right;font-weight:600;color:var(--t1);font-size:12px">${pf}</td>
+          <td style="text-align:right;color:var(--t2);font-size:10.5px">${vp}</td>
+          <td style="text-align:right;font-weight:600;color:var(--t1);font-size:12px">${_vf(v)}</td>
         </tr>`;
       }).join('');
 
@@ -7885,12 +7887,13 @@ function switchInfoTab(tab) {
     function _exdGo(p){_exdPg=p;_renderExd();const w=$('exdMW');if(w)w.scrollTop=0;}
 
     function closeExDetail(){
-      const m=$('exDetailMod');m.style.display='none';
+      const m=$('exDetailMod');m.classList.remove('active');
+      setTimeout(()=>{m.style.display='none'},180);
       document.body.classList.remove('exd-open');document.body.style.overflow='';document.documentElement.style.overflow='';document.body.style.top='';
       window.scrollTo(0,_exdSY);
     }
 
-    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('exDetailMod')?.style.display!=='none')closeExDetail()});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('exDetailMod')?.classList.contains('active'))closeExDetail()});
 
     // ===== METALS LIVE (Binance PAXG WS + goldprice.org + Swissquote + fawazahmed0 | Silver: real-time via Binance PAXG ÷ Au/Ag ratio) =====
     let _mt = { g: 0, s: 0, pt: 0, pd: 0, gChg: 0, sChg: 0, ptChg: 0, pdChg: 0, gHi: 0, gLo: 0, gVol: 0, sHi: 0, sLo: 0, lastUpd: 0 };
@@ -8202,10 +8205,9 @@ function switchInfoTab(tab) {
         '#nftDetailMod .nft-body,#stkDetailMod .stk-body{flex-direction:column!important}'+
         '#nftDetailMod .nft-left,#stkDetailMod .stk-left{width:100%!important;border-right:none!important;border-bottom:1px solid var(--bc)!important}'+
         '#nftDetailMod .nft-right,#stkDetailMod .stk-right{width:100%!important}'+
-        '#exDetailMod .exd-body{flex-direction:column!important}'+
-        '#exDetailMod .exd-left{width:100%!important;border-right:none!important;border-bottom:1px solid var(--bc)!important}'+
-        '#exDetailMod .exd-right{width:100%!important;max-height:none!important}'+
-        '#exDetailMod .exd-col-pct{display:none!important}'+
+        '.exd-open #exDetailMod .exd-main-wrap{flex-direction:column!important}'+
+        '.exd-open #exDetailMod .exd-left{width:100%!important;border-right:none!important;border-bottom:1px solid var(--bc)!important}'+
+        '.exd-open #exDetailMod .exd-right{width:100%!important}'+
         '}';
         document.head.appendChild(_ms);
       }
@@ -10748,7 +10750,7 @@ function switchInfoTab(tab) {
 <td class="stk-col-chg" style="min-width:75px"><span style="color:${cc};font-weight:700"><i class="fas ${ic}"></i> ${chg !== null ? ((chg >= 0 ? '+' : '') + chg.toFixed(2) + '%') : '--'}</span></td>
 <td class="stk-col-vol"><div style="color:var(--t2);font-size:12px;font-weight:600">${vol}</div>${spark}</td>
 <td class="stk-col-52w">${w52}</td>
-<td style="min-width:75px">${exHtml}</td>
+<td class="stk-col-ex" style="min-width:75px">${exHtml}</td>
 </tr>`;
         }).join('');
       })();

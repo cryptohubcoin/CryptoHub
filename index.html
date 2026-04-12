@@ -22,7 +22,7 @@
     })();
   </script>
   <style id="anti-flash">
-    body { opacity: 0; transition: opacity 0.15s; }
+    body { display: none !important; }
   </style>
   <script>
     // CRITICAL: Don't show page until applyLang runs (prevents language flash)
@@ -31,7 +31,6 @@
     // Hard fallback: show after 2.5s max if script.js is very slow
     setTimeout(function() {
       if (!window._langApplied) {
-        if (document.body) document.body.style.opacity = '1';
         var af = document.getElementById('anti-flash');
         if (af) af.remove();
       }
@@ -1100,7 +1099,7 @@
         </div>
 
         <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
-          <table class="w-full crypto-table" style="min-width:1000px;table-layout:fixed">
+          <table class="w-full crypto-table" id="cryptoMainTable" style="min-width:1000px;table-layout:fixed;display:none">
             <thead>
               <tr>
                 <th onclick="doSort('name')" id="th_name" class="text-start" style="width:220px"><span
@@ -1126,117 +1125,6 @@
               </tr>
             </thead>
             <tbody id="tBody">
-              <!-- Skeleton rows prevent CLS by reserving exact table height -->
-              <tr class="sk-row">
-                <td><span class="sk-cell" style="width:140px"></span></td>
-                <td><span class="sk-cell" style="width:70px;margin-left:auto"></span></td>
-                <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
-                <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-                <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              </tr>
-              <tr class="sk-row">
-                <td><span class="sk-cell" style="width:120px"></span></td>
-                <td><span class="sk-cell" style="width:80px;margin-left:auto"></span></td>
-                <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
-                <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-                <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              </tr>
-              <tr class="sk-row">
-                <td><span class="sk-cell" style="width:150px"></span></td>
-                <td><span class="sk-cell" style="width:65px;margin-left:auto"></span></td>
-                <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
-                <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-                <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              </tr>
-              <tr class="sk-row">
-                <td><span class="sk-cell" style="width:100px"></span></td>
-                <td><span class="sk-cell" style="width:75px;margin-left:auto"></span></td>
-                <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
-                <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-                <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              </tr>
-              <tr class="sk-row">
-                <td><span class="sk-cell" style="width:130px"></span></td>
-                <td><span class="sk-cell" style="width:72px;margin-left:auto"></span></td>
-                <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
-                <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-                <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              </tr>
-              <tr class="sk-row">
-                <td><span class="sk-cell" style="width:110px"></span></td>
-                <td><span class="sk-cell" style="width:78px;margin-left:auto"></span></td>
-                <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
-                <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-                <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              </tr>
-              <tr class="sk-row">
-                <td><span class="sk-cell" style="width:145px"></span></td>
-                <td><span class="sk-cell" style="width:68px;margin-left:auto"></span></td>
-                <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
-                <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-                <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              </tr>
-              <tr class="sk-row">
-                <td><span class="sk-cell" style="width:125px"></span></td>
-                <td><span class="sk-cell" style="width:82px;margin-left:auto"></span></td>
-                <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
-                <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-                <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              </tr>
-              <tr class="sk-row">
-                <td><span class="sk-cell" style="width:115px"></span></td>
-                <td><span class="sk-cell" style="width:76px;margin-left:auto"></span></td>
-                <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
-                <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-                <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              </tr>
-              <tr class="sk-row">
-                <td><span class="sk-cell" style="width:135px"></span></td>
-                <td><span class="sk-cell" style="width:73px;margin-left:auto"></span></td>
-                <td class="col-1h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-4h"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-7d"><span class="sk-cell" style="width:55px;margin-left:auto"></span></td>
-                <td class="col-spark"><span class="sk-cell" style="width:100px;height:30px;margin-left:auto"></span></td>
-                <td class="col-mcap"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-                <td class="col-vol"><span class="sk-cell" style="width:85px;margin-left:auto"></span></td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -2373,7 +2261,7 @@
             </div>
           </div>
         </div>
-        <div class="exd-right" style="flex:1;min-width:0;overflow-y:auto;max-height:calc(100vh - 80px);scrollbar-width:none;-ms-overflow-style:none">
+        <div class="exd-right" style="flex:1;min-width:0">
           <div style="padding:12px 16px;border-bottom:1px solid var(--bc);font-weight:700;font-size:14px">Markets</div>
           <div id="exdMW">
             <table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--bg2);border-bottom:1px solid var(--bc)">

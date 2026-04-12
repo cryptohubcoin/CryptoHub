@@ -317,7 +317,7 @@ function switchInfoTab(tab) {
 
     let cLang = (function() { try { var s = localStorage.getItem('lang'); return (s && s !== '') ? s : 'en'; } catch(e) { return 'en'; } })(), allC = [], filtC = [], cPage = 1, iPP = 100,
       cSort = 'rank', sortDir = 'asc', cNet = 'all', bWs = null, uInt = null, isL = false, cBatch = 0, maxB = 40,
-      exData = [], exPage = 1, exIPP = 10;
+      exData = [], exPage = 1, exIPP = 9;
     /* iPP: always 50 */
     // Clear old truncated cache (v2 upgrade)
     try { const ov = sessionStorage.getItem('cryptohub_v'); if (ov !== '14') { sessionStorage.removeItem('cryptohub_coins'); sessionStorage.removeItem('ch_fallback'); sessionStorage.setItem('cryptohub_v', '14') } } catch (e) { }
@@ -424,7 +424,6 @@ function switchInfoTab(tab) {
         window._langApplied = true;
         var af = document.getElementById('anti-flash');
         if (af) af.remove();
-        if (document.body) document.body.style.opacity = '1';
       }
     }
     function setLang(c) {
@@ -7485,6 +7484,7 @@ function switchInfoTab(tab) {
       rPages();
       // Release height reservation after first real data render (CLS fix)
       const tc = $('tab_crypto'); if (tc && filtC.length > 5 && !tc.classList.contains('data-loaded')) tc.classList.add('data-loaded');
+      const cmt = $('cryptoMainTable'); if (cmt) cmt.style.display = '';
     }
 
     function rPages() {
@@ -7738,7 +7738,7 @@ function switchInfoTab(tab) {
     const EXD_PROXY = 'https://exchange-tickers.bitcoinswapnet.workers.dev';
 
     let _exdT = [], _exdPg = 1, _exdSY = 0;
-    const _exdPP = 10;
+    const _exdPP = 9;
     const _exdCgMap = {binance:'binance',gate:'gate',gdax:'gdax',bybit_spot:'bybit_spot',okex:'okex',kraken:'kraken',kucoin:'kucoin',bitfinex:'bitfinex',mexc:'mxc',huobi:'huobi',crypto_com:'crypto_com',bitstamp:'bitstamp',gemini:'gemini',lbank:'lbank',bitget:'bitget',bingx:'bingx',htx:'huobi',upbit:'upbit',bitmart:'bitmart',poloniex:'poloniex',ascendex:'ascendex',phemex:'phemex',whitebit:'whitebit',bitrue:'bitrue',digifinex:'digifinex',probit:'probit_exchange',xt:'xt',coinw:'coinw',bithumb:'bithumb',coinone:'coinone',btcturk:'btcturk',bitvavo:'bitvavo',exmo:'exmo',bitflyer:'bitflyer',blockchain_com:'blockchain_com_exchange',cex_io:'cex',bitpanda:'bitpanda_pro',independent:'independent_reserve',nicehash:'nicehash',btcmarkets:'btc_markets',okcoin:'okcoin'};
 
     function _vf(n){if(!n||isNaN(n)||n===0)return'--';if(n>=1e12)return'$'+(n/1e12).toFixed(2)+'T';if(n>=1e9)return'$'+(n/1e9).toFixed(2)+'B';if(n>=1e6)return'$'+(n/1e6).toFixed(2)+'M';if(n>=1e3)return'$'+(n/1e3).toFixed(1)+'K';return'$'+n.toFixed(2)}
@@ -7758,8 +7758,7 @@ function switchInfoTab(tab) {
       const ref=getRef(ex.n,ex.u.replace(/{s}/g,'BTC').replace(/{sl}/g,'btc'));
       $('exdLinks').innerHTML=`<a href="https://${exHost}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ac);text-decoration:none;padding:4px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--bc)"><i class="fas fa-globe" style="font-size:11px"></i>${exHost}</a><a href="https://x.com/${ex.n.replace(/[\s.]+/g,'')}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ac);text-decoration:none;padding:4px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--bc)"><i class="fab fa-x-twitter" style="font-size:11px"></i>@${ex.n.replace(/[\s.]+/g,'')}</a>`;
       $('exdRegBtn').href=ref;
-      const bp=allC.find(c=>c.sy==='BTC')?.pr||68000;
-      const vol=exLiveVol[ex.id]?(exLiveVol[ex.id]*bp):(ex.t*5e8+(h%1e9));
+      const bp=allC.find(c=>c.sy==='BTC')?.pr||68000;const vol=exLiveVol[ex.id]?(exLiveVol[ex.id]*bp):(ex.t*5e8+(h%1e9));
       $('exdVol24').textContent=_vf(vol);$('exdVolBtc').textContent=Math.floor(vol/bp).toLocaleString()+' BTC';
       const assets=vol*(3+(h%10));$('exdAssets').textContent=_vf(assets);$('exdAssetsBtc').textContent=Math.floor(assets/bp).toLocaleString()+' BTC';
       _exdT=[];_exdPg=1;$('exdPag').style.display='none';
@@ -8249,16 +8248,17 @@ function switchInfoTab(tab) {
       for(var a=0;a<addExchanges.length;a++){
         if(baseEx.indexOf(addExchanges[a])===-1) baseEx.push(addExchanges[a]);
       }
-      var exList = baseEx.slice(0, 10);
+      var exList = baseEx;
 
-      var exRows = '';
+      var _stkExRows = [];
       var totalEx = exList.length;
-      // Distribute volume shares proportionally decreasing
+      var _stkExPP = 7;
+      // Build all rows data
+      var totalShares = 0; for(var j=0;j<totalEx;j++) totalShares += 1/(j+1);
       for(var i=0;i<totalEx;i++){
         var e = exList[i];
         var em = _EM[e]||{c:'#888',l:e.slice(0,2).toUpperCase(),u:'#'};
         var share = 1/(i+1);
-        var totalShares = 0; for(var j=0;j<totalEx;j++) totalShares += 1/(j+1);
         var pct = share/totalShares;
         var evol = d.vol>0 ? d.vol*pct : 0;
         var evStr = evol>0?(evol>=1e9?'$'+(evol/1e9).toFixed(2)+'B':evol>=1e6?'$'+(evol/1e6).toFixed(2)+'M':evol>=1e3?'$'+(evol/1e3).toFixed(1)+'K':'$'+evol.toFixed(0)):'--';
@@ -8268,15 +8268,44 @@ function switchInfoTab(tab) {
         else if(exUrl.indexOf('robinhood')!==-1) exUrl += s.sy;
         else if(exUrl.indexOf('etoro')!==-1) exUrl += s.sy.toLowerCase();
         else if(exUrl.indexOf('webull')!==-1) exUrl += 'nasdaq-'+s.sy.toLowerCase();
-        exRows += '<tr style="border-bottom:1px solid var(--bc)" onmouseenter="this.style.background=\'var(--bg2)\'" onmouseleave="this.style.background=\'\'">' +
+        _stkExRows.push('<tr style="border-bottom:1px solid var(--bc)" onmouseenter="this.style.background=\'var(--bg2)\'" onmouseleave="this.style.background=\'\'">' +
         '<td style="padding:13px 8px 13px 16px;font-size:11px;color:var(--t2);text-align:center">'+(i+1)+'</td>' +
         '<td style="padding:13px 8px"><div style="display:flex;align-items:center;gap:10px">' +
         '<div style="width:30px;height:30px;border-radius:8px;background:'+em.c+';display:flex;align-items:center;justify-content:center;color:'+(em.dark?'#000':'#fff')+';font-weight:800;font-size:11px;flex-shrink:0">'+em.l+'</div>' +
         '<a href="'+exUrl+'" target="_blank" rel="noopener" style="font-weight:700;font-size:13px;color:var(--tx);text-decoration:none;display:flex;align-items:center;gap:5px">'+e+' <span style="font-size:11px;color:var(--ac)">↗</span></a></div></td>' +
         '<td style="padding:13px 8px;text-align:right;font-size:13px;font-weight:700;color:#16c784;white-space:nowrap">'+pr+'</td>' +
         '<td style="padding:13px 8px;text-align:right;font-size:13px;font-weight:600;color:var(--tx);white-space:nowrap">'+evStr+'</td>' +
-        '<td style="padding:13px 16px 13px 8px;text-align:right;font-size:13px;font-weight:600;color:var(--tx)">'+evPct+'</td></tr>';
+        '<td style="padding:13px 16px 13px 8px;text-align:right;font-size:13px;font-weight:600;color:var(--tx)">'+evPct+'</td></tr>');
       }
+
+      // Pagination render function
+      window._stkExPage = 1;
+      window._stkExAllRows = _stkExRows;
+      window._stkExTotal = totalEx;
+      window._stkExPP = _stkExPP;
+      window._renderStkExPage = function(){
+        var pg = window._stkExPage;
+        var pp = window._stkExPP;
+        var tot = window._stkExTotal;
+        var rows = window._stkExAllRows;
+        var s = (pg-1)*pp, e = Math.min(s+pp, tot);
+        var tb = document.getElementById('stkExTbody');
+        if(tb) tb.innerHTML = rows.slice(s,e).join('');
+        var tp = Math.ceil(tot/pp);
+        var pagEl = document.getElementById('stkExPag');
+        if(pagEl && tp>1){
+          var h='<span onclick="if(window._stkExPage>1){window._stkExPage--;window._renderStkExPage()}" style="font-size:12px;padding:5px 8px;border-radius:6px;color:var(--t2);cursor:pointer">&lsaquo;</span>';
+          var sp=Math.max(1,pg-2),ep=Math.min(tp,pg+2);
+          for(var p=sp;p<=ep;p++) h+='<span onclick="window._stkExPage='+p+';window._renderStkExPage()" style="font-size:12px;padding:5px 10px;border-radius:6px;cursor:pointer;'+(p===pg?'background:var(--ac);color:#fff;font-weight:700':'color:var(--t2)')+'">'+p+'</span>';
+          h+='<span onclick="if(window._stkExPage<'+tp+'){window._stkExPage++;window._renderStkExPage()}" style="font-size:12px;padding:5px 8px;border-radius:6px;color:var(--t2);cursor:pointer">&rsaquo;</span>';
+          pagEl.innerHTML=h;pagEl.style.display='flex';
+        } else if(pagEl){pagEl.style.display='none';}
+        var info = document.getElementById('stkExInfo');
+        if(info) info.textContent='Showing '+(s+1)+'-'+e+' of '+tot+' exchanges';
+      };
+
+      // Render first page of rows
+      var initRows = _stkExRows.slice(0, _stkExPP).join('');
 
       var bx = function(l,v){return '<div style="border:1px solid var(--bc);border-radius:10px;padding:12px 14px"><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:600">'+l+'</div><div style="font-size:14px;font-weight:700">'+v+'</div></div>';};
 
@@ -8318,7 +8347,7 @@ function switchInfoTab(tab) {
         '</div></div>' +
 
         // RIGHT
-        '<div class="stk-right" style="flex:1;min-width:0;overflow-y:auto;max-height:80vh;scrollbar-width:none;-ms-overflow-style:none">' +
+        '<div class="stk-right" style="flex:1;min-width:0">' +
         '<table style="width:100%;border-collapse:collapse;table-layout:fixed">' +
         '<thead><tr style="background:var(--bg2);border-bottom:1px solid var(--bc)">' +
         '<th style="padding:12px 8px 12px 16px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:center;width:36px"></th>' +
@@ -8326,9 +8355,12 @@ function switchInfoTab(tab) {
         '<th style="padding:12px 8px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:110px">Price</th>' +
         '<th style="padding:12px 8px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:110px">Volume (24h)</th>' +
         '<th style="padding:12px 16px 12px 8px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:90px">Volume %</th>' +
-        '</tr></thead><tbody>'+exRows+'</tbody></table>' +
-        '<div style="padding:12px 16px;border-top:1px solid var(--bc);font-size:12px;color:var(--t2)">Showing '+totalEx+' exchanges</div>' +
+        '</tr></thead><tbody id="stkExTbody">'+initRows+'</tbody></table>' +
+        '<div id="stkExPag" style="display:flex;justify-content:center;align-items:center;gap:6px;padding:14px;border-top:1px solid var(--bc)"></div>' +
+        '<div id="stkExInfo" style="padding:6px 16px 12px;font-size:11px;color:var(--t2);text-align:center">Showing 1-'+Math.min(_stkExPP,totalEx)+' of '+totalEx+' exchanges</div>' +
         '</div></div></div></div>';
+      // Init pagination after DOM is set
+      setTimeout(function(){window._renderStkExPage();},0);
     }
 
     // ===== STOCKS & ETFs (Yahoo Finance via CORS proxy) =====

@@ -3245,7 +3245,6 @@
 
     @media(max-width:768px) {
 
-      /* Horizontal scroll like crypto table */
       #tab_stocks .ct {
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch;
@@ -3256,7 +3255,6 @@
         min-width: 650px !important;
       }
 
-      /* Sticky first column (Stock name) */
       .stk-table th:first-child,
       .stk-table td:first-child {
         position: sticky;
@@ -3285,7 +3283,6 @@
         font-size: 11px;
       }
 
-      /* Hide 52W on small tablets */
       .stk-col-52w,
       .stk-col-hdr-52w {
         display: none !important;
@@ -3301,10 +3298,6 @@
       .stk-col-chg,
       .stk-col-hdr-chg {
         display: none !important;
-      }
-
-      .cn-name {
-        max-width: 90px;
       }
     }
 
@@ -3839,7 +3832,7 @@
         border-radius: 5px
       }
 
-      /* Stock Table - same scroll pattern as crypto */
+      /* Stock Table */
       .stk-table td {
         padding: 8px 4px;
         font-size: 11px
@@ -5807,7 +5800,7 @@
       display: grid;
       grid-template-columns: 320px 1fr;
       flex: 1;
-      overflow-y: auto;
+      overflow-y: visible;
       min-height: 0;
       background: rgba(var(--bg1-rgb), .3);
       scrollbar-width: none;

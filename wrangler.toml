@@ -1,7 +1,5 @@
 name = "cryptohub"
-main = "worker.js"
 compatibility_date = "2024-01-01"
 
-[[routes]]
-pattern = "cryptohubcoin.com/api/*"
-zone_name = "cryptohubcoin.com"
+[site]
+bucket = "./"

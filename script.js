@@ -7746,39 +7746,24 @@ function switchInfoTab(tab) {
     function openExDetail(exId){
       const ex=EX_DB.find(e=>e.id===exId);if(!ex)return;
       _exdSY=window.scrollY;document.body.style.overflow='hidden';document.documentElement.style.overflow='hidden';document.body.classList.add('exd-open');
-      const m=$('exDetailMod');m.style.display='block';
-      const h=dHash(ex.n),ds=(ex.t-(h%5)*0.1).toFixed(1);
+      $('exDetailMod').style.display='block';
+      const h=dHash(ex.n);
       const cgId=_exdCgMap[ex.id]||ex.id;
       const exHost=ex.u.replace('https://','').replace('http://','').split('/')[0];
       const initLogo=ex.l.includes('coingecko.com')?ex.l:'https://www.google.com/s2/favicons?domain='+exHost+'&sz=128';
-      function _mki(url,sz){
-        const i=new Image();i.style.cssText='width:'+sz+'px;height:'+sz+'px;object-fit:contain;border-radius:'+Math.round(sz/5)+'px';i.src=url;
-        i.onerror=function(){this.onerror=null;this.parentElement.innerHTML='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(56,97,251,.12),rgba(108,92,231,.08));border-radius:inherit;font-weight:800;font-size:'+Math.round(sz*.45)+'px;color:var(--ac)">'+ex.n[0]+'</div>';};
-        return i;
-      }
+      function _mki(url,sz){const i=new Image();i.style.cssText='width:'+sz+'px;height:'+sz+'px;object-fit:contain;border-radius:'+Math.round(sz/5)+'px';i.src=url;i.onerror=function(){this.onerror=null;this.parentElement.innerHTML='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(56,97,251,.12),rgba(108,92,231,.08));border-radius:inherit;font-weight:800;font-size:'+Math.round(sz*.45)+'px;color:var(--ac)">'+ex.n[0]+'</div>';};return i;}
       $('exdLogo').innerHTML='';$('exdLogo').appendChild(_mki(initLogo,34));
-      fetch('https://api.coingecko.com/api/v3/exchanges/'+cgId).then(r=>r.ok?r.json():null).then(d=>{
-        if(d&&d.image){$('exdLogo').innerHTML='';$('exdLogo').appendChild(_mki(d.image,34));}
-      }).catch(()=>{});
+      fetch('https://api.coingecko.com/api/v3/exchanges/'+cgId).then(r=>r.ok?r.json():null).then(d=>{if(d&&d.image){$('exdLogo').innerHTML='';$('exdLogo').appendChild(_mki(d.image,34));}}).catch(()=>{});
       $('exdName').textContent=ex.n;
       const ref=getRef(ex.n,ex.u.replace(/{s}/g,'BTC').replace(/{sl}/g,'btc'));
-      const host=exHost;
-      $('exdLinks').innerHTML=[
-        `<a href="https://${host}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ac);text-decoration:none;padding:4px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--bc)"><i class="fas fa-globe" style="font-size:11px"></i>${host}</a>`,
-        `<a href="https://x.com/${ex.n.replace(/[\s.]+/g,'')}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ac);text-decoration:none;padding:4px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--bc)"><i class="fab fa-x-twitter" style="font-size:11px"></i>@${ex.n.replace(/[\s.]+/g,'')}</a>`
-      ].join('');
+      $('exdLinks').innerHTML=`<a href="https://${exHost}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ac);text-decoration:none;padding:4px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--bc)"><i class="fas fa-globe" style="font-size:11px"></i>${exHost}</a><a href="https://x.com/${ex.n.replace(/[\s.]+/g,'')}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ac);text-decoration:none;padding:4px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--bc)"><i class="fab fa-x-twitter" style="font-size:11px"></i>@${ex.n.replace(/[\s.]+/g,'')}</a>`;
       $('exdRegBtn').href=ref;
       const bp=allC.find(c=>c.sy==='BTC')?.pr||68000;
       const vol=exLiveVol[ex.id]?(exLiveVol[ex.id]*bp):(ex.t*5e8+(h%1e9));
-      $('exdVol24').textContent=_vf(vol);
-      $('exdVolBtc').textContent=Math.floor(vol/bp).toLocaleString()+' BTC';
-      const assets=vol*(3+(h%10));
-      $('exdAssets').textContent=_vf(assets);
-      $('exdAssetsBtc').textContent=Math.floor(assets/bp).toLocaleString()+' BTC';
-      _exdT=[];_exdPg=1;
-      $('exdPag').style.display='none';
-      _exdFallback(ex.id);
-      _loadExdTickers(ex.id);
+      $('exdVol24').textContent=_vf(vol);$('exdVolBtc').textContent=Math.floor(vol/bp).toLocaleString()+' BTC';
+      const assets=vol*(3+(h%10));$('exdAssets').textContent=_vf(assets);$('exdAssetsBtc').textContent=Math.floor(assets/bp).toLocaleString()+' BTC';
+      _exdT=[];_exdPg=1;$('exdPag').style.display='none';
+      _exdFallback(ex.id);_loadExdTickers(ex.id);
     }
 
     async function _loadExdTickers(exId){
@@ -7875,8 +7860,8 @@ function switchInfoTab(tab) {
     function _exdGo(p){_exdPg=p;_renderExd();const w=$('exdMW');if(w)w.scrollTop=0;}
 
     function closeExDetail(){
-      const m=$('exDetailMod');m.style.display='none';
-      document.body.classList.remove('exd-open');document.body.style.overflow='';document.documentElement.style.overflow='';document.body.style.top='';
+      $('exDetailMod').style.display='none';
+      document.body.classList.remove('exd-open');document.body.style.overflow='';document.documentElement.style.overflow='';
       window.scrollTo(0,_exdSY);
     }
 
@@ -8187,37 +8172,14 @@ function switchInfoTab(tab) {
       // Responsive styles for NFT, Stock & Exchange modals
       if(!document.getElementById('nftStkModalCSS')){
         var _ms=document.createElement('style');_ms.id='nftStkModalCSS';
-        _ms.textContent='#nftDetailMod *::-webkit-scrollbar,#stkDetailMod *::-webkit-scrollbar,#exDetailMod *::-webkit-scrollbar{display:none!important}'+
-        '@media(max-width:768px){'+
-        '#nftDetailMod .nft-body,#stkDetailMod .stk-body{flex-direction:column!important}'+
-        '#nftDetailMod .nft-left,#stkDetailMod .stk-left{width:100%!important;border-right:none!important;border-bottom:1px solid var(--bc)!important}'+
-        '#nftDetailMod .nft-right,#stkDetailMod .stk-right{width:100%!important;max-height:none!important}'+
-        '#exDetailMod .exd-body{flex-direction:column!important}'+
-        '#exDetailMod .exd-left{width:100%!important;border-right:none!important;border-bottom:1px solid var(--bc)!important}'+
-        '#exDetailMod .exd-right{width:100%!important;max-height:none!important}'+
-        '#exDetailMod .exd-col-pct{display:none!important}'+
-        '}';
+        _ms.textContent='#nftDetailMod *::-webkit-scrollbar,#stkDetailMod *::-webkit-scrollbar,#exDetailMod *::-webkit-scrollbar{display:none!important}@media(max-width:768px){#nftDetailMod .nft-body,#stkDetailMod .stk-body{flex-direction:column!important}#nftDetailMod .nft-left,#stkDetailMod .stk-left{width:100%!important;border-right:none!important;border-bottom:1px solid var(--bc)!important}#nftDetailMod .nft-right,#stkDetailMod .stk-right{width:100%!important;max-height:none!important}#exDetailMod .exd-body{flex-direction:column!important}#exDetailMod .exd-left{width:100%!important;border-right:none!important;border-bottom:1px solid var(--bc)!important}#exDetailMod .exd-right{width:100%!important;max-height:none!important}#exDetailMod .exd-col-pct{display:none!important}}';
         document.head.appendChild(_ms);
       }
     }
 
     // ===== STOCK/ETF DETAIL MODAL =====
     function _showStkDetail(sy) {
-      // Ensure responsive CSS is injected
-      if(!document.getElementById('nftStkModalCSS')){
-        var _ms=document.createElement('style');_ms.id='nftStkModalCSS';
-        _ms.textContent='#nftDetailMod *::-webkit-scrollbar,#stkDetailMod *::-webkit-scrollbar,#exDetailMod *::-webkit-scrollbar{display:none!important}'+
-        '@media(max-width:768px){'+
-        '#nftDetailMod .nft-body,#stkDetailMod .stk-body{flex-direction:column!important}'+
-        '#nftDetailMod .nft-left,#stkDetailMod .stk-left{width:100%!important;border-right:none!important;border-bottom:1px solid var(--bc)!important}'+
-        '#nftDetailMod .nft-right,#stkDetailMod .stk-right{width:100%!important;max-height:none!important}'+
-        '#exDetailMod .exd-body{flex-direction:column!important}'+
-        '#exDetailMod .exd-left{width:100%!important;border-right:none!important;border-bottom:1px solid var(--bc)!important}'+
-        '#exDetailMod .exd-right{width:100%!important;max-height:none!important}'+
-        '#exDetailMod .exd-col-pct{display:none!important}'+
-        '}';
-        document.head.appendChild(_ms);
-      }
+      if(!document.getElementById('nftStkModalCSS')){var _ms=document.createElement('style');_ms.id='nftStkModalCSS';_ms.textContent='#nftDetailMod *::-webkit-scrollbar,#stkDetailMod *::-webkit-scrollbar,#exDetailMod *::-webkit-scrollbar{display:none!important}@media(max-width:768px){#nftDetailMod .nft-body,#stkDetailMod .stk-body{flex-direction:column!important}#nftDetailMod .nft-left,#stkDetailMod .stk-left{width:100%!important;border-right:none!important;border-bottom:1px solid var(--bc)!important}#nftDetailMod .nft-right,#stkDetailMod .stk-right{width:100%!important;max-height:none!important}#exDetailMod .exd-body{flex-direction:column!important}#exDetailMod .exd-left{width:100%!important;border-right:none!important;border-bottom:1px solid var(--bc)!important}#exDetailMod .exd-right{width:100%!important;max-height:none!important}#exDetailMod .exd-col-pct{display:none!important}}';document.head.appendChild(_ms);}
       var s = _STK.find(function(x){return x.sy===sy;});
       if (!s) return;
       var d = _stkP[sy] || {};

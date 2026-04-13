@@ -546,64 +546,86 @@
 
 
             <div class="stats-panel" id="statsPanel">
-              <div class="stats-panel-items" style="padding-top:6px">
-                <a class="nav-item" onclick="navTo('crypto');return false" href="#">
-                  <div class="nav-ico"><i class="fas fa-coins"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="tabCrypto">العملات الرقمية</div></div>
-                  <i class="fas fa-chevron-left nav-arrow"></i>
-                </a>
-                <a class="nav-item" href="crypto-prediction">
-                  <div class="nav-ico"><i class="fas fa-brain"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="aiPredictorTitle">AI Price Predictor</div></div>
-                  <i class="fas fa-chevron-left nav-arrow"></i>
-                </a>
-                <a class="nav-item" href="token-vesting" target="_blank" rel="noopener">
-                  <div class="nav-ico"><i class="fas fa-lock-open"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="tokenVestingTitle">Token Vesting & Unlocks</div></div>
-                  <i class="fas fa-chevron-left nav-arrow"></i>
-                </a>
+              <div class="stats-panel-items" style="padding:4px 6px">
+
+                <!-- ═══ Cryptocurrencies + Accordion ═══ -->
+                <div style="border-radius:10px;overflow:hidden">
+                  <a class="nav-item" onclick="var s=document.getElementById('mktSub');var a=document.getElementById('mktChv');if(s.style.maxHeight==='0px'){s.style.maxHeight='200px';a.style.transform='rotate(180deg)'}else{s.style.maxHeight='0px';a.style.transform='rotate(0deg)'};return false" href="#" style="border-radius:10px">
+                    <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(55,138,221,.12)"><i class="fas fa-coins" style="color:#378ADD;font-size:14px"></i></div>
+                    <div style="flex:1"><div class="nav-title" data-i18n="tabCrypto">العملات الرقمية</div><div style="font-size:11px;color:var(--t2);margin-top:1px">Live prices and charts</div></div>
+                    <i id="mktChv" class="fas fa-chevron-down" style="font-size:10px;color:var(--t2);transition:transform .25s;transform:rotate(180deg)"></i>
+                  </a>
+                  <div id="mktSub" style="max-height:200px;overflow:hidden;transition:max-height .3s ease;padding:0 0 0 18px">
+                    <a class="nav-item" onclick="navTo('exchanges');return false" href="#" style="border-radius:8px;padding:8px 12px">
+                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(29,158,117,.12)"><i class="fas fa-crown" style="color:#1D9E75;font-size:12px"></i></div>
+                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="tabExchanges">جميع المنصات</div></div>
+                      <i class="fas fa-chevron-left nav-arrow"></i>
+                    </a>
+                    <a class="nav-item" onclick="navTo('commodities');return false" href="#" style="border-radius:8px;padding:8px 12px">
+                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(127,119,221,.12)"><i class="fas fa-th" style="color:#7F77DD;font-size:12px"></i></div>
+                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="tabCommodities">NFT Collections</div></div>
+                      <i class="fas fa-chevron-left nav-arrow"></i>
+                    </a>
+                    <a class="nav-item" onclick="navTo('stocks');return false" href="#" style="border-radius:8px;padding:8px 12px">
+                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(186,117,23,.12)"><i class="fas fa-chart-line" style="color:#BA7517;font-size:12px"></i></div>
+                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="tabStocks">الأسهم وETF</div></div>
+                      <i class="fas fa-chevron-left nav-arrow"></i>
+                    </a>
+                  </div>
+                </div>
+
                 <div style="height:1px;background:var(--bc);margin:4px 16px"></div>
-                <a class="nav-item" onclick="navTo('exchanges');return false" href="#">
-                  <div class="nav-ico"><i class="fas fa-crown"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="tabExchanges">جميع المنصات</div></div>
-                  <i class="fas fa-chevron-left nav-arrow"></i>
-                </a>
-                <a class="nav-item" onclick="navTo('commodities');return false" href="#">
-                  <div class="nav-ico"><i class="fas fa-th"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="tabCommodities">NFT Collections</div></div>
-                  <i class="fas fa-chevron-left nav-arrow"></i>
-                </a>
-                <a class="nav-item" onclick="navTo('stocks');return false" href="#">
-                  <div class="nav-ico"><i class="fas fa-chart-line"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="tabStocks">الأسهم وETF</div></div>
-                  <i class="fas fa-chevron-left nav-arrow"></i>
-                </a>
+
+                <!-- ═══ AI Tools + Accordion ═══ -->
+                <div style="border-radius:10px;overflow:hidden">
+                  <a class="nav-item" onclick="var s=document.getElementById('aiSub');var a=document.getElementById('aiChv');if(s.style.maxHeight==='0px'){s.style.maxHeight='320px';a.style.transform='rotate(180deg)'}else{s.style.maxHeight='0px';a.style.transform='rotate(0deg)'};return false" href="#" style="border-radius:10px">
+                    <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(226,75,74,.12)"><i class="fas fa-brain" style="color:#E24B4A;font-size:14px"></i></div>
+                    <div style="flex:1"><div class="nav-title">AI Tools</div><div style="font-size:11px;color:var(--t2);margin-top:1px">Smart analysis and predictions</div></div>
+                    <i id="aiChv" class="fas fa-chevron-down" style="font-size:10px;color:var(--t2);transition:transform .25s;transform:rotate(0deg)"></i>
+                  </a>
+                  <div id="aiSub" style="max-height:0px;overflow:hidden;transition:max-height .3s ease;padding:0 0 0 18px">
+                    <a class="nav-item" href="crypto-prediction" style="border-radius:8px;padding:8px 12px">
+                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(226,75,74,.12)"><i class="fas fa-lightbulb" style="color:#E24B4A;font-size:12px"></i></div>
+                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="aiPredictorTitle">AI Price Predictor</div></div>
+                      <i class="fas fa-chevron-left nav-arrow"></i>
+                    </a>
+                    <a class="nav-item" onclick="toggleAnalysis();return false" href="#" style="border-radius:8px;padding:8px 12px">
+                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(216,90,48,.12)"><i class="fas fa-robot" style="color:#D85A30;font-size:12px"></i></div>
+                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="aiTitle">التحليل الفني</div></div>
+                      <i class="fas fa-chevron-left nav-arrow"></i>
+                    </a>
+                    <a class="nav-item" href="crypto-arbitrage" style="border-radius:8px;padding:8px 12px">
+                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(29,158,117,.12)"><i class="fas fa-balance-scale" style="color:#1D9E75;font-size:12px"></i></div>
+                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="cryptoArbitrage">ماسح الفروقات</div></div>
+                      <i class="fas fa-chevron-left nav-arrow"></i>
+                    </a>
+                    <a class="nav-item" href="crypto-analyzer" style="border-radius:8px;padding:8px 12px">
+                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(55,138,221,.12)"><i class="fas fa-chart-pie" style="color:#378ADD;font-size:12px"></i></div>
+                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="cryptoAnalyzer">محلل السيولة</div></div>
+                      <i class="fas fa-chevron-left nav-arrow"></i>
+                    </a>
+                    <a class="nav-item" href="forex-analyzer.html" style="border-radius:8px;padding:8px 12px">
+                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(186,117,23,.12)"><i class="fas fa-dollar-sign" style="color:#BA7517;font-size:12px"></i></div>
+                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="forexAnalyzer">محلل الفوركس</div></div>
+                      <i class="fas fa-chevron-left nav-arrow"></i>
+                    </a>
+                  </div>
+                </div>
+
                 <div style="height:1px;background:var(--bc);margin:4px 16px"></div>
-                <a class="nav-item" onclick="toggleAnalysis();return false" href="#">
-                  <div class="nav-ico"><i class="fas fa-robot"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="aiTitle">التحليل الفني</div></div>
+
+                <!-- ═══ Standalone Items ═══ -->
+                <a class="nav-item" href="token-vesting" target="_blank" rel="noopener" style="border-radius:10px">
+                  <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(127,119,221,.12)"><i class="fas fa-lock-open" style="color:#7F77DD;font-size:14px"></i></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="tokenVestingTitle">Token Vesting & Unlocks</div><div style="font-size:11px;color:var(--t2);margin-top:1px">Unlock schedules</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
-                <a class="nav-item" href="crypto-analyzer">
-                  <div class="nav-ico"><i class="fas fa-chart-pie"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="cryptoAnalyzer">محلل السيولة</div></div>
+                <a class="nav-item" href="blog" style="border-radius:10px">
+                  <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(136,135,128,.12)"><i class="fas fa-newspaper" style="color:#88877F;font-size:14px"></i></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="blogNav">المدونة</div><div style="font-size:11px;color:var(--t2);margin-top:1px">Articles and guides</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
-                <a class="nav-item" href="crypto-arbitrage">
-                  <div class="nav-ico"><i class="fas fa-balance-scale"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="cryptoArbitrage">ماسح الفروقات</div></div>
-                  <i class="fas fa-chevron-left nav-arrow"></i>
-                </a>
-                <a class="nav-item" href="forex-analyzer.html">
-                  <div class="nav-ico"><i class="fas fa-dollar-sign"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="forexAnalyzer">محلل الفوركس</div></div>
-                  <i class="fas fa-chevron-left nav-arrow"></i>
-                </a>
-                <a class="nav-item" href="blog">
-                  <div class="nav-ico"><i class="fas fa-newspaper"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="blogNav">المدونة</div></div>
-                  <i class="fas fa-chevron-left nav-arrow"></i>
-                </a>
+
               </div>
               <div class="stats-panel-ft"><i class="fas fa-shield-halved"></i> <span data-i18n="secure">آمن</span></div>
             </div>

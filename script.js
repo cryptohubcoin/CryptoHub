@@ -7980,31 +7980,43 @@ function switchInfoTab(tab) {
     const _NFT_PROXY='https://nft-proxy.bitcoinswapnet.workers.dev';
     let _nftAll=[],_nftPage=1,_nftPP=50,_nftQ='',_nftChain='',_nftSort='mcap',_nftSortDir=-1,_nftRefreshId=null;
 
+    function _mapNFT(n){return{id:n.id,name:n.name||'',symbol:n.symbol||'',image:n.image||'',chain:n.chain||'ethereum',fpNative:n.floor_price?.native||0,fpUsd:n.floor_price?.usd||0,fpSymbol:n.floor_price?.symbol||'ETH',h24:n.changes?.h24||0,h7d:n.changes?.h7d||0,mcap:n.market_cap||0,vol:n.volume_24h||0,owners:n.owners||0,supply:n.total_supply||0};}
     async function _loadNFTCollections(){
       const tb=$('nftTbody');if(!tb)return;
       tb.innerHTML='<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--t2)"><i class="fas fa-spinner fa-spin" style="margin-right:6px"></i>Loading NFT collections...</td></tr>';
       try{
-        const r=await fetch(_NFT_PROXY+'/api/nfts');
-        if(!r.ok)throw new Error(r.status);
-        const d=await r.json();
-        if(d&&d.data&&d.data.length>0){
-          _nftAll=d.data.map(n=>({
-            id:n.id,name:n.name||'',symbol:n.symbol||'',
-            image:n.image||'',chain:n.chain||'ethereum',
-            fpNative:n.floor_price?.native||0,fpUsd:n.floor_price?.usd||0,
-            fpSymbol:n.floor_price?.symbol||'ETH',
-            h24:n.changes?.h24||0,h7d:n.changes?.h7d||0,
-            mcap:n.market_cap||0,vol:n.volume_24h||0,
-            owners:n.owners||0,supply:n.total_supply||0
-          }));
+        var all=[],page=1,totalPages=1;
+        while(page<=totalPages&&page<=20){
+          const r=await fetch(_NFT_PROXY+'/api/nfts?limit=250&page='+page);
+          if(!r.ok)throw new Error(r.status);
+          const d=await r.json();
+          if(d&&d.data&&d.data.length>0){
+            all=all.concat(d.data.map(_mapNFT));
+            totalPages=d.pages||1;
+            const cc=$('nftCount');if(cc)cc.textContent='\u2022 '+all.length+' / '+(d.total||all.length)+' collections';
+            if(page===1){_nftAll=all.slice();_nftPage=1;_renderNFT();}
+          }else{break;}
+          page++;
+        }
+        if(all.length>0){
+          _nftAll=all;
           const cc=$('nftCount');if(cc)cc.textContent='\u2022 '+_nftAll.length+' collections';
         }
         _nftPage=1;_renderNFT();
+        _populateNFTChainFilter();
       }catch(e){
         console.warn('[NFT]',e);
-        tb.innerHTML='<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--rd)"><i class="fas fa-exclamation-triangle"></i> Failed to load \u2014 <a href="#" onclick="_loadNFTCollections();return false" style="color:var(--ac)">Retry</a></td></tr>';
+        if(_nftAll.length===0)tb.innerHTML='<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--rd)"><i class="fas fa-exclamation-triangle"></i> Failed to load \u2014 <a href="#" onclick="_loadNFTCollections();return false" style="color:var(--ac)">Retry</a></td></tr>';
       }
       if(!_nftRefreshId)_nftRefreshId=setInterval(_loadNFTCollections,120000);
+    }
+    function _populateNFTChainFilter(){
+      const sel=$('nftChainFilter');if(!sel)return;
+      var chains={};_nftAll.forEach(function(n){var c=n.chain||'unknown';chains[c]=(chains[c]||0)+1;});
+      var opts='<option value="">All Chains</option>';
+      Object.keys(chains).sort(function(a,b){return chains[b]-chains[a];}).forEach(function(c){opts+='<option value="'+c+'">'+c.replace(/-/g,' ')+' ('+chains[c]+')</option>';});
+      sel.innerHTML=opts;
+      if(_nftChain)sel.value=_nftChain;
     }
     function _filterNFT(q){_nftQ=q.toLowerCase().trim();_nftPage=1;_renderNFT();}
     function _filterNFTChain(c){_nftChain=c;_nftPage=1;_renderNFT();}

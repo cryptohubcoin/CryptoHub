@@ -453,6 +453,7 @@
 
   <!-- Linked Styles -->
   <link rel="stylesheet" href="style.css">
+  <link rel="preload" href="script.js" as="script">
 
   <!-- Preload critical data BEFORE script.js loads -->
   <script>
@@ -641,7 +642,7 @@
 
 
     <!-- Precious Metals Live -->
-    <div class="mbar" id="metalBar" style="min-height:90px;contain:layout style">
+    <div class="mbar" id="metalBar" style="min-height:90px;contain:layout style paint;content-visibility:auto">
       <div class="mbc" id="mGCard">
         <div class="mbi" style="background:linear-gradient(135deg,#FFD700,#FFA000)">🥇</div>
         <div class="flex-1 min-w-0">
@@ -965,9 +966,9 @@
 
     </div>
 
-    <div class="tab-content active" id="tab_crypto" style="min-height:1200px;contain:layout style">
+    <div class="tab-content active" id="tab_crypto" style="min-height:1200px;contain:layout style paint">
       <!-- Top Gainers Orbital -->
-      <div class="tg-section" id="tickerWrap" style="min-height:110px">
+      <div class="tg-section" id="tickerWrap" style="min-height:110px;contain:layout style paint">
         <div class="tg-hdr">
           <div style="display:flex;align-items:center;gap:8px">
             <i class="fas fa-fire" style="color:#f97316"></i>
@@ -1241,7 +1242,7 @@
     </div>
 
     <!-- Tab: Commodities -->
-    <div class="tab-content" id="tab_commodities" style="min-height:160px"
+    <div class="tab-content" id="tab_commodities" style="min-height:160px;content-visibility:auto;contain-intrinsic-size:0 800px"
       style="content-visibility:auto;contain-intrinsic-size:0 800px">
       <div class="card mb-4">
         <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
@@ -1285,7 +1286,7 @@
     </div>
 
     <!-- Tab: Stocks & ETFs -->
-    <div class="tab-content" id="tab_stocks">
+    <div class="tab-content" id="tab_stocks" style="content-visibility:auto;contain-intrinsic-size:0 800px">
       <div class="card mb-4">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
           <div>
@@ -2363,7 +2364,7 @@
 
 
   <!-- Linked Scripts -->
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
   <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "148b04af28d846e4b59fb5cf2370360f"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 

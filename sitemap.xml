@@ -1,87 +1,197 @@
-#!/bin/bash
-# Cache Warmer Script for cryptohubcoin.com
-# This script visits all URLs to warm up Cloudflare cache
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-echo "=========================================="
-echo "  Cache Warmer - cryptohubcoin.com"
-echo "=========================================="
-echo ""
+  <!-- Main Pages -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/crypto-analyzer</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/crypto-arbitrage</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/forex-analyzer</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/about</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/faq</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/glossary</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/privacy</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/terms</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
 
-# List of all URLs from sitemap
-URLS=(
-  "https://www.cryptohubcoin.com/"
-  "https://www.cryptohubcoin.com/crypto-analyzer"
-  "https://www.cryptohubcoin.com/crypto-arbitrage"
-  "https://www.cryptohubcoin.com/forex-analyzer"
-  "https://www.cryptohubcoin.com/about"
-  "https://www.cryptohubcoin.com/faq"
-  "https://www.cryptohubcoin.com/glossary"
-  "https://www.cryptohubcoin.com/privacy"
-  "https://www.cryptohubcoin.com/terms"
-  "https://www.cryptohubcoin.com/crypto-prediction"
-  "https://www.cryptohubcoin.com/blog"
-  "https://www.cryptohubcoin.com/blog/bitcoin-guide-2025"
-  "https://www.cryptohubcoin.com/blog/brc20-vs-runes"
-  "https://www.cryptohubcoin.com/blog/fear-greed-index-guide"
-  "https://www.cryptohubcoin.com/blog/gold-vs-bitcoin"
-  "https://www.cryptohubcoin.com/blog/crypto-beginners-guide"
-  "https://www.cryptohubcoin.com/blog/crypto-security-guide"
-  "https://www.cryptohubcoin.com/blog/rsi-macd-bollinger-guide"
-  "https://www.cryptohubcoin.com/blog/what-is-defi"
-  "https://www.cryptohubcoin.com/blog/best-crypto-exchange-2025"
-  "https://www.cryptohubcoin.com/blog/bitcoin-halving-explained"
-  "https://www.cryptohubcoin.com/blog/what-is-web3"
-  "https://www.cryptohubcoin.com/blog/what-is-rwa"
-  "https://www.cryptohubcoin.com/blog/what-is-zero-knowledge-proofs"
-  "https://www.cryptohubcoin.com/blog/what-is-ai-crypto"
-  "https://www.cryptohubcoin.com/blog/decentralized-finance-protocols"
-  "https://www.cryptohubcoin.com/blog/defi-protocol"
-  "https://www.cryptohubcoin.com/blog/bitcoin-halving-meaning"
-  "https://www.cryptohubcoin.com/blog/what-is-staking"
-  "https://www.cryptohubcoin.com/token-vesting"
-  "https://www.cryptohubcoin.com/token-unlock-calendar"
-)
+  <url>
+    <loc>https://www.cryptohubcoin.com/crypto-prediction</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
 
-TOTAL=${#URLS[@]}
-CACHED=0
-MISS=0
+  <!-- Blog -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/bitcoin-guide-2025</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/brc20-vs-runes</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/fear-greed-index-guide</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/gold-vs-bitcoin</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/crypto-beginners-guide</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/crypto-security-guide</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/rsi-macd-bollinger-guide</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/what-is-defi</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/best-crypto-exchange-2025</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/bitcoin-halving-explained</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/what-is-web3</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/what-is-rwa</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/what-is-zero-knowledge-proofs</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/what-is-ai-crypto</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/decentralized-finance-protocols</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/defi-protocol</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/bitcoin-halving-meaning</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/what-is-staking</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
-echo "Total URLs to warm: $TOTAL"
-echo ""
+  <!-- Tools -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/token-vesting</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/token-unlock-calendar</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
 
-# Function to warm a single URL
-warm_url() {
-  local url=$1
-  local num=$2
-  
-  # Visit the URL and get cache status
-  response=$(curl -s -I "$url" -H "User-Agent: Mozilla/5.0" 2>&1)
-  cache_status=$(echo "$response" | grep -i "cf-cache-status" | awk '{print $2}' | tr -d '\r')
-  http_code=$(echo "$response" | grep -E "^HTTP" | awk '{print $2}')
-  
-  if [ "$cache_status" = "HIT" ]; then
-    echo "[$num/$TOTAL] ✅ HIT  - $url"
-    ((CACHED++))
-  elif [ "$cache_status" = "MISS" ]; then
-    echo "[$num/$TOTAL] ❌ MISS - $url"
-    ((MISS++))
-  else
-    echo "[$num/$TOTAL] ⏳ $http_code - $url (Status: ${cache_status:-unknown})"
-  fi
-}
-
-# Warm all URLs
-for i in "${!URLS[@]}"; do
-  warm_url "${URLS[$i]}" "$((i+1))"
-  sleep 0.5  # Small delay to be nice to the server
-done
-
-echo ""
-echo "=========================================="
-echo "  Cache Warm Complete!"
-echo "=========================================="
-echo "Total: $TOTAL"
-echo "Cached (HIT): $CACHED"
-echo "Missed (MISS): $MISS"
-echo ""
-echo "Run this script again in 5 minutes to improve cache hit rate!"
+</urlset>

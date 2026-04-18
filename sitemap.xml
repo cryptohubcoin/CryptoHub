@@ -187,6 +187,13 @@
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
+    <!-- Portfolio & Wallet Tracker -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/portfolio</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
   <url>
     <loc>https://www.cryptohubcoin.com/token-vesting</loc>
     <lastmod>2026-04-03</lastmod>

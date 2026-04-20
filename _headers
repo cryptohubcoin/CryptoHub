@@ -46,11 +46,11 @@
   Cache-Control: public, max-age=300
   CDN-Cache-Control: public, max-age=3600
 
+# NEW: API cache
+/api/*
+  Cache-Control: public, max-age=60
+
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
-
-# NEW: API cache
-/api/*
-  Cache-Control: public, max-age=60

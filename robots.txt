@@ -3,11 +3,12 @@
 
 User-agent: *
 Allow: /
+Allow: /*?lang=
 Disallow: /admin/
 Disallow: /private/
 Disallow: /cdn-cgi/
+Disallow: /cmc-proxy.php
 Disallow: /*.json$
-Disallow: /*?lang=
 Disallow: /*?q=
 Disallow: /*?ag=
 Disallow: /*?sort=
@@ -20,9 +21,10 @@ Crawl-delay: 1
 # Google - أولوية عالية
 User-agent: Googlebot
 Allow: /
+Allow: /*?lang=
 Disallow: /admin/
 Disallow: /private/
-Disallow: /*?lang=
+Disallow: /cmc-proxy.php
 Disallow: /*?q=
 Disallow: /*?ag=
 Disallow: /*?sort=
@@ -38,9 +40,10 @@ Crawl-delay: 0
 # Bing
 User-agent: Bingbot
 Allow: /
+Allow: /*?lang=
 Disallow: /admin/
 Disallow: /private/
-Disallow: /*?lang=
+Disallow: /cmc-proxy.php
 Disallow: /*?q=
 Disallow: /*?ag=
 Disallow: /*?sort=

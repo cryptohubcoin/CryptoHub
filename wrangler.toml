@@ -1,6 +1,45 @@
-name = "cryptohub"
-main = "worker.js"
-compatibility_date = "2024-01-01"
+name = "cryptohub-api"
+main = "src/index.js"
+compatibility_date = "2025-04-01"
 
-[site]
-bucket = "./"
+# ═══════════════════════════════════════════════════════════════════
+# Deployment settings
+# ═══════════════════════════════════════════════════════════════════
+workers_dev = false
+preview_urls = false
+
+# ═══════════════════════════════════════════════════════════════════
+# Custom domain
+# ═══════════════════════════════════════════════════════════════════
+routes = [
+  { pattern = "api.cryptohubcoin.com/*", zone_name = "cryptohubcoin.com" }
+]
+
+# ═══════════════════════════════════════════════════════════════════
+# D1 Database binding
+# ═══════════════════════════════════════════════════════════════════
+[[d1_databases]]
+binding = "DB"
+database_name = "cryptohub_d1"
+database_id = "be019da7-dea2-4adc-9ac0-75ae3bd0880e"
+
+# ═══════════════════════════════════════════════════════════════════
+# KV Namespace bindings
+# ═══════════════════════════════════════════════════════════════════
+[[kv_namespaces]]
+binding = "RATE_LIMITS"
+id = "e31c014eb06c46d5a1da1aab2a835822"
+
+[[kv_namespaces]]
+binding = "BACKUP_KV"
+id = "b5a0b96eb04f47cbab431594e9274fbb"
+
+# ═══════════════════════════════════════════════════════════════════
+# Environment variables (public - non-secret)
+# ═══════════════════════════════════════════════════════════════════
+[vars]
+ALLOWED_ORIGINS = "https://cryptohubcoin.com,https://www.cryptohubcoin.com,http://127.0.0.1:5500,http://localhost:5500"
+APP_URL = "https://cryptohubcoin.com"
+API_URL = "https://api.cryptohubcoin.com"
+GOOGLE_CLIENT_ID = "933118105315-8862fkd0gvf82aqnhqhpj0upahlqpf9s.apps.googleusercontent.com"
+EMAIL_FROM = "CryptoHubCoin <noreply@cryptohubcoin.com>"

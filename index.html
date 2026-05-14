@@ -364,8 +364,6 @@
   <link rel="dns-prefetch" href="https://forex-data-feed.swissquote.com">
   <link rel="dns-prefetch" href="https://data-asg.goldprice.org">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-  <link rel="preconnect" href="https://late-wood-9120.bitcoinswapnet.workers.dev" crossorigin>
-  <link rel="dns-prefetch" href="https://late-wood-9120.bitcoinswapnet.workers.dev">
 
   <!-- Icons -->
   <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
@@ -401,8 +399,77 @@
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet"></noscript>
   
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+  <style>
+    .cmc-net-scroll { overflow: hidden !important; flex-wrap: nowrap !important; gap: 4px !important; }
+    .cmc-net-scroll > * { flex-shrink: 0 !important; }
+    .cmc-net-bar { overflow: visible !important; }
+    .cmc-net-bar .cmc-net-btn { padding: 6px 8px !important; font-size: 12px !important; gap: 4px !important; white-space: nowrap !important; }
+    .cmc-net-bar .cmc-net-btn img, .cmc-net-bar .cmc-net-btn i { width: 16px !important; height: 16px !important; font-size: 12px !important; flex-shrink: 0 !important; }
+    #filterBtn { display: inline-flex !important; }
+    #aFilt { display: none !important; }
+
+    /* ═══ TEMPORARILY HIDDEN — networks bar (delete this rule to restore) ═══ */
+    .cmc-net-bar { display: none !important; }
+    /* ═══ End of temporary hide ═══ */
+
+    /* ============ Coin modal: Chart/Market tabs + Watermark ============ */
+    .cd-tabs { display: flex; gap: 0; padding: 0 14px; border-bottom: 1px solid var(--bc); background: var(--bg2); position: sticky; top: 0; z-index: 5; }
+    .cd-tab { padding: 12px 22px; background: none; border: 0; border-bottom: 2px solid transparent; color: var(--t2); font-size: 14px; font-weight: 700; cursor: pointer; margin-bottom: -1px; transition: color .2s, border-color .2s; display: flex; align-items: center; gap: 6px; }
+    .cd-tab:hover { color: var(--t1); }
+    .cd-tab.cd-tab-active { color: var(--ac); border-bottom-color: var(--ac); }
+    .cd-tab i { font-size: 12px; }
+    .cd-chart-panel { padding: 16px; display: flex; flex-direction: column; gap: 14px; min-height: 460px; }
+    .cd-rng { display: flex; gap: 4px; align-self: flex-end; align-items: center; background: var(--bg2); padding: 3px; border-radius: 8px; border: 1px solid var(--bc); }
+    .cd-rng button { padding: 6px 12px; background: transparent; border: 0; border-radius: 6px; color: var(--t2); font-size: 12px; font-weight: 700; cursor: pointer; transition: all .15s; }
+    .cd-rng button:hover { color: var(--t1); }
+    .cd-rng button.active { background: var(--ac); color: #fff; }
+    .cd-more-wrap { position: relative; border-left: 1px solid var(--bc); margin-left: 2px; padding-left: 4px; }
+    .cd-more-btn { display: inline-flex; align-items: center; gap: 4px; }
+    .cd-more-btn svg { width: 10px; height: 10px; transition: transform .2s; }
+    .cd-more-btn.open svg { transform: rotate(180deg); }
+    .cd-more-menu { position: absolute; right: 0; top: calc(100% + 6px); min-width: 150px; background: var(--bg1); border: 1px solid var(--bc); border-radius: 10px; padding: 4px; box-shadow: 0 8px 24px rgba(0,0,0,.12); z-index: 50; display: none; }
+    .cd-more-menu.show { display: block; }
+    .cd-more-menu .cd-mi { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; font-size: 12px; color: var(--t1); cursor: pointer; border-radius: 6px; font-weight: 600; }
+    .cd-more-menu .cd-mi:hover { background: var(--bg2); }
+    .cd-more-menu .cd-mi.active { background: var(--ac); color: #fff; }
+    .cd-more-menu .cd-mi.active .cd-mi-tag { color: rgba(255,255,255,.8); }
+    .cd-mi-tag { font-size: 10px; color: var(--t2); font-weight: 700; }
+    .cd-mi-sep { height: 1px; background: var(--bc); margin: 4px 8px; }
+    .cd-chart-wrap { position: relative; flex: 1; min-height: 380px; background: var(--bg1); border-radius: 12px; border: 1px solid var(--bc); padding: 16px; overflow: hidden; }
+    .cd-watermark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 56px; font-weight: 800; color: var(--t1); opacity: 0.05; letter-spacing: 3px; pointer-events: none; z-index: 0; font-family: 'Inter','Cairo',sans-serif; user-select: none; -webkit-user-select: none; text-transform: lowercase; }
+    .cd-chart-canvas { position: relative; z-index: 1; width: 100% !important; height: 100% !important; max-height: 380px; }
+    .cd-chart-loading, .cd-chart-err { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--t2); font-size: 14px; z-index: 2; gap: 8px; }
+    .cd-chart-err { color: var(--rd); }
+    .cd-chart-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 4px; }
+    .cd-chart-price { font-size: 22px; font-weight: 800; }
+    .cd-chart-chg { font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 6px; }
+    .cd-chart-chg.up { color: var(--gn); background: rgba(22,199,132,0.12); }
+    .cd-chart-chg.down { color: var(--rd); background: rgba(234,57,67,0.12); }
+    /* Chart-type toggle (Line / Candles) */
+    .cd-ctrls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; align-self: flex-end; }
+    .cd-type { display: inline-flex; gap: 2px; background: var(--bg2); padding: 3px; border-radius: 8px; border: 1px solid var(--bc); }
+    .cd-type button { background: none; border: 0; padding: 6px 10px; border-radius: 6px; color: var(--t2); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all .2s; }
+    .cd-type button:hover { color: var(--t1); }
+    .cd-type button.active { background: var(--ac); color: #fff; }
+    .cd-type button svg { display: block; }
+    /* TEMP: Hide candles button until enough snapshots accumulate (~1-2 months).
+       To re-enable: remove the next two rules. */
+    .cd-type { display: none !important; }
+    #cdType { display: none !important; }
+    /* Container holding both Line canvas and Candles div */
+    .cd-chart-stage { position: relative; z-index: 1; width: 100%; height: 100%; max-height: 380px; }
+    .cd-candles-host { position: absolute; inset: 0; }
+    @media (max-width: 768px) {
+      .cd-chart-panel { min-height: 360px; padding: 12px; }
+      .cd-chart-wrap { min-height: 280px; padding: 10px; }
+      .cd-chart-canvas, .cd-chart-stage { max-height: 280px; }
+      .cd-watermark { font-size: 36px; letter-spacing: 1px; }
+      .cd-rng button { padding: 5px 10px; font-size: 11px; }
+      .cd-type button { padding: 5px 8px; }
+    }
+  </style>
 
   
   
@@ -453,20 +520,529 @@
 
   <!-- Linked Styles -->
   <link rel="stylesheet" href="style.css">
-  <link rel="preload" href="script.js" as="script">
+  <link rel="preload" href="script.min.js" as="script">
 
-  <!-- Preload critical data BEFORE script.js loads -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- Preload critical data BEFORE scripts load — reads from D1   -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
   <script>
+    // ─── Endpoints ────────────────────────────────────────────────
+    // Single source of truth: cryptohub-api proxies all data from D1.
+    // _API_STATS kept for backward compatibility — points to same domain.
+    var _API_CORE  = 'https://api.cryptohubcoin.com';
+    var _API_STATS = _API_CORE; // unified — stats now served from cryptohub-api
+    var _API_KEY   = 'ch_live_7f3553f6c561ba6bdaa157f2254ae12f76c34cd08920e549';
+
+    // ─── Logger (silent in production, enable via window._debug = true) ─
+    var _log = function (label, ok, info) {
+      if (!window._debug) return;
+      var icon = ok ? '✓' : '✗';
+      var color = ok ? '#10b981' : '#ef4444';
+      console.log('%c[D1] ' + icon + ' ' + label, 'color:' + color + ';font-weight:600', info || '');
+    };
+
+    // ─── Adapters: convert new API shape → old (script.js expected) shape ─
+    function adaptCoins(apiResp) {
+      // cryptohub-api returns: { success, data: [{ id, symbol, name, price, ... }], total }
+      // Frontend expects: { coins: [{ id, sy, nm, pr, c1, c4, c24, c7, mc, vol, cmc_id, ex, ... }] }
+      if (!apiResp || !apiResp.data) return null;
+      var coins = apiResp.data.map(function (c) {
+        return {
+          id: c.id,
+          cmc_id: c.cmc_id || null,
+          sy: c.symbol,
+          nm: c.name,
+          pr: c.price,
+          c1: c.change_1h || 0,
+          c4: c.change_4h || 0,
+          c24: c.change_24h || 0,
+          c7: c.change_7d || 0,
+          mc: c.market_cap || 0,
+          vol: c.volume_24h || 0,
+          h24: c.high_24h || 0,
+          l24: c.low_24h || 0,
+          sup: c.circulating_supply || 0,
+          ts: c.total_supply || 0,
+          ms: c.max_supply || 0,
+          ex: 0,
+          rk: c.rank || 0,
+          img: c.logo,
+          // ═══ NEW (May 2026): platforms — للـ network filter ═══
+          // c.plat = string (أول شبكة) للتوافق مع script.js القديم
+          // c.plats = array (كل الشبكات) للـ filter الجديد
+          plat: (c.platforms && typeof c.platforms === 'object') ? (Object.keys(c.platforms).filter(k => k && c.platforms[k])[0] || null) : null,
+          plats: c.platforms ? Object.keys(c.platforms).filter(k => k && c.platforms[k]) : [],
+          _ts: c.price_updated_at,
+          _src: c.price_source || 'd1'
+        };
+      });
+      return { coins: coins, total: apiResp.total || coins.length, start: 0, limit: coins.length };
+    }
+    window.adaptCoins = adaptCoins; // expose for use in 03-crypto.js refresh logic
+
+    function adaptStat(apiResp) {
+      if (!apiResp) return null;
+      var raw = apiResp.data || apiResp;
+      if (!raw) return null;
+      return {
+        totalMarketCap: raw.totalMarketCap || raw.total_market_cap || 0,
+        totalVolume24h: raw.totalVolume24h || raw.total_volume_24h || 0,
+        btcDominance:   raw.btcDominance   || raw.btc_dominance   || 0,
+        ethDominance:   raw.ethDominance   || raw.eth_dominance   || 0,
+        now: raw.now, yesterday: raw.yesterday, lastWeek: raw.lastWeek,
+        lastMonth: raw.lastMonth, classification: raw.classification,
+      };
+    }
+
+    // ─── Preload ──────────────────────────────────────────────────
     window._preload = {};
-    var _API = 'https://late-wood-9120.bitcoinswapnet.workers.dev';
-    window._preload.coins = fetch(_API + '/api/coins?start=0&limit=10000').then(function(r){return r.json()}).catch(function(){return null});
-    window._preload.metals = fetch(_API + '/api/metals').then(function(r){return r.json()}).catch(function(){return null});
-    window._preload.global = fetch(_API + '/api/global').then(function(r){return r.json()}).catch(function(){return null});
-    window._preload.fearGreed = fetch(_API + '/api/fear-greed').then(function(r){return r.json()}).catch(function(){return null});
+
+    var t0 = performance.now();
+
+    window._preload.coins = fetch(_API_CORE + '/api/v1/market/coins?limit=10000', {
+      headers: { 'x-api-key': _API_KEY }
+    }).then(function (r) { return r.json(); })
+      .then(function (d) {
+        var adapted = adaptCoins(d);
+        _log('coins', !!adapted, adapted ? adapted.total + ' coins' : 'failed');
+        return adapted;
+      })
+      .catch(function (e) { _log('coins', false, e.message); return null; });
+
+    window._preload.global = fetch(_API_CORE + '/api/v1/market/global', {
+      headers: { 'x-api-key': _API_KEY }
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var adapted = adaptStat(d);
+        // ═══ FIX (May 2026): set _cleanGlobal مباشرةً علشان نمنع الـ flash ═══
+        if (adapted && adapted.totalMarketCap) {
+          window._cleanGlobal = {
+            totalMarketCap: adapted.totalMarketCap,
+            totalVolume24h: adapted.totalVolume24h,
+            btcDominance: adapted.btcDominance,
+            ethDominance: adapted.ethDominance
+          };
+        }
+        _log('global', !!adapted, adapted && adapted.totalMarketCap ? '$' + (adapted.totalMarketCap / 1e12).toFixed(2) + 'T' : 'ok');
+        return adapted;
+      })
+      .catch(function (e) { _log('global', false, e.message); return null; });
+
+    window._preload.fearGreed = fetch(_API_CORE + '/api/v1/stats/fear', {
+      headers: { 'x-api-key': _API_KEY }
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var adapted = adaptStat(d);
+        _log('fearGreed', !!adapted, adapted && adapted.now ? adapted.now + ' (' + adapted.classification + ')' : 'ok');
+        return adapted;
+      })
+      .catch(function (e) { _log('fearGreed', false, e.message); return null; });
+
+    // Metals from D1 via cryptohub-api/api/v1/metals
+    window._preload.metals = fetch(_API_CORE + '/api/v1/metals', {
+      headers: { 'x-api-key': _API_KEY }
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.success) {
+          _log('metals', true, 'Au $' + (d.gold && d.gold.price ? d.gold.price.toFixed(2) : '?'));
+          return d;
+        }
+        return null;
+      })
+      .catch(function (e) { _log('metals', false, e.message); return null; });
+
+    // ═══ Stocks preload — start fetch immediately on page load (don't wait for tab) ═══
+    window._preload.stocks = fetch(_API_CORE + '/api/v1/stocks', {
+      headers: { 'x-api-key': _API_KEY }
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        _log('stocks', !!d, d ? 'preloaded' : 'failed');
+        return d;
+      })
+      .catch(function (e) { _log('stocks', false, e.message); return null; });
   </script>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- Auth-aware nav items: shown to all, but with premium header + CTA for guests -->
+  <style>
+    .guest-only { display: none; }
+    .auth-guest .guest-only { display: block; }
+    .auth-logged-in .guest-only { display: none !important; }
+    /* Hide top "Sign in" for guests — Log in CTA is inside the menu now.
+       For logged-in users, the slot shows the user dropdown. */
+    .auth-guest #auth-nav-slot { display: none !important; }
+
+    /* ─── Card-row layout (shared by Market Stats + Indicators) ─── */
+    .cards-row-wrap {
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
+      margin: 6px 0 10px;
+    }
+    .cards-row-arrow {
+      flex-shrink: 0;
+      width: 28px;
+      height: auto;
+      min-width: 28px;
+      background: transparent;
+      border: 0;
+      color: var(--t2);
+      font-size: 20px;
+      font-weight: 400;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: color .15s ease;
+      align-self: stretch;
+      padding: 0;
+    }
+    .cards-row-arrow.is-visible { display: flex; }
+    .cards-row-arrow:hover {
+      color: var(--t1);
+    }
+
+    .cards-row {
+      flex: 1;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: 1px 0;
+    }
+    .cards-row::-webkit-scrollbar { display: none; }
+
+    .stat-card {
+      flex: 1 0 auto;
+      min-width: 150px;
+      background: var(--bg2);
+      border: 0.5px solid var(--bc);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s, box-shadow .15s, border-color .15s;
+    }
+    .stat-card:hover {
+      background: var(--bg3);
+      border-color: var(--ac);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .stat-card-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--t2);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .stat-card-label i { font-size: 13px; flex-shrink: 0; }
+    .stat-card-value {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--t1);
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color .15s;
+    }
+    .stat-card-value.up   { color: var(--gn); }
+    .stat-card-value.down { color: var(--rd); }
+    .stat-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--t2);
+    }
+    .stat-card-meta.up   { color: var(--gn); }
+    .stat-card-meta.down { color: var(--rd); }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      .stat-card { min-width: 130px; padding: 9px 12px; }
+      .stat-card-label { font-size: 11px; }
+      .stat-card-value { font-size: 15px; }
+      .cards-row-arrow { width: 24px; min-width: 24px; font-size: 18px; }
+    }
+
+    /* ─── Indicator card refresh — professional layout with scale context ─── */
+    .ind-item {
+      min-width: 158px;
+      gap: 8px !important;
+      padding: 11px 13px !important;
+    }
+    .ind-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--t2);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .ind-ico {
+      font-size: 11px;
+      color: var(--t2);
+      flex-shrink: 0;
+    }
+    .ind-lbl {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ind-val-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .ind-item .stat-card-value {
+      font-size: 19px !important;
+      font-weight: 600 !important;
+      line-height: 1 !important;
+    }
+    .ind-status {
+      font-size: 10px;
+      color: var(--t2);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 80px;
+      transition: color .15s;
+    }
+    .ind-status.up   { color: var(--gn); }
+    .ind-status.down { color: var(--rd); }
+    .ind-bar {
+      position: relative;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--bg3);
+      margin-top: auto;
+      overflow: visible;
+    }
+    .ind-grad {
+      position: absolute;
+      inset: 0;
+      border-radius: 2px;
+      background: linear-gradient(90deg, rgba(234,57,67,0.55) 0%, rgba(245,158,11,0.55) 50%, rgba(22,199,132,0.55) 100%);
+    }
+    .ind-marker {
+      position: absolute;
+      top: -3px;
+      left: var(--marker-pct, 50%);
+      transform: translateX(-50%);
+      width: 3px;
+      height: 10px;
+      background: var(--t1);
+      border-radius: 1px;
+      box-shadow: 0 0 0 2px var(--bg2);
+      transition: left .4s ease;
+    }
+    .ind-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: var(--marker-pct, 0%);
+      border-radius: 2px;
+      transition: width .4s ease, background .15s;
+      background: var(--ac);
+    }
+    .ind-fill.up   { background: var(--gn); }
+    .ind-fill.down { background: var(--rd); }
+    .ind-scale {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--t2);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 500;
+      opacity: 0.75;
+    }
+    .ind-item.no-bar .ind-bar,
+    .ind-item.no-bar .ind-scale { display: none; }
+    .ind-item.no-bar .ind-val-row { margin-top: auto; }
+
+    @media (max-width: 640px) {
+      .ind-item { min-width: 142px; padding: 10px 12px !important; }
+      .ind-item .stat-card-value { font-size: 17px !important; }
+      .ind-status { max-width: 70px; }
+    }
+
+    /* ─── Market Stats bar — original is hidden, we render to a sibling display element ─── */
+    .cmc-bar-wrap {
+      display: flex !important;
+      align-items: stretch !important;
+      gap: 0 !important;
+      margin: 6px 0 10px !important;
+    }
+    /* Hide the original cmcBar entirely — the external script keeps re-rendering it
+       which would cause flicker if we transformed in place. We mirror its content
+       into .cmc-bar-display below, updating only on real content change. */
+    .cmc-bar {
+      display: none !important;
+    }
+    /* Hide the side arrows — bar is full-width now */
+    .cmc-bar-arrow { display: none !important; }
+
+    /* Our visible ticker strip */
+    .cmc-bar-display {
+      flex: 1;
+      width: 100%;
+      padding: 4px;
+      font-size: 13px;
+      line-height: 1.4;
+      border-radius: 12px;
+      background: var(--bg2);
+      border: 1px solid var(--bc);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .cmc-bar-display::-webkit-scrollbar { display: none; }
+    .cmc-bar-display:empty { display: none; }
+
+    /* Structured item produced by JS render */
+    .cmc-stat {
+      flex: 1 0 auto;
+      min-width: 150px;
+      padding: 10px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      white-space: nowrap;
+    }
+    .cmc-stat + .cmc-stat::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 14px;
+      bottom: 14px;
+      width: 1px;
+      background: var(--bc);
+    }
+    .cmc-stat-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--t2);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .cmc-stat-head i {
+      font-size: 11px !important;
+      color: var(--t2) !important;
+      flex-shrink: 0;
+    }
+    .cmc-stat-val-row {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+    }
+    .cmc-stat-val {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--t1);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .cmc-chg {
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .cmc-chg.up { color: var(--gn); }
+    .cmc-chg.down { color: var(--rd); }
+
+    @media (max-width: 640px) {
+      .cmc-stat { min-width: 130px; padding: 8px 14px; }
+      .cmc-stat-val { font-size: 14px; }
+    }
+
+    /* ─── AI Analysis panel header with close button ─── */
+    #analysisPanel {
+      position: relative;
+      padding-top: 56px;
+      margin-top: 8px;
+    }
+    #analysisPanelHeader {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      border-bottom: 0.5px solid var(--bc);
+      background: var(--bg1);
+      border-radius: 10px 10px 0 0;
+      z-index: 10;
+    }
+    #analysisPanelHeader .ap-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t1);
+    }
+    #analysisPanelHeader .ap-title i {
+      color: var(--ac);
+      font-size: 14px;
+    }
+    #closeAnalysisBtn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg2);
+      border: 0.5px solid var(--bc);
+      color: var(--t2);
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s;
+    }
+    #closeAnalysisBtn:hover {
+      background: var(--rd);
+      color: #fff;
+      border-color: var(--rd);
+    }
+    #closeAnalysisBtn:active { transform: scale(0.92); }
+  </style>
 </head>
 
-<body>
+<body class="auth-guest">
   <!-- Nav -->
   <nav class="fixed w-full top-0 border-b" style="border-color:var(--bc);z-index:9999">
     <div
@@ -474,13 +1050,13 @@
     </div>
     <div class="max-w-7xl mx-auto px-4 py-2.5">
       <div class="flex justify-between items-center">
-        <div class="flex items-center gap-2.5">
+        <div class="flex items-center gap-2.5" style="flex-shrink:0;min-width:max-content">
           <a href="#" onclick="location.reload();return false" class="flex items-center gap-2 no-underline"
             style="color:var(--t1)">
-            <img src="logo.png" alt="CryptoHub" fetchpriority="high"
-              style="height:36px;width:36px;object-fit:contain;border-radius:4px" width="36" height="36"
+            <img src="logo.png" alt="CryptoHubCoin" fetchpriority="high"
+              style="height:36px;width:36px;object-fit:contain;border-radius:4px;flex-shrink:0" width="36" height="36"
               decoding="sync">
-            <h1 class="text-base font-bold" data-i18n="siteTitle">CryptoHub</h1>
+            <h1 class="text-base font-bold" style="font-size:15px;white-space:nowrap;flex-shrink:0">CryptoHubCoin</h1>
           </a>
           <div class="dropdown" id="exDd" style="display:none"><button class="ddb" onclick="toggleDD('exDd')"><i class="fas fa-exchange-alt"
                 style="color:var(--ac);font-size:12px"></i><span data-i18n="exchanges"
@@ -536,6 +1112,9 @@
             <div class="ddm" id="lMenu" style="min-width:190px"></div>
           </div>
 
+          <!-- Auth Nav Slot (Sign in button OR User dropdown) -->
+          <div id="auth-nav-slot" style="display:flex;align-items:center"></div>
+
           <div class="dropdown" id="statsDd" style="display:flex;align-items:center;gap:8px;">
             <button class="nav-icon-btn nav-hamburger" onclick="toggleDD('statsDd')" id="navSecBtn"
               title="Site Sections">
@@ -547,95 +1126,76 @@
 
 
             <div class="stats-panel" id="statsPanel">
-              <div class="stats-panel-items" style="padding:4px 6px">
+              <div class="stats-panel-items" style="padding:6px 8px">
 
-                <!-- ═══ Cryptocurrencies + Accordion ═══ -->
-                <div style="border-radius:10px;overflow:hidden">
-                  <a class="nav-item" onclick="var s=document.getElementById('mktSub');var a=document.getElementById('mktChv');if(s.style.maxHeight==='0px'){s.style.maxHeight='200px';a.style.transform='rotate(180deg)'}else{s.style.maxHeight='0px';a.style.transform='rotate(0deg)'};return false" href="#" style="border-radius:10px">
-                    <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(55,138,221,.12)"><i class="fas fa-coins" style="color:#378ADD;font-size:14px"></i></div>
-                    <div style="flex:1"><div class="nav-title" data-i18n="tabCrypto">العملات الرقمية</div><div style="font-size:11px;color:var(--t2);margin-top:1px">Live prices and charts</div></div>
-                    <i id="mktChv" class="fas fa-chevron-down" style="font-size:10px;color:var(--t2);transition:transform .25s;transform:rotate(180deg)"></i>
-                  </a>
-                  <div id="mktSub" style="max-height:200px;overflow:hidden;transition:max-height .3s ease;padding:0 0 0 18px">
-                    <a class="nav-item" onclick="navTo('exchanges');return false" href="#" style="border-radius:8px;padding:8px 12px">
-                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(29,158,117,.12)"><i class="fas fa-crown" style="color:#1D9E75;font-size:12px"></i></div>
-                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="tabExchanges">جميع المنصات</div></div>
-                      <i class="fas fa-chevron-left nav-arrow"></i>
-                    </a>
-                    <a class="nav-item" onclick="navTo('commodities');return false" href="#" style="border-radius:8px;padding:8px 12px">
-                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(127,119,221,.12)"><i class="fas fa-th" style="color:#7F77DD;font-size:12px"></i></div>
-                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="tabCommodities">NFT Collections</div></div>
-                      <i class="fas fa-chevron-left nav-arrow"></i>
-                    </a>
-                    <a class="nav-item" onclick="navTo('stocks');return false" href="#" style="border-radius:8px;padding:8px 12px">
-                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(186,117,23,.12)"><i class="fas fa-chart-line" style="color:#BA7517;font-size:12px"></i></div>
-                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="tabStocks">الأسهم وETF</div></div>
-                      <i class="fas fa-chevron-left nav-arrow"></i>
-                    </a>
-                  </div>
-                </div>
+                <!-- ═══ MARKETS SECTION ═══ -->
+                <div style="font-size:10px;font-weight:600;color:var(--t2);letter-spacing:1.2px;padding:8px 14px 6px;text-transform:uppercase">MARKETS</div>
 
-                <div style="height:1px;background:var(--bc);margin:4px 16px"></div>
+                <a class="nav-item" onclick="navTo('crypto');return false" href="#" style="border-radius:10px">
+                  <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(186,117,23,.12)"><i class="fas fa-coins" style="color:#BA7517;font-size:14px"></i></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="tabCrypto">Cryptocurrencies</div></div>
+                  <i class="fas fa-chevron-left nav-arrow"></i>
+                </a>
+                <a class="nav-item" onclick="navTo('exchanges');return false" href="#" style="border-radius:10px">
+                  <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(29,158,117,.12)"><i class="fas fa-crown" style="color:#1D9E75;font-size:14px"></i></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="tabExchanges">All Exchanges</div></div>
+                  <i class="fas fa-chevron-left nav-arrow"></i>
+                </a>
+                <a class="nav-item" onclick="navTo('commodities');return false" href="#" style="border-radius:10px">
+                  <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(127,119,221,.12)"><i class="fas fa-th" style="color:#7F77DD;font-size:14px"></i></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="tabCommodities">NFT Collections</div></div>
+                  <i class="fas fa-chevron-left nav-arrow"></i>
+                </a>
+                <a class="nav-item" onclick="navTo('stocks');return false" href="#" style="border-radius:10px">
+                  <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(216,90,48,.12)"><i class="fas fa-chart-line" style="color:#D85A30;font-size:14px"></i></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="tabStocks">Stocks &amp; ETFs</div></div>
+                  <i class="fas fa-chevron-left nav-arrow"></i>
+                </a>
 
-                <!-- ═══ AI Tools + Accordion ═══ -->
-                <div style="border-radius:10px;overflow:hidden">
-                  <a class="nav-item" onclick="var s=document.getElementById('aiSub');var a=document.getElementById('aiChv');if(s.style.maxHeight==='0px'){s.style.maxHeight='320px';a.style.transform='rotate(180deg)'}else{s.style.maxHeight='0px';a.style.transform='rotate(0deg)'};return false" href="#" style="border-radius:10px">
-                    <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(226,75,74,.12)"><i class="fas fa-brain" style="color:#E24B4A;font-size:14px"></i></div>
-                    <div style="flex:1"><div class="nav-title">AI Tools</div><div style="font-size:11px;color:var(--t2);margin-top:1px">Smart analysis and predictions</div></div>
-                    <i id="aiChv" class="fas fa-chevron-down" style="font-size:10px;color:var(--t2);transition:transform .25s;transform:rotate(0deg)"></i>
-                  </a>
-                  <div id="aiSub" style="max-height:0px;overflow:hidden;transition:max-height .3s ease;padding:0 0 0 18px">
-                    <a class="nav-item" href="crypto-prediction" style="border-radius:8px;padding:8px 12px">
-                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(226,75,74,.12)"><i class="fas fa-lightbulb" style="color:#E24B4A;font-size:12px"></i></div>
-                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="aiPredictorTitle">AI Price Predictor</div></div>
-                      <i class="fas fa-chevron-left nav-arrow"></i>
-                    </a>
-                    <a class="nav-item" onclick="toggleAnalysis();return false" href="#" style="border-radius:8px;padding:8px 12px">
-                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(216,90,48,.12)"><i class="fas fa-robot" style="color:#D85A30;font-size:12px"></i></div>
-                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="aiTitle">التحليل الفني</div></div>
-                      <i class="fas fa-chevron-left nav-arrow"></i>
-                    </a>
-                    <a class="nav-item" href="crypto-arbitrage" style="border-radius:8px;padding:8px 12px">
-                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(29,158,117,.12)"><i class="fas fa-balance-scale" style="color:#1D9E75;font-size:12px"></i></div>
-                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="cryptoArbitrage">ماسح الفروقات</div></div>
-                      <i class="fas fa-chevron-left nav-arrow"></i>
-                    </a>
-                    <a class="nav-item" href="crypto-analyzer" style="border-radius:8px;padding:8px 12px">
-                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(55,138,221,.12)"><i class="fas fa-chart-pie" style="color:#378ADD;font-size:12px"></i></div>
-                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="cryptoAnalyzer">محلل السيولة</div></div>
-                      <i class="fas fa-chevron-left nav-arrow"></i>
-                    </a>
-                    <a class="nav-item" href="forex-analyzer.html" style="border-radius:8px;padding:8px 12px">
-                      <div class="nav-ico" style="width:28px;height:28px;border-radius:8px;background:rgba(186,117,23,.12)"><i class="fas fa-dollar-sign" style="color:#BA7517;font-size:12px"></i></div>
-                      <div style="flex:1"><div class="nav-title" style="font-size:13px" data-i18n="forexAnalyzer">محلل الفوركس</div></div>
-                      <i class="fas fa-chevron-left nav-arrow"></i>
-                    </a>
-                  </div>
-                </div>
+                <!-- ═══ PREMIUM TOOLS SECTION ═══ -->
+                <div style="font-size:10px;font-weight:600;color:var(--t2);letter-spacing:1.2px;padding:14px 14px 6px;text-transform:uppercase;margin-top:6px;border-top:0.5px solid var(--bc)">PREMIUM TOOLS</div>
 
-                <div style="height:1px;background:var(--bc);margin:4px 16px"></div>
-
-                <!-- ═══ Standalone Items ═══ -->
-                <a class="nav-item" href="whale-alert" onclick="window.location.href='whale-alert';return false;" style="border-radius:10px">
+                <a class="nav-item" href="crypto-prediction" data-auth-required="1" data-feature="AI Price Predictor" style="border-radius:10px">
+                  <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(226,75,74,.12)"><i class="fas fa-lightbulb" style="color:#E24B4A;font-size:14px"></i></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="aiPredictorTitle">AI Price Predictor</div></div>
+                  <i class="fas fa-chevron-left nav-arrow"></i>
+                </a>
+                <a class="nav-item" href="crypto-arbitrage" data-auth-required="1" data-feature="Crypto Arbitrage" style="border-radius:10px">
+                  <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(29,158,117,.12)"><i class="fas fa-balance-scale" style="color:#1D9E75;font-size:14px"></i></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="cryptoArbitrage">Arbitrage Scanner</div></div>
+                  <i class="fas fa-chevron-left nav-arrow"></i>
+                </a>
+                <a class="nav-item" href="crypto-analyzer" data-auth-required="1" data-feature="Crypto Analyzer" style="border-radius:10px">
+                  <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(55,138,221,.12)"><i class="fas fa-chart-pie" style="color:#378ADD;font-size:14px"></i></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="cryptoAnalyzer">Liquidity Analyzer</div></div>
+                  <i class="fas fa-chevron-left nav-arrow"></i>
+                </a>
+                <a class="nav-item" href="forex-analyzer.html" data-auth-required="1" data-feature="Forex Analyzer" style="border-radius:10px">
+                  <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(186,117,23,.12)"><i class="fas fa-dollar-sign" style="color:#BA7517;font-size:14px"></i></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="forexAnalyzer">Forex Analyzer</div></div>
+                  <i class="fas fa-chevron-left nav-arrow"></i>
+                </a>
+                <a class="nav-item" href="whale-alert" data-auth-required="1" data-feature="Whale Alert" style="border-radius:10px">
                   <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(55,138,221,.12)"><i class="fas fa-water" style="color:#378ADD;font-size:14px"></i></div>
-                  <div style="flex:1"><div class="nav-title">Whale Alert</div><div style="font-size:11px;color:var(--t2);margin-top:1px">Large transactions live</div></div>
+                  <div style="flex:1"><div class="nav-title">Whale Alert</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
-                <a class="nav-item" href="portfolio" style="border-radius:10px">
-                  <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(22,199,132,.12)"><i class="fas fa-wallet" style="color:#16c784;font-size:14px"></i></div>
-                  <div style="flex:1"><div class="nav-title">Portfolio Tracker <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:rgba(22,199,132,.15);color:#16c784;letter-spacing:0.3px;margin-left:4px">NEW</span></div><div style="font-size:11px;color:var(--t2);margin-top:1px">Track your holdings</div></div>
-                  <i class="fas fa-chevron-left nav-arrow"></i>
-                </a>
-                <a class="nav-item" href="token-vesting" target="_blank" rel="noopener" style="border-radius:10px">
+                <a class="nav-item" href="token-vesting" data-auth-required="1" data-target="_blank" data-feature="Token Vesting" style="border-radius:10px">
                   <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(127,119,221,.12)"><i class="fas fa-lock-open" style="color:#7F77DD;font-size:14px"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="tokenVestingTitle">Token Vesting & Unlocks</div><div style="font-size:11px;color:var(--t2);margin-top:1px">Unlock schedules</div></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="tokenVestingTitle">Token Vesting &amp; Unlocks</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
-                <a class="nav-item" href="blog" style="border-radius:10px">
-                  <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(136,135,128,.12)"><i class="fas fa-newspaper" style="color:#88877F;font-size:14px"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="blogNav">المدونة</div><div style="font-size:11px;color:var(--t2);margin-top:1px">Articles and guides</div></div>
-                  <i class="fas fa-chevron-left nav-arrow"></i>
+
+                <!-- ═══ Login CTA (guests only) ═══ -->
+                <a href="login.html" class="guest-only" style="margin:14px 10px 6px;padding:13px;background:#2563eb;color:#fff;text-align:center;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;letter-spacing:0.3px;transition:background .15s" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
+                  Log in
                 </a>
+
+                <!-- ═══ Logo Footer ═══ -->
+                <div style="margin-top:14px;padding:12px;border-top:0.5px solid var(--bc);display:flex;align-items:center;justify-content:center;gap:8px">
+                  <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#185FA5,#BA7517);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;letter-spacing:-0.5px">CH</div>
+                  <div style="font-size:13px;font-weight:600;color:var(--t1);letter-spacing:0.2px">CryptoHubCoin</div>
+                </div>
 
               </div>
               <div class="stats-panel-ft"><i class="fas fa-shield-halved"></i> <span data-i18n="secure">آمن</span></div>
@@ -712,8 +1272,88 @@
       <button class="cmc-bar-arrow cmc-arr-end" id="cmcArrEnd" aria-label="Scroll end">&#8250;</button>
     </div>
 
+    <!-- Indicators Bar — card-row layout -->
+    <div class="cards-row-wrap" id="indBarWrap">
+      <button class="cards-row-arrow" id="indArrStart" aria-label="Scroll start">&#8249;</button>
+      <div class="cards-row" id="indBar">
+
+        <div class="stat-card ind-item" data-metric="fg" data-bar="marker">
+          <div class="ind-head"><i class="fas fa-heartbeat ind-ico"></i><span class="ind-lbl">Fear &amp; Greed</span></div>
+          <div class="ind-val-row"><div class="stat-card-value" id="irFgV">--</div><span class="ind-status" id="irFgStatus"></span></div>
+          <div class="ind-bar"><div class="ind-grad"></div><div class="ind-marker"></div></div>
+          <div class="ind-scale"><span>Fear</span><span>Greed</span></div>
+        </div>
+
+        <div class="stat-card ind-item" data-metric="alt" data-bar="fill">
+          <div class="ind-head"><i class="fas fa-chart-pie ind-ico"></i><span class="ind-lbl">Altcoin Season</span></div>
+          <div class="ind-val-row"><div class="stat-card-value" id="irAltV">--</div><span class="ind-status" id="irAltStatus"></span></div>
+          <div class="ind-bar"><div class="ind-fill"></div></div>
+          <div class="ind-scale"><span>BTC</span><span>Alts</span></div>
+        </div>
+
+        <div class="stat-card ind-item" data-metric="rsi" data-bar="marker">
+          <div class="ind-head"><i class="fas fa-chart-line ind-ico"></i><span class="ind-lbl">RSI (14)</span></div>
+          <div class="ind-val-row"><div class="stat-card-value" id="irRsiV">--</div><span class="ind-status" id="irRsiStatus"></span></div>
+          <div class="ind-bar"><div class="ind-grad"></div><div class="ind-marker"></div></div>
+          <div class="ind-scale"><span>Oversold</span><span>Bought</span></div>
+        </div>
+
+        <div class="stat-card ind-item no-bar" data-metric="macd">
+          <div class="ind-head"><i class="fas fa-wave-square ind-ico"></i><span class="ind-lbl">MACD</span></div>
+          <div class="ind-val-row"><div class="stat-card-value" id="irMacdV">--</div><span class="ind-status" id="irMacdStatus"></span></div>
+        </div>
+
+        <div class="stat-card ind-item" data-metric="bb" data-bar="marker">
+          <div class="ind-head"><i class="fas fa-chart-area ind-ico"></i><span class="ind-lbl">Bollinger %B</span></div>
+          <div class="ind-val-row"><div class="stat-card-value" id="irBbV">--</div><span class="ind-status" id="irBbStatus"></span></div>
+          <div class="ind-bar"><div class="ind-grad"></div><div class="ind-marker"></div></div>
+          <div class="ind-scale"><span>Lower</span><span>Upper</span></div>
+        </div>
+
+        <div class="stat-card ind-item no-bar" data-metric="ema">
+          <div class="ind-head"><i class="fas fa-chart-line ind-ico"></i><span class="ind-lbl">EMA 20/50</span></div>
+          <div class="ind-val-row"><div class="stat-card-value" id="irEmaV">--</div><span class="ind-status" id="irEmaStatus"></span></div>
+        </div>
+
+        <div class="stat-card ind-item" data-metric="stoch" data-bar="marker">
+          <div class="ind-head"><i class="fas fa-percentage ind-ico"></i><span class="ind-lbl">Stochastic</span></div>
+          <div class="ind-val-row"><div class="stat-card-value" id="irStochV">--</div><span class="ind-status" id="irStochStatus"></span></div>
+          <div class="ind-bar"><div class="ind-grad"></div><div class="ind-marker"></div></div>
+          <div class="ind-scale"><span>Oversold</span><span>Bought</span></div>
+        </div>
+
+        <div class="stat-card ind-item" data-metric="adx" data-bar="fill">
+          <div class="ind-head"><i class="fas fa-bolt ind-ico"></i><span class="ind-lbl">ADX</span></div>
+          <div class="ind-val-row"><div class="stat-card-value" id="irAdxV">--</div><span class="ind-status" id="irAdxStatus"></span></div>
+          <div class="ind-bar"><div class="ind-fill"></div></div>
+          <div class="ind-scale"><span>Weak</span><span>Strong</span></div>
+        </div>
+
+        <div class="stat-card ind-item no-bar" data-metric="vol">
+          <div class="ind-head"><i class="fas fa-chart-bar ind-ico"></i><span class="ind-lbl">Volume</span></div>
+          <div class="ind-val-row"><div class="stat-card-value" id="irVolV">--</div><span class="ind-status" id="irVolStatus"></span></div>
+        </div>
+
+        <div class="stat-card ind-item no-bar" data-metric="sr">
+          <div class="ind-head"><i class="fas fa-arrows-alt-v ind-ico"></i><span class="ind-lbl">Support / Res</span></div>
+          <div class="ind-val-row"><div class="stat-card-value" id="irSrV">--</div><span class="ind-status" id="irSrStatus"></span></div>
+        </div>
+
+      </div>
+      <button class="cards-row-arrow" id="indArrEnd" aria-label="Scroll end">&#8250;</button>
+    </div>
+
 
     <div id="analysisPanel" style="display:none">
+      <div id="analysisPanelHeader">
+        <div class="ap-title">
+          <i class="fas fa-chart-line"></i>
+          <span data-i18n="detailedAnalysis">تحليل تفصيلي</span>
+        </div>
+        <button id="closeAnalysisBtn" aria-label="Close" title="Close" type="button">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
       <!-- Fear & Greed + Altcoin Index -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
         <!-- Fear & Greed -->
@@ -811,7 +1451,7 @@
               </div>
             </div>
             <!-- AI Analysis -->
-            <div class="pcard" style="min-height:100%">
+            <div id="aiBox" class="pcard" style="min-height:100%;scroll-margin-top:80px">
               <div class="relative z-10">
                 <div class="flex items-start justify-between mb-1.5">
                   <div>
@@ -823,13 +1463,8 @@
                         class="ld"></span><span data-i18n="live">مباشر</span></span><span style="font-size:8px"
                       class="opacity-60">BTC/USDT</span></div>
                 </div>
-                <div class="ai-ring mb-1.5" style="width:60px;height:60px">
-                  <svg viewBox="0 0 120 120">
-                    <circle class="bg-ring" cx="60" cy="60" r="52" stroke-dasharray="327" stroke-dashoffset="0" />
-                    <circle class="fg-ring" id="aiRing" cx="60" cy="60" r="52" stroke-dasharray="327"
-                      stroke-dashoffset="327" />
-                  </svg>
-                  <div style="z-index:2;text-align:center">
+                <div class="ai-ring mb-1.5" style="width:60px;height:60px;display:flex;align-items:center;justify-content:center">
+                  <div style="text-align:center">
                     <div class="text-lg font-bold" id="aiS">--</div>
                     <div style="font-size:7px" class="opacity-70">Score</div>
                   </div>
@@ -1013,12 +1648,7 @@
         <div class="text-xs text-center mt-1" style="color:var(--t2)" id="pTxt">...</div>
       </div>
 
-      <div id="aFilt" class="hidden mb-3 flex items-center gap-2 flex-wrap"><span class="text-sm"
-          style="color:var(--t2)" data-i18n="filteredBy">تصفية:</span><span id="aNetTag"
-          class="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium"
-          style="background:rgba(56,97,251,.1);color:var(--ac)"><span id="aNetName"></span><button onclick="clearNet()"
-            class="hover:opacity-70">&times;</button></span><span id="fCount" class="text-sm"
-          style="color:var(--t2)"></span></div>
+      <div id="aFilt" class="hidden" style="display:none !important"></div>
 
       <!-- Coins Section with integrated networks -->
       <div class="ct mb-4" style="border-radius:14px;min-height:2000px;contain:layout style paint">
@@ -1044,6 +1674,11 @@
               <button class="cmc-net-btn cmc-net-more-btn" id="cmcMoreBtn">More <i class="fas fa-chevron-down"
                   id="cmcMoreChev" style="font-size:10px;transition:transform .3s"></i></button>
             </div>
+            <button id="filterBtn" class="cmc-net-btn" style="display:none;flex-shrink:0;background:var(--bg2);gap:6px;cursor:default" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ac)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              <span style="font-weight:600">Filters</span>
+              <span id="filterCount" style="background:var(--ac);color:#fff;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;min-width:20px;text-align:center;line-height:1.2">0</span>
+            </button>
           </div>
 
           <!-- More Networks Expanded Grid -->
@@ -1130,8 +1765,8 @@
           </div>
         </div>
 
-        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
-          <table class="w-full crypto-table" id="cryptoMainTable" style="min-width:1000px;table-layout:fixed;display:none">
+        <div>
+          <table class="w-full crypto-table" id="cryptoMainTable" style="table-layout:fixed;display:none;width:100%">
             <thead>
               <tr>
                 <th onclick="doSort('name')" id="th_name" class="text-start" style="width:220px"><span
@@ -1188,13 +1823,11 @@
               <div class="exg-icon-wrap"><i class="fas fa-globe"></i></div>
               <div>
                 <h3 class="exg-title" data-i18n="allExchangesTitle">All Global Exchanges</h3>
-                <p class="exg-sub" data-i18n="allExchangesSub">500+ Licensed Exchanges • Ranked by Trust • Direct Links
+                <p class="exg-sub" data-i18n="allExchangesSub">Trusted Exchanges Only • Ranked by Volume • Direct Links
                 </p>
               </div>
             </div>
             <div class="exg-badges">
-              <span class="exg-badge exg-badge-blue"><i class="fas fa-shield-alt"></i> <span
-                  data-i18n="trustScore">Trust Score</span></span>
               <span class="exg-badge exg-badge-green"><i class="fas fa-clock"></i> 4h Refresh</span>
               <span class="exg-badge exg-badge-gold"><i class="fas fa-link"></i> <span
                   data-i18n="colTrade">Trade</span></span>
@@ -1217,7 +1850,6 @@
               <tr>
                 <th class="exg-th exg-th-num">#</th>
                 <th class="exg-th exg-th-left" data-i18n="colExchange2">Exchange</th>
-                <th class="exg-th exg-th-left" data-i18n="trustScore">Trust Score</th>
                 <th class="exg-th exg-th-center" data-i18n="volume" style="text-transform:uppercase;">VOLUME (24H)</th>
                 <th class="exg-th exg-th-center" style="text-transform:uppercase;">AVG. LIQUIDITY</th>
                 <th class="exg-th exg-th-center" style="text-transform:uppercase;">WEEKLY VISITS</th>
@@ -1230,22 +1862,12 @@
           </table>
         </div>
 
-        <!-- Pagination -->
+        <!-- Show More button (replaces pagination) -->
         <div class="exg-footer">
-          <div id="exPag" class="exg-pag">
-            <button onclick="gExFirst()" class="pg-btn" title="First"><i class="fas fa-angle-double-left"></i></button>
-            <button onclick="gExPrev()" class="pg-btn" id="pgExPrev"><i class="fas fa-angle-left"></i></button>
-            <div id="exPgs" style="display:flex;gap:4px;flex-wrap:wrap;align-items:center"></div>
-            <button onclick="gExNext()" class="pg-btn" id="pgExNext"><i class="fas fa-angle-right"></i></button>
-            <button onclick="gExLast()" class="pg-btn" title="Last"><i class="fas fa-angle-double-right"></i></button>
-          </div>
-          <div class="exg-page-info">
-            <span data-i18n="showing">Showing</span>
-            <b id="exRange" class="exg-range">--</b>
-            <span data-i18n="of">of</span>
-            <b id="exTotal" class="exg-range">--</b>
-            <span data-i18n="exchange">exchanges</span>
-          </div>
+          <button id="exShowMore" onclick="gExShowMore()" class="exg-show-more-btn" style="display:none;">
+            <i class="fas fa-plus-circle"></i>
+            <span data-i18n="showMore">Show More</span>
+          </button>
         </div>
 
       </div>
@@ -1272,10 +1894,11 @@
           </select>
         </div>
         <div class="ct" style="overflow-x:auto;width:100%;display:block">
-          <table class="w-full" style="min-width:920px;border-collapse:collapse" id="nftTable">
+          <table class="w-full" style="border-collapse:collapse" id="nftTable">
             <thead>
               <tr style="border-bottom:2px solid var(--bc)">
-                <th class="text-start" style="padding:10px 12px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;min-width:220px;cursor:pointer" onclick="_sortNFT('name')">Collection <i class="fas fa-sort" style="font-size:9px;opacity:.4"></i></th>
+                <th class="text-center" style="width:50px;padding:10px 4px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap">#</th>
+                <th class="text-start" style="padding:10px 12px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;min-width:200px;cursor:pointer" onclick="_sortNFT('name')">Collection <i class="fas fa-sort" style="font-size:9px;opacity:.4"></i></th>
                 <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;cursor:pointer;text-align:right" onclick="_sortNFT('floor')">Floor Price <i class="fas fa-sort" style="font-size:9px;opacity:.4"></i></th>
                 <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;cursor:pointer;text-align:right" onclick="_sortNFT('h24')">24H% <i class="fas fa-sort" style="font-size:9px;opacity:.4"></i></th>
                 <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;cursor:pointer;text-align:right" onclick="_sortNFT('h7d')">7D% <i class="fas fa-sort" style="font-size:9px;opacity:.4"></i></th>
@@ -1289,8 +1912,10 @@
           </table>
         </div>
         <div id="nftPagWrap" style="display:none;flex-direction:column;align-items:center;gap:8px;padding:16px 4px 4px;min-height:50px;contain:layout style">
-          <div id="nftPagBtns" style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center"></div>
-          <div id="nftPagInfo" style="font-size:11px;color:var(--t2)"></div>
+          <button id="nftShowMore" onclick="_nftShowMore()" class="exg-show-more-btn" style="display:none;">
+            <i class="fas fa-plus-circle"></i>
+            <span data-i18n="showMore">Show More</span>
+          </button>
         </div>
       </div>
     </div>
@@ -1323,12 +1948,12 @@
             <option value="commodity" data-i18n-opt="stkCommodity">سلع</option>
             <option value="index" data-i18n-opt="stkIndex">مؤشرات</option>
           </select>
-          <div id="stkCountBadge" style="font-size:11px;color:var(--t2);white-space:nowrap"></div>
         </div>
         <div class="ct">
           <table class="w-full stk-table">
             <thead>
               <tr>
+                <th class="text-center" style="width:50px;padding:8px 4px;font-size:11px;color:var(--t2);font-weight:600">#</th>
                 <th class="text-start" data-i18n="colStock">السهم</th>
                 <th data-i18n="colPrice">السعر</th>
                 <th class="stk-col-hdr-chg" data-i18n="change24h">التغيير 24س</th>
@@ -1340,10 +1965,12 @@
             <tbody id="stkB"></tbody>
           </table>
         </div>
-        <!-- Pagination -->
+        <!-- Show More button -->
         <div id="stkPagWrap" style="display:none;flex-direction:column;align-items:center;gap:8px;padding:16px 4px 4px">
-          <div id="stkPagBtns" style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center"></div>
-          <div id="stkPagInfo" style="font-size:11px;color:var(--t2);text-align:center"></div>
+          <button id="stkShowMore" onclick="_stkShowMore()" class="exg-show-more-btn" style="display:none;">
+            <i class="fas fa-plus-circle"></i>
+            <span data-i18n="showMore">Show More</span>
+          </button>
         </div>
       </div>
     </div>
@@ -1598,39 +2225,35 @@
       <div id="itc-contact" class="info-tab-content" style="display:none">
         <div style="padding:20px">
           <h2 style="font-size:17px;font-weight:800;color:var(--t1);margin-bottom:6px" data-i18n="itContactTitle">تواصل
-            مع فريق CryptoHub</h2>
+            مع فريق CryptoHubCoin</h2>
           <p style="font-size:13px;color:var(--t2);margin-bottom:16px" data-i18n="itContactDesc">سؤال، اقتراح، أو مشكلة
             تقنية؟ فريقنا جاهز لمساعدتك.</p>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
-            <a href="https://t.me/cryptoHubcrypto1" target="_blank" rel="noopener"
-              style="display:flex;align-items:center;gap:12px;background:#0088cc18;border:1.5px solid #0088cc44;border-radius:12px;padding:16px;text-decoration:none;transition:background .2s"
-              onmouseenter="this.style.background='#0088cc28'" onmouseleave="this.style.background='#0088cc18'">
-              <div
-                style="width:42px;height:42px;border-radius:10px;background:#0088cc;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <i class="fab fa-telegram-plane" style="color:#fff;font-size:18px"></i>
-              </div>
-              <div>
-                <div style="font-size:13px;font-weight:700;color:var(--t1)" data-i18n="itContactTg">تيليغرام</div>
-                <div style="font-size:12px;color:#0088cc;font-weight:600">@cryptoHubcrypto1</div>
-              </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+
+            <!-- Telegram -->
+            <a href="https://t.me/CryptoHubCoinNews" target="_blank" rel="noopener"
+              style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(42,171,238,0.08);border:1.5px solid rgba(42,171,238,0.25);border-radius:16px;padding:20px;text-decoration:none;transition:all .3s;color:var(--t1)"
+              onmouseenter="this.style.background='#2AABEE';this.style.borderColor='#2AABEE';this.style.color='#fff';this.style.transform='translateY(-3px)'"
+              onmouseleave="this.style.background='rgba(42,171,238,0.08)';this.style.borderColor='rgba(42,171,238,0.25)';this.style.color='var(--t1)';this.style.transform='translateY(0)'">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" style="color:#2AABEE">
+                <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+              </svg>
+              <div style="font-size:15px;font-weight:700;color:inherit" data-i18n="itContactTg">تيليغرام</div>
+              <div style="font-size:11px;opacity:.7">@CryptoHubCoinNews</div>
             </a>
-            <div
-              style="display:flex;align-items:center;gap:12px;background:var(--bg2);border:1.5px solid var(--bc);border-radius:12px;padding:16px">
-              <div
-                style="width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#3861fb,#6c5ce7);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <i class="fas fa-globe" style="color:#fff;font-size:18px"></i>
-              </div>
-              <div>
-                <div style="font-size:13px;font-weight:700;color:var(--t1)" data-i18n="itContactWeb">الموقع</div>
-                <div style="font-size:12px;color:var(--ac);font-weight:600">cryptohubcoin.com</div>
-              </div>
-            </div>
-          </div>
-          <div
-            style="margin-top:14px;background:var(--bg2);border-radius:10px;padding:12px;font-size:11px;color:var(--t2);line-height:1.6"
-            data-i18n="itContactNote">
-            ملاحظة: CryptoHub منصة مستقلة لتتبع الأسعار وليست منصة تداول. لا تشارك بيانات محفظتك أو مفاتيحك الخاصة مع أي
-            جهة.
+
+            <!-- Twitter / X -->
+            <a href="https://twitter.com/CryptoHubCoin" target="_blank" rel="noopener"
+              style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(0,0,0,0.06);border:1.5px solid rgba(0,0,0,0.15);border-radius:16px;padding:20px;text-decoration:none;transition:all .3s;color:var(--t1)"
+              onmouseenter="this.style.background='#000';this.style.borderColor='#000';this.style.color='#fff';this.style.transform='translateY(-3px)'"
+              onmouseleave="this.style.background='rgba(0,0,0,0.06)';this.style.borderColor='rgba(0,0,0,0.15)';this.style.color='var(--t1)';this.style.transform='translateY(0)'">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="color:var(--t1)">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+              <div style="font-size:15px;font-weight:700;color:inherit">Twitter / X</div>
+              <div style="font-size:11px;opacity:.7">@CryptoHubCoin</div>
+            </a>
+
           </div>
         </div>
       </div>
@@ -1867,81 +2490,102 @@
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
-  <footer class="pro-footer" style="content-visibility:auto;contain-intrinsic-size:0 400px">
+  <footer class="pro-footer" style="content-visibility:auto;contain-intrinsic-size:0 400px;background:#0f1729;padding:48px 0 24px">
     <div class="max-w-7xl mx-auto px-5 footer-inner">
 
-      <!-- Main Grid -->
-      <div class="footer-grid">
+      <!-- Main Grid: 5 columns (brand wider) -->
+      <div class="footer-grid" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:36px;align-items:start">
 
-        <!-- Brand Column -->
+        <!-- ═══ Brand Column ═══ -->
         <div>
-          <a href="#" onclick="location.reload();return false" class="flex items-center gap-3 mb-4 no-underline" style="color:#fff">
-            <img src="logo.png" alt="CryptoHub" style="height:36px;width:36px;object-fit:contain;border-radius:8px;" width="36" height="36" loading="lazy" decoding="async">
+          <a href="#" onclick="location.reload();return false" class="flex items-center gap-3 mb-4 no-underline" style="color:#fff;display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <img src="logo.png" alt="CryptoHubCoin" style="height:36px;width:36px;object-fit:contain;border-radius:50%;" width="36" height="36" loading="lazy" decoding="async">
             <div>
-              <span class="font-bold text-xl block">CryptoHub</span>
-              <span class="text-xs" style="color:#3b82f6;font-weight:700;letter-spacing:1px">CRYPTO TRACKER</span>
+              <span style="font-size:18px;font-weight:600;color:#fff;display:block;line-height:1.2">CryptoHubCoin</span>
+              <span style="font-size:11px;color:#185FA5;font-weight:600;letter-spacing:1.5px">CRYPTO TRACKER</span>
             </div>
           </a>
-          <p class="text-sm leading-relaxed mb-6" data-i18n="footerDesc" style="color:#94a3b8;max-width:300px;font-size:12px">
+          <p data-i18n="footerDesc" style="color:#94a3b8;max-width:300px;font-size:13px;line-height:1.6;margin:0 0 18px">
             Your comprehensive platform for tracking 10,000+ cryptocurrencies with advanced AI analysis tools and real-time prices.
           </p>
 
-          <!-- Telegram Support Button -->
-          <a href="https://t.me/cryptoHubcrypto1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:#1e293b;border-radius:10px;padding:10px 16px;text-decoration:none;transition:background 0.2s" onmouseenter="this.style.background='#334155'" onmouseleave="this.style.background='#1e293b'">
-            <i class="fab fa-telegram-plane" style="color:#38bdf8;font-size:16px"></i>
-            <span style="color:#e2e8f0;font-size:12px;font-weight:600" data-i18n="support">Support</span>
-          </a>
-        </div>
-
-        <!-- Quick Links -->
-        <div>
-          <div class="ft-section-title"><i class="fas fa-compass" style="color:#3b82f6"></i> <span data-i18n="quickLinks">QUICK LINKS</span></div>
-          <div class="space-y-2">
-            <a href="#" onclick="location.reload();return false" class="ft-link"><i class="fas fa-home" style="color:#3b82f6;width:16px"></i> <span data-i18n="home">Home</span></a>
-            <a href="blog" class="ft-link"><i class="fas fa-newspaper" style="color:#f7931a;width:16px"></i> <span data-i18n="blogNav">Blog</span></a>
-            <a href="faq" class="ft-link"><i class="fas fa-question-circle" style="color:#8b5cf6;width:16px"></i> FAQ</a>
-            <a href="#cmcBar" class="ft-link"><i class="fas fa-fire" style="color:#ec4899;width:16px"></i> <span data-i18n="trendingTitle">Trending</span></a>
+          <!-- Social Links (inline SVG for reliability) -->
+          <div style="display:flex;gap:10px">
+            <a href="https://t.me/CryptoHubCoinNews" target="_blank" rel="noopener" title="Telegram" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:#1e293b;border-radius:8px;text-decoration:none;transition:all 0.2s;color:#94a3b8" onmouseenter="this.style.background='#2AABEE';this.style.color='#fff'" onmouseleave="this.style.background='#1e293b';this.style.color='#94a3b8'">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+              </svg>
+            </a>
+            <a href="https://twitter.com/CryptoHubCoin" target="_blank" rel="noopener" title="@CryptoHubCoin" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:#1e293b;border-radius:8px;text-decoration:none;transition:all 0.2s;color:#94a3b8" onmouseenter="this.style.background='#000';this.style.color='#fff'" onmouseleave="this.style.background='#1e293b';this.style.color='#94a3b8'">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
           </div>
         </div>
 
-        <!-- Site Sections -->
+        <!-- ═══ Markets ═══ -->
         <div>
-          <div class="ft-section-title"><i class="fas fa-th-large" style="color:#8b5cf6"></i> SECTIONS</div>
-          <div class="space-y-2">
-            <a href="#exchanges" class="ft-link" onclick="if(typeof showTab==='function')showTab('exchanges');return false"><i class="fas fa-exchange-alt" style="color:#3b82f6;width:16px"></i> <span data-i18n="tabExchanges">All Exchanges</span></a>
-            <a href="#commodities" class="ft-link" onclick="if(typeof showTab==='function')showTab('commodities');return false"><i class="fas fa-th" style="color:#8b5cf6;width:16px"></i> <span data-i18n="tabCommodities">NFT Collections</span></a>
-            <a href="#stocks" class="ft-link" onclick="if(typeof showTab==='function')showTab('stocks');return false"><i class="fas fa-chart-line" style="color:#10b981;width:16px"></i> <span data-i18n="stocksTitle">Stocks & ETFs</span></a>
-            <a href="#aiBox" class="ft-link"><i class="fas fa-robot" style="color:#f59e0b;width:16px"></i> <span data-i18n="aiTitle">AI Analysis</span></a>
-            <a href="#vesting" class="ft-link"><i class="fas fa-clock" style="color:#06b6d4;width:16px"></i> Token Vesting</a>
-            <a href="#predictor" class="ft-link"><i class="fas fa-brain" style="color:#ec4899;width:16px"></i> AI Price Predictor</a>
+          <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase">MARKETS</div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <a href="#" onclick="if(typeof navTo==='function')navTo('crypto');return false" class="ft-link-new"><span class="ft-dot"></span><span data-i18n="tabCrypto">Cryptocurrencies</span></a>
+            <a href="#" onclick="if(typeof navTo==='function')navTo('exchanges');return false" class="ft-link-new"><span class="ft-dot"></span><span data-i18n="tabExchanges">All Exchanges</span></a>
+            <a href="#" onclick="if(typeof navTo==='function')navTo('commodities');return false" class="ft-link-new"><span class="ft-dot"></span><span data-i18n="tabCommodities">NFT Collections</span></a>
+            <a href="#" onclick="if(typeof navTo==='function')navTo('stocks');return false" class="ft-link-new"><span class="ft-dot"></span><span data-i18n="tabStocks">Stocks &amp; ETFs</span></a>
+            <a href="#cmcBar" class="ft-link-new"><span class="ft-dot"></span><span data-i18n="trendingTitle">Trending</span></a>
           </div>
         </div>
 
-        <!-- Features -->
+        <!-- ═══ Premium Tools ═══ -->
         <div>
-          <div class="ft-section-title"><i class="fas fa-star" style="color:#22c55e"></i> <span data-i18n="features">FEATURES</span></div>
-          <div class="space-y-2">
-            <span class="ft-link" style="cursor:default"><i class="fas fa-check" style="color:#22c55e;width:16px;font-size:10px"></i> <span data-i18n="realTimePrices">Real-time Prices</span></span>
-            <span class="ft-link" style="cursor:default"><i class="fas fa-check" style="color:#22c55e;width:16px;font-size:10px"></i> <span data-i18n="aiAnalysis">AI Analysis</span></span>
-            <span class="ft-link" style="cursor:default"><i class="fas fa-check" style="color:#22c55e;width:16px;font-size:10px"></i> <span data-i18n="languages">30+ Languages</span></span>
-            <span class="ft-link" style="cursor:default"><i class="fas fa-check" style="color:#22c55e;width:16px;font-size:10px"></i> 10,000+ Coins</span>
-            <span class="ft-link" style="cursor:default"><i class="fas fa-check" style="color:#22c55e;width:16px;font-size:10px"></i> Metals & Gold</span>
-            <span class="ft-link" style="cursor:default"><i class="fas fa-check" style="color:#22c55e;width:16px;font-size:10px"></i> No Signup Required</span>
+          <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase">PREMIUM TOOLS</div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <a href="crypto-prediction" data-auth-required="1" data-feature="AI Price Predictor" class="ft-link-new"><span class="ft-dot"></span>AI Price Predictor</a>
+            <a href="crypto-arbitrage" data-auth-required="1" data-feature="Crypto Arbitrage" class="ft-link-new"><span class="ft-dot"></span>Arbitrage Scanner</a>
+            <a href="crypto-analyzer" data-auth-required="1" data-feature="Crypto Analyzer" class="ft-link-new"><span class="ft-dot"></span>Liquidity Analyzer</a>
+            <a href="forex-analyzer.html" data-auth-required="1" data-feature="Forex Analyzer" class="ft-link-new"><span class="ft-dot"></span>Forex Analyzer</a>
+            <a href="whale-alert" data-auth-required="1" data-feature="Whale Alert" class="ft-link-new"><span class="ft-dot"></span>Whale Alert</a>
+            <a href="portfolio" data-auth-required="1" data-feature="Portfolio Tracker" class="ft-link-new"><span class="ft-dot"></span>Portfolio Tracker</a>
+            <a href="token-vesting" data-auth-required="1" data-target="_blank" data-feature="Token Vesting" class="ft-link-new"><span class="ft-dot"></span>Token Vesting</a>
+          </div>
+        </div>
+
+        <!-- ═══ Resources ═══ -->
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase">RESOURCES</div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <a href="blog" class="ft-link-new"><span class="ft-dot"></span><span data-i18n="blogNav">Blog</span></a>
+            <a href="faq" class="ft-link-new"><span class="ft-dot"></span>FAQ</a>
+            <a href="glossary" class="ft-link-new"><span class="ft-dot"></span>Glossary</a>
+            <a href="api-docs.html" target="_blank" class="ft-link-new"><span class="ft-dot"></span>Developer API</a>
+            <a href="bitcoin-guide-2025.html" class="ft-link-new"><span class="ft-dot"></span>Bitcoin Guide 2025</a>
+            <a href="crypto-security-guide.html" class="ft-link-new"><span class="ft-dot"></span>Security Guide</a>
+          </div>
+        </div>
+
+        <!-- ═══ Company ═══ -->
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase">COMPANY</div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <a href="about" class="ft-link-new"><span class="ft-dot"></span>About Us</a>
+            <a href="#" onclick="openLegal('aboutModal');return false" class="ft-link-new"><span class="ft-dot"></span>Pricing <span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:99px;background:rgba(22,199,132,.2);color:#16c784;letter-spacing:0.4px;margin-left:4px">SOON</span></a>
+            <a href="https://t.me/CryptoHubCoinNews" target="_blank" rel="noopener" class="ft-link-new"><span class="ft-dot"></span>Contact</a>
+            <a href="terms.html" class="ft-link-new"><span class="ft-dot"></span>Terms of Service</a>
+            <a href="privacy.html" class="ft-link-new"><span class="ft-dot"></span>Privacy Policy</a>
           </div>
         </div>
 
       </div>
 
       <!-- Footer Bottom -->
-      <div class="footer-bottom" style="position:relative">
-        <div class="ft-copy">
-          © 2026 CryptoHub. <span data-i18n="allRights">All Rights Reserved</span>
+      <div class="footer-bottom" style="position:relative;max-width:1280px;margin:36px auto 0;padding-top:20px;border-top:0.5px solid #1e293b;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px">
+        <div class="ft-copy" style="font-size:12px;color:#64748b">
+          © 2026 CryptoHubCoin. <span data-i18n="allRights">All Rights Reserved</span>
         </div>
-        <div class="ft-bottom-links">
-          <a href="#" onclick="openLegal('privacyModal');return false">Privacy Policy</a>
-          <a href="#" onclick="openLegal('termsModal');return false">Terms of Service</a>
-          <a href="#" onclick="openLegal('aboutModal');return false">About Us</a>
-          <button onclick="var d=document.getElementById('ftDisclaimer');d.style.display=d.style.display==='block'?'none':'block'" style="background:none;border:none;color:#f59e0b;font-size:11px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:4px" onmouseenter="this.style.background='#1e293b'" onmouseleave="this.style.background='none'">
+        <div class="ft-bottom-links" style="display:flex;gap:20px;align-items:center">
+          <a href="#" onclick="openLegal('privacyModal');return false" style="font-size:12px;color:#94a3b8;text-decoration:none">Privacy Policy</a>
+          <a href="#" onclick="openLegal('termsModal');return false" style="font-size:12px;color:#94a3b8;text-decoration:none">Terms of Service</a>
+          <button onclick="var d=document.getElementById('ftDisclaimer');d.style.display=d.style.display==='block'?'none':'block'" style="background:none;border:none;color:#94a3b8;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:0;font-family:inherit">
             <i class="fas fa-exclamation-triangle" style="font-size:10px"></i> <span data-i18n="disclaimer">Disclaimer</span>
           </button>
         </div>
@@ -1951,6 +2595,17 @@
       </div>
 
     </div>
+
+    <!-- Footer link styles -->
+    <style>
+      .ft-link-new{color:#94a3b8;font-size:13px;text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .15s;cursor:pointer}
+      .ft-link-new:hover{color:#fff}
+      .ft-dot{width:5px;height:5px;border-radius:50%;background:#475569;flex-shrink:0;transition:background .15s;display:inline-block}
+      .ft-link-new:hover .ft-dot{background:#3861fb}
+      @media (max-width:900px){.footer-grid{grid-template-columns:1fr 1fr !important}}
+      @media (max-width:520px){.footer-grid{grid-template-columns:1fr !important}}
+    </style>
+
   </footer>
 
   <!-- Privacy Policy Modal -->
@@ -2230,38 +2885,102 @@
           </div>
           <div id="cdLinks" style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px"></div>
         </div>
-        <!-- Right: Markets -->
+        <!-- Right: Markets / Chart -->
         <div class="cd-right">
-          <div class="cd-mhd" style="display:none">
-            <div style="font-size:15px;font-weight:800"><span id="cdMktName">--</span> Markets</div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--t2)">
-              <span><span id="exCt" style="font-weight:700">--</span> exchanges</span>
-              <span id="exTotVol"></span>
+          <!-- Tabs (Chart / Market) -->
+          <div class="cd-tabs">
+            <button class="cd-tab cd-tab-active" data-cd-tab="chart" type="button"><i class="fas fa-chart-line"></i> Chart</button>
+            <button class="cd-tab" data-cd-tab="market" type="button"><i class="fas fa-store"></i> Market</button>
+          </div>
+
+          <!-- Chart Panel -->
+          <div id="cdChartPanel" class="cd-chart-panel">
+            <div class="cd-chart-head">
+              <div>
+                <div class="cd-chart-price" id="cdChartPrice">--</div>
+                <div style="font-size:11px;color:var(--t2);margin-top:2px" id="cdChartTitle">Price chart</div>
+              </div>
+              <span class="cd-chart-chg" id="cdChartChg">--</span>
+            </div>
+            <div class="cd-ctrls">
+              <div class="cd-type" id="cdType">
+                <button data-type="line" class="active" type="button" title="Line chart" aria-label="Line chart">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,17 8,12 13,15 21,5"/></svg>
+                </button>
+                <button data-type="candles" type="button" title="Candlestick chart" aria-label="Candlestick chart">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="3" height="10"/><line x1="5.5" y1="5" x2="5.5" y2="8" stroke-linecap="round"/><line x1="5.5" y1="18" x2="5.5" y2="21" stroke-linecap="round"/><rect x="11" y="5" width="3" height="14"/><line x1="12.5" y1="2" x2="12.5" y2="5" stroke-linecap="round"/><line x1="12.5" y1="19" x2="12.5" y2="22" stroke-linecap="round"/><rect x="18" y="10" width="3" height="6"/><line x1="19.5" y1="7" x2="19.5" y2="10" stroke-linecap="round"/><line x1="19.5" y1="16" x2="19.5" y2="19" stroke-linecap="round"/></svg>
+                </button>
+              </div>
+              <div class="cd-rng" id="cdRng">
+                <!-- TEMP: 30m hidden until enough snapshots accumulate. Uncomment to restore. -->
+                <!-- <button data-rng="0.021" type="button">30m</button> -->
+                <button data-rng="0.17"  type="button">4h</button>
+                <button data-rng="1" class="active" type="button">24h</button>
+                <button data-rng="7" type="button">7D</button>
+                <button data-rng="30" type="button">30D</button>
+                <button data-rng="365" type="button">1Y</button>
+                <button data-rng="max" type="button">All</button>
+                <div class="cd-more-wrap">
+                  <button id="cdMoreBtn" class="cd-more-btn" type="button">More
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  <div id="cdMoreMenu" class="cd-more-menu" role="menu">
+                    <div class="cd-mi" data-rng="0.04"  data-label="1h">  <span>1 hour</span>   <span class="cd-mi-tag">1h</span></div>
+                    <div class="cd-mi" data-rng="0.08"  data-label="2h">  <span>2 hours</span>  <span class="cd-mi-tag">2h</span></div>
+                    <div class="cd-mi" data-rng="0.33"  data-label="8h">  <span>8 hours</span>  <span class="cd-mi-tag">8h</span></div>
+                    <div class="cd-mi" data-rng="0.5"   data-label="12h"> <span>12 hours</span> <span class="cd-mi-tag">12h</span></div>
+                    <div class="cd-mi-sep"></div>
+                    <div class="cd-mi" data-rng="14"    data-label="14D"> <span>14 days</span>  <span class="cd-mi-tag">14D</span></div>
+                    <div class="cd-mi" data-rng="90"    data-label="90D"> <span>90 days</span>  <span class="cd-mi-tag">90D</span></div>
+                    <div class="cd-mi" data-rng="180"   data-label="180D"><span>180 days</span> <span class="cd-mi-tag">180D</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="cd-chart-wrap">
+              <div class="cd-watermark">cryptohubcoin</div>
+              <div class="cd-chart-stage">
+                <canvas id="cdChartCanvas" class="cd-chart-canvas"></canvas>
+                <div id="cdCandlesHost" class="cd-candles-host" style="display:none"></div>
+              </div>
+              <div id="cdChartLoading" class="cd-chart-loading"><i class="fas fa-spinner fa-spin"></i> <span>Loading chart...</span></div>
+              <div id="cdChartErr" class="cd-chart-err" style="display:none"><i class="fas fa-exclamation-circle"></i> <span>Chart data not available</span></div>
             </div>
           </div>
-          <div style="padding:6px 14px;display:none"><input type="text" id="exSrch" class="cd-srch" placeholder="Search exchange...">
-          </div>
-          <div class="cd-tbl-wrap">
-            <table class="w-full text-sm" style="border-collapse:separate;border-spacing:0">
-              <thead>
-                <tr style="background:var(--bg3);position:sticky;top:0;z-index:2">
-                  <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Exchange
-                  </th>
-                  <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Pair</th>
-                  <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Price</th>
-                  <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700;min-width:110px">Volume (24h)
-                  </th>
-                  <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Volume %</th>
-                </tr>
-              </thead>
-              <tbody id="exLst"></tbody>
-            </table>
-          </div>
-          <div id="exPaginationBar"
-            style="display:none;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 14px;background:var(--bg2);border-top:1px solid var(--bc)">
-            <div id="exShowingInfo" style="font-size:12px;color:var(--t2);font-weight:500;min-width:100px"></div>
-            <div id="exPagination" style="display:flex;align-items:center;justify-content:center;gap:4px;flex:1"></div>
-            <div style="min-width:100px"></div>
+
+          <!-- Market Panel (existing exchanges content) -->
+          <div id="cdMarketPanel" style="display:none">
+            <div class="cd-mhd" style="display:none">
+              <div style="font-size:15px;font-weight:800"><span id="cdMktName">--</span> Markets</div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--t2)">
+                <span><span id="exCt" style="font-weight:700">--</span> exchanges</span>
+                <span id="exTotVol"></span>
+              </div>
+            </div>
+            <div style="padding:6px 14px;display:none"><input type="text" id="exSrch" class="cd-srch" placeholder="Search exchange...">
+            </div>
+            <div class="cd-tbl-wrap">
+              <table class="w-full text-sm" style="border-collapse:separate;border-spacing:0">
+                <thead>
+                  <tr style="background:var(--bg3);position:sticky;top:0;z-index:2">
+                    <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Exchange
+                    </th>
+                    <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Pair</th>
+                    <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Price</th>
+                    <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700;min-width:110px">Volume (24h)
+                    </th>
+                    <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Volume %</th>
+                  </tr>
+                </thead>
+                <tbody id="exLst"></tbody>
+              </table>
+            </div>
+            <div id="exPaginationBar"
+              style="display:none;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 14px;background:var(--bg2);border-top:1px solid var(--bc)">
+              <div id="exShowingInfo" style="font-size:12px;color:var(--t2);font-weight:500;min-width:100px"></div>
+              <div id="exPagination" style="display:flex;align-items:center;justify-content:center;gap:4px;flex:1"></div>
+              <div style="min-width:100px"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -2297,12 +3016,12 @@
           <div style="padding:12px 16px;border-bottom:1px solid var(--bc);font-weight:700;font-size:14px">Markets</div>
           <div id="exdMW">
             <table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--bg2);border-bottom:1px solid var(--bc)">
-              <th style="text-align:center;width:30px;padding:10px 6px;font-size:11px;font-weight:700;color:var(--t2)">#</th>
-              <th style="text-align:left;padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2)">Currency</th>
-              <th style="text-align:left;padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2)">Pair</th>
-              <th style="text-align:right;padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2)">Price</th>
-              <th style="text-align:right;padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2)" class="exd-col-pct">24h</th>
-              <th style="text-align:right;padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2)">Volume</th>
+              <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700;width:30px">#</th>
+              <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Currency</th>
+              <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Pair</th>
+              <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Price</th>
+              <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700;min-width:110px">Volume (24h)</th>
+              <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Volume %</th>
             </tr></thead><tbody id="exdTB"></tbody></table>
           </div>
           <div class="exd-pag" id="exdPag" style="display:none;justify-content:center;gap:4px;padding:12px;flex-wrap:wrap"></div>
@@ -2373,9 +3092,2062 @@
   </script>
 
 
-  <!-- Linked Scripts -->
-  <script src="script.js" defer></script>
-  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "148b04af28d846e4b59fb5cf2370360f"}'></script><!-- End Cloudflare Web Analytics -->
+  <!-- Chart.js for line chart in coin modal -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js" defer></script>
+  <!-- Lightweight Charts for candlestick chart in coin modal -->
+  <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js" defer></script>
+
+  <!-- Bundled & minified application script (built from auth-helper.js + 00-bootstrap.js through 08-main.js) -->
+  <script src="script.min.js" defer></script>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       AUTH GATING + MODAL CONTROLLER
+       ═══════════════════════════════════════════════════════════════ -->
+  <script defer>
+    (function () {
+      var API_URL = 'https://api.cryptohubcoin.com';
+      var pendingHref = null;
+      var pendingOpenInNewTab = false;
+
+      function openAuthModal(view) {
+        var modal = document.getElementById('authModal');
+        if (!modal) return;
+        switchView(view || 'login');
+        clearAlerts();
+        modal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeAuthModal() {
+        var modal = document.getElementById('authModal');
+        if (!modal) return;
+        modal.classList.remove('is-open');
+        document.body.style.overflow = '';
+        clearAlerts();
+        pendingHref = null;
+        pendingOpenInNewTab = false;
+      }
+      function switchView(view) {
+        var modal = document.getElementById('authModal');
+        if (!modal) return;
+        modal.setAttribute('data-current-view', view);
+        var views = modal.querySelectorAll('.auth-view');
+        views.forEach(function (el) {
+          el.style.display = (el.getAttribute('data-view') === view) ? 'block' : 'none';
+        });
+        var tabs = modal.querySelectorAll('.auth-tab');
+        tabs.forEach(function (t) {
+          t.classList.toggle('active', t.getAttribute('data-view') === view);
+        });
+        clearAlerts();
+      }
+      function clearAlerts() {
+        var e = document.getElementById('authAlertError');
+        var s = document.getElementById('authAlertSuccess');
+        if (e) { e.classList.remove('show'); e.textContent = ''; }
+        if (s) { s.classList.remove('show'); s.textContent = ''; }
+      }
+      function showError(msg) {
+        clearAlerts();
+        var e = document.getElementById('authAlertError');
+        if (e) { e.textContent = msg; e.classList.add('show'); }
+      }
+      function showSuccess(msg) {
+        clearAlerts();
+        var s = document.getElementById('authAlertSuccess');
+        if (s) { s.textContent = msg; s.classList.add('show'); }
+      }
+
+      window.openAuthModal = openAuthModal;
+      window.closeAuthModal = closeAuthModal;
+
+      document.addEventListener('DOMContentLoaded', function () {
+        if (!window.Auth) {
+          console.warn('[CryptoHub] Auth helper not loaded — gating disabled');
+          return;
+        }
+
+        try { Auth.renderNavSlot('auth-nav-slot'); } catch (e) { console.error(e); }
+
+        function refreshAuthBodyClass() {
+          Auth.getCurrentUser().then(function (user) {
+            if (user) {
+              document.body.classList.add('auth-logged-in');
+              document.body.classList.remove('auth-guest');
+            } else {
+              document.body.classList.add('auth-guest');
+              document.body.classList.remove('auth-logged-in');
+            }
+          }).catch(function () {
+            document.body.classList.add('auth-guest');
+            document.body.classList.remove('auth-logged-in');
+          });
+        }
+        refreshAuthBodyClass();
+        window.refreshAuthOnlyVisibility = refreshAuthBodyClass;
+
+        document.addEventListener('click', function (e) {
+          var a = e.target.closest('a[data-auth-required="1"]');
+          if (!a) return;
+          e.preventDefault();
+          e.stopPropagation();
+          var href = a.getAttribute('href');
+          var openInNewTab = a.getAttribute('data-target') === '_blank';
+
+          Auth.getCurrentUser().then(function (user) {
+            if (user) {
+              if (!href || href === '#') return;
+              if (href.charAt(0) === '#') {
+                var target = document.querySelector(href);
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+              }
+              if (openInNewTab) window.open(href, '_blank', 'noopener');
+              else window.location.href = href;
+            } else {
+              pendingHref = href;
+              pendingOpenInNewTab = openInNewTab;
+              openAuthModal('login');
+            }
+          });
+        }, true);
+
+        document.addEventListener('click', function (e) {
+          var a = e.target.closest('a[href="login.html"], a[href="/login.html"], a[href="signup.html"], a[href="/signup.html"]');
+          if (!a) return;
+          if (a.closest('#authModal')) return;
+          if (document.body.classList.contains('auth-logged-in')) return;
+          e.preventDefault();
+          var view = a.getAttribute('href').indexOf('signup') >= 0 ? 'signup' : 'login';
+          pendingHref = null;
+          openAuthModal(view);
+        }, true);
+
+        document.querySelectorAll('[data-auth-close]').forEach(function (el) {
+          el.addEventListener('click', closeAuthModal);
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && document.getElementById('authModal').classList.contains('is-open')) {
+            closeAuthModal();
+          }
+        });
+
+        document.querySelectorAll('[data-view-switch]').forEach(function (el) {
+          el.addEventListener('click', function (e) {
+            e.preventDefault();
+            switchView(el.getAttribute('data-view-switch'));
+          });
+        });
+
+        document.querySelectorAll('.auth-tab').forEach(function (t) {
+          t.addEventListener('click', function () {
+            switchView(t.getAttribute('data-view'));
+          });
+        });
+
+        var loginForm = document.getElementById('authLoginForm');
+        if (loginForm) loginForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          clearAlerts();
+          var btn = document.getElementById('authLoginBtn');
+          var email = document.getElementById('authLoginEmail').value.trim().toLowerCase();
+          var password = document.getElementById('authLoginPassword').value;
+          if (!email || !password) { showError('Please enter your email and password'); return; }
+          btn.disabled = true; btn.textContent = 'Signing in...';
+          fetch(API_URL + '/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ email: email, password: password })
+          })
+          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
+          .then(function (res) {
+            if (!res.ok || !res.json.success) {
+              showError(res.json.error || 'Could not sign in. Please try again.');
+              btn.disabled = false; btn.textContent = 'Log in';
+              return;
+            }
+            showSuccess('Welcome back!');
+            Auth.getCurrentUser(true).then(function () {
+              refreshAuthBodyClass();
+              try { Auth.renderNavSlot('auth-nav-slot'); } catch (e) {}
+              setTimeout(function () {
+                closeAuthModal();
+                if (pendingHref && pendingHref !== '#') {
+                  if (pendingHref.charAt(0) === '#') {
+                    var target = document.querySelector(pendingHref);
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  } else if (pendingOpenInNewTab) window.open(pendingHref, '_blank', 'noopener');
+                  else window.location.href = pendingHref;
+                }
+                btn.disabled = false; btn.textContent = 'Log in';
+              }, 400);
+            });
+          })
+          .catch(function () {
+            showError('Network error. Please check your connection.');
+            btn.disabled = false; btn.textContent = 'Log in';
+          });
+        });
+
+        var signupForm = document.getElementById('authSignupForm');
+        if (signupForm) signupForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          clearAlerts();
+          var btn = document.getElementById('authSignupBtn');
+          var full_name = document.getElementById('authSignupName').value.trim();
+          var email = document.getElementById('authSignupEmail').value.trim().toLowerCase();
+          var password = document.getElementById('authSignupPassword').value;
+          if (!full_name || !email || !password) { showError('Please fill in all required fields'); return; }
+          if (password.length < 8) { showError('Password must be at least 8 characters'); return; }
+          btn.disabled = true; btn.textContent = 'Creating account...';
+          fetch(API_URL + '/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ full_name: full_name, email: email, password: password })
+          })
+          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
+          .then(function (res) {
+            if (!res.ok || !res.json.success) {
+              showError(res.json.error || 'Could not create account. Please try again.');
+              btn.disabled = false; btn.textContent = 'Create account';
+              return;
+            }
+            window.location.href = '/verify-email.html?pending=1&email=' + encodeURIComponent(email);
+          })
+          .catch(function () {
+            showError('Network error. Please check your connection.');
+            btn.disabled = false; btn.textContent = 'Create account';
+          });
+        });
+
+        var forgotForm = document.getElementById('authForgotForm');
+        if (forgotForm) forgotForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          clearAlerts();
+          var btn = document.getElementById('authForgotBtn');
+          var email = document.getElementById('authForgotEmail').value.trim().toLowerCase();
+          if (!email) { showError('Please enter your email address'); return; }
+          btn.disabled = true; btn.textContent = 'Sending...';
+          fetch(API_URL + '/api/auth/forgot-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ email: email })
+          })
+          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
+          .then(function (res) {
+            if (!res.ok || !res.json.success) {
+              showError(res.json.error || 'Could not send reset email. Please try again.');
+              btn.disabled = false; btn.textContent = 'Send reset link';
+              return;
+            }
+            showSuccess('If an account exists, a password reset link has been sent. Check your inbox.');
+            forgotForm.reset();
+            btn.disabled = false; btn.textContent = 'Send reset link';
+          })
+          .catch(function () {
+            showError('Network error. Please check your connection.');
+            btn.disabled = false; btn.textContent = 'Send reset link';
+          });
+        });
+      });
+
+      window.gatedToggleAnalysis = function () {
+        if (!window.Auth) { openAuthModal('login'); return; }
+        Auth.getCurrentUser().then(function (user) {
+          if (!user) {
+            pendingHref = null;
+            openAuthModal('login');
+            return;
+          }
+          if (typeof window.toggleAnalysis === 'function') {
+            window.toggleAnalysis();
+          } else {
+            console.warn('[CryptoHub] toggleAnalysis function not found');
+          }
+        });
+      };
+    })();
+  </script>
+
+  <button id="backToTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top" style="position:fixed;bottom:24px;right:24px;width:42px;height:42px;border-radius:50%;background:var(--ct);border:1px solid var(--bd);box-shadow:0 4px 12px rgba(0,0,0,0.1);color:var(--t1);cursor:pointer;display:none;align-items:center;justify-content:center;z-index:9999;transition:opacity .25s ease, transform .25s ease;opacity:0;transform:translateY(8px)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
+  <script>
+    (function(){
+      var btn = document.getElementById('backToTopBtn');
+      if (!btn) return;
+      var visible = false;
+      function onScroll() {
+        var y = window.scrollY || document.documentElement.scrollTop || 0;
+        var should = y > 400;
+        if (should && !visible) {
+          btn.style.display = 'flex';
+          requestAnimationFrame(function(){ btn.style.opacity = '1'; btn.style.transform = 'translateY(0)'; });
+          visible = true;
+        } else if (!should && visible) {
+          btn.style.opacity = '0';
+          btn.style.transform = 'translateY(8px)';
+          setTimeout(function(){ if (!visible) btn.style.display = 'none'; }, 250);
+          visible = false;
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      btn.addEventListener('mouseenter', function(){ btn.style.background = 'var(--bg2)'; });
+      btn.addEventListener('mouseleave', function(){ btn.style.background = 'var(--ct)'; });
+    })();
+  </script>
+  <script>
+    // ======================== Filter button ========================
+    (function(){
+      function updateFilterBtn() {
+        var btn = document.getElementById('filterBtn');
+        if (!btn) return;
+        var activeNet = document.querySelector('.cmc-net-btn.cmc-net-active:not(#filterBtn):not(.cmc-net-more-btn)');
+        var netId = activeNet ? activeNet.getAttribute('data-net') : null;
+        if (!netId) {
+          var activeMg = document.querySelector('.cmc-mg-item.cmc-mg-active');
+          netId = activeMg ? activeMg.getAttribute('data-net') : 'all';
+        }
+        btn.style.display = '';
+        var countEl = document.getElementById('filterCount');
+        if (!countEl) return;
+        if (!netId || netId === 'all') {
+          countEl.style.display = 'none';
+        } else {
+          countEl.style.display = '';
+          countEl.textContent = '1';
+        }
+      }
+      var observer = new MutationObserver(updateFilterBtn);
+      var bar = document.querySelector('.cmc-net-bar');
+      if (bar) observer.observe(bar, { attributes: true, subtree: true, attributeFilter: ['class'] });
+      setInterval(updateFilterBtn, 1000);
+      updateFilterBtn();
+    })();
+
+    // ======================== "More" dropdown → filter coins ========================
+    (function(){
+      try {
+        document.addEventListener('click', function(e){
+          var item = e.target.closest('.cmc-mg-item');
+          if (!item) return;
+          var netId = item.getAttribute('data-net');
+          if (!netId) return;
+          document.querySelectorAll('.cmc-mg-item').forEach(function(b){
+            b.classList.toggle('cmc-mg-active', b.getAttribute('data-net') === netId);
+          });
+          document.querySelectorAll('.cmc-net-btn').forEach(function(b){
+            if (b.id === 'filterBtn') return;
+            if (b.classList.contains('cmc-net-more-btn')) return;
+            b.classList.toggle('cmc-net-active', b.getAttribute('data-net') === netId);
+          });
+          if (typeof window.allC !== 'undefined' && Array.isArray(window.allC)) {
+            if (netId === 'all') {
+              window.filtC = window.allC.slice();
+            } else if (typeof window.chkNet === 'function') {
+              window.filtC = window.allC.filter(function(c){
+                try { return window.chkNet(c, netId); } catch(_){ return false; }
+              });
+            }
+            if (typeof window.doFilter === 'function') {
+              try { window.doFilter(); } catch(_){
+                if (typeof window.render === 'function') window.render();
+              }
+            } else if (typeof window.render === 'function') {
+              window.render();
+            }
+          }
+        });
+      } catch(err) { console.error('More dropdown filter error:', err); }
+    })();
+
+    // ======================== Coin modal: Chart / Market tabs ========================
+    (function(){
+      var chartInstance   = null;
+      var candlesChart    = null;
+      var candlesSeries   = null;
+      var resizeObs       = null;
+      var currentCoinId   = null;
+      var currentCoinSym  = null;
+      var currentDays     = '1';
+      var currentType     = 'line';
+      var lastFetchKey    = null;
+
+      function $(id){ return document.getElementById(id); }
+
+      function showPanel(name) {
+        var chartP = $('cdChartPanel');
+        var mktP   = $('cdMarketPanel');
+        if (!chartP || !mktP) return;
+        if (name === 'chart') {
+          chartP.style.display = '';
+          mktP.style.display   = 'none';
+          if (currentCoinId) loadChart(currentCoinId, currentCoinSym, currentDays);
+        } else {
+          chartP.style.display = 'none';
+          mktP.style.display   = '';
+        }
+        document.querySelectorAll('.cd-tab').forEach(function(t){
+          t.classList.toggle('cd-tab-active', t.getAttribute('data-cd-tab') === name);
+        });
+      }
+
+      document.addEventListener('click', function(e){
+        var tab = e.target.closest && e.target.closest('.cd-tab[data-cd-tab]');
+        if (tab) { showPanel(tab.getAttribute('data-cd-tab')); return; }
+
+        var moreBtn = e.target.closest && e.target.closest('#cdMoreBtn');
+        if (moreBtn) {
+          var menu = document.getElementById('cdMoreMenu');
+          if (menu) {
+            menu.classList.toggle('show');
+            moreBtn.classList.toggle('open', menu.classList.contains('show'));
+          }
+          e.stopPropagation();
+          return;
+        }
+
+        var mi = e.target.closest && e.target.closest('#cdMoreMenu .cd-mi[data-rng]');
+        if (mi) {
+          currentDays = mi.getAttribute('data-rng');
+          document.querySelectorAll('#cdMoreMenu .cd-mi').forEach(function(x){
+            x.classList.toggle('active', x === mi);
+          });
+          document.querySelectorAll('#cdRng button[data-rng]').forEach(function(b){ b.classList.remove('active'); });
+          var menu = document.getElementById('cdMoreMenu');
+          var btn  = document.getElementById('cdMoreBtn');
+          if (menu) menu.classList.remove('show');
+          if (btn)  btn.classList.remove('open');
+          if (currentCoinId) loadChart(currentCoinId, currentCoinSym, currentDays);
+          return;
+        }
+
+        if (!e.target.closest('.cd-more-wrap')) {
+          var openMenu = document.getElementById('cdMoreMenu');
+          var openBtn  = document.getElementById('cdMoreBtn');
+          if (openMenu && openMenu.classList.contains('show')) {
+            openMenu.classList.remove('show');
+            if (openBtn) openBtn.classList.remove('open');
+          }
+        }
+
+        var rng = e.target.closest && e.target.closest('#cdRng button[data-rng]');
+        if (rng) {
+          currentDays = rng.getAttribute('data-rng');
+          document.querySelectorAll('#cdRng button[data-rng]').forEach(function(b){
+            b.classList.toggle('active', b === rng);
+          });
+          document.querySelectorAll('#cdMoreMenu .cd-mi').forEach(function(x){ x.classList.remove('active'); });
+          if (currentCoinId) loadChart(currentCoinId, currentCoinSym, currentDays);
+          return;
+        }
+
+        var typeBtn = e.target.closest && e.target.closest('#cdType button[data-type]');
+        if (typeBtn) {
+          var newType = typeBtn.getAttribute('data-type');
+          if (newType === currentType) return;
+          currentType = newType;
+          document.querySelectorAll('#cdType button').forEach(function(b){
+            b.classList.toggle('active', b === typeBtn);
+          });
+          if (currentCoinId) loadChart(currentCoinId, currentCoinSym, currentDays);
+        }
+      });
+
+      function fmtPrice(v) {
+        if (v == null || isNaN(v)) return '--';
+        if (v >= 1)      return '$' + v.toLocaleString('en-US', { maximumFractionDigits: 4 });
+        if (v >= 0.01)   return '$' + v.toFixed(4);
+        return '$' + v.toFixed(8);
+      }
+
+      function fetchHistory(coinId, days, type) {
+        if (!coinId) return Promise.resolve(null);
+        var apiBase = (typeof window._API_CORE !== 'undefined') ? window._API_CORE : 'https://api.cryptohubcoin.com';
+        var apiKey  = (typeof window._API_KEY  !== 'undefined') ? window._API_KEY  : '';
+        var url = apiBase + '/api/v1/coins/' + encodeURIComponent(coinId)
+                + '/history?days=' + encodeURIComponent(days)
+                + '&type=' + encodeURIComponent(type);
+        var headers = apiKey ? { 'x-api-key': apiKey } : {};
+        return fetch(url, { headers: headers })
+          .then(function(r){ return r.ok ? r.json() : null; })
+          .then(function(j){
+            if (!j || !j.success || !Array.isArray(j.data) || j.data.length === 0) return null;
+            return j.data;
+          })
+          .catch(function(){ return null; });
+      }
+
+      function fmtDateLabel(ts, days) {
+        var d = new Date(ts);
+        if (days === '1') {
+          return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+        }
+        if (days === '7' || days === '30') {
+          return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+        return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+      }
+
+      function loadChart(coinId, sym, days) {
+        var canvas   = $('cdChartCanvas');
+        var candHost = $('cdCandlesHost');
+        var loading  = $('cdChartLoading');
+        var err      = $('cdChartErr');
+        if (!canvas || !candHost) return;
+
+        var libNeeded = currentType === 'candles' ? 'LightweightCharts' : 'Chart';
+        if (typeof window[libNeeded] === 'undefined') {
+          if (loading) loading.style.display = 'flex';
+          setTimeout(function(){ loadChart(coinId, sym, days); }, 400);
+          return;
+        }
+
+        var fetchKey = coinId + '|' + sym + '|' + days + '|' + currentType;
+        lastFetchKey = fetchKey;
+
+        if (loading) loading.style.display = 'flex';
+        if (err) err.style.display = 'none';
+
+        if (currentType === 'candles') {
+          canvas.style.display = 'none';
+          candHost.style.display = '';
+        } else {
+          canvas.style.display = 'block';
+          candHost.style.display = 'none';
+        }
+
+        if (currentType === 'candles') {
+          fetchHistory(coinId, days, 'candles').then(function(rows){
+            if (lastFetchKey !== fetchKey) return;
+            if (loading) loading.style.display = 'none';
+            if (!rows || rows.length === 0) {
+              if (err) {
+                err.style.display = 'flex';
+                var msg = err.querySelector('span');
+                if (msg) msg.textContent = 'No history yet for this coin. Snapshots are taken every 30 min — check back soon.';
+              }
+              destroyAllCharts();
+              updateHeadFromOhlc(null);
+              return;
+            }
+            if (rows.length < 2) {
+              if (err) {
+                err.style.display = 'flex';
+                var msg2 = err.querySelector('span');
+                if (msg2) msg2.textContent = 'Only 1 snapshot collected so far — candles need at least 2 points. Check back in 30 min.';
+              }
+              destroyAllCharts();
+              updateHeadFromOhlc(null);
+              return;
+            }
+            var mapped = rows.map(function(r){
+              return { time: r.t, open: r.o, high: r.h, low: r.l, close: r.c };
+            });
+            drawCandles(mapped);
+            updateHeadFromOhlc(mapped);
+          });
+        } else {
+          fetchHistory(coinId, days, 'line').then(function(rows){
+            if (lastFetchKey !== fetchKey) return;
+            if (loading) loading.style.display = 'none';
+            if (!rows || rows.length === 0) {
+              if (err) {
+                err.style.display = 'flex';
+                var msg = err.querySelector('span');
+                if (msg) msg.textContent = 'No history yet for this coin. Snapshots are taken every 30 min — check back soon.';
+              }
+              destroyAllCharts();
+              updateHead(null);
+              return;
+            }
+            if (rows.length < 2) {
+              if (err) {
+                err.style.display = 'flex';
+                var msg2 = err.querySelector('span');
+                if (msg2) msg2.textContent = 'Only 1 snapshot collected so far — chart needs at least 2 points. Check back in 30 min.';
+              }
+              destroyAllCharts();
+              var single = [{ x: rows[0].t, y: rows[0].p }, { x: rows[0].t, y: rows[0].p }];
+              updateHead(single);
+              return;
+            }
+            var points = rows.map(function(r){ return { x: r.t, y: r.p }; });
+            drawLine(points, days);
+            updateHead(points);
+          });
+        }
+      }
+
+      function destroyAllCharts() {
+        if (chartInstance) { try { chartInstance.destroy(); } catch(_){} chartInstance = null; }
+        if (candlesChart)  { try { candlesChart.remove(); }   catch(_){} candlesChart = null; candlesSeries = null; }
+        if (resizeObs)     { try { resizeObs.disconnect(); }  catch(_){} resizeObs = null; }
+      }
+
+      function updateHead(points) {
+        var priceEl = $('cdChartPrice');
+        var chgEl   = $('cdChartChg');
+        var titleEl = $('cdChartTitle');
+        if (!points || points.length < 2) {
+          if (priceEl) priceEl.textContent = '--';
+          if (chgEl)   { chgEl.textContent = '--'; chgEl.className = 'cd-chart-chg'; }
+          return;
+        }
+        var first = points[0].y, last = points[points.length-1].y;
+        applyHead(first, last, titleEl, priceEl, chgEl);
+      }
+
+      function updateHeadFromOhlc(rows) {
+        var priceEl = $('cdChartPrice');
+        var chgEl   = $('cdChartChg');
+        var titleEl = $('cdChartTitle');
+        if (!rows || rows.length < 2) {
+          if (priceEl) priceEl.textContent = '--';
+          if (chgEl)   { chgEl.textContent = '--'; chgEl.className = 'cd-chart-chg'; }
+          return;
+        }
+        var first = rows[0].open, last = rows[rows.length-1].close;
+        applyHead(first, last, titleEl, priceEl, chgEl);
+      }
+
+      function getLivePrice() {
+        try {
+          if (!currentCoinId || typeof allC === 'undefined') return null;
+          var c = allC.find(function(x){ return x.id === currentCoinId; });
+          return c && c.pr ? c.pr : null;
+        } catch(_) { return null; }
+      }
+
+      function applyHead(first, last, titleEl, priceEl, chgEl) {
+        var live = getLivePrice();
+        if (live) last = live;
+
+        var pct = ((last - first) / first) * 100;
+        var up = pct >= 0;
+        if (priceEl) priceEl.textContent = fmtPrice(last);
+        if (chgEl) {
+          chgEl.textContent = (up ? '▲ ' : '▼ ') + Math.abs(pct).toFixed(2) + '%';
+          chgEl.className = 'cd-chart-chg ' + (up ? 'up' : 'down');
+        }
+        if (titleEl) {
+          var labels = {
+            '0.021':'Past 30 minutes', '0.04':'Past 1 hour', '0.08':'Past 2 hours',
+            '0.17':'Past 4 hours', '0.33':'Past 8 hours', '0.5':'Past 12 hours',
+            '1':'Past 24 hours', '7':'Past 7 days', '14':'Past 14 days', '30':'Past 30 days',
+            '90':'Past 90 days', '180':'Past 180 days', '365':'Past 1 year', 'max':'All time'
+          };
+          titleEl.textContent = labels[currentDays] || 'Price chart';
+        }
+      }
+
+      function drawLine(points, days) {
+        destroyAllCharts();
+        var canvas = $('cdChartCanvas');
+        if (!canvas) return;
+        var ctx = canvas.getContext('2d');
+
+        var isUp = points[points.length-1].y >= points[0].y;
+        var lineColor = isUp ? '#16C784' : '#EA3943';
+
+        var grad = ctx.createLinearGradient(0, 0, 0, 380);
+        grad.addColorStop(0, isUp ? 'rgba(22,199,132,0.28)' : 'rgba(234,57,67,0.28)');
+        grad.addColorStop(1, isUp ? 'rgba(22,199,132,0)'    : 'rgba(234,57,67,0)');
+
+        var labels = points.map(function(p){ return fmtDateLabel(p.x, days); });
+        var data   = points.map(function(p){ return p.y; });
+        var rawTs  = points.map(function(p){ return p.x; });
+
+        var t2 = (getComputedStyle(document.documentElement).getPropertyValue('--t2') || '#888').trim();
+        var bc = (getComputedStyle(document.documentElement).getPropertyValue('--bc') || 'rgba(128,128,128,0.15)').trim();
+
+        chartInstance = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: data,
+              borderColor: lineColor,
+              backgroundColor: grad,
+              fill: true,
+              borderWidth: 2,
+              tension: 0.3,
+              pointRadius: 0,
+              pointHoverRadius: 5,
+              pointHoverBackgroundColor: lineColor,
+              pointHoverBorderColor: '#fff',
+              pointHoverBorderWidth: 2,
+              pointHitRadius: 12
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            animation: { duration: 600 },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: 'rgba(15,23,42,0.95)',
+                titleColor: '#fff', bodyColor: '#fff',
+                borderColor: lineColor, borderWidth: 1, padding: 10, displayColors: false,
+                callbacks: {
+                  title: function(items){ var i = items[0].dataIndex; return new Date(rawTs[i]).toLocaleString(); },
+                  label: function(item){ return fmtPrice(item.parsed.y); }
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { display: false, drawBorder: false },
+                ticks: { color: t2, font: { size: 11 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 6 },
+                border: { display: false }
+              },
+              y: {
+                position: 'right',
+                grid: { color: bc, drawBorder: false, lineWidth: 0.5 },
+                ticks: {
+                  color: t2, font: { size: 11 }, maxTicksLimit: 6,
+                  callback: function(v){
+                    if (v >= 1000) return '$' + (v/1000).toFixed(1) + 'k';
+                    if (v >= 1)    return '$' + Number(v).toLocaleString('en-US', { maximumFractionDigits: 2 });
+                    if (v >= 0.01) return '$' + Number(v).toFixed(3);
+                    return '$' + Number(v).toFixed(6);
+                  }
+                },
+                border: { display: false }
+              }
+            }
+          }
+        });
+      }
+
+      function drawCandles(rows) {
+        destroyAllCharts();
+        var host = $('cdCandlesHost');
+        if (!host) return;
+        host.innerHTML = '';
+
+        var t1 = (getComputedStyle(document.documentElement).getPropertyValue('--t1') || '#222').trim();
+        var t2 = (getComputedStyle(document.documentElement).getPropertyValue('--t2') || '#888').trim();
+        var bc = (getComputedStyle(document.documentElement).getPropertyValue('--bc') || 'rgba(128,128,128,0.15)').trim();
+
+        var nd = parseFloat(currentDays);
+        var showTime = currentDays === 'max' ? false : (isFinite(nd) && nd <= 1.5);
+
+        candlesChart = LightweightCharts.createChart(host, {
+          width: host.clientWidth,
+          height: host.clientHeight,
+          layout: {
+            background: { type: 'solid', color: 'transparent' },
+            textColor: t2,
+            fontSize: 11,
+            fontFamily: 'Inter, system-ui, sans-serif'
+          },
+          grid: {
+            vertLines: { color: bc, style: 1 },
+            horzLines: { color: bc, style: 1 }
+          },
+          rightPriceScale: {
+            borderColor: 'transparent',
+            scaleMargins: { top: 0.1, bottom: 0.1 },
+            entireTextOnly: true
+          },
+          timeScale: {
+            borderColor: 'transparent',
+            timeVisible: showTime,
+            secondsVisible: false,
+            barSpacing: 8,
+            minBarSpacing: 2,
+            rightOffset: 4
+          },
+          crosshair: {
+            mode: LightweightCharts.CrosshairMode.Normal,
+            vertLine: { color: t2, width: 1, style: 3, labelBackgroundColor: '#3861FB' },
+            horzLine: { color: t2, width: 1, style: 3, labelBackgroundColor: '#3861FB' }
+          },
+          handleScroll: true,
+          handleScale: true
+        });
+
+        candlesSeries = candlesChart.addCandlestickSeries({
+          upColor:        '#16C784',
+          downColor:      '#EA3943',
+          wickUpColor:    '#16C784',
+          wickDownColor:  '#EA3943',
+          borderUpColor:  '#16C784',
+          borderDownColor:'#EA3943',
+          borderVisible:  true,
+          wickVisible:    true,
+          priceFormat: {
+            type: 'price',
+            precision: 2,
+            minMove: 0.01
+          }
+        });
+
+        var seen = {};
+        var clean = [];
+        for (var i = 0; i < rows.length; i++) {
+          var r = rows[i];
+          if (!r || r.time == null) continue;
+          if (seen[r.time]) continue;
+          seen[r.time] = 1;
+          var hi = r.high, lo = r.low, op = r.open, cl = r.close;
+          var bodyMax = Math.max(op, cl);
+          var bodyMin = Math.min(op, cl);
+          if (hi <= bodyMax) hi = bodyMax;
+          if (lo >= bodyMin) lo = bodyMin;
+          clean.push({ time: r.time, open: op, high: hi, low: lo, close: cl });
+        }
+        clean.sort(function(a,b){ return a.time - b.time; });
+
+        candlesSeries.setData(clean);
+        candlesChart.timeScale().fitContent();
+
+        if (typeof ResizeObserver !== 'undefined') {
+          resizeObs = new ResizeObserver(function(){
+            if (candlesChart && host.clientWidth && host.clientHeight) {
+              candlesChart.applyOptions({ width: host.clientWidth, height: host.clientHeight });
+            }
+          });
+          resizeObs.observe(host);
+        }
+      }
+
+      function hookShowEx() {
+        if (typeof window.showEx !== 'function' || window._cdHookedShowEx) return false;
+        var orig = window.showEx;
+        window.showEx = function(id, name, sym, img) {
+          currentCoinId  = id;
+          currentCoinSym = sym;
+          var ret = orig.apply(this, arguments);
+          showPanel('chart');
+          currentDays = '1';
+          currentType = 'line';
+          document.querySelectorAll('#cdRng button[data-rng]').forEach(function(b){
+            b.classList.toggle('active', b.getAttribute('data-rng') === '1');
+          });
+          document.querySelectorAll('#cdMoreMenu .cd-mi').forEach(function(x){ x.classList.remove('active'); });
+          document.querySelectorAll('#cdType button').forEach(function(b){
+            b.classList.toggle('active', b.getAttribute('data-type') === 'line');
+          });
+          loadChart(id, sym, currentDays);
+
+          // ─── URL routing: update browser address to /crypto/{slug}/ ───
+          // Slug priority: explicit id (CoinGecko slug) → lowercase symbol
+          // Lets users copy/share the URL and have the coin open directly.
+          try {
+            var slug = (id || sym || '').toString().toLowerCase().trim();
+            if (slug) {
+              var newPath = '/crypto/' + encodeURIComponent(slug) + '/';
+              if (location.pathname !== newPath) {
+                history.pushState({coin: slug, name: name, sym: sym, img: img}, '', newPath + location.search + location.hash);
+              }
+              // Update page title for browser tab + SEO snippets
+              if (name && sym) {
+                document.title = name + ' (' + sym + ') Price | CryptoHubCoin';
+              }
+            }
+          } catch (e) { /* routing is enhancement, never blocks UI */ }
+
+          return ret;
+        };
+        window._cdHookedShowEx = true;
+        return true;
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', hookShowEx);
+      } else {
+        hookShowEx();
+      }
+      var attempts = 0;
+      var iv = setInterval(function(){
+        attempts++;
+        if (hookShowEx() || attempts > 20) clearInterval(iv);
+      }, 500);
+    })();
+  </script>
+
+  <!-- ═════════════════════════════════════════════════════════════════
+       SMART SCROLL ARROWS — Show only the relevant arrow based on
+       scroll position. Works for both CMC bar and Indicators bar,
+       and handles LTR + RTL correctly.
+       ═════════════════════════════════════════════════════════════════ -->
+  <script>
+    (function () {
+      // Each pair: [track id, "start" arrow id, "end" arrow id]
+      var BARS = [
+        ['cmcBar', 'cmcArrStart', 'cmcArrEnd'],
+        ['indBar', 'indArrStart', 'indArrEnd']
+      ];
+
+      function isRTL() {
+        return document.documentElement.dir === 'rtl';
+      }
+
+      function show(el) { if (el) el.classList.add('is-visible'); }
+      function hide(el) { if (el) el.classList.remove('is-visible'); }
+
+      function updateArrows(track, startArr, endArr) {
+        if (!track || !startArr || !endArr) return;
+
+        var maxScroll = track.scrollWidth - track.clientWidth;
+
+        // Content fits — hide both arrows
+        if (maxScroll <= 2) {
+          hide(startArr);
+          hide(endArr);
+          return;
+        }
+
+        // Normalize scrollLeft (negative in RTL on some browsers)
+        var sl = track.scrollLeft;
+        if (isRTL()) sl = Math.abs(sl);
+
+        var atStart = sl <= 2;
+        var atEnd   = sl >= maxScroll - 2;
+
+        // In LTR: forward = end arrow (›), back = start arrow (‹)
+        // In RTL: forward = start arrow (‹), back = end arrow (›)
+        var forward = isRTL() ? startArr : endArr;
+        var back    = isRTL() ? endArr   : startArr;
+
+        if (atStart) {
+          // Initial state — only show forward arrow
+          show(forward);
+          hide(back);
+        } else if (atEnd) {
+          // End reached — only show back arrow
+          hide(forward);
+          show(back);
+        } else {
+          // Mid-scroll — show both
+          show(forward);
+          show(back);
+        }
+      }
+
+      function bindBar(trackId, startId, endId) {
+        var track    = document.getElementById(trackId);
+        var startArr = document.getElementById(startId);
+        var endArr   = document.getElementById(endId);
+        if (!track || !startArr || !endArr) return;
+
+        // Click handlers — scroll the bar
+        var step = function () { return Math.max(200, track.clientWidth * 0.6); };
+        startArr.addEventListener('click', function () {
+          // In LTR ‹ scrolls back, in RTL ‹ scrolls forward (handled by browser)
+          track.scrollBy({ left: isRTL() ? step() : -step(), behavior: 'smooth' });
+        });
+        endArr.addEventListener('click', function () {
+          track.scrollBy({ left: isRTL() ? -step() : step(), behavior: 'smooth' });
+        });
+
+        // Initial state
+        updateArrows(track, startArr, endArr);
+
+        // Update on scroll
+        var rafId = null;
+        track.addEventListener('scroll', function () {
+          if (rafId) return;
+          rafId = requestAnimationFrame(function () {
+            rafId = null;
+            updateArrows(track, startArr, endArr);
+          });
+        }, { passive: true });
+
+        // Update when track resizes
+        if (typeof ResizeObserver !== 'undefined') {
+          var ro = new ResizeObserver(function () {
+            updateArrows(track, startArr, endArr);
+          });
+          ro.observe(track);
+        } else {
+          window.addEventListener('resize', function () {
+            updateArrows(track, startArr, endArr);
+          });
+        }
+
+        // Update when content changes (live data)
+        if (typeof MutationObserver !== 'undefined') {
+          var mo = new MutationObserver(function () {
+            setTimeout(function () { updateArrows(track, startArr, endArr); }, 50);
+          });
+          mo.observe(track, { childList: true, subtree: true, characterData: true });
+        }
+
+        // Safety re-checks
+        setTimeout(function () { updateArrows(track, startArr, endArr); }, 800);
+        setTimeout(function () { updateArrows(track, startArr, endArr); }, 2500);
+      }
+
+      function init() {
+        BARS.forEach(function (b) { bindBar(b[0], b[1], b[2]); });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "148b04af28d846e4b59fb5cf2370360f"}'></script>
+  <!-- End Cloudflare Web Analytics -->
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       AUTH MODAL
+       ═══════════════════════════════════════════════════════════════ -->
+  <div id="authModal" class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+    <div class="auth-modal-backdrop" data-auth-close></div>
+    <div class="auth-modal-card">
+      <button type="button" class="auth-modal-close" data-auth-close aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+
+      <div class="auth-tabs" id="authTabs">
+        <button type="button" class="auth-tab active" data-view="login">Log In</button>
+        <button type="button" class="auth-tab" data-view="signup">Sign Up</button>
+      </div>
+
+      <div id="authAlertError" class="auth-alert auth-alert-error"></div>
+      <div id="authAlertSuccess" class="auth-alert auth-alert-success"></div>
+
+      <!-- LOGIN -->
+      <div class="auth-view" data-view="login">
+        <a class="auth-btn-google" href="https://api.cryptohubcoin.com/api/auth/google">
+          <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </a>
+        <div class="auth-divider"><span class="auth-divider-line"></span><span class="auth-divider-text">OR</span><span class="auth-divider-line"></span></div>
+        <form id="authLoginForm" novalidate>
+          <div class="auth-field">
+            <label for="authLoginEmail" class="auth-label">Email Address</label>
+            <input id="authLoginEmail" name="email" type="email" autocomplete="email" required class="auth-input">
+          </div>
+          <div class="auth-field">
+            <div class="auth-field-row">
+              <label for="authLoginPassword" class="auth-label">Password</label>
+              <a href="#" class="auth-link" data-view-switch="forgot">Forgot?</a>
+            </div>
+            <input id="authLoginPassword" name="password" type="password" autocomplete="current-password" required class="auth-input">
+          </div>
+          <button type="submit" class="auth-btn-primary" id="authLoginBtn">Log in</button>
+        </form>
+        <div class="auth-footer">
+          Don't have an account? <a href="#" data-view-switch="signup">Sign up</a>
+        </div>
+      </div>
+
+      <!-- SIGNUP -->
+      <div class="auth-view" data-view="signup" style="display:none">
+        <a class="auth-btn-google" href="https://api.cryptohubcoin.com/api/auth/google">
+          <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Sign up with Google
+        </a>
+        <div class="auth-divider"><span class="auth-divider-line"></span><span class="auth-divider-text">OR</span><span class="auth-divider-line"></span></div>
+        <form id="authSignupForm" novalidate>
+          <div class="auth-field">
+            <label for="authSignupName" class="auth-label">Full Name</label>
+            <input id="authSignupName" name="full_name" type="text" autocomplete="name" required maxlength="100" class="auth-input">
+          </div>
+          <div class="auth-field">
+            <label for="authSignupEmail" class="auth-label">Email Address</label>
+            <input id="authSignupEmail" name="email" type="email" autocomplete="email" required maxlength="254" class="auth-input">
+          </div>
+          <div class="auth-field">
+            <label for="authSignupPassword" class="auth-label">Password</label>
+            <input id="authSignupPassword" name="password" type="password" autocomplete="new-password" required minlength="8" maxlength="128" class="auth-input" placeholder="Min. 8 characters">
+          </div>
+          <button type="submit" class="auth-btn-primary" id="authSignupBtn">Create account</button>
+          <p class="auth-legal">By continuing, you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a></p>
+        </form>
+        <div class="auth-footer">
+          Have an account? <a href="#" data-view-switch="login">Log in</a>
+        </div>
+      </div>
+
+      <!-- FORGOT -->
+      <div class="auth-view" data-view="forgot" style="display:none">
+        <a href="#" class="auth-back-link" data-view-switch="login">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back to Log in
+        </a>
+        <h2 class="auth-h2" id="authModalTitle">Reset password</h2>
+        <p class="auth-sub">Enter your email and we'll send you a reset link</p>
+        <form id="authForgotForm" novalidate>
+          <div class="auth-field">
+            <label for="authForgotEmail" class="auth-label">Email Address</label>
+            <input id="authForgotEmail" name="email" type="email" autocomplete="email" required class="auth-input">
+          </div>
+          <button type="submit" class="auth-btn-primary" id="authForgotBtn">Send reset link</button>
+        </form>
+        <div class="auth-footer">
+          Remember your password? <a href="#" data-view-switch="login">Log in</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <style>
+    .auth-modal{display:none;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;font-family:'Inter','Cairo',-apple-system,sans-serif}
+    .auth-modal.is-open{display:flex}
+    .auth-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px);cursor:pointer}
+    .auth-modal-card{position:relative;background:#fff;color:#222531;border-radius:14px;width:420px;max-width:calc(100% - 32px);max-height:calc(100vh - 32px);overflow-y:auto;padding:28px 24px;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:authModalIn .2s ease}
+    @keyframes authModalIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+    .auth-modal-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888;transition:background .15s}
+    .auth-modal-close:hover{background:#f0f0f3;color:#222}
+    .auth-tabs{display:flex;justify-content:center;gap:32px;margin-bottom:20px;border-bottom:0.5px solid #eee}
+    .auth-tab{padding:8px 4px 14px;font-size:16px;font-weight:600;color:#888;cursor:pointer;background:transparent;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit;transition:color .15s}
+    .auth-tab.active{color:#222531;border-bottom-color:#3861fb}
+    .auth-tab:hover:not(.active){color:#444}
+    .auth-btn-google{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;background:#fff;border:0.5px solid #ddd;border-radius:8px;font-size:13px;font-weight:500;color:#222531;cursor:pointer;text-decoration:none;font-family:inherit;transition:background .15s}
+    .auth-btn-google:hover{background:#f5f5f7}
+    .auth-divider{display:flex;align-items:center;gap:12px;margin:14px 0}
+    .auth-divider-line{flex:1;height:0.5px;background:#e5e5e5}
+    .auth-divider-text{font-size:11px;color:#888;letter-spacing:1px;font-weight:500}
+    .auth-field{margin-bottom:12px}
+    .auth-field-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+    .auth-label{font-size:12px;color:#666;font-weight:500;display:block;margin-bottom:5px}
+    .auth-link{font-size:12px;color:#3861fb;text-decoration:none;font-weight:500;cursor:pointer}
+    .auth-link:hover{text-decoration:underline}
+    .auth-input{width:100%;padding:10px 12px;border:0.5px solid #ddd;border-radius:6px;font-size:13px;background:#fafafa;color:#222531;box-sizing:border-box;font-family:inherit;transition:border-color .15s,box-shadow .15s}
+    .auth-input:focus{outline:none;border-color:#3861fb;background:#fff;box-shadow:0 0 0 3px rgba(56,97,251,0.1)}
+    .auth-btn-primary{width:100%;padding:11px;background:#3861fb;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:6px;transition:opacity .15s}
+    .auth-btn-primary:hover{opacity:.92}
+    .auth-btn-primary:disabled{opacity:.6;cursor:not-allowed}
+    .auth-legal{font-size:11px;color:#888;text-align:center;margin:10px 0 0;line-height:1.5}
+    .auth-legal a{color:#3861fb;text-decoration:none}
+    .auth-footer{text-align:center;margin-top:14px;padding-top:14px;border-top:0.5px solid #eee;font-size:13px;color:#666}
+    .auth-footer a{color:#3861fb;text-decoration:none;font-weight:500;cursor:pointer}
+    .auth-footer a:hover{text-decoration:underline}
+    .auth-back-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#888;text-decoration:none;cursor:pointer;margin-bottom:12px}
+    .auth-back-link:hover{color:#3861fb}
+    .auth-h2{font-size:20px;font-weight:600;margin:6px 0 6px;text-align:center}
+    .auth-sub{font-size:13px;color:#666;text-align:center;margin:0 0 18px;line-height:1.5}
+    .auth-alert{padding:10px 12px;border-radius:6px;font-size:12px;margin-bottom:14px;display:none}
+    .auth-alert.show{display:block}
+    .auth-alert-error{background:rgba(234,57,67,0.1);color:#ea3943;border:0.5px solid rgba(234,57,67,0.3)}
+    .auth-alert-success{background:rgba(22,199,132,0.1);color:#16c784;border:0.5px solid rgba(22,199,132,0.3)}
+    .auth-modal[data-current-view="forgot"] .auth-tabs{display:none}
+    @media (prefers-color-scheme: dark){
+      html:not([data-theme="light"]) .auth-modal-card{background:#171d2e;color:#e8eaed}
+      html:not([data-theme="light"]) .auth-modal-close{color:#8a919e}
+      html:not([data-theme="light"]) .auth-modal-close:hover{background:#1e2738;color:#e8eaed}
+      html:not([data-theme="light"]) .auth-tabs{border-bottom-color:#1e2738}
+      html:not([data-theme="light"]) .auth-tab{color:#8a919e}
+      html:not([data-theme="light"]) .auth-tab.active{color:#e8eaed;border-bottom-color:#5b7cfa}
+      html:not([data-theme="light"]) .auth-btn-google{background:#1e2738;border-color:#2d3748;color:#e8eaed}
+      html:not([data-theme="light"]) .auth-btn-google:hover{background:#252f44}
+      html:not([data-theme="light"]) .auth-divider-line{background:#1e2738}
+      html:not([data-theme="light"]) .auth-divider-text,
+      html:not([data-theme="light"]) .auth-label,
+      html:not([data-theme="light"]) .auth-footer,
+      html:not([data-theme="light"]) .auth-legal,
+      html:not([data-theme="light"]) .auth-sub,
+      html:not([data-theme="light"]) .auth-back-link{color:#8a919e}
+      html:not([data-theme="light"]) .auth-link,
+      html:not([data-theme="light"]) .auth-footer a,
+      html:not([data-theme="light"]) .auth-legal a{color:#5b7cfa}
+      html:not([data-theme="light"]) .auth-input{background:#0d1421;border-color:#1e2738;color:#e8eaed}
+      html:not([data-theme="light"]) .auth-input:focus{background:#0d1421;border-color:#5b7cfa;box-shadow:0 0 0 3px rgba(91,124,250,0.15)}
+      html:not([data-theme="light"]) .auth-btn-primary{background:#5b7cfa}
+      html:not([data-theme="light"]) .auth-footer{border-top-color:#1e2738}
+      html:not([data-theme="light"]) .auth-h2{color:#e8eaed}
+    }
+  </style>
+
+  <!-- ═════════════════════════════════════════════════════════════════
+       Indicators Row — value mirroring, scroll handler, click handler
+       ═════════════════════════════════════════════════════════════════ -->
+  <script>
+    (function () {
+      var MIRRORS = [
+        ['fgV',   'irFgV'],
+        ['altV',  'irAltV'],
+        ['rV',    'irRsiV'],
+        ['mV',    'irMacdV'],
+        ['bV',    'irBbV'],
+        ['eV',    'irEmaV'],
+        ['stV',   'irStochV'],
+        ['adV',   'irAdxV'],
+        ['vlV',   'irVolV'],
+        ['srV',   'irSrV']
+      ];
+
+      var TONE_SOURCES = {
+        'irFgV':   'fgL',
+        'irAltV':  'altL',
+        'irRsiV':  'rS',
+        'irMacdV': 'mS',
+        'irBbV':   'bS',
+        'irEmaV':  'eS',
+        'irStochV':'stS',
+        'irAdxV':  'adS',
+        'irVolV':  'vlS',
+        'irSrV':   'srS'
+      };
+
+      function detectTone(text) {
+        if (!text) return '';
+        var t = text.toLowerCase();
+        if (/(bull|buy|strong|golden|up|صعود|شراء|قوي)/.test(t)) return 'up';
+        if (/(bear|sell|weak|down|high risk|هبوط|بيع|ضعيف)/.test(t)) return 'down';
+        return '';
+      }
+
+      function applyValueTone(dst, srcLabelId) {
+        var srcLbl = document.getElementById(srcLabelId);
+        if (!srcLbl) return;
+        var tone = detectTone(srcLbl.textContent);
+        dst.classList.remove('up', 'down');
+        if (tone) dst.classList.add(tone);
+      }
+
+      // Update marker/fill bar position and status text on each indicator card
+      function updateCardVisuals(valEl, srcLabelId) {
+        var card = valEl.closest('.ind-item');
+        if (!card) return;
+
+        // Set marker/fill position from numeric value (for 0-100 metrics)
+        if (card.dataset.bar) {
+          var num = parseFloat(valEl.textContent);
+          if (!isNaN(num)) {
+            var clamped = Math.max(0, Math.min(100, num));
+            card.style.setProperty('--marker-pct', clamped + '%');
+          }
+        }
+
+        // Update status text from source label + apply tone color
+        var statusEl = card.querySelector('.ind-status');
+        if (statusEl && srcLabelId) {
+          var srcLbl = document.getElementById(srcLabelId);
+          if (srcLbl) {
+            var txt = (srcLbl.textContent || '').trim();
+            if (txt && statusEl.textContent !== txt) {
+              statusEl.textContent = txt;
+            }
+            var tone = detectTone(txt);
+            statusEl.classList.remove('up', 'down');
+            if (tone) statusEl.classList.add(tone);
+
+            // For fill bars, color the fill by tone
+            var fill = card.querySelector('.ind-fill');
+            if (fill) {
+              fill.classList.remove('up', 'down');
+              if (tone) fill.classList.add(tone);
+            }
+          }
+        }
+      }
+
+      function syncOnce() {
+        for (var i = 0; i < MIRRORS.length; i++) {
+          var src = document.getElementById(MIRRORS[i][0]);
+          var dst = document.getElementById(MIRRORS[i][1]);
+          if (!src || !dst) continue;
+          var v = src.textContent;
+          if (v && dst.textContent !== v) {
+            dst.textContent = v;
+          }
+          var toneSrc = TONE_SOURCES[MIRRORS[i][1]];
+          if (toneSrc) applyValueTone(dst, toneSrc);
+          updateCardVisuals(dst, toneSrc);
+        }
+        saveCache();
+      }
+
+      // ─── Persistence: cache last-known values to localStorage ──────
+      // External data (Fear & Greed, RSI, MACD, ...) takes a few seconds
+      // to populate on cold load. We persist whatever we showed last time
+      // so repeat visits show real numbers instantly, then fresh data
+      // replaces them once it arrives.
+      var IND_CACHE_KEY  = 'ch_ind_cache_v1';
+      var IND_CACHE_TTL  = 6 * 60 * 60 * 1000;  // 6 hours
+
+      function saveCache() {
+        try {
+          var cache = { _ts: Date.now() };
+          for (var i = 0; i < MIRRORS.length; i++) {
+            var dstId = MIRRORS[i][1];
+            var dst = document.getElementById(dstId);
+            if (!dst) continue;
+            var val = (dst.textContent || '').trim();
+            if (!val || val === '--' || val === '...') continue;
+
+            var card = dst.closest ? dst.closest('.ind-item') : null;
+            var statusEl = card ? card.querySelector('.ind-status') : null;
+            var tone = '';
+            if (dst.classList.contains('up')) tone = 'up';
+            else if (dst.classList.contains('down')) tone = 'down';
+
+            cache[dstId] = {
+              v: val,
+              s: statusEl ? (statusEl.textContent || '').trim() : '',
+              t: tone,
+              p: card ? (card.style.getPropertyValue('--marker-pct') || '') : ''
+            };
+          }
+          localStorage.setItem(IND_CACHE_KEY, JSON.stringify(cache));
+        } catch (e) { /* storage quota or disabled */ }
+      }
+
+      function hydrateCache() {
+        try {
+          var raw = localStorage.getItem(IND_CACHE_KEY);
+          if (!raw) return;
+          var cache = JSON.parse(raw);
+          if (!cache || !cache._ts) return;
+          if (Date.now() - cache._ts > IND_CACHE_TTL) return;
+
+          for (var i = 0; i < MIRRORS.length; i++) {
+            var dstId = MIRRORS[i][1];
+            var entry = cache[dstId];
+            if (!entry || !entry.v) continue;
+
+            var dst = document.getElementById(dstId);
+            if (!dst) continue;
+            // Don't overwrite if fresh data already arrived
+            var cur = (dst.textContent || '').trim();
+            if (cur && cur !== '--' && cur !== '...') continue;
+
+            dst.textContent = entry.v;
+            dst.classList.remove('up', 'down');
+            if (entry.t) dst.classList.add(entry.t);
+
+            var card = dst.closest ? dst.closest('.ind-item') : null;
+            if (card) {
+              if (entry.p) card.style.setProperty('--marker-pct', entry.p);
+              var statusEl = card.querySelector('.ind-status');
+              if (statusEl && entry.s) {
+                statusEl.textContent = entry.s;
+                statusEl.classList.remove('up', 'down');
+                if (entry.t) statusEl.classList.add(entry.t);
+              }
+              var fillEl = card.querySelector('.ind-fill');
+              if (fillEl && entry.t) {
+                fillEl.classList.remove('up', 'down');
+                fillEl.classList.add(entry.t);
+              }
+            }
+          }
+        } catch (e) { /* corrupted cache — ignore */ }
+      }
+
+      function startMirror() {
+        hydrateCache();         // ← show last-known values immediately
+        syncOnce();             // ← then immediately try to read fresh data
+        var panel = document.getElementById('analysisPanel');
+        if (panel && window.MutationObserver) {
+          var obs = new MutationObserver(function () { syncOnce(); });
+          obs.observe(panel, { childList: true, subtree: true, characterData: true });
+        }
+        setInterval(syncOnce, 2000);
+      }
+
+      function bindItemClicks() {
+        document.querySelectorAll('#indBar .ind-item').forEach(function (item) {
+          item.addEventListener('click', function (e) {
+            e.preventDefault();
+            var panel = document.getElementById('analysisPanel');
+            if (panel && (panel.style.display === 'none' || !panel.style.display)) {
+              panel.style.display = 'block';
+            }
+            setTimeout(function () {
+              var target = document.getElementById('aiBox') || panel;
+              if (!target) return;
+              var rect = target.getBoundingClientRect();
+              var y = rect.top + (window.pageYOffset || document.documentElement.scrollTop) - 70;
+              window.scrollTo({ top: y, behavior: 'smooth' });
+              target.style.transition = 'box-shadow .4s';
+              target.style.boxShadow = '0 0 0 3px rgba(91,124,250,0.5)';
+              setTimeout(function () { target.style.boxShadow = ''; }, 1500);
+            }, 80);
+          });
+        });
+      }
+
+      window.scrollToAiBox = function (e) {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        var panel = document.getElementById('statsDd');
+        if (panel) panel.classList.remove('open');
+        var aiPanel = document.getElementById('analysisPanel');
+        if (aiPanel && (aiPanel.style.display === 'none' || !aiPanel.style.display)) {
+          aiPanel.style.display = 'block';
+        }
+        setTimeout(function () {
+          var target = document.getElementById('aiBox') || aiPanel;
+          if (!target) return;
+          var rect = target.getBoundingClientRect();
+          var y = rect.top + (window.pageYOffset || document.documentElement.scrollTop) - 70;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+          target.style.transition = 'box-shadow .4s';
+          target.style.boxShadow = '0 0 0 3px rgba(91,124,250,0.5)';
+          setTimeout(function () { target.style.boxShadow = ''; }, 1500);
+          if (history.replaceState) history.replaceState(null, '', '#aiBox');
+        }, 220);
+        return false;
+      };
+
+      function bindCloseBtn() {
+        var btn = document.getElementById('closeAnalysisBtn');
+        var panel = document.getElementById('analysisPanel');
+        if (!btn || !panel) return;
+        btn.addEventListener('click', function () {
+          panel.style.transition = 'opacity .25s, transform .25s';
+          panel.style.opacity = '0';
+          panel.style.transform = 'scale(0.98)';
+          setTimeout(function () {
+            panel.style.display = 'none';
+            panel.style.opacity = '';
+            panel.style.transform = '';
+            if (history.replaceState && location.hash === '#aiBox') {
+              history.replaceState(null, '', location.pathname + location.search);
+            }
+            var bar = document.getElementById('indBarWrap');
+            if (bar) {
+              var rect = bar.getBoundingClientRect();
+              var y = rect.top + (window.pageYOffset || document.documentElement.scrollTop) - 70;
+              window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+          }, 250);
+        });
+      }
+
+      function init() {
+        startMirror();
+        bindItemClicks();
+        bindCloseBtn();
+        bindCmcBarFilter();
+        bindStocksChangeFix();
+        if (location.hash === '#aiBox') {
+          setTimeout(function () { window.scrollToAiBox(); }, 600);
+        }
+      }
+
+      // ─── Stocks "24H CHANGE" column fix ───────────────────────────
+      // The external script renders change_24h but the API field is
+      // change_pct. We fetch from the same API and patch the column.
+      function bindStocksChangeFix() {
+        var API_BASE = 'https://api.cryptohubcoin.com';
+        var ENDPOINTS = [
+          '/api/v1/stocks',
+          '/api/v1/stocks?limit=200',
+          '/api/v1/market/stocks',
+          '/api/v1/market/stocks?limit=200'
+        ];
+        var changeBySymbol = {};   // { "AAPL": -0.21, ... }
+        var dataLoaded = false;
+
+        // Step 1 — Fetch from API
+        async function loadChangeData() {
+          for (var i = 0; i < ENDPOINTS.length; i++) {
+            try {
+              var r = await fetch(API_BASE + ENDPOINTS[i]);
+              if (!r.ok) continue;
+              var json = await r.json();
+              var arr = (json && json.data) || (Array.isArray(json) ? json : null);
+              if (!arr || !arr.length) continue;
+
+              arr.forEach(function (s) {
+                var sym = (s.symbol || s.ticker || '').toUpperCase();
+                // API may use change_pct, change_24h, or pct_change
+                var chg = (s.change_pct != null ? s.change_pct
+                         : s.change_24h != null ? s.change_24h
+                         : s.pct_change != null ? s.pct_change : null);
+                if (sym && chg != null && !isNaN(chg)) {
+                  changeBySymbol[sym] = Number(chg);
+                }
+              });
+
+              if (Object.keys(changeBySymbol).length > 0) {
+                dataLoaded = true;
+                return true;
+              }
+            } catch (e) { /* try next endpoint */ }
+          }
+          return false;
+        }
+
+        // Step 2 — Patch the column in the DOM
+        function patchColumn() {
+          if (!dataLoaded) return;
+          var tbody = document.getElementById('stkB');
+          if (!tbody || !tbody.children.length) return;
+
+          var rows = tbody.querySelectorAll('tr');
+          rows.forEach(function (row) {
+            // Find the symbol — usually in the second cell (ticker shown small)
+            var rowText = row.textContent || '';
+            var symbol = null;
+
+            // Search for any known symbol in the row
+            for (var sym in changeBySymbol) {
+              // Match as whole word so "AAPL" doesn't match "AAPLE"
+              var re = new RegExp('\\b' + sym + '\\b');
+              if (re.test(rowText)) { symbol = sym; break; }
+            }
+            if (!symbol) return;
+
+            var cells = row.querySelectorAll('td');
+            // Change column is index 3 (after #, Stock, Price)
+            var cell = cells[3];
+            if (!cell) return;
+
+            var chg = changeBySymbol[symbol];
+            var sign = chg >= 0 ? '+' : '';
+            var arrow = chg >= 0 ? '▲' : '▼';
+            var color = chg >= 0 ? 'var(--gn, #16c784)' : 'var(--rd, #ea3943)';
+            var newHtml = '<span style="color:' + color + ';font-weight:600;display:inline-flex;align-items:center;gap:3px"><span style="font-size:.85em">' + arrow + '</span>' + sign + chg.toFixed(2) + '%</span>';
+
+            // Only update if different (avoid layout thrash)
+            if (cell.innerHTML.indexOf(chg.toFixed(2)) === -1) {
+              cell.innerHTML = newHtml;
+              cell.setAttribute('data-chg-patched', '1');
+            }
+          });
+        }
+
+        // Step 3 — Initialize + watch for table updates
+        loadChangeData().then(function () {
+          patchColumn();
+
+          // Re-patch whenever the table changes (sort, pagination, etc.)
+          var tbody = document.getElementById('stkB');
+          if (tbody && window.MutationObserver) {
+            var mo = new MutationObserver(function () {
+              clearTimeout(window._stkPatchT);
+              window._stkPatchT = setTimeout(patchColumn, 50);
+            });
+            mo.observe(tbody, { childList: true, subtree: true, characterData: true });
+          }
+
+          // Refresh data every 60s
+          setInterval(function () {
+            loadChangeData().then(patchColumn);
+          }, 60000);
+        });
+      }
+
+      // ─── Market Stats bar (cmcBar) — render mirrored display to avoid flicker ───
+      // The external script repeatedly re-renders #cmcBar with raw inline spans.
+      // Transforming in-place causes flicker because each external re-render
+      // wipes our transformed DOM. Instead, we hide #cmcBar via CSS and render
+      // a separate #cmcBarDisplay element from its content, updating only when
+      // the actual data changes (last-html cache prevents needless repaints).
+      function bindCmcBarFilter() {
+        var bar = document.getElementById('cmcBar');
+        if (!bar) return;
+
+        // Create the visible display element next to the hidden source
+        var display = document.getElementById('cmcBarDisplay');
+        if (!display) {
+          display = document.createElement('div');
+          display.id = 'cmcBarDisplay';
+          display.className = 'cmc-bar-display';
+          bar.parentNode.insertBefore(display, bar.nextSibling);
+        }
+
+        // Keywords that identify items to KEEP (case-insensitive substring match)
+        var ALLOWED = [
+          'total market cap',
+          'market cap',
+          'total volume',
+          'volume 24h',
+          'btc dominance',
+          'btc dom',
+          'eth dominance',
+          'eth dom'
+        ];
+
+        function isAllowed(text) {
+          var t = (text || '').toLowerCase();
+          if (t.length < 3) return false;
+          for (var i = 0; i < ALLOWED.length; i++) {
+            if (t.indexOf(ALLOWED[i]) !== -1) return true;
+          }
+          return false;
+        }
+
+        function isSeparator(node) {
+          if (!node) return false;
+          var txt = (node.textContent || '').trim();
+          return txt === '|' || txt === '·' || txt === '•' || txt === '-' ||
+                 (txt.length <= 2 && !/[A-Za-z0-9\u0600-\u06FF]/.test(txt));
+        }
+
+        function escapeHTML(s) {
+          return String(s).replace(/[&<>"']/g, function (c) {
+            return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+          });
+        }
+
+        // Detect direction (up/down) from an element using multiple signals:
+        // 1) Direction icons inside (fa-caret-up, fa-arrow-down, etc.)
+        // 2) Text content (▲▼↑↓ or leading +/-)
+        // 3) Class names (up/down/positive/negative/green/red/gain/loss)
+        // 4) Inline color style
+        // 5) Computed color (last resort — detects greenish vs reddish text)
+        function detectDirection(el) {
+          if (!el || el.nodeType !== 1) return null;
+
+          // 1. Icons inside
+          var icons = el.querySelectorAll ? el.querySelectorAll('i, svg') : [];
+          for (var i = 0; i < icons.length; i++) {
+            var ic = icons[i];
+            var c = ((ic.className && ic.className.baseVal) || ic.className || '') + '';
+            c = c.toLowerCase();
+            if (/caret-up|chevron-up|arrow-up|sort-up|triangle-up|trend-up|long-up|fa-up|angle-up/.test(c)) return 'up';
+            if (/caret-down|chevron-down|arrow-down|sort-down|triangle-down|trend-down|long-down|fa-down|angle-down/.test(c)) return 'down';
+          }
+
+          // 2. Text symbols
+          var txt = el.textContent || '';
+          if (/[▲↑⬆]/.test(txt)) return 'up';
+          if (/[▼↓⬇]/.test(txt)) return 'down';
+          if (/^\s*\+\s*\d/.test(txt)) return 'up';
+          if (/^\s*-\s*\d/.test(txt)) return 'down';
+
+          // 3. Class names
+          var cls = ((el.className && el.className.baseVal) || el.className || '') + '';
+          cls = cls.toLowerCase();
+          if (/(^|[\s\-_])(up|positive|green|gain|profit|bull|gn)([\s\-_]|$)/.test(cls)) return 'up';
+          if (/(^|[\s\-_])(down|negative|red|loss|deficit|bear|rd)([\s\-_]|$)/.test(cls)) return 'down';
+
+          // 4. Inline color
+          var inline = (el.style && el.style.color ? el.style.color : '').toLowerCase();
+          if (inline) {
+            if (/green|#16c|#10b|#22c|#0f0|#00c/.test(inline)) return 'up';
+            if (/red|#ea3|#dc2|#ef4|#f87|#f00/.test(inline)) return 'down';
+          }
+
+          // 5. Computed color (works even when colors come from CSS classes)
+          try {
+            var comp = window.getComputedStyle(el).color || '';
+            var rgb = comp.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+            if (rgb) {
+              var r = +rgb[1], g = +rgb[2], b = +rgb[3];
+              if (g > 130 && g > r * 1.3 && g > b * 1.1) return 'up';
+              if (r > 130 && r > g * 1.3 && r > b * 1.1) return 'down';
+            }
+          } catch (e) { /* ignore */ }
+
+          return null;
+        }
+
+        function buildStatHTML(srcEl) {
+          // Extract main (non-directional) icon for the head
+          var iconHTML = '';
+          var iconCandidates = srcEl.querySelectorAll('i');
+          for (var ii = 0; ii < iconCandidates.length; ii++) {
+            var ic = iconCandidates[ii];
+            var ccls = ((ic.className && ic.className.baseVal) || ic.className || '').toLowerCase();
+            // Skip directional icons — those belong to the change indicator
+            if (/caret|chevron|arrow|sort|triangle|trend-up|trend-down|long-up|long-down|angle-up|angle-down/.test(ccls)) continue;
+            iconHTML = ic.outerHTML;
+            break;
+          }
+
+          // Find the change element by scanning for percentage text + direction signal
+          var changeAmt = '';
+          var changeDir = '';
+          var changeRawText = '';
+
+          var els = srcEl.querySelectorAll('span, b, strong, em, div');
+          for (var i = 0; i < els.length; i++) {
+            var el = els[i];
+            var t = (el.textContent || '').trim();
+            if (!t || t.length > 25) continue;
+            if (!/\d[\d.,]*%?/.test(t)) continue;
+
+            var dir = detectDirection(el);
+            if (dir) {
+              var amtMatch = t.match(/[\d.,]+%?/);
+              if (amtMatch) {
+                changeAmt = amtMatch[0];
+                changeDir = dir;
+                changeRawText = t;
+                break;
+              }
+            }
+          }
+
+          // Build value text (full text minus change text)
+          var fullText = (srcEl.textContent || '').trim();
+          if (changeRawText) {
+            var idx = fullText.lastIndexOf(changeRawText);
+            if (idx >= 0) {
+              fullText = (fullText.substring(0, idx) + fullText.substring(idx + changeRawText.length)).trim();
+            }
+          }
+
+          var colonIdx = fullText.indexOf(':');
+          if (colonIdx <= 0) return '';
+
+          var label = fullText.substring(0, colonIdx).trim().replace(/^Total\s+/i, '');
+          var value = fullText.substring(colonIdx + 1).trim().replace(/\s+/g, ' ');
+
+          if (!value) return '';
+
+          var changeHTML = '';
+          if (changeAmt && changeDir) {
+            var arrow = changeDir === 'up' ? '▲' : '▼';
+            // Ensure amount has % if it originally did or if label suggests percentage change
+            if (!/%$/.test(changeAmt) && /%/.test(changeRawText)) changeAmt += '%';
+            changeHTML = '<span class="cmc-chg ' + changeDir + '">' + arrow + ' ' + escapeHTML(changeAmt) + '</span>';
+          }
+
+          return '<div class="cmc-stat">' +
+            '<div class="cmc-stat-head">' + iconHTML +
+              '<span class="cmc-stat-lbl">' + escapeHTML(label) + '</span></div>' +
+            '<div class="cmc-stat-val-row">' +
+              '<span class="cmc-stat-val">' + escapeHTML(value) + '</span>' +
+              changeHTML +
+            '</div></div>';
+        }
+
+        var lastHTML = '';
+        function render() {
+          if (!bar.children || bar.children.length === 0) return;
+          var newHTML = '';
+          var kids = Array.prototype.slice.call(bar.children);
+          for (var i = 0; i < kids.length; i++) {
+            var k = kids[i];
+            if (isSeparator(k)) continue;
+            if (!isAllowed(k.textContent)) continue;
+            newHTML += buildStatHTML(k);
+          }
+          // Only repaint if content actually changed
+          if (newHTML && newHTML !== lastHTML) {
+            display.innerHTML = newHTML;
+            lastHTML = newHTML;
+          }
+        }
+
+        // Initial render + retry a few times in case content loads slowly
+        var tries = 0;
+        var iv = setInterval(function () {
+          tries++;
+          render();
+          if (lastHTML || tries > 20) clearInterval(iv);
+        }, 250);
+
+        // Re-render when the external script updates the source bar
+        if (window.MutationObserver) {
+          var mo = new MutationObserver(render);
+          mo.observe(bar, { childList: true, subtree: true, characterData: true });
+        }
+      }
+
+      // Hydrate cached values eagerly — runs as soon as the script is parsed.
+      // The script tag sits at the end of <body>, so the indicator card
+      // elements are already in the DOM by this point. This gets cached
+      // values onto the cards before DOMContentLoaded fires, eliminating
+      // the flash of "--" placeholders on repeat visits.
+      try { hydrateCache(); } catch (e) {}
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- ═════════════════════════════════════════════════════════════════
+       INSTANT-RENDER CACHE — Captures the page's "live data" elements
+       (metals, market stats, CMC ticker bar, etc.) into localStorage so
+       that on the next visit the values appear INSTANTLY before the
+       APIs respond. Re-saves whenever values change.
+       Independent of the indicators cache above — that one only covers
+       the indicator row. This one covers everything else.
+       ═════════════════════════════════════════════════════════════════ -->
+  <script>
+  (function(){
+    var SNAPSHOT_KEY = 'ch_page_snap_v1';
+    var SNAPSHOT_TTL = 6 * 60 * 60 * 1000;  // 6 hours — same as indicators cache
+
+    // Elements whose textContent (or innerHTML for the ticker bar) we cache.
+    // Each entry: [id, mode] — mode is 'text' or 'html'.
+    var SNAP_TARGETS = [
+      // Metals row — Gold / Silver / Platinum / Palladium
+      ['mGP', 'text'], ['mGHL', 'text'], ['mGC', 'text'],
+      ['mSP', 'text'], ['mSHL', 'text'], ['mSC', 'text'],
+      ['mPtP','text'], ['mPtHL','text'], ['mPtC','text'],
+      ['mPdP','text'], ['mPdHL','text'], ['mPdC','text'],
+      // Market stats bar — innerHTML preserves the layout
+      ['cmcBar', 'html']
+    ];
+
+    function loadSnapshot(){
+      try {
+        var raw = localStorage.getItem(SNAPSHOT_KEY);
+        if (!raw) return;
+        var snap = JSON.parse(raw);
+        if (!snap || !snap._ts) return;
+        if (Date.now() - snap._ts > SNAPSHOT_TTL) return;
+
+        SNAP_TARGETS.forEach(function(target){
+          var id = target[0], mode = target[1];
+          var el = document.getElementById(id);
+          if (!el || !snap[id]) return;
+          // Don't overwrite if fresh data already arrived
+          var cur = (mode === 'html' ? el.innerHTML : el.textContent || '').trim();
+          if (cur && cur !== '--' && cur !== '...' && cur !== '0' && cur.length > 1) return;
+          if (mode === 'html') {
+            el.innerHTML = snap[id];
+          } else {
+            el.textContent = snap[id];
+          }
+        });
+      } catch (e) { /* corrupted — ignore */ }
+    }
+
+    function saveSnapshot(){
+      try {
+        var snap = { _ts: Date.now() };
+        var anyValid = false;
+        SNAP_TARGETS.forEach(function(target){
+          var id = target[0], mode = target[1];
+          var el = document.getElementById(id);
+          if (!el) return;
+          var val = mode === 'html' ? el.innerHTML : el.textContent;
+          val = (val || '').trim();
+          // Only save real values — skip placeholders
+          if (val && val !== '--' && val !== '...' && val.length > 1) {
+            snap[id] = val;
+            anyValid = true;
+          }
+        });
+        if (anyValid) localStorage.setItem(SNAPSHOT_KEY, JSON.stringify(snap));
+      } catch (e) {}
+    }
+
+    // 1) Hydrate immediately — script is at end of body, all elements exist
+    loadSnapshot();
+
+    // 2) Save snapshot periodically (every 10s) and on visibility change
+    setInterval(saveSnapshot, 10000);
+    document.addEventListener('visibilitychange', function(){
+      if (document.visibilityState === 'hidden') saveSnapshot();
+    });
+    window.addEventListener('beforeunload', saveSnapshot);
+
+    // 3) Also save after fresh data lands — observe the metals row + cmcBar
+    if (window.MutationObserver) {
+      var saveTimer = null;
+      function scheduleSave(){
+        if (saveTimer) return;
+        saveTimer = setTimeout(function(){ saveTimer = null; saveSnapshot(); }, 1500);
+      }
+      var obs = new MutationObserver(scheduleSave);
+      var metalBar = document.getElementById('metalBar');
+      var cmcBar = document.getElementById('cmcBar');
+      if (metalBar) obs.observe(metalBar, { childList:true, subtree:true, characterData:true });
+      if (cmcBar)   obs.observe(cmcBar,   { childList:true, subtree:true, characterData:true });
+    }
+  })();
+  </script>
+
+<!-- ═════════════════════════════════════════════════════════════════
+     CRYPTO URL ROUTER — Lets users share direct links to coins.
+     If the URL is /crypto/{slug}/, wait for the coin data to load,
+     find the matching coin, then call showEx() to open it.
+     Also handles browser Back/Forward buttons via popstate.
+     ═════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  // Parse the slug out of the current URL path (e.g. "bitcoin" from /crypto/bitcoin/)
+  function getSlugFromUrl(){
+    var m = location.pathname.match(/^\/crypto\/([^\/]+)\/?$/i);
+    return m ? decodeURIComponent(m[1]).toLowerCase() : null;
+  }
+
+  // Look up a coin in the loaded data — try id first, then symbol
+  function findCoin(slug){
+    if (typeof allC === 'undefined' || !Array.isArray(allC)) return null;
+    var s = slug.toLowerCase();
+    // 1) exact match on CoinGecko id
+    var c = allC.find(function(x){ return x && (x.id||'').toLowerCase() === s; });
+    if (c) return c;
+    // 2) exact match on symbol (e.g. /crypto/btc/)
+    c = allC.find(function(x){ return x && (x.sy||'').toLowerCase() === s; });
+    if (c) return c;
+    return null;
+  }
+
+  // Try to open the coin from URL; if data isn't ready yet, retry briefly
+  var initialOpenDone = false;
+  function tryOpenFromUrl(){
+    if (initialOpenDone) return true;
+    var slug = getSlugFromUrl();
+    if (!slug) { initialOpenDone = true; return true; }  // not a coin URL — done
+
+    var c = findCoin(slug);
+    if (!c) return false;  // data not loaded yet — caller will retry
+
+    if (typeof window.showEx === 'function') {
+      initialOpenDone = true;
+      // showEx signature: (id, name, sym, img)
+      window.showEx(c.id || c.sy, c.na || c.nm || c.sy, c.sy, c.img || '');
+      return true;
+    }
+    return false;
+  }
+
+  // Retry up to 30 times (15 seconds) while the app boots and loads coins
+  function startRouter(){
+    if (tryOpenFromUrl()) return;
+    var attempts = 0;
+    var iv = setInterval(function(){
+      attempts++;
+      if (tryOpenFromUrl() || attempts > 30) clearInterval(iv);
+    }, 500);
+  }
+
+  // Browser Back/Forward — re-open the coin in the new URL (or close if back to /)
+  window.addEventListener('popstate', function(){
+    initialOpenDone = false;
+    var slug = getSlugFromUrl();
+    if (slug) {
+      tryOpenFromUrl();
+    } else {
+      // User navigated back to root → close any open coin detail panel
+      // so the main market view becomes visible again
+      try {
+        if (typeof window.closeExDetail === 'function') {
+          window.closeExDetail();
+        }
+      } catch (e) {}
+      // Restore default page title
+      document.title = 'CryptoHubCoin — Crypto Tracker, Charts & Markets';
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startRouter);
+  } else {
+    startRouter();
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // Detect when the coin panel CLOSES (regardless of how — ✕ button, Esc, etc.)
+  // ─────────────────────────────────────────────────────────────────
+  // The coin detail UI is created dynamically by external JS, so we don't
+  // know the exact panel selector. Strategy: search the DOM for any visible
+  // full-screen-ish overlay (fixed position, high z-index, visible).
+  // The reset only fires after a "panel was open" state has been confirmed.
+
+  function resetUrlToRoot(){
+    try {
+      if (/^\/crypto\//i.test(location.pathname)) {
+        history.pushState({}, '', '/' + location.search + location.hash);
+        document.title = 'CryptoHubCoin — Crypto Tracker, Charts & Markets';
+      }
+    } catch (e) {}
+  }
+
+  var panelHasBeenVisibleSinceOpen = false;
+
+  // Find any element that looks like a fullscreen/large overlay panel.
+  // Criteria: fixed/absolute position, z-index >= 100, visible, big.
+  function findVisibleOverlay(){
+    // Known IDs first (fast path)
+    var knownIds = ['exDetailMod', 'cdRoot', 'coinDetail', 'coinPanel', 'cdOverlay', 'coinDetailMod'];
+    for (var i = 0; i < knownIds.length; i++) {
+      var el = document.getElementById(knownIds[i]);
+      if (el && isElVisible(el)) return el;
+    }
+    // Fallback: scan body's direct children for any visible overlay
+    var children = document.body ? document.body.children : [];
+    for (var j = 0; j < children.length; j++) {
+      var c = children[j];
+      if (!isElVisible(c)) continue;
+      var style = window.getComputedStyle(c);
+      var z = parseInt(style.zIndex, 10) || 0;
+      var pos = style.position;
+      var rect = c.getBoundingClientRect();
+      // Big, fixed/absolute, high z-index → likely an overlay
+      if ((pos === 'fixed' || pos === 'absolute') &&
+          z >= 100 &&
+          rect.width > window.innerWidth * 0.5 &&
+          rect.height > window.innerHeight * 0.3) {
+        return c;
+      }
+    }
+    return null;
+  }
+
+  function isElVisible(el){
+    if (!el) return false;
+    var style = window.getComputedStyle(el);
+    if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') return false;
+    var rect = el.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0;
+  }
+
+  // Debounced check — runs after any DOM mutation
+  var checkTimer = null;
+  function scheduleVisibilityCheck(){
+    if (checkTimer) return;
+    checkTimer = setTimeout(function(){
+      checkTimer = null;
+      if (!/^\/crypto\//i.test(location.pathname)) return;
+
+      var overlay = findVisibleOverlay();
+      if (overlay) {
+        panelHasBeenVisibleSinceOpen = true;
+      } else if (panelHasBeenVisibleSinceOpen) {
+        resetUrlToRoot();
+      }
+    }, 250);
+  }
+
+  // Reset "seen visible" flag whenever URL changes to a new /crypto/...
+  function markRouteOpened(){
+    panelHasBeenVisibleSinceOpen = false;
+    // Re-check shortly so we can confirm the panel actually opened
+    setTimeout(scheduleVisibilityCheck, 350);
+  }
+
+  // Hook history methods to catch programmatic URL changes
+  ['pushState', 'replaceState'].forEach(function(method){
+    var orig = history[method];
+    history[method] = function(){
+      var ret = orig.apply(this, arguments);
+      markRouteOpened();
+      return ret;
+    };
+  });
+  window.addEventListener('popstate', markRouteOpened);
+
+  // Observe DOM changes for visibility events
+  var observer = new MutationObserver(scheduleVisibilityCheck);
+  function startObserver(){
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['style', 'class'],
+      childList: true,
+      subtree: true
+    });
+    // Also do periodic checks as a safety net (every 2s)
+    setInterval(scheduleVisibilityCheck, 2000);
+  }
+  if (document.body) {
+    startObserver();
+  } else {
+    document.addEventListener('DOMContentLoaded', startObserver);
+  }
+})();
+</script>
+
 </body>
 
 </html>

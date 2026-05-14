@@ -433,29 +433,23 @@
       margin-top: .25rem
     }
 
-    .w-4 {
-      width: 1rem
-    }
+    .w-4 { width: 1rem }
+    .w-5 { width: 1.25rem }
+    .w-6 { width: 1.5rem }
+    .w-8 { width: 2rem }
+    .w-10 { width: 2.5rem }
+    .w-12 { width: 3rem }
 
-    .w-5 {
-      width: 1.25rem
-    }
+    .h-4 { height: 1rem }
+    .h-5 { height: 1.25rem }
+    .h-6 { height: 1.5rem }
+    .h-8 { height: 2rem }
+    .h-10 { height: 2.5rem }
+    .h-12 { height: 3rem }
 
-    .w-6 {
-      width: 1.5rem
-    }
-
-    .h-4 {
-      height: 1rem
-    }
-
-    .h-5 {
-      height: 1.25rem
-    }
-
-    .h-6 {
-      height: 1.5rem
-    }
+    /* Fix FOUC (Flash of Unstyled Content) for SVGs and Images */
+    svg:not([width]) { max-width: 1.5rem; max-height: 1.5rem; }
+    img:not([class*="w-"]) { max-width: 100%; height: auto; }
 
     .flex-wrap {
       flex-wrap: wrap
@@ -1200,7 +1194,7 @@
     .sort-icon .fa-caret-up,
     .sort-icon .fa-caret-down {
       opacity: .2;
-      transition: all .2s;
+      transition: opacity .2s, color .2s;
     }
 
     .ct th.sorted.asc .sort-icon .fa-caret-up,
@@ -1421,12 +1415,10 @@
     @keyframes ds {
       from {
         opacity: 0;
-        transform: translateY(-8px)
       }
 
       to {
         opacity: 1;
-        transform: translateY(0)
       }
     }
 
@@ -1629,12 +1621,10 @@
     @keyframes modalFadeIn {
       from {
         opacity: 0;
-        transform: scale(0.95);
       }
 
       to {
         opacity: 1;
-        transform: scale(1);
       }
     }
 
@@ -2109,6 +2099,34 @@
       flex-wrap: wrap;
     }
 
+    /* Show More button (replaces pagination) */
+    .exg-show-more-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 28px;
+      background: var(--bg);
+      border: 1px solid var(--bc);
+      border-radius: 8px;
+      color: var(--t1);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .exg-show-more-btn:hover {
+      background: var(--ac);
+      color: #fff;
+      border-color: var(--ac);
+      transform: translateY(-1px);
+    }
+    .exg-show-more-btn:active {
+      transform: translateY(0);
+    }
+    .exg-show-more-btn i {
+      font-size: 14px;
+    }
+
 
     /* ===== EXCHANGE DETAIL MODAL ===== */
     #exDetailMod{position:fixed;inset:0;z-index:10000;display:none;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
@@ -2118,7 +2136,7 @@
     @media(min-width:769px){
       .exd-panel{max-width:940px;max-height:92vh;height:auto;border-radius:16px;border:1px solid var(--bc);box-shadow:0 20px 60px rgba(0,0,0,.4);animation:exdUp .22s ease}
     }
-    @keyframes exdUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+    @keyframes exdUp{from{opacity:0;}to{opacity:1;}}
 
     .exd-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--bc);background:var(--bg2);flex-shrink:0}
     .exd-close{width:32px;height:32px;border-radius:8px;border:1px solid var(--bc);background:var(--bg3);color:var(--t2);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;line-height:1}
@@ -2616,12 +2634,10 @@
     @keyframes cmSlideUp {
       from {
         opacity: 0;
-        transform: translateY(12px)
       }
 
       to {
         opacity: 1;
-        transform: translateY(0)
       }
     }
 
@@ -3116,15 +3132,35 @@
       animation: tabFade .3s ease
     }
 
+    /* Full-width breakout — Exchanges + NFT tabs escape the parent max-w-7xl wrapper
+       so all columns (including Supply for NFTs) fit on screen without overflow */
+    #tab_exchanges,
+    #tab_commodities {
+      width: 100vw !important;
+      max-width: 100vw !important;
+      position: relative !important;
+      left: 50% !important;
+      right: 50% !important;
+      margin-left: -50vw !important;
+      margin-right: -50vw !important;
+      padding: 0 24px !important;
+      box-sizing: border-box !important;
+    }
+
+    @media (max-width: 768px) {
+      #tab_exchanges,
+      #tab_commodities {
+        padding: 0 12px !important;
+      }
+    }
+
     @keyframes tabFade {
       from {
         opacity: 0;
-        transform: translateY(6px)
       }
 
       to {
         opacity: 1;
-        transform: translateY(0)
       }
     }
 
@@ -3526,12 +3562,10 @@
     @keyframes mtlExpIn {
       from {
         opacity: 0;
-        transform: translateY(-6px);
       }
 
       to {
         opacity: 1;
-        transform: translateY(0);
       }
     }
 
@@ -4756,12 +4790,10 @@
 
     @keyframes gsModalPop {
       from {
-        transform: scale(.95) translateY(-12px);
         opacity: 0;
       }
 
       to {
-        transform: scale(1) translateY(0);
         opacity: 1;
       }
     }
@@ -5180,7 +5212,7 @@
       border: 1px solid var(--bc);
       color: var(--t1);
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
       padding: 0;
       flex-shrink: 0;
     }
@@ -5210,7 +5242,7 @@
       height: 2px;
       border-radius: 2px;
       background: var(--t1);
-      transition: all 0.2s ease;
+      transition: background 0.2s, transform 0.2s, opacity 0.2s;
     }
 
     .nav-hamburger:hover .ham-line {
@@ -5582,12 +5614,10 @@
     @keyframes mgOpen {
       from {
         opacity: 0;
-        transform: translateY(-5px);
       }
 
       to {
         opacity: 1;
-        transform: translateY(0);
       }
     }
 
@@ -6817,3 +6847,143 @@ html[dir="rtl"] .ai-chat-modal,
       align-self: flex-start;
     }
 
+
+    /* ═══════════════════════════════════════════════════════════════
+       NFT TABLE — COMPACT LAYOUT (DESKTOP)
+       widths دقيقة لكل عمود + truncation للأسماء الطويلة
+       ═══════════════════════════════════════════════════════════════ */
+    #tab_commodities .ct {
+      overflow-x: auto;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      max-width: 100%;
+    }
+    #tab_commodities .ct::-webkit-scrollbar {
+      height: 8px;
+    }
+    #tab_commodities .ct::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    #tab_commodities .ct::-webkit-scrollbar-thumb {
+      background: var(--ac);
+      border-radius: 4px;
+    }
+
+    #nftTable {
+      width: 100%;
+      min-width: 880px;
+      table-layout: fixed;
+      font-size: 12.5px;
+    }
+    #nftTable th,
+    #nftTable td {
+      padding: 10px 6px !important;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    #nftTable th {
+      font-size: 10.5px;
+      letter-spacing: 0.4px;
+      font-weight: 700;
+    }
+
+    /* العمود 1: # (rank) */
+    #nftTable th:nth-child(1),
+    #nftTable td:nth-child(1) {
+      width: 42px !important;
+      max-width: 42px !important;
+      padding-left: 12px !important;
+      padding-right: 4px !important;
+      text-align: center;
+    }
+
+    /* العمود 2: COLLECTION — ياخد الباقي مع truncation */
+    #nftTable th:nth-child(2),
+    #nftTable td:nth-child(2) {
+      width: auto !important;
+      min-width: 180px;
+      text-align: left;
+      padding-left: 4px !important;
+      padding-right: 8px !important;
+    }
+    #nftTable td:nth-child(2) > div {
+      max-width: 100%;
+      overflow: hidden;
+    }
+    /* اسم الـ collection — truncate بـ ellipsis */
+    #nftTable td:nth-child(2) > div > div:last-child {
+      min-width: 0 !important;
+      max-width: calc(100% - 50px) !important;
+      overflow: hidden !important;
+    }
+    #nftTable td:nth-child(2) > div > div:last-child > div:first-child {
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      max-width: 100% !important;
+      font-size: 13px !important;
+    }
+    /* السطر التاني (symbol + chain badge) */
+    #nftTable td:nth-child(2) > div > div:last-child > div:nth-child(2) {
+      overflow: hidden !important;
+      max-width: 100% !important;
+    }
+    #nftTable td:nth-child(2) > div > div:last-child > div:nth-child(2) > span:first-child {
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      max-width: 100px !important;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* العمود 3: FLOOR PRICE */
+    #nftTable th:nth-child(3),
+    #nftTable td:nth-child(3) {
+      width: 100px !important;
+      text-align: right;
+      font-weight: 700;
+    }
+
+    /* العمود 4: 24H% */
+    #nftTable th:nth-child(4),
+    #nftTable td:nth-child(4) {
+      width: 70px !important;
+      text-align: right;
+    }
+
+    /* العمود 5: 7D% */
+    #nftTable th:nth-child(5),
+    #nftTable td:nth-child(5) {
+      width: 70px !important;
+      text-align: right;
+    }
+
+    /* العمود 6: MARKET CAP */
+    #nftTable th:nth-child(6),
+    #nftTable td:nth-child(6) {
+      width: 95px !important;
+      text-align: right;
+    }
+
+    /* العمود 7: VOLUME 24H */
+    #nftTable th:nth-child(7),
+    #nftTable td:nth-child(7) {
+      width: 90px !important;
+      text-align: right;
+    }
+
+    /* العمود 8: OWNERS */
+    #nftTable th:nth-child(8),
+    #nftTable td:nth-child(8) {
+      width: 75px !important;
+      text-align: right;
+    }
+
+    /* العمود 9: SUPPLY */
+    #nftTable th:nth-child(9),
+    #nftTable td:nth-child(9) {
+      width: 75px !important;
+      padding-right: 12px !important;
+      text-align: right;
+    }

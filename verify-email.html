@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify email - CryptoHubCoin</title>
+<link rel="icon" href="/logo.png" type="image/png">
+
+<style>
+  :root {
+    --bg1: #fff; --bg2: #f8fafd; --bg3: #eff2f5;
+    --t1: #222531; --t2: #616e85;
+    --bc: #eff2f5; --ac: #3861fb; --hv: #f0f6ff;
+    --gn: #16c784; --rd: #ea3943;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg1); color: var(--t1);
+    font-family: 'Inter', 'Cairo', -apple-system, sans-serif;
+    min-height: 100vh; display: flex; align-items: center;
+    justify-content: center; padding: 1.5rem;
+  }
+  .auth-card {
+    background: var(--bg2); border-radius: 12px;
+    border: 0.5px solid var(--bc); padding: 2.5rem 1.75rem;
+    width: 100%; max-width: 420px; text-align: center;
+  }
+  .brand-row {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 1.5rem; text-decoration: none; color: inherit;
+  }
+  .brand-logo {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, #185FA5, #BA7517);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 500; font-size: 13px;
+  }
+  .brand-name { font-size: 16px; font-weight: 500; }
+  .icon-circle {
+    width: 56px; height: 56px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .icon-pending { background: rgba(91, 124, 250, 0.15); }
+  .icon-success { background: rgba(22, 199, 132, 0.15); }
+  .icon-error   { background: rgba(234, 57, 67, 0.15); }
+  h1 { font-size: 22px; font-weight: 500; margin: 0 0 8px; }
+  .description {
+    font-size: 13px; color: var(--t2); margin: 0 0 1.5rem;
+    line-height: 1.6;
+  }
+  .description strong { color: var(--t1); font-weight: 500; }
+  .btn-primary {
+    width: 100%; padding: 10px; background: var(--ac); color: white;
+    border: none; border-radius: 6px; font-size: 14px; font-weight: 500;
+    cursor: pointer; font-family: inherit; text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { opacity: 0.92; }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-secondary {
+    width: 100%; padding: 10px; background: transparent;
+    color: var(--t1); border: 0.5px solid var(--bc); border-radius: 6px;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    font-family: inherit; text-decoration: none; display: inline-block;
+    margin-top: 8px;
+  }
+  .btn-secondary:hover { background: var(--bg3); }
+  .alert {
+    padding: 10px 12px; border-radius: 6px; font-size: 12px;
+    margin-bottom: 14px; display: none; text-align: left;
+  }
+  .alert.show { display: block; }
+  .alert-error {
+    background: rgba(234, 57, 67, 0.1); color: var(--rd);
+    border: 0.5px solid rgba(234, 57, 67, 0.3);
+  }
+  .alert-success {
+    background: rgba(22, 199, 132, 0.1); color: var(--gn);
+    border: 0.5px solid rgba(22, 199, 132, 0.3);
+  }
+  .state { display: none; }
+  .state.show { display: block; }
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]) {
+      --bg1: #0d1421; --bg2: #171d2e; --bg3: #1e2738;
+      --t1: #e8eaed; --t2: #8a919e;
+      --bc: #1e2738; --ac: #5b7cfa; --hv: #1a2540;
+    }
+    html:not([data-theme="light"]) body { background: #0d1421; color: #e8eaed; }
+  }
+</style>
+</head>
+<body>
+
+<main class="auth-card">
+
+  <a href="/" class="brand-row">
+    <span class="brand-logo">CH</span>
+    <span class="brand-name">CryptoHubCoin</span>
+  </a>
+
+  <!-- Pending state: after registration, waiting for user to click email link -->
+  <div id="state-pending" class="state">
+    <div class="icon-circle icon-pending">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5b7cfa" stroke-width="2">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+    </div>
+    <h1>Verify your email</h1>
+    <p class="description">
+      A verification link has been sent to <strong id="email-display">your email address</strong>.<br>
+      Click the link to activate your account.
+    </p>
+
+    <div id="resend-alert-success" class="alert alert-success"></div>
+    <div id="resend-alert-error" class="alert alert-error"></div>
+
+    <button id="resend-btn" class="btn-secondary">Resend verification email</button>
+  </div>
+
+  <!-- Success state: email was verified successfully -->
+  <div id="state-success" class="state">
+    <div class="icon-circle icon-success">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16c784" stroke-width="2.5">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h1>Email confirmed</h1>
+    <p class="description">
+      Your account has been activated.<br>
+      You can now access all CryptoHubCoin features.
+    </p>
+    <a href="/login.html" class="btn-primary">Continue to sign in</a>
+  </div>
+
+  <!-- Error state: link expired or invalid -->
+  <div id="state-error" class="state">
+    <div class="icon-circle icon-error">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ea3943" stroke-width="2.5">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <h1 id="error-title">Verification failed</h1>
+    <p class="description" id="error-description">
+      This link has expired or is invalid.<br>
+      Request a new verification link below.
+    </p>
+
+    <div id="error-alert-success" class="alert alert-success"></div>
+    <div id="error-alert-error" class="alert alert-error"></div>
+
+    <button id="request-new-btn" class="btn-primary">Request new link</button>
+    <a href="/login.html" class="btn-secondary">Return to sign in</a>
+  </div>
+
+</main>
+
+<script>
+  const API_URL = 'https://api.cryptohubcoin.com';
+  const params = new URLSearchParams(window.location.search);
+
+  const stateMap = {
+    pending: document.getElementById('state-pending'),
+    success: document.getElementById('state-success'),
+    error:   document.getElementById('state-error'),
+  };
+
+  function showState(key) {
+    Object.values(stateMap).forEach(el => el.classList.remove('show'));
+    stateMap[key].classList.add('show');
+  }
+
+  // Decide initial state based on URL params
+  if (params.get('verified') === '1') {
+    showState('success');
+  } else if (params.get('error')) {
+    const code = params.get('error');
+    const titleEl = document.getElementById('error-title');
+    const descEl = document.getElementById('error-description');
+    if (code === 'expired') {
+      titleEl.textContent = 'Link expired';
+      descEl.innerHTML = 'This verification link is no longer valid.<br>Request a new one below.';
+    } else if (code === 'already_used') {
+      titleEl.textContent = 'Already verified';
+      descEl.innerHTML = 'This link has already been used.<br>Try signing in to your account.';
+    } else if (code === 'invalid' || code === 'missing_token') {
+      titleEl.textContent = 'Invalid link';
+      descEl.innerHTML = 'This verification link is not recognized.<br>Request a new one below.';
+    }
+    showState('error');
+  } else if (params.get('pending') === '1') {
+    const emailParam = params.get('email');
+    if (emailParam) {
+      document.getElementById('email-display').textContent = emailParam;
+    }
+    showState('pending');
+  } else {
+    showState('pending');
+  }
+
+  // Resend handler (used in both pending and error states)
+  async function resendVerification(emailValue, alertSuccessEl, alertErrorEl, btn) {
+    if (!emailValue) {
+      const email = prompt('Enter your email address:');
+      if (!email) return;
+      emailValue = email.trim().toLowerCase();
+    }
+
+    alertSuccessEl.classList.remove('show');
+    alertErrorEl.classList.remove('show');
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = 'Sending...';
+
+    try {
+      const res = await fetch(API_URL + '/api/auth/resend-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email: emailValue }),
+      });
+      const json = await res.json();
+
+      if (!res.ok || !json.success) {
+        alertErrorEl.textContent = json.error || 'Could not send. Please try again.';
+        alertErrorEl.classList.add('show');
+      } else {
+        alertSuccessEl.textContent = 'If an account exists, a verification email has been sent.';
+        alertSuccessEl.classList.add('show');
+      }
+    } catch (err) {
+      alertErrorEl.textContent = 'Network error. Please check your connection.';
+      alertErrorEl.classList.add('show');
+    }
+
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+
+  document.getElementById('resend-btn').addEventListener('click', () => {
+    const emailValue = params.get('email') || '';
+    resendVerification(
+      emailValue,
+      document.getElementById('resend-alert-success'),
+      document.getElementById('resend-alert-error'),
+      document.getElementById('resend-btn')
+    );
+  });
+
+  document.getElementById('request-new-btn').addEventListener('click', () => {
+    resendVerification(
+      '',
+      document.getElementById('error-alert-success'),
+      document.getElementById('error-alert-error'),
+      document.getElementById('request-new-btn')
+    );
+  });
+</script>
+
+</body>
+</html>

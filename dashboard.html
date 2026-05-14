@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - CryptoHubCoin</title>
+<link rel="icon" href="/logo.png" type="image/png">
+
+<style>
+  :root {
+    --bg1: #fff; --bg2: #f8fafd; --bg3: #eff2f5;
+    --t1: #222531; --t2: #616e85;
+    --bc: #eff2f5; --ac: #3861fb; --hv: #f0f6ff;
+    --gn: #16c784; --rd: #ea3943;
+  }
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]) {
+      --bg1: #0d1421; --bg2: #171d2e; --bg3: #1e2738;
+      --t1: #e8eaed; --t2: #8a919e;
+      --bc: #1e2738; --ac: #5b7cfa; --hv: #1a2540;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg1); color: var(--t1);
+    font-family: 'Inter', 'Cairo', -apple-system, sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ─── Header ─── */
+  header {
+    background: var(--bg2);
+    border-bottom: 0.5px solid var(--bc);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
+  .nav-logo {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, #185FA5, #BA7517);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 500; font-size: 12px;
+  }
+  .nav-name { font-size: 14px; font-weight: 500; }
+  nav { display: flex; align-items: center; gap: 20px; }
+  nav a {
+    font-size: 13px; color: var(--t2); text-decoration: none;
+    padding: 4px 0;
+  }
+  nav a.active { color: var(--t1); font-weight: 500; }
+  nav a:hover { color: var(--t1); }
+  .user-menu {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 10px; background: var(--bg3); border-radius: 6px;
+    cursor: pointer; border: none; color: var(--t1);
+    font-family: inherit; font-size: 12px;
+  }
+  .user-menu:hover { background: var(--hv); }
+  .user-avatar {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--ac);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 10px; font-weight: 500;
+  }
+  .user-dropdown {
+    position: absolute; top: 56px; right: 24px;
+    background: var(--bg2); border: 0.5px solid var(--bc);
+    border-radius: 8px; padding: 6px; min-width: 180px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: none; z-index: 20;
+  }
+  .user-dropdown.show { display: block; }
+  .user-dropdown button {
+    display: block; width: 100%; text-align: left;
+    background: transparent; border: none; padding: 8px 12px;
+    font-size: 13px; color: var(--t1); cursor: pointer;
+    border-radius: 4px; font-family: inherit;
+  }
+  .user-dropdown button:hover { background: var(--hv); }
+  .user-dropdown .divider {
+    height: 0.5px; background: var(--bc); margin: 4px 0;
+  }
+
+  /* ─── Main ─── */
+  .main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+  .welcome { margin-bottom: 28px; }
+  .welcome h1 { font-size: 26px; font-weight: 500; margin-bottom: 4px; }
+  .welcome p { font-size: 13px; color: var(--t2); }
+
+  /* ─── Stats ─── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 768px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    nav a:not(.active):not(.user-trigger-text) { display: none; }
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 0.5px solid var(--bc);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .stat-label {
+    font-size: 11px; color: var(--t2);
+    margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .stat-value { font-size: 18px; font-weight: 500; }
+  .stat-meta { font-size: 11px; color: var(--t2); margin-top: 4px; }
+  .stat-link {
+    font-size: 11px; color: var(--ac); text-decoration: none;
+    display: inline-block; margin-top: 4px;
+  }
+  .stat-link:hover { text-decoration: underline; }
+
+  /* ─── Sections ─── */
+  section {
+    background: var(--bg2);
+    border: 0.5px solid var(--bc);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .section-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px;
+  }
+  .section-title h2 { font-size: 16px; font-weight: 500; margin-bottom: 2px; }
+  .section-title p { font-size: 12px; color: var(--t2); }
+
+  /* ─── Buttons ─── */
+  .btn-primary {
+    padding: 8px 14px;
+    background: var(--ac);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-primary:hover { opacity: 0.92; }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-secondary {
+    background: transparent;
+    border: 0.5px solid var(--bc);
+    color: var(--t2);
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-secondary:hover { background: var(--bg3); color: var(--t1); }
+  .btn-secondary.danger { color: var(--rd); }
+  .btn-secondary.danger:hover { background: rgba(234,57,67,0.08); }
+
+  /* ─── Key Card ─── */
+  .key-card {
+    background: var(--bg1);
+    border: 0.5px solid var(--bc);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+  }
+  .key-card:last-child { margin-bottom: 0; }
+  .key-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .key-name {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 500;
+  }
+  .badge-active {
+    background: rgba(22,199,132,0.15);
+    color: var(--gn);
+    font-size: 10px; padding: 2px 6px;
+    border-radius: 4px; font-weight: 500;
+  }
+  .badge-revoked {
+    background: rgba(234,57,67,0.12);
+    color: var(--rd);
+    font-size: 10px; padding: 2px 6px;
+    border-radius: 4px; font-weight: 500;
+  }
+  .key-value-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 6px;
+  }
+  .key-value {
+    font-family: 'SF Mono', Monaco, Consolas, monospace;
+    font-size: 12px;
+    color: var(--t1);
+    background: var(--bg3);
+    padding: 4px 8px;
+    border-radius: 4px;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .key-meta {
+    display: flex; gap: 12px; font-size: 11px; color: var(--t2);
+    flex-wrap: wrap;
+  }
+
+  /* ─── Empty state ─── */
+  .empty-state {
+    text-align: center;
+    padding: 32px 16px;
+    color: var(--t2);
+    font-size: 13px;
+  }
+  .empty-state p { margin-bottom: 12px; }
+
+  /* ─── Account ─── */
+  .account-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 600px) {
+    .account-grid { grid-template-columns: 1fr; }
+  }
+  .account-field { font-size: 13px; }
+  .account-label {
+    font-size: 11px; color: var(--t2);
+    margin-bottom: 4px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .verified-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--gn);
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* ─── Modal ─── */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none; align-items: center; justify-content: center;
+    z-index: 100;
+    padding: 1rem;
+  }
+  .modal-backdrop.show { display: flex; }
+  .modal {
+    background: var(--bg2);
+    border: 0.5px solid var(--bc);
+    border-radius: 12px;
+    padding: 24px;
+    width: 100%;
+    max-width: 460px;
+  }
+  .modal h3 { font-size: 17px; font-weight: 500; margin-bottom: 8px; }
+  .modal p { font-size: 13px; color: var(--t2); margin-bottom: 16px; line-height: 1.5; }
+  .modal label {
+    font-size: 12px; color: var(--t2); display: block;
+    margin-bottom: 4px; font-weight: 500;
+  }
+  .modal input[type="text"] {
+    width: 100%; padding: 9px 12px;
+    background: var(--bg1); border: 0.5px solid var(--bc);
+    border-radius: 6px; color: var(--t1); font-size: 13px;
+    font-family: inherit; margin-bottom: 16px;
+  }
+  .modal input:focus {
+    outline: none; border-color: var(--ac);
+    box-shadow: 0 0 0 3px rgba(91,124,250,0.1);
+  }
+  .modal-actions {
+    display: flex; gap: 8px; justify-content: flex-end;
+  }
+  .modal-actions .btn-cancel {
+    padding: 8px 14px; background: transparent;
+    border: 0.5px solid var(--bc); color: var(--t1);
+    border-radius: 6px; font-size: 12px; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+  }
+  .modal-actions .btn-cancel:hover { background: var(--bg3); }
+
+  .new-key-display {
+    background: var(--bg3);
+    border: 0.5px solid var(--bc);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+  .new-key-value {
+    font-family: 'SF Mono', Monaco, Consolas, monospace;
+    font-size: 12px; color: var(--t1);
+    word-break: break-all;
+    margin-bottom: 8px;
+  }
+  .new-key-warning {
+    background: rgba(234,165,33,0.1);
+    color: #d28209;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  /* ─── Loading ─── */
+  .loading {
+    text-align: center;
+    padding: 24px;
+    color: var(--t2);
+    font-size: 13px;
+  }
+
+  /* ─── Toast ─── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--t1);
+    color: var(--bg1);
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    z-index: 200;
+  }
+  .toast.show { opacity: 1; }
+
+  body.dark-mode { background: #0d1421; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="nav-brand">
+    <div class="nav-logo">CH</div>
+    <span class="nav-name">CryptoHubCoin</span>
+  </a>
+
+  <nav>
+    <a href="/">Markets</a>
+    <a href="/api-docs">API Docs</a>
+    <a href="/dashboard.html" class="active">Dashboard</a>
+    <button id="user-trigger" class="user-menu">
+      <div class="user-avatar" id="user-avatar">?</div>
+      <span id="user-name">Loading...</span>
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </button>
+    <div id="user-dropdown" class="user-dropdown">
+      <button id="logout-btn">Sign out</button>
+    </div>
+  </nav>
+</header>
+
+<main class="main">
+
+  <div class="welcome">
+    <h1 id="welcome-heading">Welcome back</h1>
+    <p>Manage your API keys and monitor usage</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Plan</div>
+      <div class="stat-value" id="stat-plan">—</div>
+      <a href="#" class="stat-link">Upgrade</a>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Requests today</div>
+      <div class="stat-value" id="stat-today">—</div>
+      <div class="stat-meta">across all keys</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">All-time requests</div>
+      <div class="stat-value" id="stat-total">—</div>
+      <div class="stat-meta">free tier: 100k/month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Active keys</div>
+      <div class="stat-value" id="stat-keys">—</div>
+      <div class="stat-meta" id="stat-keys-max">of 5 max</div>
+    </div>
+  </div>
+
+  <!-- API Keys -->
+  <section>
+    <div class="section-header">
+      <div class="section-title">
+        <h2>API Keys</h2>
+        <p>Use these keys to authenticate API requests</p>
+      </div>
+      <button class="btn-primary" id="create-key-btn">+ Create key</button>
+    </div>
+
+    <div id="keys-loading" class="loading">Loading keys...</div>
+    <div id="keys-list"></div>
+    <div id="keys-empty" class="empty-state" style="display: none;">
+      <p>You don't have any API keys yet.</p>
+      <button class="btn-primary" id="create-first-key-btn">Create your first key</button>
+    </div>
+  </section>
+
+  <!-- Account -->
+  <section>
+    <div class="section-header">
+      <div class="section-title">
+        <h2>Account</h2>
+        <p>Your account information</p>
+      </div>
+    </div>
+
+    <div class="account-grid">
+      <div class="account-field">
+        <div class="account-label">Full name</div>
+        <div id="acc-name">—</div>
+      </div>
+      <div class="account-field">
+        <div class="account-label">Email</div>
+        <div id="acc-email">—</div>
+      </div>
+      <div class="account-field">
+        <div class="account-label">Plan</div>
+        <div id="acc-plan">—</div>
+      </div>
+      <div class="account-field">
+        <div class="account-label">Email status</div>
+        <div id="acc-verified">—</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ─── Create Key Modal ─── -->
+<div class="modal-backdrop" id="create-modal">
+  <div class="modal">
+    <div id="create-modal-form">
+      <h3>Create new API key</h3>
+      <p>Give your key a descriptive name to identify it later.</p>
+      <label for="key-name">Key name</label>
+      <input id="key-name" type="text" placeholder="e.g. Production, Mobile App" maxlength="50">
+      <div class="modal-actions">
+        <button class="btn-cancel" id="create-cancel">Cancel</button>
+        <button class="btn-primary" id="create-submit">Create key</button>
+      </div>
+    </div>
+
+    <div id="create-modal-result" style="display: none;">
+      <h3>Your new API key</h3>
+      <p>Copy this key now. You won't be able to see it again.</p>
+      <div class="new-key-warning">
+        ⚠ Save this key in a secure place. It will not be shown again.
+      </div>
+      <div class="new-key-display">
+        <div class="new-key-value" id="new-key-value">—</div>
+        <button class="btn-secondary" id="copy-new-key">Copy to clipboard</button>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-primary" id="create-done">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Confirm Revoke Modal ─── -->
+<div class="modal-backdrop" id="revoke-modal">
+  <div class="modal">
+    <h3>Revoke this key?</h3>
+    <p>
+      Any application using this key will immediately stop working.
+      This action cannot be undone.
+    </p>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="revoke-cancel">Cancel</button>
+      <button class="btn-primary" id="revoke-confirm" style="background: var(--rd);">Revoke key</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Toast ─── -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const API_URL = 'https://api.cryptohubcoin.com';
+
+  // ─── Helpers ─────────────────────────────────────────────────────
+  function $(id) { return document.getElementById(id); }
+
+  function showToast(message) {
+    const toast = $('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  async function apiFetch(path, options = {}) {
+    const res = await fetch(API_URL + path, {
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      ...options,
+    });
+    return { res, json: await res.json().catch(() => ({})) };
+  }
+
+  function formatDate(timestamp) {
+    if (!timestamp) return 'Never';
+    const d = new Date(timestamp);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function formatRelative(timestamp) {
+    if (!timestamp) return 'Never used';
+    const diff = Date.now() - timestamp;
+    if (diff < 60_000) return 'Just now';
+    if (diff < 3600_000) return Math.floor(diff / 60_000) + ' min ago';
+    if (diff < 86400_000) return Math.floor(diff / 3600_000) + ' hr ago';
+    return Math.floor(diff / 86400_000) + ' days ago';
+  }
+
+  function formatNumber(n) {
+    return (n || 0).toLocaleString('en-US');
+  }
+
+  // ─── Auth check & load user ──────────────────────────────────────
+  let currentUser = null;
+
+  async function loadUser() {
+    const { res, json } = await apiFetch('/api/auth/me');
+    if (!res.ok || !json.success) {
+      // Not authenticated — redirect to login
+      window.location.href = '/login.html';
+      return;
+    }
+    currentUser = json.user;
+    renderUser();
+  }
+
+  function renderUser() {
+    const u = currentUser;
+    const firstName = (u.full_name || u.email).split(' ')[0].split('@')[0];
+    const initial = firstName.charAt(0).toUpperCase();
+
+    $('welcome-heading').textContent = 'Welcome back, ' + firstName;
+    $('user-name').textContent = firstName;
+    $('user-avatar').textContent = initial;
+
+    $('acc-name').textContent = u.full_name || '—';
+    $('acc-email').textContent = u.email;
+    $('acc-plan').textContent = (u.plan || 'free').replace(/^./, c => c.toUpperCase());
+
+    if (u.email_verified) {
+      $('acc-verified').innerHTML = '<span class="verified-dot"></span>Verified';
+    } else {
+      $('acc-verified').innerHTML = '<span class="verified-dot" style="background:#ea3943;"></span>Not verified';
+    }
+
+    $('stat-plan').textContent = (u.plan || 'free').replace(/^./, c => c.toUpperCase());
+  }
+
+  // ─── Load keys ───────────────────────────────────────────────────
+  async function loadKeys() {
+    $('keys-loading').style.display = 'block';
+    $('keys-list').innerHTML = '';
+    $('keys-empty').style.display = 'none';
+
+    const { res, json } = await apiFetch('/api/keys');
+
+    $('keys-loading').style.display = 'none';
+
+    if (!res.ok || !json.success) {
+      $('keys-list').innerHTML = '<p style="color:var(--rd);font-size:13px;text-align:center;padding:16px;">Could not load keys.</p>';
+      return;
+    }
+
+    const keys = (json.data || []).filter(k => k.status === 'active');
+
+    // Stats
+    $('stat-keys').textContent = keys.length;
+    $('stat-keys-max').textContent = 'of ' + (json.max || 5) + ' max';
+
+    let totalRequests = 0;
+    keys.forEach(k => totalRequests += (k.request_count || 0));
+    $('stat-total').textContent = formatNumber(totalRequests);
+    $('stat-today').textContent = formatNumber(totalRequests); // Note: per-day stats need backend support
+
+    if (keys.length === 0) {
+      $('keys-empty').style.display = 'block';
+      return;
+    }
+
+    keys.forEach(k => {
+      const card = document.createElement('div');
+      card.className = 'key-card';
+      card.innerHTML = `
+        <div class="key-header">
+          <div class="key-name">
+            <span>${escapeHtml(k.name)}</span>
+            <span class="badge-active">Active</span>
+          </div>
+          <button class="btn-secondary danger" data-revoke="${k.id}">Revoke</button>
+        </div>
+        <div class="key-value-row">
+          <code class="key-value">${escapeHtml(k.masked_key)}</code>
+        </div>
+        <div class="key-meta">
+          <span>Created ${formatDate(k.created_at)}</span>
+          <span>•</span>
+          <span>${formatNumber(k.request_count)} requests total</span>
+          <span>•</span>
+          <span>${formatRelative(k.last_used_at)}</span>
+        </div>
+      `;
+      $('keys-list').appendChild(card);
+    });
+
+    // Bind revoke buttons
+    document.querySelectorAll('[data-revoke]').forEach(btn => {
+      btn.addEventListener('click', () => openRevokeModal(btn.dataset.revoke));
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+
+  // ─── Create key modal ────────────────────────────────────────────
+  $('create-key-btn').addEventListener('click', openCreateModal);
+  $('create-first-key-btn')?.addEventListener('click', openCreateModal);
+
+  function openCreateModal() {
+    $('create-modal-form').style.display = 'block';
+    $('create-modal-result').style.display = 'none';
+    $('key-name').value = '';
+    $('create-modal').classList.add('show');
+    setTimeout(() => $('key-name').focus(), 100);
+  }
+
+  $('create-cancel').addEventListener('click', () => {
+    $('create-modal').classList.remove('show');
+  });
+
+  $('create-submit').addEventListener('click', async () => {
+    const name = $('key-name').value.trim();
+    if (!name) {
+      showToast('Please enter a name');
+      return;
+    }
+
+    const btn = $('create-submit');
+    btn.disabled = true;
+    btn.textContent = 'Creating...';
+
+    const { res, json } = await apiFetch('/api/keys', {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+    });
+
+    btn.disabled = false;
+    btn.textContent = 'Create key';
+
+    if (!res.ok || !json.success) {
+      showToast(json.error || 'Could not create key');
+      return;
+    }
+
+    // Show the full key once
+    $('new-key-value').textContent = json.data.key;
+    $('create-modal-form').style.display = 'none';
+    $('create-modal-result').style.display = 'block';
+  });
+
+  $('copy-new-key').addEventListener('click', async () => {
+    const text = $('new-key-value').textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast('Key copied to clipboard');
+    } catch {
+      showToast('Could not copy. Select and copy manually.');
+    }
+  });
+
+  $('create-done').addEventListener('click', () => {
+    $('create-modal').classList.remove('show');
+    loadKeys();
+  });
+
+  // ─── Revoke modal ────────────────────────────────────────────────
+  let revokeKeyId = null;
+
+  function openRevokeModal(keyId) {
+    revokeKeyId = keyId;
+    $('revoke-modal').classList.add('show');
+  }
+
+  $('revoke-cancel').addEventListener('click', () => {
+    $('revoke-modal').classList.remove('show');
+    revokeKeyId = null;
+  });
+
+  $('revoke-confirm').addEventListener('click', async () => {
+    if (!revokeKeyId) return;
+
+    const btn = $('revoke-confirm');
+    btn.disabled = true;
+    btn.textContent = 'Revoking...';
+
+    const { res, json } = await apiFetch('/api/keys/' + encodeURIComponent(revokeKeyId), {
+      method: 'DELETE',
+    });
+
+    btn.disabled = false;
+    btn.textContent = 'Revoke key';
+
+    $('revoke-modal').classList.remove('show');
+    revokeKeyId = null;
+
+    if (!res.ok || !json.success) {
+      showToast(json.error || 'Could not revoke key');
+      return;
+    }
+
+    showToast('Key revoked');
+    loadKeys();
+  });
+
+  // ─── User menu ───────────────────────────────────────────────────
+  $('user-trigger').addEventListener('click', (e) => {
+    e.stopPropagation();
+    $('user-dropdown').classList.toggle('show');
+  });
+
+  document.addEventListener('click', () => {
+    $('user-dropdown').classList.remove('show');
+  });
+
+  $('logout-btn').addEventListener('click', async () => {
+    await apiFetch('/api/auth/logout', { method: 'POST' });
+    window.location.href = '/login.html';
+  });
+
+  // Close modals on backdrop click
+  document.querySelectorAll('.modal-backdrop').forEach(bd => {
+    bd.addEventListener('click', (e) => {
+      if (e.target === bd) bd.classList.remove('show');
+    });
+  });
+
+  // ─── Init ────────────────────────────────────────────────────────
+  (async () => {
+    await loadUser();
+    if (currentUser) await loadKeys();
+  })();
+</script>
+
+</body>
+</html>

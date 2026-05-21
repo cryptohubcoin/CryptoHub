@@ -168,6 +168,35 @@
   const alertSuccess = document.getElementById('alert-success');
 
   const params = new URLSearchParams(window.location.search);
+
+  // ─── Post-login redirect ───────────────────────────────────────
+  // If the user was bounced here from a gated page, the gate will have
+  // appended ?next=… or ?redirect=… so we can send them back after sign-in.
+  // We only honor SAME-ORIGIN relative paths to prevent open-redirect abuse.
+  function getPostLoginUrl() {
+    const raw = params.get('next') || params.get('redirect') || '';
+    if (!raw) return '/dashboard.html';
+    try {
+      const decoded = decodeURIComponent(raw);
+      // Only allow site-relative paths (e.g. /crypto-prediction?coin=BTC).
+      // Reject anything starting with // (protocol-relative) or with a scheme.
+      if (decoded.startsWith('/') && !decoded.startsWith('//') && !/^[a-z]+:/i.test(decoded)) {
+        return decoded;
+      }
+    } catch (e) {}
+    return '/dashboard.html';
+  }
+  const postLoginUrl = getPostLoginUrl();
+
+  // Forward the redirect param to Google OAuth so the backend can hand
+  // the user back to the right page after the OAuth round-trip.
+  const googleBtn = document.querySelector('.btn-google');
+  if (googleBtn && postLoginUrl !== '/dashboard.html') {
+    const u = new URL(googleBtn.href);
+    u.searchParams.set('next', postLoginUrl);
+    googleBtn.href = u.toString();
+  }
+
   if (params.get('reset') === '1') {
     alertSuccess.textContent = 'Password updated. Please sign in with your new password.';
     alertSuccess.classList.add('show');
@@ -217,7 +246,7 @@
         submitBtn.textContent = 'Sign in';
         return;
       }
-      window.location.href = '/dashboard.html';
+      window.location.href = postLoginUrl;
     } catch (err) {
       showError('Network error. Please check your connection.');
       submitBtn.disabled = false;

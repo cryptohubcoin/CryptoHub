@@ -1007,6 +1007,18 @@
     #mobileUserHeader .mu-name { font-size: 14px; font-weight: 700; color: var(--t1); }
     #mobileUserHeader .mu-email { font-size: 11px; color: var(--t2); margin-top: 2px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+    #mobileUserHeader .mu-logout {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin: 10px 12px 6px;
+      padding: 10px 14px;
+      background: rgba(239,68,68,.08);
+      border: 1px solid rgba(239,68,68,.25);
+      border-radius: 10px;
+      color: #ef4444;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; width: calc(100% - 24px);
+    }
+    #mobileUserHeader .mu-logout:hover { background: rgba(239,68,68,.15); }
 
     /* ─── AI Analysis panel header with close button ─── */
     #analysisPanel {
@@ -3222,7 +3234,11 @@
                       '<div class="mu-name">' + name + '</div>' +
                       (email ? '<div class="mu-email">' + email + '</div>' : '') +
                     '</div>' +
-                  '</div>';
+                  '</div>' +
+                  '<button class="mu-logout" onclick="window.__mobileLogout()">' +
+                    '<i class="fas fa-sign-out-alt"></i>' +
+                    '<span>Logout</span>' +
+                  '</button>';
               }
             } else {
               document.body.classList.add('auth-guest');
@@ -3236,6 +3252,27 @@
         }
         refreshAuthBodyClass();
         window.refreshAuthOnlyVisibility = refreshAuthBodyClass;
+
+        // Mobile menu logout — tries multiple possible Auth helper names,
+        // falls back to clearing storage and reloading
+        window.__mobileLogout = function () {
+          try {
+            if (window.Auth && typeof Auth.logout === 'function') {
+              Auth.logout();
+              return;
+            }
+            if (window.Auth && typeof Auth.signOut === 'function') {
+              Auth.signOut();
+              return;
+            }
+          } catch (e) {}
+          // Defensive fallback
+          try {
+            ['auth_token','authToken','token','ch_token','jwt','accessToken','user','currentUser']
+              .forEach(function (k) { localStorage.removeItem(k); sessionStorage.removeItem(k); });
+          } catch (e) {}
+          location.href = '/';
+        };
 
         document.addEventListener('click', function (e) {
           var a = e.target.closest('a[data-auth-required="1"]');

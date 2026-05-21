@@ -188,6 +188,38 @@
   }
   const postLoginUrl = getPostLoginUrl();
 
+  // ─── Already-logged-in check ───────────────────────────────────
+  // If a valid session already exists, skip the form and forward the user
+  // straight to the destination. Includes loop-protection in case the
+  // gated page and this page disagree about auth state.
+  (async function autoForwardIfAuthed() {
+    const now = Date.now();
+    const last = parseInt(sessionStorage.getItem('ch_auth_redirect_time') || '0', 10);
+    const count = parseInt(sessionStorage.getItem('ch_auth_redirect_count') || '0', 10);
+    // If we just bounced here from a gated page more than twice in 5s, break the loop
+    if (count > 2 && (now - last) < 5000) {
+      sessionStorage.removeItem('ch_auth_redirect_count');
+      sessionStorage.removeItem('ch_auth_redirect_time');
+      showError('Session check failed. Please sign in again.');
+      return;
+    }
+    try {
+      const r = await fetch(API_URL + '/api/auth/me', {
+        method: 'GET',
+        credentials: 'include',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!r.ok) return; // not logged in → show form
+      const data = await r.json().catch(() => null);
+      const user = data && (data.user || data.data || (data.id || data.email ? data : null));
+      if (user) {
+        sessionStorage.removeItem('ch_auth_redirect_count');
+        sessionStorage.removeItem('ch_auth_redirect_time');
+        window.location.replace(postLoginUrl);
+      }
+    } catch (e) { /* offline → show form */ }
+  })();
+
   // Forward the redirect param to Google OAuth so the backend can hand
   // the user back to the right page after the OAuth round-trip.
   const googleBtn = document.querySelector('.btn-google');

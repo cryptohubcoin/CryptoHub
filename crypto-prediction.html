@@ -213,6 +213,32 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   .search-row{flex-direction:column;}
 }
 </style>
+
+<!-- ═══ حماية الصفحة: تسجيل الدخول إجباري ═══ -->
+<script src="/auth-helper.js"></script>
+<style id="auth-gate-style">body{visibility:hidden}</style>
+<script>
+(function(){
+  function gate(){
+    if(!window.Auth||!window.Auth.requireLogin){ setTimeout(gate,30); return; }
+    // requireLogin: لو مش مسجّل يحوّله لصفحة الدخول مع رابط الرجوع
+    window.Auth.requireLogin().then(function(user){
+      if(user){
+        var s=document.getElementById('auth-gate-style');
+        if(s) s.parentNode && s.parentNode.removeChild(s);
+      }
+      // لو مفيش user: requireLogin حوّله بالفعل لصفحة الدخول
+    }).catch(function(){
+      // فشل التحقق — للأمان نحوّله للدخول
+      var next=encodeURIComponent(location.pathname+location.search);
+      location.href='/login.html?next='+next;
+    });
+  }
+  gate();
+})();
+</script>
+<!-- ═══ نهاية حماية الصفحة ═══ -->
+
 </head>
 <body>
 

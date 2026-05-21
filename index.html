@@ -4050,8 +4050,6 @@
       var params = new URLSearchParams();
       if (id)   params.set('coin', id);
       if (sym)  params.set('sym',  String(sym).toUpperCase());
-      if (name) params.set('name', name.trim());
-      if (img && img.indexOf('data:') !== 0) params.set('img', img);
       params.set('auto', '1');
       var qs = params.toString();
       location.href = '/crypto-prediction' + (qs ? ('?' + qs) : '');

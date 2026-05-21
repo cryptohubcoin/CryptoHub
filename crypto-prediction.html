@@ -10,19 +10,29 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FTBNSF9WJT"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-FTBNSF9WJT');</script>
 
-<!-- ════ AUTH GATE — runs BEFORE body renders to prevent flash ════ -->
+<!-- ════ AUTH GATE — hide until auth-helper confirms login ════ -->
 <style id="auth-gate-style">html{visibility:hidden!important}</style>
+<script src="auth-helper.js?v=3"></script>
 <script>
 (function () {
-  function show()  { var s = document.getElementById('auth-gate-style'); if (s) s.remove(); }
+  function show()   { var s = document.getElementById('auth-gate-style'); if (s) s.remove(); }
   function bounce() {
     var here = location.pathname + location.search;
     location.replace('/login.html?next=' + encodeURIComponent(here));
   }
-  fetch('https://api.cryptohubcoin.com/api/auth/me', { credentials: 'include' })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (j) { if (j && j.success && j.user) show(); else bounce(); })
-    .catch(function () { bounce(); });
+  // Wait for auth-helper to be available (it loads synchronously above,
+  // but be defensive in case of cache/order issues)
+  if (!window.Auth || typeof Auth.getCurrentUser !== 'function') {
+    // auth-helper failed to load — show page and let user navigate; don't bounce blindly
+    show();
+    return;
+  }
+  Auth.getCurrentUser().then(function (user) {
+    if (user) show(); else bounce();
+  }).catch(function () {
+    // Network error — show the page rather than trap the user; they can retry from inside
+    show();
+  });
 })();
 </script>
 
@@ -293,7 +303,6 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 <!-- RESULTS -->
 <div class="results-section" id="resultsSection"></div>
 
-<script src="auth-helper.js?v=2"></script>
 <script src="crypto-prediction.min.js?v=2"></script>
 
 <!-- Social Sentinel Floating Button + Panel -->

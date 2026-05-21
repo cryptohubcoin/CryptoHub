@@ -986,6 +986,28 @@
       .cmc-stat-val { font-size: 14px; }
     }
 
+    /* ─── Mobile: hide user button from nav (it goes inside menu) ─── */
+    @media (max-width: 640px) {
+      body.auth-logged-in #auth-nav-slot { display: none !important; }
+      body.auth-logged-in #mobileUserHeader { display: block !important; }
+    }
+    /* Mobile user info card inside the dropdown menu */
+    #mobileUserHeader .mu-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--bc);
+      background: linear-gradient(180deg, rgba(124,58,237,.08) 0%, transparent 100%);
+    }
+    #mobileUserHeader .mu-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-size: 17px; font-weight: 700; flex-shrink: 0;
+    }
+    #mobileUserHeader .mu-name { font-size: 14px; font-weight: 700; color: var(--t1); }
+    #mobileUserHeader .mu-email { font-size: 11px; color: var(--t2); margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+
     /* ─── AI Analysis panel header with close button ─── */
     #analysisPanel {
       position: relative;
@@ -1126,6 +1148,8 @@
 
 
             <div class="stats-panel" id="statsPanel">
+              <!-- Mobile user info (shown only when logged in AND on mobile) -->
+              <div id="mobileUserHeader" style="display:none"></div>
               <div class="stats-panel-items" style="padding:6px 8px">
 
                 <!-- ═══ MARKETS SECTION ═══ -->
@@ -2831,8 +2855,20 @@
       <div class="cd-body">
         <!-- Left sidebar -->
         <div class="cd-left">
-          <div id="cdPrice" style="font-size:28px;font-weight:800;letter-spacing:-.5px">--</div>
-          <div id="cdChg" style="font-size:13px;font-weight:700;margin-bottom:16px">--</div>
+          <!-- Price + 48h AI Prediction button on the same row -->
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+            <div style="min-width:0">
+              <div id="cdPrice" style="font-size:28px;font-weight:800;letter-spacing:-.5px">--</div>
+              <div id="cdChg" style="font-size:13px;font-weight:700">--</div>
+            </div>
+            <a id="cdPredictBtn" href="javascript:void(0)" onclick="goToPrediction(event)"
+               style="display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:linear-gradient(90deg,#6366f1,#a855f7);color:#fff;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;white-space:nowrap;flex-shrink:0;box-shadow:0 2px 8px rgba(99,102,241,.25);transition:transform .15s,box-shadow .15s"
+               onmouseenter="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 12px rgba(99,102,241,.4)'"
+               onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(99,102,241,.25)'">
+              <i class="fas fa-chart-line"></i>
+              <span>Prediction</span>
+            </a>
+          </div>
           <div class="cd-stats">
             <div class="cd-st"><span>Market cap</span><span id="cdMcap">--</span></div>
             <div class="cd-st"><span>Volume (24h)</span><span id="cdVol">--</span></div>
@@ -3170,12 +3206,28 @@
 
         function refreshAuthBodyClass() {
           Auth.getCurrentUser().then(function (user) {
+            var mh = document.getElementById('mobileUserHeader');
             if (user) {
               document.body.classList.add('auth-logged-in');
               document.body.classList.remove('auth-guest');
+              // Populate mobile user card (shown only on mobile via CSS)
+              if (mh) {
+                var name  = user.name || user.username || user.email || 'User';
+                var email = user.email || '';
+                var initial = (name.charAt(0) || 'U').toUpperCase();
+                mh.innerHTML =
+                  '<div class="mu-card">' +
+                    '<div class="mu-avatar">' + initial + '</div>' +
+                    '<div style="flex:1;min-width:0">' +
+                      '<div class="mu-name">' + name + '</div>' +
+                      (email ? '<div class="mu-email">' + email + '</div>' : '') +
+                    '</div>' +
+                  '</div>';
+              }
             } else {
               document.body.classList.add('auth-guest');
               document.body.classList.remove('auth-logged-in');
+              if (mh) mh.innerHTML = '';
             }
           }).catch(function () {
             document.body.classList.add('auth-guest');
@@ -3970,6 +4022,40 @@
         if (hookShowEx() || attempts > 20) clearInterval(iv);
       }, 500);
     })();
+  </script>
+
+  <!-- ═════════════════════════════════════════════════════════════════
+       PREDICTION HAND-OFF — When the user clicks "48h AI Prediction"
+       inside a coin's detail modal, jump to /crypto-prediction with
+       the coin pre-filled and auto-start the engine.
+       URL contract: ?coin={id}&sym={SYM}&name={Name}&img={url}&auto=1
+       ═════════════════════════════════════════════════════════════════ -->
+  <script>
+    window.goToPrediction = function (ev) {
+      if (ev && ev.preventDefault) ev.preventDefault();
+      // Pull current coin from globals set by showEx, falling back to
+      // whatever the modal header is currently displaying.
+      var id   = (typeof currentCoinId  !== 'undefined' && currentCoinId)  ? currentCoinId  : '';
+      var sym  = (typeof currentCoinSym !== 'undefined' && currentCoinSym) ? currentCoinSym : '';
+      var name = (document.getElementById('mName') || {}).textContent || '';
+      var img  = (document.getElementById('mLogo') || {}).src || '';
+      // Symbol fallback from header badge
+      if (!sym) sym = ((document.getElementById('mSym') || {}).textContent || '').trim();
+      // ID fallback from current URL (works on /crypto/{slug}/ routes)
+      if (!id) {
+        var m = location.pathname.match(/\/crypto\/([^\/?#]+)/i);
+        if (m) id = decodeURIComponent(m[1]);
+      }
+      if (!id && !sym) { /* nothing to send — just open the page */ }
+      var params = new URLSearchParams();
+      if (id)   params.set('coin', id);
+      if (sym)  params.set('sym',  String(sym).toUpperCase());
+      if (name) params.set('name', name.trim());
+      if (img && img.indexOf('data:') !== 0) params.set('img', img);
+      params.set('auto', '1');
+      var qs = params.toString();
+      location.href = 'crypto-prediction' + (qs ? ('?' + qs) : '');
+    };
   </script>
 
   <!-- ═════════════════════════════════════════════════════════════════

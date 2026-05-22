@@ -5,19 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard - CryptoHubCoin</title>
 <link rel="icon" href="/logo.png" type="image/png">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.5.0/dist/tabler-icons.min.css" rel="stylesheet">
 
 <style>
   :root {
     --bg1: #fff; --bg2: #f8fafd; --bg3: #eff2f5;
     --t1: #222531; --t2: #616e85;
     --bc: #eff2f5; --ac: #3861fb; --hv: #f0f6ff;
-    --gn: #16c784; --rd: #ea3943;
+    --gn: #16c784; --rd: #ea3943; --am: #f0ad4e;
+    --grid: #eff2f5;
   }
   @media (prefers-color-scheme: dark) {
     html:not([data-theme="light"]) {
       --bg1: #0d1421; --bg2: #171d2e; --bg3: #1e2738;
       --t1: #e8eaed; --t2: #8a919e;
       --bc: #1e2738; --ac: #5b7cfa; --hv: #1a2540;
+      --grid: #1e2738;
     }
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,29 +35,20 @@
   header {
     background: var(--bg2);
     border-bottom: 0.5px solid var(--bc);
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    padding: 10px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 10;
   }
-  .nav-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
-  .nav-logo {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: linear-gradient(135deg, #185FA5, #BA7517);
-    display: flex; align-items: center; justify-content: center;
-    color: white; font-weight: 500; font-size: 12px;
-  }
-  .nav-name { font-size: 14px; font-weight: 500; }
+  .nav-brand { display: flex; align-items: center; text-decoration: none; color: inherit; }
+  .nav-logo { height: 32px; width: auto; display: block; }
   nav { display: flex; align-items: center; gap: 20px; }
   nav a {
     font-size: 13px; color: var(--t2); text-decoration: none;
     padding: 4px 0;
+    border-bottom: 1.5px solid transparent;
   }
-  nav a.active { color: var(--t1); font-weight: 500; }
   nav a:hover { color: var(--t1); }
+  nav a.active { color: var(--t1); font-weight: 500; border-bottom-color: var(--ac); }
   .user-menu {
     display: flex; align-items: center; gap: 8px;
     padding: 6px 10px; background: var(--bg3); border-radius: 6px;
@@ -69,7 +63,7 @@
     color: white; font-size: 10px; font-weight: 500;
   }
   .user-dropdown {
-    position: absolute; top: 56px; right: 24px;
+    position: absolute; top: 60px; right: 24px;
     background: var(--bg2); border: 0.5px solid var(--bc);
     border-radius: 8px; padding: 6px; min-width: 180px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -83,9 +77,6 @@
     border-radius: 4px; font-family: inherit;
   }
   .user-dropdown button:hover { background: var(--hv); }
-  .user-dropdown .divider {
-    height: 0.5px; background: var(--bc); margin: 4px 0;
-  }
 
   /* ─── Main ─── */
   .main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
@@ -98,11 +89,11 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
   @media (max-width: 768px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    nav a:not(.active):not(.user-trigger-text) { display: none; }
+    nav a:not(.active) { display: none; }
   }
   .stat-card {
     background: var(--bg2);
@@ -116,12 +107,10 @@
     text-transform: uppercase; letter-spacing: 0.05em;
   }
   .stat-value { font-size: 18px; font-weight: 500; }
+  .stat-value.accent { color: var(--ac); }
   .stat-meta { font-size: 11px; color: var(--t2); margin-top: 4px; }
-  .stat-link {
-    font-size: 11px; color: var(--ac); text-decoration: none;
-    display: inline-block; margin-top: 4px;
-  }
-  .stat-link:hover { text-decoration: underline; }
+  .stat-meta.up { color: var(--gn); }
+  .stat-meta.down { color: var(--rd); }
 
   /* ─── Sections ─── */
   section {
@@ -129,26 +118,68 @@
     border: 0.5px solid var(--bc);
     border-radius: 12px;
     padding: 20px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
   .section-header {
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 16px;
+    gap: 12px; flex-wrap: wrap;
   }
   .section-title h2 { font-size: 16px; font-weight: 500; margin-bottom: 2px; }
   .section-title p { font-size: 12px; color: var(--t2); }
+  .section-actions { display: flex; gap: 8px; }
+
+  /* ─── Current Plan ─── */
+  .plan-summary {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 16px;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .plan-summary-info h3 {
+    font-size: 15px; font-weight: 500;
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 4px;
+  }
+  .plan-summary-info p { font-size: 12px; color: var(--t2); }
+  .plan-summary-actions { display: flex; gap: 8px; }
+  .plan-badge {
+    background: rgba(91,124,250,0.15);
+    color: var(--ac);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .progress-row {
+    display: flex; justify-content: space-between;
+    font-size: 12px; margin-bottom: 6px;
+  }
+  .progress-row .muted { color: var(--t2); }
+  .progress-bar {
+    background: var(--bg3);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: var(--ac);
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .progress-fill.warn { background: var(--am); }
+  .progress-fill.danger { background: var(--rd); }
 
   /* ─── Buttons ─── */
   .btn-primary {
     padding: 8px 14px;
-    background: var(--ac);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: inherit;
+    background: var(--ac); color: white;
+    border: none; border-radius: 6px;
+    font-size: 12px; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 5px;
   }
   .btn-primary:hover { opacity: 0.92; }
   .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -156,15 +187,17 @@
     background: transparent;
     border: 0.5px solid var(--bc);
     color: var(--t2);
-    padding: 4px 10px;
+    padding: 6px 12px;
     border-radius: 5px;
     font-size: 11px;
-    cursor: pointer;
-    font-family: inherit;
+    cursor: pointer; font-family: inherit;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 5px;
   }
   .btn-secondary:hover { background: var(--bg3); color: var(--t1); }
   .btn-secondary.danger { color: var(--rd); }
   .btn-secondary.danger:hover { background: rgba(234,57,67,0.08); }
+  .btn-small { padding: 3px 8px; font-size: 10px; }
 
   /* ─── Key Card ─── */
   .key-card {
@@ -177,21 +210,16 @@
   .key-card:last-child { margin-bottom: 0; }
   .key-header {
     display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 8px; gap: 8px; flex-wrap: wrap;
   }
   .key-name {
     display: flex; align-items: center; gap: 8px;
     font-size: 13px; font-weight: 500;
   }
+  .key-rate { font-size: 11px; color: var(--t2); font-weight: 400; }
   .badge-active {
     background: rgba(22,199,132,0.15);
     color: var(--gn);
-    font-size: 10px; padding: 2px 6px;
-    border-radius: 4px; font-weight: 500;
-  }
-  .badge-revoked {
-    background: rgba(234,57,67,0.12);
-    color: var(--rd);
     font-size: 10px; padding: 2px 6px;
     border-radius: 4px; font-weight: 500;
   }
@@ -207,22 +235,271 @@
     padding: 4px 8px;
     border-radius: 4px;
     flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: hidden; text-overflow: ellipsis;
   }
   .key-meta {
     display: flex; gap: 12px; font-size: 11px; color: var(--t2);
     flex-wrap: wrap;
   }
 
-  /* ─── Empty state ─── */
-  .empty-state {
+  .empty-state, .loading {
     text-align: center;
-    padding: 32px 16px;
+    padding: 28px 16px;
     color: var(--t2);
     font-size: 13px;
   }
   .empty-state p { margin-bottom: 12px; }
+
+  /* ─── Usage Analytics — REDESIGNED ─── */
+  .usage-header-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 12px;
+  }
+  .period-selector {
+    background: var(--bg1);
+    border: 0.5px solid var(--bc);
+    border-radius: 7px;
+    padding: 3px;
+    display: inline-flex; gap: 2px;
+  }
+  .period-option {
+    background: transparent; border: none;
+    padding: 5px 11px;
+    font-size: 11px;
+    color: var(--t2);
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .period-option:hover { color: var(--t1); }
+  .period-option.active {
+    background: var(--bg3); color: var(--t1); font-weight: 500;
+  }
+
+  .usage-hero {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .usage-hero .big-number {
+    font-size: 30px; font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .usage-hero .big-label {
+    font-size: 12px; color: var(--t2);
+  }
+  .usage-hero .trend {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px;
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .usage-hero .trend.up {
+    background: rgba(22,199,132,0.12);
+    color: var(--gn);
+  }
+  .usage-hero .trend.down {
+    background: rgba(234,57,67,0.12);
+    color: var(--rd);
+  }
+
+  .chart-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 6px;
+  }
+  .chart-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .chart-tooltip {
+    position: absolute;
+    background: var(--bg1);
+    border: 0.5px solid var(--bc);
+    border-radius: 6px;
+    padding: 6px 9px;
+    font-size: 11px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 5;
+    white-space: nowrap;
+  }
+  .chart-tooltip .tt-date { color: var(--t2); font-size: 10px; }
+  .chart-tooltip .tt-value { font-weight: 500; }
+
+  .usage-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 0.5px solid var(--bc);
+  }
+  @media (max-width: 600px) {
+    .usage-summary { grid-template-columns: repeat(2, 1fr); }
+  }
+  .usage-summary div { font-size: 13px; }
+  .usage-summary .label {
+    font-size: 10px; color: var(--t2);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .usage-summary .value { font-weight: 500; font-size: 14px; }
+  .usage-summary .value.good { color: var(--gn); }
+  .usage-summary .value.bad { color: var(--rd); }
+  .usage-summary .delta {
+    font-size: 10px; color: var(--gn); margin-top: 2px;
+  }
+  .usage-summary .delta.down { color: var(--rd); }
+
+  /* Top endpoints */
+  .endpoints-section {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 0.5px solid var(--bc);
+  }
+  .endpoints-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+  }
+  .endpoints-header .label {
+    font-size: 11px; color: var(--t2);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+  .endpoint-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 90px;
+    gap: 12px;
+    padding: 9px 0;
+    align-items: center;
+    border-bottom: 0.5px solid var(--bc);
+  }
+  .endpoint-row:last-child { border-bottom: none; }
+  .endpoint-path {
+    font-family: 'SF Mono', Monaco, Consolas, monospace;
+    font-size: 12px;
+    color: var(--t1);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .endpoint-bar-container {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .endpoint-bar {
+    flex: 1;
+    background: var(--bg3);
+    height: 5px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .endpoint-bar-fill {
+    background: var(--ac);
+    height: 100%;
+    border-radius: 3px;
+  }
+  .endpoint-pct {
+    font-size: 11px;
+    color: var(--t2);
+    min-width: 40px;
+    text-align: right;
+  }
+  .endpoint-count {
+    font-size: 12px;
+    text-align: right;
+    color: var(--t1);
+  }
+  @media (max-width: 600px) {
+    .endpoint-row { grid-template-columns: 1.5fr 1fr; }
+    .endpoint-row .endpoint-count { display: none; }
+  }
+
+  /* ─── Billing ─── */
+  .billing-card {
+    background: var(--bg1);
+    border: 0.5px solid var(--bc);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .next-charge-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 12px; flex-wrap: wrap;
+  }
+  .next-charge-row .amount {
+    font-size: 22px; font-weight: 500;
+    margin-top: 4px;
+  }
+  .next-charge-row .amount-usd {
+    font-size: 13px; color: var(--t2); font-weight: 400; margin-left: 5px;
+  }
+  .next-charge-row .due {
+    font-size: 12px; color: var(--t2); margin-top: 4px;
+  }
+  .charge-details {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    margin-top: 14px; padding-top: 14px;
+    border-top: 0.5px solid var(--bc);
+  }
+  @media (max-width: 600px) {
+    .charge-details { grid-template-columns: 1fr; }
+  }
+  .charge-details .label {
+    font-size: 10px; color: var(--t2);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .charge-details .value { font-size: 13px; }
+  .payment-method-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--bg3);
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .payment-method-badge i { font-size: 14px; color: var(--ac); }
+
+  .invoices-header {
+    display: grid; grid-template-columns: 80px 1fr 1fr 90px 90px;
+    gap: 8px; padding: 8px 4px;
+    font-size: 10px; color: var(--t2);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    border-bottom: 0.5px solid var(--bc);
+    font-weight: 500;
+  }
+  .invoice-row {
+    display: grid; grid-template-columns: 80px 1fr 1fr 90px 90px;
+    gap: 8px; padding: 10px 4px;
+    font-size: 12px;
+    border-bottom: 0.5px solid var(--bc);
+    align-items: center;
+  }
+  .invoice-row:last-child { border-bottom: none; }
+  .invoice-method {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px;
+    color: var(--t2);
+  }
+  .invoice-method i { font-size: 13px; }
+  .invoice-tx {
+    font-family: 'SF Mono', Monaco, Consolas, monospace;
+    color: var(--ac); font-size: 11px;
+    text-decoration: none;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .invoice-tx:hover { text-decoration: underline; }
+  .invoice-status { text-align: right; }
+  @media (max-width: 700px) {
+    .invoices-header, .invoice-row {
+      grid-template-columns: 70px 1fr 90px;
+    }
+    .invoices-header span:nth-child(3),
+    .invoices-header span:nth-child(4),
+    .invoice-row > *:nth-child(3),
+    .invoice-row > *:nth-child(4) { display: none; }
+  }
 
   /* ─── Account ─── */
   .account-grid {
@@ -248,7 +525,7 @@
     vertical-align: middle;
   }
 
-  /* ─── Modal ─── */
+  /* ─── Modals ─── */
   .modal-backdrop {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.6);
@@ -264,6 +541,8 @@
     padding: 24px;
     width: 100%;
     max-width: 460px;
+    max-height: 90vh;
+    overflow-y: auto;
   }
   .modal h3 { font-size: 17px; font-weight: 500; margin-bottom: 8px; }
   .modal p { font-size: 13px; color: var(--t2); margin-bottom: 16px; line-height: 1.5; }
@@ -314,54 +593,40 @@
     margin-bottom: 12px;
   }
 
-  /* ─── Loading ─── */
-  .loading {
-    text-align: center;
-    padding: 24px;
-    color: var(--t2);
-    font-size: 13px;
-  }
-
   /* ─── Toast ─── */
   .toast {
     position: fixed;
-    bottom: 24px;
-    left: 50%;
+    bottom: 24px; left: 50%;
     transform: translateX(-50%);
-    background: var(--t1);
-    color: var(--bg1);
+    background: var(--t1); color: var(--bg1);
     padding: 10px 16px;
     border-radius: 6px;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 13px; font-weight: 500;
     opacity: 0;
     transition: opacity 0.2s;
     pointer-events: none;
     z-index: 200;
   }
   .toast.show { opacity: 1; }
-
-  body.dark-mode { background: #0d1421; }
 </style>
 </head>
 <body>
 
 <header>
   <a href="/" class="nav-brand">
-    <div class="nav-logo">CH</div>
-    <span class="nav-name">CryptoHubCoin</span>
+    <img src="/logo.png" alt="CryptoHubCoin" class="nav-logo">
   </a>
 
   <nav>
     <a href="/">Markets</a>
-    <a href="/api-docs">API Docs</a>
+    <a href="/#premium-tools">Premium Tools</a>
+    <a href="/pricing.html">Pricing</a>
+    <a href="/api-docs.html">API Docs</a>
     <a href="/dashboard.html" class="active">Dashboard</a>
     <button id="user-trigger" class="user-menu">
       <div class="user-avatar" id="user-avatar">?</div>
       <span id="user-name">Loading...</span>
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <polyline points="6 9 12 15 18 9"/>
-      </svg>
+      <i class="ti ti-chevron-down" style="font-size:11px;"></i>
     </button>
     <div id="user-dropdown" class="user-dropdown">
       <button id="logout-btn">Sign out</button>
@@ -373,52 +638,228 @@
 
   <div class="welcome">
     <h1 id="welcome-heading">Welcome back</h1>
-    <p>Manage your API keys and monitor usage</p>
+    <p>Manage your API keys, usage, and billing</p>
   </div>
 
-  <!-- Stats -->
+  <!-- ─── Stats ─── -->
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-label">Plan</div>
-      <div class="stat-value" id="stat-plan">—</div>
-      <a href="#" class="stat-link">Upgrade</a>
+      <div class="stat-label">Current plan</div>
+      <div class="stat-value accent" id="stat-plan">—</div>
+      <div class="stat-meta" id="stat-plan-price">&nbsp;</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Requests today</div>
       <div class="stat-value" id="stat-today">—</div>
-      <div class="stat-meta">across all keys</div>
+      <div class="stat-meta" id="stat-today-meta">across all keys</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">All-time requests</div>
-      <div class="stat-value" id="stat-total">—</div>
-      <div class="stat-meta">free tier: 100k/month</div>
+      <div class="stat-label">This month</div>
+      <div class="stat-value" id="stat-month">—</div>
+      <div class="stat-meta" id="stat-month-meta">&nbsp;</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Active keys</div>
       <div class="stat-value" id="stat-keys">—</div>
-      <div class="stat-meta" id="stat-keys-max">of 5 max</div>
+      <div class="stat-meta" id="stat-keys-max">&nbsp;</div>
     </div>
   </div>
 
-  <!-- API Keys -->
+  <!-- ─── Current Plan ─── -->
+  <section id="current-plan-section">
+    <div class="plan-summary">
+      <div class="plan-summary-info">
+        <h3>
+          <span id="plan-name">—</span>
+          <span class="plan-badge">ACTIVE</span>
+        </h3>
+        <p id="plan-renewal">Loading subscription details…</p>
+      </div>
+      <div class="plan-summary-actions">
+        <a href="/pricing.html" class="btn-secondary">
+          <i class="ti ti-list-details"></i> View plans
+        </a>
+        <a href="/pricing.html" class="btn-primary">
+          <i class="ti ti-rocket"></i> Upgrade
+        </a>
+      </div>
+    </div>
+    <div class="progress-row">
+      <span class="muted">Monthly requests</span>
+      <span><span id="usage-used">—</span> <span class="muted">/ <span id="usage-total">—</span></span></span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="usage-fill" style="width: 0%;"></div>
+    </div>
+  </section>
+
+  <!-- ─── API Keys ─── -->
   <section>
     <div class="section-header">
       <div class="section-title">
         <h2>API Keys</h2>
-        <p>Use these keys to authenticate API requests</p>
+        <p id="keys-rate-limit-info">Authentication keys for your API requests</p>
       </div>
-      <button class="btn-primary" id="create-key-btn">+ Create key</button>
+      <button class="btn-primary" id="create-key-btn">
+        <i class="ti ti-plus"></i> Create key
+      </button>
     </div>
 
-    <div id="keys-loading" class="loading">Loading keys...</div>
+    <div id="keys-loading" class="loading">Loading keys…</div>
     <div id="keys-list"></div>
     <div id="keys-empty" class="empty-state" style="display: none;">
       <p>You don't have any API keys yet.</p>
-      <button class="btn-primary" id="create-first-key-btn">Create your first key</button>
+      <button class="btn-primary" id="create-first-key-btn">
+        <i class="ti ti-plus"></i> Create your first key
+      </button>
     </div>
   </section>
 
-  <!-- Account -->
+  <!-- ─── Usage Analytics — REDESIGNED ─── -->
+  <section id="usage-section">
+    <div class="usage-header-row">
+      <div>
+        <h2 style="font-size:16px;font-weight:500;margin-bottom:2px;">Usage analytics</h2>
+        <p style="font-size:12px;color:var(--t2);">API requests over time</p>
+      </div>
+      <div class="period-selector" id="period-selector">
+        <button class="period-option" data-period="1">24h</button>
+        <button class="period-option" data-period="7">7d</button>
+        <button class="period-option active" data-period="14">14d</button>
+        <button class="period-option" data-period="30">30d</button>
+        <button class="period-option" data-period="90">90d</button>
+      </div>
+    </div>
+
+    <div id="usage-loading" class="loading">Loading usage data…</div>
+
+    <div id="usage-content" style="display: none;">
+      <div class="usage-hero">
+        <span class="big-number" id="usage-total-num">—</span>
+        <span class="big-label">total requests</span>
+        <span class="trend up" id="usage-trend" style="display:none;">
+          <i class="ti ti-trending-up"></i>
+          <span id="usage-trend-text">—</span>
+        </span>
+      </div>
+
+      <div class="chart-wrapper">
+        <svg class="chart-svg" id="usage-chart" viewBox="0 0 620 200" preserveAspectRatio="none" role="img">
+          <title>API requests over time</title>
+        </svg>
+        <div class="chart-tooltip" id="chart-tooltip">
+          <div class="tt-date" id="tt-date">—</div>
+          <div class="tt-value" id="tt-value">—</div>
+        </div>
+      </div>
+
+      <div class="usage-summary">
+        <div>
+          <div class="label">Total requests</div>
+          <div class="value" id="usage-total-summary">—</div>
+          <div class="delta" id="usage-delta-total"></div>
+        </div>
+        <div>
+          <div class="label">Avg / day</div>
+          <div class="value" id="usage-avg">—</div>
+          <div class="delta" id="usage-delta-avg"></div>
+        </div>
+        <div>
+          <div class="label">Peak day</div>
+          <div class="value" id="usage-peak">—</div>
+          <div class="delta" id="usage-peak-date"></div>
+        </div>
+        <div>
+          <div class="label">Error rate</div>
+          <div class="value good" id="usage-errors">—</div>
+          <div class="delta" id="usage-delta-errors"></div>
+        </div>
+      </div>
+
+      <div class="endpoints-section">
+        <div class="endpoints-header">
+          <span class="label">Top endpoints</span>
+        </div>
+        <div id="endpoints-list"></div>
+      </div>
+    </div>
+
+    <div id="usage-empty" class="empty-state" style="display: none;">
+      No usage data yet. Start making API requests to see analytics here.
+    </div>
+  </section>
+
+  <!-- ─── Billing ─── -->
+  <section id="billing-section">
+    <div class="section-header">
+      <div class="section-title">
+        <h2>Billing &amp; Payments</h2>
+        <p>Card (Stripe) and Crypto (USDT/BTC/ETH) supported</p>
+      </div>
+      <a href="/pricing.html" class="btn-secondary">
+        <i class="ti ti-edit"></i> Change plan
+      </a>
+    </div>
+
+    <div id="billing-loading" class="loading">Loading billing info…</div>
+
+    <div id="billing-content" style="display: none;">
+      <div class="billing-card">
+        <div class="next-charge-row">
+          <div>
+            <div class="stat-label">Next charge</div>
+            <div class="amount">
+              <span id="next-amount">—</span>
+              <span class="amount-usd" id="next-amount-usd"></span>
+            </div>
+            <div class="due" id="next-due">—</div>
+          </div>
+          <button class="btn-primary" id="pay-now-btn">
+            <i class="ti ti-credit-card"></i> Pay now
+          </button>
+        </div>
+        <div class="charge-details">
+          <div>
+            <div class="label">Payment method</div>
+            <div class="value">
+              <span class="payment-method-badge" id="payment-method-badge">
+                <i class="ti ti-credit-card"></i>
+                <span id="payment-method-text">—</span>
+              </span>
+            </div>
+          </div>
+          <div>
+            <div class="label">Status</div>
+            <div class="value" id="payment-renewal-status">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-label" style="margin-bottom: 8px;">Recent invoices</div>
+      <div id="invoices-table">
+        <div class="invoices-header">
+          <span>Date</span>
+          <span>Amount</span>
+          <span>Method</span>
+          <span>Reference</span>
+          <span style="text-align: right;">Status</span>
+        </div>
+        <div id="invoices-list"></div>
+      </div>
+      <div id="invoices-empty" class="empty-state" style="display: none; padding: 16px;">
+        No invoices yet.
+      </div>
+    </div>
+
+    <div id="billing-free" class="empty-state" style="display: none;">
+      <p>You're on the Free plan — no billing required.</p>
+      <a href="/pricing.html" class="btn-primary">
+        <i class="ti ti-rocket"></i> Upgrade for more
+      </a>
+    </div>
+  </section>
+
+  <!-- ─── Account ─── -->
   <section>
     <div class="section-header">
       <div class="section-title">
@@ -471,7 +912,9 @@
       </div>
       <div class="new-key-display">
         <div class="new-key-value" id="new-key-value">—</div>
-        <button class="btn-secondary" id="copy-new-key">Copy to clipboard</button>
+        <button class="btn-secondary" id="copy-new-key">
+          <i class="ti ti-copy"></i> Copy to clipboard
+        </button>
       </div>
       <div class="modal-actions">
         <button class="btn-primary" id="create-done">Done</button>
@@ -480,14 +923,11 @@
   </div>
 </div>
 
-<!-- ─── Confirm Revoke Modal ─── -->
+<!-- ─── Revoke Modal ─── -->
 <div class="modal-backdrop" id="revoke-modal">
   <div class="modal">
     <h3>Revoke this key?</h3>
-    <p>
-      Any application using this key will immediately stop working.
-      This action cannot be undone.
-    </p>
+    <p>Any application using this key will immediately stop working. This action cannot be undone.</p>
     <div class="modal-actions">
       <button class="btn-cancel" id="revoke-cancel">Cancel</button>
       <button class="btn-primary" id="revoke-confirm" style="background: var(--rd);">Revoke key</button>
@@ -495,13 +935,46 @@
   </div>
 </div>
 
-<!-- ─── Toast ─── -->
 <div class="toast" id="toast"></div>
 
 <script>
+  // ═══════════════════════════════════════════════════════════════════
+  //   CONFIG
+  // ═══════════════════════════════════════════════════════════════════
   const API_URL = 'https://api.cryptohubcoin.com';
 
-  // ─── Helpers ─────────────────────────────────────────────────────
+  const PLANS = {
+    free: {
+      name: 'Free', price_usdt: 0, price_usd: 0,
+      requests_monthly: 100000, keys_max: 2, rate_limit: 10,
+    },
+    starter: {
+      name: 'Starter', price_usdt: 19, price_usd: 19,
+      requests_monthly: 1000000, keys_max: 5, rate_limit: 100,
+    },
+    pro: {
+      name: 'Pro', price_usdt: 99, price_usd: 99,
+      requests_monthly: 10000000, keys_max: 20, rate_limit: 1000,
+    },
+    enterprise: {
+      name: 'Enterprise', price_usdt: null, price_usd: null,
+      requests_monthly: Infinity, keys_max: Infinity, rate_limit: null,
+    },
+  };
+
+  // Block explorers for crypto TX hashes
+  const TX_EXPLORERS = {
+    'usdt-trc20': 'https://tronscan.org/#/transaction/',
+    'usdt-erc20': 'https://etherscan.io/tx/',
+    'btc': 'https://blockstream.info/tx/',
+    'eth': 'https://etherscan.io/tx/',
+    'bnb': 'https://bscscan.com/tx/',
+    'default': 'https://tronscan.org/#/transaction/',
+  };
+
+  // ═══════════════════════════════════════════════════════════════════
+  //   HELPERS
+  // ═══════════════════════════════════════════════════════════════════
   function $(id) { return document.getElementById(id); }
 
   function showToast(message) {
@@ -512,44 +985,83 @@
   }
 
   async function apiFetch(path, options = {}) {
-    const res = await fetch(API_URL + path, {
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      ...options,
-    });
-    return { res, json: await res.json().catch(() => ({})) };
+    try {
+      const res = await fetch(API_URL + path, {
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        ...options,
+      });
+      return { res, json: await res.json().catch(() => ({})) };
+    } catch (err) {
+      return { res: { ok: false, status: 0 }, json: { error: err.message } };
+    }
   }
 
   function formatDate(timestamp) {
     if (!timestamp) return 'Never';
-    const d = new Date(timestamp);
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return new Date(timestamp).toLocaleDateString('en-US', {
+      month: 'short', day: 'numeric', year: 'numeric'
+    });
+  }
+
+  function formatDateShort(timestamp) {
+    if (!timestamp) return '—';
+    return new Date(timestamp).toLocaleDateString('en-US', {
+      month: 'short', day: 'numeric'
+    });
   }
 
   function formatRelative(timestamp) {
     if (!timestamp) return 'Never used';
     const diff = Date.now() - timestamp;
-    if (diff < 60_000) return 'Just now';
-    if (diff < 3600_000) return Math.floor(diff / 60_000) + ' min ago';
-    if (diff < 86400_000) return Math.floor(diff / 3600_000) + ' hr ago';
-    return Math.floor(diff / 86400_000) + ' days ago';
+    if (diff < 60000) return 'Just now';
+    if (diff < 3600000) return Math.floor(diff / 60000) + ' min ago';
+    if (diff < 86400000) return Math.floor(diff / 3600000) + ' hr ago';
+    return Math.floor(diff / 86400000) + ' days ago';
   }
 
-  function formatNumber(n) {
-    return (n || 0).toLocaleString('en-US');
+  function formatNumber(n) { return (n || 0).toLocaleString('en-US'); }
+
+  function formatCompact(n) {
+    if (!n) return '0';
+    if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    return String(n);
   }
 
-  // ─── Auth check & load user ──────────────────────────────────────
+  function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+
+  function truncateHash(hash, head = 6, tail = 4) {
+    if (!hash) return '—';
+    if (hash.length <= head + tail + 3) return hash;
+    return hash.slice(0, head) + '…' + hash.slice(-tail);
+  }
+
+  function getExplorerUrl(network, hash) {
+    if (!hash) return '#';
+    const key = (network || 'default').toLowerCase().replace(/\s+/g, '-');
+    return (TX_EXPLORERS[key] || TX_EXPLORERS.default) + hash;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  //   AUTH & USER
+  // ═══════════════════════════════════════════════════════════════════
   let currentUser = null;
+  let currentPlan = null;
 
   async function loadUser() {
     const { res, json } = await apiFetch('/api/auth/me');
     if (!res.ok || !json.success) {
-      // Not authenticated — redirect to login
       window.location.href = '/login.html';
       return;
     }
     currentUser = json.user;
+    const planKey = (currentUser.plan || 'free').toLowerCase();
+    currentPlan = PLANS[planKey] || PLANS.free;
     renderUser();
   }
 
@@ -564,25 +1076,36 @@
 
     $('acc-name').textContent = u.full_name || '—';
     $('acc-email').textContent = u.email;
-    $('acc-plan').textContent = (u.plan || 'free').replace(/^./, c => c.toUpperCase());
+    $('acc-plan').textContent = currentPlan.name + (
+      currentPlan.price_usdt ? ' · $' + currentPlan.price_usd + '/mo' : ''
+    );
 
-    if (u.email_verified) {
-      $('acc-verified').innerHTML = '<span class="verified-dot"></span>Verified';
-    } else {
-      $('acc-verified').innerHTML = '<span class="verified-dot" style="background:#ea3943;"></span>Not verified';
-    }
+    $('acc-verified').innerHTML = u.email_verified
+      ? '<span class="verified-dot"></span>Verified'
+      : '<span class="verified-dot" style="background:#ea3943;"></span>Not verified';
 
-    $('stat-plan').textContent = (u.plan || 'free').replace(/^./, c => c.toUpperCase());
+    $('stat-plan').textContent = currentPlan.name;
+    $('stat-plan-price').textContent = currentPlan.price_usdt
+      ? '$' + currentPlan.price_usd + ' / month'
+      : (currentPlan.price_usdt === 0 ? 'Forever free' : 'Custom pricing');
+
+    $('plan-name').textContent = currentPlan.name + ' Plan';
+
+    const rateInfo = currentPlan.rate_limit
+      ? 'Authentication keys · ' + formatNumber(currentPlan.rate_limit) + ' req/s rate limit'
+      : 'Authentication keys for your API requests';
+    $('keys-rate-limit-info').textContent = rateInfo;
   }
 
-  // ─── Load keys ───────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════════
+  //   KEYS
+  // ═══════════════════════════════════════════════════════════════════
   async function loadKeys() {
     $('keys-loading').style.display = 'block';
     $('keys-list').innerHTML = '';
     $('keys-empty').style.display = 'none';
 
     const { res, json } = await apiFetch('/api/keys');
-
     $('keys-loading').style.display = 'none';
 
     if (!res.ok || !json.success) {
@@ -591,20 +1114,18 @@
     }
 
     const keys = (json.data || []).filter(k => k.status === 'active');
-
-    // Stats
+    const maxKeys = currentPlan.keys_max === Infinity ? '∞' : currentPlan.keys_max;
     $('stat-keys').textContent = keys.length;
-    $('stat-keys-max').textContent = 'of ' + (json.max || 5) + ' max';
-
-    let totalRequests = 0;
-    keys.forEach(k => totalRequests += (k.request_count || 0));
-    $('stat-total').textContent = formatNumber(totalRequests);
-    $('stat-today').textContent = formatNumber(totalRequests); // Note: per-day stats need backend support
+    $('stat-keys-max').textContent = 'of ' + maxKeys + ' max';
 
     if (keys.length === 0) {
       $('keys-empty').style.display = 'block';
       return;
     }
+
+    const rateLabel = currentPlan.rate_limit
+      ? '<span class="key-rate">· ' + formatNumber(currentPlan.rate_limit) + ' req/s</span>'
+      : '';
 
     keys.forEach(k => {
       const card = document.createElement('div');
@@ -614,8 +1135,11 @@
           <div class="key-name">
             <span>${escapeHtml(k.name)}</span>
             <span class="badge-active">Active</span>
+            ${rateLabel}
           </div>
-          <button class="btn-secondary danger" data-revoke="${k.id}">Revoke</button>
+          <button class="btn-secondary danger btn-small" data-revoke="${escapeHtml(k.id)}">
+            <i class="ti ti-trash"></i> Revoke
+          </button>
         </div>
         <div class="key-value-row">
           <code class="key-value">${escapeHtml(k.masked_key)}</code>
@@ -631,23 +1155,427 @@
       $('keys-list').appendChild(card);
     });
 
-    // Bind revoke buttons
     document.querySelectorAll('[data-revoke]').forEach(btn => {
       btn.addEventListener('click', () => openRevokeModal(btn.dataset.revoke));
     });
   }
 
-  function escapeHtml(s) {
-    return String(s || '').replace(/[&<>"']/g, c => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[c]));
+  // ═══════════════════════════════════════════════════════════════════
+  //   USAGE ANALYTICS — REDESIGNED
+  //   Backend: GET /api/usage/daily?days=N
+  //     → { success, data: [{date, requests, errors}, ...] }
+  //   Backend: GET /api/usage/endpoints?days=N
+  //     → { success, data: [{path, count, percentage}, ...] }
+  // ═══════════════════════════════════════════════════════════════════
+  let currentPeriod = 14;
+
+  document.querySelectorAll('.period-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const period = parseInt(btn.dataset.period);
+      if (period === currentPeriod) return;
+      currentPeriod = period;
+      document.querySelectorAll('.period-option').forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.period) === period);
+      });
+      loadUsage();
+    });
+  });
+
+  async function loadUsage() {
+    $('usage-loading').style.display = 'block';
+    $('usage-content').style.display = 'none';
+    $('usage-empty').style.display = 'none';
+
+    // Fetch usage timeseries and top endpoints in parallel
+    const [usageResult, endpointsResult] = await Promise.all([
+      apiFetch('/api/usage/daily?days=' + currentPeriod),
+      apiFetch('/api/usage/endpoints?days=' + currentPeriod),
+    ]);
+
+    $('usage-loading').style.display = 'none';
+
+    if (!usageResult.res.ok || !usageResult.json.success || !usageResult.json.data || usageResult.json.data.length === 0) {
+      $('usage-empty').style.display = 'block';
+      updateUsageStats(0, 0, 0);
+      return;
+    }
+
+    const days = usageResult.json.data;
+    renderChart(days);
+    renderEndpoints(endpointsResult.json?.data || []);
+
+    // Compute totals & trends
+    let totalReq = 0;
+    let totalErr = 0;
+    let peakDay = 0;
+    let peakDate = null;
+
+    days.forEach(d => {
+      const reqs = d.requests || 0;
+      totalReq += reqs;
+      totalErr += d.errors || 0;
+      if (reqs > peakDay) { peakDay = reqs; peakDate = d.date; }
+    });
+
+    const avg = Math.floor(totalReq / days.length);
+    const errorRate = totalReq > 0 ? ((totalErr / totalReq) * 100) : 0;
+
+    $('usage-total-num').textContent = formatNumber(totalReq);
+    $('usage-total-summary').textContent = formatNumber(totalReq);
+    $('usage-avg').textContent = formatNumber(avg);
+    $('usage-peak').textContent = formatNumber(peakDay);
+    if (peakDate) $('usage-peak-date').textContent = formatDateShort(peakDate);
+
+    const errEl = $('usage-errors');
+    errEl.textContent = errorRate.toFixed(2) + '%';
+    errEl.className = 'value ' + (errorRate < 1 ? 'good' : errorRate < 5 ? '' : 'bad');
+
+    // Today's stats from data
+    const todayReq = days[days.length - 1]?.requests || 0;
+    const yesterdayReq = days[days.length - 2]?.requests || 0;
+    updateUsageStats(todayReq, yesterdayReq, totalReq);
+
+    $('usage-content').style.display = 'block';
   }
 
-  // ─── Create key modal ────────────────────────────────────────────
+  function renderChart(days) {
+    const svg = $('usage-chart');
+    const W = 620, H = 200;
+    const PAD_LEFT = 35, PAD_RIGHT = 15, PAD_TOP = 15, PAD_BOTTOM = 35;
+    const chartW = W - PAD_LEFT - PAD_RIGHT;
+    const chartH = H - PAD_TOP - PAD_BOTTOM;
+
+    const maxReq = Math.max(...days.map(d => d.requests || 0), 1);
+    const yMax = Math.ceil(maxReq / 1000) * 1000;
+
+    // Build path points
+    const points = days.map((d, i) => {
+      const x = PAD_LEFT + (days.length === 1 ? chartW / 2 : (i / (days.length - 1)) * chartW);
+      const y = PAD_TOP + chartH - ((d.requests || 0) / yMax) * chartH;
+      return { x, y, data: d };
+    });
+
+    // Smooth curve path
+    function curvePath(pts) {
+      if (pts.length === 0) return '';
+      if (pts.length === 1) return `M ${pts[0].x},${pts[0].y}`;
+      let path = `M ${pts[0].x},${pts[0].y}`;
+      for (let i = 1; i < pts.length; i++) {
+        const prev = pts[i - 1];
+        const curr = pts[i];
+        const cp1x = prev.x + (curr.x - prev.x) / 2;
+        const cp1y = prev.y;
+        const cp2x = prev.x + (curr.x - prev.x) / 2;
+        const cp2y = curr.y;
+        path += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${curr.x},${curr.y}`;
+      }
+      return path;
+    }
+
+    const linePath = curvePath(points);
+    const lastP = points[points.length - 1];
+    const firstP = points[0];
+    const areaPath = linePath +
+      ` L ${lastP.x},${PAD_TOP + chartH} L ${firstP.x},${PAD_TOP + chartH} Z`;
+
+    // Y-axis labels (4 ticks)
+    const yLabels = [
+      { v: yMax, y: PAD_TOP },
+      { v: Math.floor(yMax * 0.66), y: PAD_TOP + chartH * 0.34 },
+      { v: Math.floor(yMax * 0.33), y: PAD_TOP + chartH * 0.67 },
+      { v: 0, y: PAD_TOP + chartH },
+    ];
+
+    // X-axis labels (3 ticks: first, middle, last)
+    const xLabels = days.length >= 3
+      ? [
+          { d: days[0], x: points[0].x },
+          { d: days[Math.floor(days.length / 2)], x: points[Math.floor(days.length / 2)].x },
+          { d: days[days.length - 1], x: points[days.length - 1].x },
+        ]
+      : days.map((d, i) => ({ d, x: points[i].x }));
+
+    let html = `
+      <defs>
+        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--ac)" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="var(--ac)" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+    `;
+
+    // Grid lines + Y labels
+    yLabels.forEach(({ v, y }) => {
+      html += `<line x1="${PAD_LEFT}" y1="${y}" x2="${W - PAD_RIGHT}" y2="${y}" stroke="var(--grid)" stroke-width="0.5" ${v > 0 ? 'stroke-dasharray="2,3"' : ''}/>`;
+      html += `<text x="${PAD_LEFT - 6}" y="${y + 3}" text-anchor="end" font-size="9" fill="var(--t2)">${formatCompact(v)}</text>`;
+    });
+
+    // Area + line
+    html += `<path d="${areaPath}" fill="url(#areaGrad)"/>`;
+    html += `<path d="${linePath}" stroke="var(--ac)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+    // Last point dot
+    html += `<circle cx="${lastP.x}" cy="${lastP.y}" r="4" fill="var(--ac)" stroke="var(--bg2)" stroke-width="2"/>`;
+
+    // X-axis labels
+    xLabels.forEach(({ d, x }) => {
+      html += `<text x="${x}" y="${H - 12}" text-anchor="middle" font-size="9" fill="var(--t2)">${formatDateShort(d.date)}</text>`;
+    });
+
+    // Invisible hover targets
+    points.forEach(p => {
+      html += `<circle cx="${p.x}" cy="${p.y}" r="14" fill="transparent" data-x="${p.x}" data-y="${p.y}" data-date="${p.data.date}" data-value="${p.data.requests || 0}" class="hover-target" style="cursor:pointer;"/>`;
+    });
+
+    svg.innerHTML = html;
+
+    // Tooltip hover
+    const tooltip = $('chart-tooltip');
+    const wrapper = svg.parentElement;
+    svg.querySelectorAll('.hover-target').forEach(target => {
+      target.addEventListener('mouseenter', (e) => {
+        const rect = wrapper.getBoundingClientRect();
+        const svgRect = svg.getBoundingClientRect();
+        const scaleX = svgRect.width / W;
+        const px = parseFloat(target.dataset.x) * scaleX;
+        const py = parseFloat(target.dataset.y) * (svgRect.height / H);
+
+        $('tt-date').textContent = formatDateShort(parseInt(target.dataset.date));
+        $('tt-value').textContent = formatNumber(parseInt(target.dataset.value)) + ' requests';
+
+        tooltip.style.left = Math.min(px + 14, svgRect.width - 110) + 'px';
+        tooltip.style.top = Math.max(py - 36, 0) + 'px';
+        tooltip.style.opacity = '1';
+      });
+      target.addEventListener('mouseleave', () => {
+        tooltip.style.opacity = '0';
+      });
+    });
+  }
+
+  function renderEndpoints(endpoints) {
+    const list = $('endpoints-list');
+    list.innerHTML = '';
+
+    if (!endpoints || endpoints.length === 0) {
+      list.innerHTML = '<div style="font-size:12px;color:var(--t2);text-align:center;padding:12px;">No endpoint data available for this period.</div>';
+      return;
+    }
+
+    endpoints.slice(0, 5).forEach(ep => {
+      const row = document.createElement('div');
+      row.className = 'endpoint-row';
+      const pct = ep.percentage || 0;
+      row.innerHTML = `
+        <code class="endpoint-path">${escapeHtml(ep.path)}</code>
+        <div class="endpoint-bar-container">
+          <div class="endpoint-bar">
+            <div class="endpoint-bar-fill" style="width: ${Math.min(100, pct)}%;"></div>
+          </div>
+          <span class="endpoint-pct">${pct.toFixed(1)}%</span>
+        </div>
+        <span class="endpoint-count">${formatNumber(ep.count)}</span>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  function updateUsageStats(todayReq, yesterdayReq, periodTotal) {
+    $('stat-today').textContent = formatNumber(todayReq);
+    if (yesterdayReq > 0) {
+      const pct = ((todayReq - yesterdayReq) / yesterdayReq) * 100;
+      const meta = $('stat-today-meta');
+      const sign = pct >= 0 ? '▲' : '▼';
+      meta.textContent = sign + ' ' + Math.abs(pct).toFixed(0) + '% vs yesterday';
+      meta.className = 'stat-meta ' + (pct >= 0 ? 'up' : 'down');
+    }
+
+    const limit = currentPlan.requests_monthly;
+    $('stat-month').textContent = formatCompact(periodTotal);
+
+    if (limit === Infinity) {
+      $('stat-month-meta').textContent = 'unlimited';
+    } else {
+      const pct = (periodTotal / limit) * 100;
+      $('stat-month-meta').textContent = 'of ' + formatCompact(limit) + ' · ' + pct.toFixed(0) + '%';
+    }
+
+    // Update Current Plan progress bar
+    if (limit !== Infinity) {
+      const pct = Math.min(100, (periodTotal / limit) * 100);
+      $('usage-used').textContent = formatCompact(periodTotal);
+      $('usage-total').textContent = formatCompact(limit);
+
+      const fill = $('usage-fill');
+      fill.style.width = pct + '%';
+      fill.classList.remove('warn', 'danger');
+      if (pct >= 90) fill.classList.add('danger');
+      else if (pct >= 75) fill.classList.add('warn');
+    } else {
+      $('usage-used').textContent = formatCompact(periodTotal);
+      $('usage-total').textContent = '∞';
+      $('usage-fill').style.width = '0%';
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  //   BILLING
+  //   Backend: GET /api/billing/info → { success, data: {
+  //     next_charge_amount, next_charge_currency, next_charge_usd,
+  //     next_charge_date, auto_renew, payment_method ('card' | 'crypto'),
+  //     card_last4 (if card), network (if crypto)
+  //   }}
+  //   Backend: GET /api/billing/invoices → { success, data: [{
+  //     id, date, amount, currency, payment_method ('card' | 'crypto'),
+  //     reference (last4 or tx_hash), network, status
+  //   }, ...]}
+  // ═══════════════════════════════════════════════════════════════════
+  async function loadBilling() {
+    if (currentPlan === PLANS.free) {
+      $('billing-loading').style.display = 'none';
+      $('billing-content').style.display = 'none';
+      $('billing-free').style.display = 'block';
+      $('plan-renewal').textContent = 'No billing — upgrade for paid features';
+      return;
+    }
+
+    $('billing-loading').style.display = 'block';
+    $('billing-content').style.display = 'none';
+
+    const [infoResult, invoicesResult] = await Promise.all([
+      apiFetch('/api/billing/info'),
+      apiFetch('/api/billing/invoices'),
+    ]);
+
+    $('billing-loading').style.display = 'none';
+
+    if (!infoResult.res.ok || !infoResult.json.success) {
+      $('billing-loading').style.display = 'block';
+      $('billing-loading').textContent = 'Could not load billing info.';
+      return;
+    }
+
+    const info = infoResult.json.data;
+    const method = info.payment_method || 'card';
+
+    // Next charge
+    if (method === 'crypto') {
+      $('next-amount').textContent = info.next_charge_amount + ' ' + (info.next_charge_currency || 'USDT');
+    } else {
+      $('next-amount').textContent = '$' + info.next_charge_amount;
+    }
+    $('next-amount-usd').textContent = info.next_charge_usd && method === 'crypto'
+      ? '≈ $' + Number(info.next_charge_usd).toFixed(2)
+      : '';
+
+    if (info.next_charge_date) {
+      const daysLeft = Math.ceil((new Date(info.next_charge_date) - Date.now()) / 86400000);
+      $('next-due').textContent = 'Due ' + formatDate(info.next_charge_date);
+      $('plan-renewal').textContent = 'Renews ' + formatDate(info.next_charge_date) +
+        ' · ' + daysLeft + ' day' + (daysLeft === 1 ? '' : 's') + ' left';
+    }
+
+    // Payment method badge
+    const badge = $('payment-method-badge');
+    const methodText = $('payment-method-text');
+    if (method === 'crypto') {
+      badge.querySelector('i').className = 'ti ti-currency-bitcoin';
+      methodText.textContent = info.network || 'USDT (TRC20)';
+    } else {
+      badge.querySelector('i').className = 'ti ti-credit-card';
+      methodText.textContent = info.card_last4
+        ? 'Card ending in ' + info.card_last4
+        : 'Credit card';
+    }
+
+    $('payment-renewal-status').textContent = info.auto_renew ? 'Auto-renew enabled' : 'Manual renewal';
+
+    // Invoices
+    const invoices = invoicesResult.json.data || [];
+    const list = $('invoices-list');
+    list.innerHTML = '';
+
+    if (invoices.length === 0) {
+      $('invoices-empty').style.display = 'block';
+      $('invoices-table').style.display = 'none';
+    } else {
+      $('invoices-empty').style.display = 'none';
+      $('invoices-table').style.display = 'block';
+      invoices.slice(0, 10).forEach(inv => {
+        const row = document.createElement('div');
+        row.className = 'invoice-row';
+        const invMethod = inv.payment_method || 'card';
+
+        let methodCell, referenceCell;
+        if (invMethod === 'crypto') {
+          methodCell = `<span class="invoice-method"><i class="ti ti-currency-bitcoin"></i>${escapeHtml(inv.network || 'Crypto')}</span>`;
+          const explorerUrl = inv.reference ? getExplorerUrl(inv.network, inv.reference) : '#';
+          referenceCell = inv.reference
+            ? `<a href="${escapeHtml(explorerUrl)}" target="_blank" rel="noopener" class="invoice-tx">${truncateHash(inv.reference)}</a>`
+            : '<span style="color:var(--t2);">—</span>';
+        } else {
+          methodCell = `<span class="invoice-method"><i class="ti ti-credit-card"></i>Card</span>`;
+          referenceCell = inv.reference
+            ? `<span style="font-family:monospace;font-size:11px;color:var(--t2);">•••• ${escapeHtml(inv.reference)}</span>`
+            : '<span style="color:var(--t2);">—</span>';
+        }
+
+        const amountText = invMethod === 'crypto'
+          ? `${escapeHtml(inv.amount)} ${escapeHtml(inv.currency || 'USDT')}`
+          : `$${escapeHtml(inv.amount)}`;
+
+        row.innerHTML = `
+          <span>${formatDateShort(inv.date)}</span>
+          <span>${amountText}</span>
+          ${methodCell}
+          ${referenceCell}
+          <span class="invoice-status"><span class="badge-active">${escapeHtml(inv.status || 'paid')}</span></span>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    $('billing-content').style.display = 'block';
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  //   PAY NOW — redirects to /pricing.html for fresh checkout
+  // ═══════════════════════════════════════════════════════════════════
+  $('pay-now-btn').addEventListener('click', async () => {
+    const planKey = (currentUser.plan || 'free').toLowerCase();
+    if (planKey === 'free') return;
+
+    // Backend: POST /api/billing/checkout creates a new payment session
+    // for the user's existing plan (renewal)
+    showToast('Creating payment session…');
+
+    const { res, json } = await apiFetch('/api/billing/checkout', {
+      method: 'POST',
+      body: JSON.stringify({ plan: planKey, renewal: true }),
+    });
+
+    if (!res.ok || !json.success) {
+      showToast(json.error || 'Could not create payment');
+      return;
+    }
+
+    if (json.data?.checkout_url) {
+      window.location.href = json.data.checkout_url;
+    }
+  });
+
+  // ═══════════════════════════════════════════════════════════════════
+  //   CREATE / REVOKE KEY MODALS
+  // ═══════════════════════════════════════════════════════════════════
   $('create-key-btn').addEventListener('click', openCreateModal);
   $('create-first-key-btn')?.addEventListener('click', openCreateModal);
 
   function openCreateModal() {
+    const activeKeys = document.querySelectorAll('.key-card').length;
+    if (currentPlan.keys_max !== Infinity && activeKeys >= currentPlan.keys_max) {
+      showToast('Key limit reached. Upgrade your plan to create more keys.');
+      return;
+    }
     $('create-modal-form').style.display = 'block';
     $('create-modal-result').style.display = 'none';
     $('key-name').value = '';
@@ -661,14 +1589,11 @@
 
   $('create-submit').addEventListener('click', async () => {
     const name = $('key-name').value.trim();
-    if (!name) {
-      showToast('Please enter a name');
-      return;
-    }
+    if (!name) { showToast('Please enter a name'); return; }
 
     const btn = $('create-submit');
     btn.disabled = true;
-    btn.textContent = 'Creating...';
+    btn.textContent = 'Creating…';
 
     const { res, json } = await apiFetch('/api/keys', {
       method: 'POST',
@@ -683,16 +1608,14 @@
       return;
     }
 
-    // Show the full key once
     $('new-key-value').textContent = json.data.key;
     $('create-modal-form').style.display = 'none';
     $('create-modal-result').style.display = 'block';
   });
 
   $('copy-new-key').addEventListener('click', async () => {
-    const text = $('new-key-value').textContent;
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText($('new-key-value').textContent);
       showToast('Key copied to clipboard');
     } catch {
       showToast('Could not copy. Select and copy manually.');
@@ -704,9 +1627,7 @@
     loadKeys();
   });
 
-  // ─── Revoke modal ────────────────────────────────────────────────
   let revokeKeyId = null;
-
   function openRevokeModal(keyId) {
     revokeKeyId = keyId;
     $('revoke-modal').classList.add('show');
@@ -719,10 +1640,9 @@
 
   $('revoke-confirm').addEventListener('click', async () => {
     if (!revokeKeyId) return;
-
     const btn = $('revoke-confirm');
     btn.disabled = true;
-    btn.textContent = 'Revoking...';
+    btn.textContent = 'Revoking…';
 
     const { res, json } = await apiFetch('/api/keys/' + encodeURIComponent(revokeKeyId), {
       method: 'DELETE',
@@ -730,7 +1650,6 @@
 
     btn.disabled = false;
     btn.textContent = 'Revoke key';
-
     $('revoke-modal').classList.remove('show');
     revokeKeyId = null;
 
@@ -738,12 +1657,13 @@
       showToast(json.error || 'Could not revoke key');
       return;
     }
-
     showToast('Key revoked');
     loadKeys();
   });
 
-  // ─── User menu ───────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════════
+  //   USER MENU
+  // ═══════════════════════════════════════════════════════════════════
   $('user-trigger').addEventListener('click', (e) => {
     e.stopPropagation();
     $('user-dropdown').classList.toggle('show');
@@ -758,18 +1678,26 @@
     window.location.href = '/login.html';
   });
 
-  // Close modals on backdrop click
   document.querySelectorAll('.modal-backdrop').forEach(bd => {
     bd.addEventListener('click', (e) => {
       if (e.target === bd) bd.classList.remove('show');
     });
   });
 
-  // ─── Init ────────────────────────────────────────────────────────
-  (async () => {
+  // ═══════════════════════════════════════════════════════════════════
+  //   INIT
+  // ═══════════════════════════════════════════════════════════════════
+  async function loadAll() {
     await loadUser();
-    if (currentUser) await loadKeys();
-  })();
+    if (!currentUser) return;
+    await Promise.all([
+      loadKeys(),
+      loadUsage(),
+      loadBilling(),
+    ]);
+  }
+
+  loadAll();
 </script>
 
 </body>

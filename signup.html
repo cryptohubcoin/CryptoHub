@@ -132,6 +132,13 @@
     margin: 0 0 1rem;
   }
 
+  /* Cloudflare Turnstile widget — centered in the card */
+  .cf-turnstile-field {
+    display: flex;
+    justify-content: center;
+    min-height: 65px;
+  }
+
   .btn-primary {
     width: 100%;
     padding: 10px;
@@ -200,6 +207,9 @@
     }
   }
 </style>
+
+<!-- Cloudflare Turnstile -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -250,6 +260,11 @@
       <p class="hint">Minimum 8 characters</p>
     </div>
 
+    <!-- Cloudflare Turnstile — replace data-sitekey with your real site key -->
+    <div class="field cf-turnstile-field">
+      <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="auto"></div>
+    </div>
+
     <button type="submit" class="btn-primary" id="submit-btn">Continue</button>
 
     <p class="legal">
@@ -281,6 +296,13 @@
     alertBox.textContent = '';
   }
 
+  // Turnstile tokens are single-use — reset the widget after a failed submit
+  function resetTurnstile() {
+    if (window.turnstile && typeof turnstile.reset === 'function') {
+      try { turnstile.reset(); } catch (_) {}
+    }
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     clearError();
@@ -300,6 +322,18 @@
       return;
     }
 
+    // Cloudflare Turnstile — the challenge must be completed
+    const turnstileToken =
+      (window.turnstile && typeof turnstile.getResponse === 'function')
+        ? turnstile.getResponse()
+        : (form.elements['cf-turnstile-response']?.value || '');
+
+    if (!turnstileToken) {
+      showError('Please complete the verification challenge.');
+      return;
+    }
+    data.turnstile_token = turnstileToken;
+
     submitBtn.disabled = true;
     submitBtn.textContent = 'Creating account...';
 
@@ -317,6 +351,7 @@
         showError(json.error || 'Could not create account. Please try again.');
         submitBtn.disabled = false;
         submitBtn.textContent = 'Continue';
+        resetTurnstile();
         return;
       }
 
@@ -326,6 +361,7 @@
       showError('Network error. Please check your connection.');
       submitBtn.disabled = false;
       submitBtn.textContent = 'Continue';
+      resetTurnstile();
     }
   });
 </script>

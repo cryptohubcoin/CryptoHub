@@ -164,46 +164,62 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 .proj-chg{font-size:12px;font-weight:600;margin-top:2px;}
 
 /* Disclaimer */
-.disclaimer{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:12px;padding:14px 16px;font-size:12px;color:var(--t2);margin-top:20px;display:flex;gap:10px;}
-.disclaimer::before{content:'⚠️';flex-shrink:0;}
+.disclaimer{background:var(--bg2);border:1px solid var(--bc);border-radius:12px;padding:16px 20px;font-size:12px;color:var(--t2);margin-top:20px;line-height:1.7;}
 
 /* ── Social Sentinel ── */
 .sentinel-fab{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--grd1);border:none;color:#fff;font-size:24px;cursor:pointer;z-index:200;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(59,130,246,.4);transition:.3s;font-family:inherit;}
 .sentinel-fab:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(59,130,246,.5);}
 .sentinel-fab .notif-dot{position:absolute;top:-2px;right:-2px;width:18px;height:18px;background:var(--rd);border-radius:50%;font-size:10px;font-weight:800;display:none;align-items:center;justify-content:center;border:2px solid var(--bg);}
 .sentinel-fab .notif-dot.show{display:flex;}
-.sentinel-panel{position:fixed;bottom:90px;right:24px;width:420px;max-height:75vh;background:var(--bg2);border:1px solid var(--bc);border-radius:20px;z-index:200;display:none;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.5);overflow:hidden;}
+.sentinel-panel{position:fixed;bottom:90px;right:24px;width:380px;height:520px;background:var(--bg2);border:1px solid var(--bc);border-radius:20px;z-index:200;display:none;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.5);overflow:hidden;}
 .sentinel-panel.open{display:flex;}
-.sentinel-header{padding:16px 20px;border-bottom:1px solid var(--bc);display:flex;align-items:center;justify-content:space-between;}
-.sentinel-header h3{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.sentinel-header{padding:14px 16px;border-bottom:1px solid var(--bc);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.sentinel-header h3{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;margin:0;}
 .sentinel-status{font-size:10px;padding:3px 8px;border-radius:10px;font-weight:700;}
 .sentinel-status.active{background:rgba(34,197,94,.15);color:var(--gn);}
 .sentinel-status.paused{background:rgba(245,158,11,.15);color:var(--yw);}
-.sentinel-body{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px;max-height:55vh;}
-.sentinel-alert{background:var(--bg3);border-radius:12px;padding:14px;border-left:3px solid var(--ac);animation:slideIn .3s ease;}
-.sentinel-alert.bullish{border-left-color:var(--gn);}
-.sentinel-alert.bearish{border-left-color:var(--rd);}
-.sentinel-alert.neutral{border-left-color:var(--yw);}
-.sentinel-alert-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
-.sentinel-alert-head img{width:20px;height:20px;border-radius:50%;}
-.sentinel-alert-head .name{font-size:12px;font-weight:700;}
-.sentinel-alert-head .handle{font-size:11px;color:var(--t3);}
+
+.sentinel-summary-strip{padding:7px 14px;background:rgba(91,124,250,.08);border-bottom:1px solid var(--bc);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.sentinel-sum-left{font-size:11px;color:var(--t2);}
+.sentinel-sum-right{font-size:11px;color:var(--gn);font-weight:600;display:flex;align-items:center;gap:4px;}
+
+.sentinel-body{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:7px;min-height:0;}
+
+.sentinel-alert{background:var(--bg3);border:1px solid var(--bc);border-left:3px solid var(--ac);border-radius:8px;padding:10px 12px;animation:slideIn .3s ease;}
+.sentinel-alert.tier-high{border-left-color:var(--rd);}
+.sentinel-alert.tier-medium{border-left-color:#f3ba2f;}
+.sentinel-alert.tier-low{border-left-color:var(--t3);opacity:.75;}
+
+.sentinel-alert-head{display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap;}
+.sentinel-alert-head .tier-badge{font-size:9px;padding:2px 7px;border-radius:6px;font-weight:700;letter-spacing:.05em;}
+.sentinel-alert-head .tier-badge.tier-high{background:rgba(234,57,67,.15);color:var(--rd);}
+.sentinel-alert-head .tier-badge.tier-medium{background:rgba(243,186,47,.15);color:#f3ba2f;}
+.sentinel-alert-head .tier-badge.tier-low{background:rgba(138,145,158,.15);color:var(--t3);}
+.sentinel-alert-head .coin-badge{font-size:10px;padding:2px 7px;border-radius:6px;background:rgba(91,124,250,.15);color:var(--ac);font-weight:600;}
+.sentinel-alert-head .dir-label{font-size:11px;font-weight:600;display:flex;align-items:center;gap:3px;}
+.sentinel-alert-head .dir-label.bullish{color:var(--gn);}
+.sentinel-alert-head .dir-label.bearish{color:var(--rd);}
+.sentinel-alert-head .dir-label.neutral{color:var(--t3);}
 .sentinel-alert-head .time{margin-left:auto;font-size:10px;color:var(--t3);}
-.sentinel-tweet{font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:8px;border:1px solid var(--bc);border-radius:8px;padding:8px 10px;background:var(--bg4);}
-.sentinel-impact{font-size:12px;font-weight:600;padding:6px 10px;border-radius:8px;}
-.sentinel-impact.bullish{background:rgba(34,197,94,.1);color:var(--gn);}
-.sentinel-impact.bearish{background:rgba(234,57,67,.1);color:var(--rd);}
-.sentinel-impact.neutral{background:rgba(245,158,11,.1);color:var(--yw);}
-.sentinel-coins{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;}
-.sentinel-coins span{font-size:10px;padding:2px 6px;border-radius:6px;background:rgba(59,130,246,.1);color:var(--ac);font-weight:600;}
+
+.sentinel-summary{font-size:12px;line-height:1.5;color:var(--t1);margin-bottom:6px;}
+
+.sentinel-foot{padding-top:7px;border-top:1px solid var(--bc);display:flex;justify-content:space-between;align-items:center;}
+.sentinel-foot .boost{font-size:10px;color:var(--t2);display:flex;align-items:center;gap:3px;}
+.sentinel-foot .boost.bullish strong{color:var(--gn);}
+.sentinel-foot .boost.bearish strong{color:var(--rd);}
+.sentinel-foot .boost.neutral strong{color:var(--t2);}
+.sentinel-foot .view-link{font-size:10px;color:var(--ac);cursor:pointer;font-weight:500;}
+.sentinel-foot .view-link:hover{text-decoration:underline;}
+
 .sentinel-empty{text-align:center;padding:40px 20px;color:var(--t3);}
-.sentinel-footer{padding:12px 16px;border-top:1px solid var(--bc);display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-.sentinel-footer button{padding:5px 10px;border-radius:8px;border:1px solid var(--bc);background:var(--bg3);color:var(--t2);font-size:11px;cursor:pointer;font-family:inherit;font-weight:600;transition:.2s;}
+.sentinel-footer{padding:9px 12px;border-top:1px solid var(--bc);display:flex;gap:6px;align-items:center;flex-wrap:wrap;flex-shrink:0;}
+.sentinel-footer button{padding:5px 10px;border-radius:6px;border:1px solid var(--bc);background:var(--bg3);color:var(--t2);font-size:11px;cursor:pointer;font-family:inherit;font-weight:600;transition:.2s;}
 .sentinel-footer button:hover{border-color:var(--ac);color:var(--t1);}
 .sentinel-footer button.active{background:rgba(59,130,246,.15);border-color:var(--ac);color:var(--ac);}
 @keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:640px){
-  .sentinel-panel{width:calc(100vw - 32px);right:16px;bottom:82px;}
+  .sentinel-panel{width:calc(100vw - 32px);right:16px;bottom:82px;height:min(520px, calc(100vh - 120px));}
   .sentinel-fab{bottom:16px;right:16px;}
 }
 
@@ -232,8 +248,8 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 
 <!-- HERO -->
 <div class="hero">
-  <h1>48-Hour <span>Price Prediction</span></h1>
-  <p>Get the expected price direction for any coin over the next 48 hours, with a clear confidence score that helps you decide when to trust the signal and when to step back.</p>
+  <h1>AI <span>Price Direction Forecast</span></h1>
+  <p>Discover the projected market direction for any cryptocurrency, backed by a confidence score that tells you when the signal is strong — and when to step aside.</p>
   <div class="hero-pills">
     <div class="hero-pill"><span class="dot" style="background:#22c55e"></span>Technical Analysis</div>
     <div class="hero-pill"><span class="dot" style="background:#3b82f6"></span>Whale Movements</div>
@@ -255,7 +271,16 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
         🔮 Predict
       </button>
     </div>
-    <div class="popular-coins" id="popularCoins"></div>
+    <div class="popular-coins" id="popularCoins">
+      <!-- Pre-rendered for instant display; JS will rebind click handlers on load -->
+      <div class="pop-coin" data-coin-id="bitcoin"><img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" onerror="this.style.display='none'">BTC</div>
+      <div class="pop-coin" data-coin-id="ethereum"><img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" onerror="this.style.display='none'">ETH</div>
+      <div class="pop-coin" data-coin-id="binancecoin"><img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" onerror="this.style.display='none'">BNB</div>
+      <div class="pop-coin" data-coin-id="solana"><img src="https://assets.coingecko.com/coins/images/4128/small/solana.png" onerror="this.style.display='none'">SOL</div>
+      <div class="pop-coin" data-coin-id="ripple"><img src="https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png" onerror="this.style.display='none'">XRP</div>
+      <div class="pop-coin" data-coin-id="cardano"><img src="https://assets.coingecko.com/coins/images/975/small/cardano.png" onerror="this.style.display='none'">ADA</div>
+      <div class="pop-coin" data-coin-id="dogecoin"><img src="https://assets.coingecko.com/coins/images/5/small/dogecoin.png" onerror="this.style.display='none'">DOGE</div>
+    </div>
   </div>
 </div>
 
@@ -279,7 +304,7 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 <!-- RESULTS -->
 <div class="results-section" id="resultsSection"></div>
 
-<script src="crypto-prediction.min.js?v=3"></script>
+<script src="crypto-prediction.min.js?v=5"></script>
 
 <!-- Social Sentinel Floating Button + Panel -->
 <button class="sentinel-fab" onclick="toggleSentinelPanel()" title="Social Sentinel — Influencer Monitor">
@@ -292,11 +317,15 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
     <h3>📡 Social Sentinel <span id="sentinelStatusBadge" class="sentinel-status paused">STARTING</span></h3>
     <button onclick="toggleSentinelPanel()" style="background:none;border:none;color:var(--t2);font-size:18px;cursor:pointer">✕</button>
   </div>
+  <div class="sentinel-summary-strip" id="sentinelSummary">
+    <span class="sentinel-sum-left">Initializing…</span>
+    <span class="sentinel-sum-right">Monitoring active</span>
+  </div>
   <div class="sentinel-body" id="sentinelBody">
     <div class="sentinel-empty">
       <div style="font-size:32px;margin-bottom:12px">📡</div>
       <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:4px">Starting Monitor...</div>
-      <div style="font-size:12px">Watching 8 influencer accounts for market-moving posts.</div>
+      <div style="font-size:12px">Scanning live market intelligence streams.</div>
     </div>
   </div>
   <div class="sentinel-footer">

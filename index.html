@@ -599,9 +599,42 @@
 
     var t0 = performance.now();
 
-    window._preload.coins = fetch(_API_CORE + '/api/v1/market/coins?limit=10000', {
-      headers: { 'x-api-key': _API_KEY }
-    }).then(function (r) { return r.json(); })
+    // ═══ FIX (May 2026): localStorage stale-while-revalidate ═══
+    // Replaces plain fetch — eliminates the "--" loading flash on repeat visits.
+    // First visit: waits for fetch normally. Repeat visits: returns cached data
+    // instantly, then fires the real fetch in background to refresh cache for
+    // the NEXT visit. TTLs are conservative; values are at most one TTL stale.
+    function _cacheFetch(key, url, ttlMs) {
+      var cacheKey = '_pf_' + key;
+      var now = Date.now();
+
+      // Always fire the real fetch — when it resolves, save to cache for next time.
+      var freshPromise = fetch(url, { headers: { 'x-api-key': _API_KEY } })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: d })); } catch (e) { /* quota — ignore */ }
+          return d;
+        });
+
+      // If valid cache exists, return it IMMEDIATELY for instant render.
+      try {
+        var raw = localStorage.getItem(cacheKey);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (parsed && parsed.ts && (now - parsed.ts) < ttlMs) {
+            // Catch the fresh fetch so it doesn't throw uncaught — we just want it
+            // to refresh the cache, the caller doesn't need its result this visit.
+            freshPromise.catch(function () {});
+            return Promise.resolve(parsed.data);
+          }
+        }
+      } catch (e) { /* corrupt cache — fall through */ }
+
+      // No valid cache — caller waits for fresh fetch.
+      return freshPromise;
+    }
+
+    window._preload.coins = _cacheFetch('coins', _API_CORE + '/api/v1/market/coins?limit=10000', 5 * 60 * 1000)
       .then(function (d) {
         var adapted = adaptCoins(d);
         _log('coins', !!adapted, adapted ? adapted.total + ' coins' : 'failed');
@@ -609,10 +642,7 @@
       })
       .catch(function (e) { _log('coins', false, e.message); return null; });
 
-    window._preload.global = fetch(_API_CORE + '/api/v1/market/global', {
-      headers: { 'x-api-key': _API_KEY }
-    })
-      .then(function (r) { return r.json(); })
+    window._preload.global = _cacheFetch('global', _API_CORE + '/api/v1/market/global', 5 * 60 * 1000)
       .then(function (d) {
         var adapted = adaptStat(d);
         // ═══ FIX (May 2026): set _cleanGlobal مباشرةً علشان نمنع الـ flash ═══
@@ -629,10 +659,7 @@
       })
       .catch(function (e) { _log('global', false, e.message); return null; });
 
-    window._preload.fearGreed = fetch(_API_CORE + '/api/v1/stats/fear', {
-      headers: { 'x-api-key': _API_KEY }
-    })
-      .then(function (r) { return r.json(); })
+    window._preload.fearGreed = _cacheFetch('fearGreed', _API_CORE + '/api/v1/stats/fear', 30 * 60 * 1000)
       .then(function (d) {
         var adapted = adaptStat(d);
         _log('fearGreed', !!adapted, adapted && adapted.now ? adapted.now + ' (' + adapted.classification + ')' : 'ok');
@@ -641,10 +668,7 @@
       .catch(function (e) { _log('fearGreed', false, e.message); return null; });
 
     // Metals from D1 via cryptohub-api/api/v1/metals
-    window._preload.metals = fetch(_API_CORE + '/api/v1/metals', {
-      headers: { 'x-api-key': _API_KEY }
-    })
-      .then(function (r) { return r.json(); })
+    window._preload.metals = _cacheFetch('metals', _API_CORE + '/api/v1/metals', 15 * 60 * 1000)
       .then(function (d) {
         if (d && d.success) {
           _log('metals', true, 'Au $' + (d.gold && d.gold.price ? d.gold.price.toFixed(2) : '?'));
@@ -655,10 +679,7 @@
       .catch(function (e) { _log('metals', false, e.message); return null; });
 
     // ═══ Stocks preload — start fetch immediately on page load (don't wait for tab) ═══
-    window._preload.stocks = fetch(_API_CORE + '/api/v1/stocks', {
-      headers: { 'x-api-key': _API_KEY }
-    })
-      .then(function (r) { return r.json(); })
+    window._preload.stocks = _cacheFetch('stocks', _API_CORE + '/api/v1/stocks', 15 * 60 * 1000)
       .then(function (d) {
         _log('stocks', !!d, d ? 'preloaded' : 'failed');
         return d;

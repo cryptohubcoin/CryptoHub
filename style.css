@@ -2529,26 +2529,29 @@
 
     /* ── TRENDING TICKER ── */
     @media (max-width: 480px) {
+      .tg-track {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+
       .tg-card {
-        width: 62px !important;
-        padding: 4px 2px !important;
+        padding: 5px 6px !important;
       }
 
       .tg-sym {
-        font-size: 8px !important;
+        font-size: 11px !important;
       }
 
       .tg-chg {
-        font-size: 7px !important;
-        padding: 1px 3px !important;
+        font-size: 9px !important;
+        padding: 1px 4px !important;
       }
 
       .tg-pr {
-        display: none !important;
+        font-size: 9px !important;
       }
 
       .tg-rank {
-        font-size: 7px !important;
+        font-size: 8px !important;
       }
     }
 
@@ -5319,109 +5322,74 @@
       animation: livePulse 1.5s infinite;
     }
 
+    /* Top Gainers — STATIC GRID (May 2026)
+       Previously: infinite horizontal scrolling ticker (180s linear animation)
+       Now: static 5×3 grid showing top 15, refreshed via JS on a 4hr cache.
+       The .tg-belt::before/::after fades are removed (no scroll = no edge fade) */
     .tg-belt {
-      overflow: hidden;
+      padding: 12px;
       position: relative;
-      padding: 16px 0;
-    }
-
-    .tg-belt::before,
-    .tg-belt::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 60px;
-      z-index: 2;
-      pointer-events: none
-    }
-
-    .tg-belt::before {
-      left: 0;
-      background: linear-gradient(to right, var(--bg2), transparent)
-    }
-
-    .tg-belt::after {
-      right: 0;
-      background: linear-gradient(to left, var(--bg2), transparent)
     }
 
     .tg-track {
-      display: flex;
-      gap: 12px;
-      width: max-content;
-      animation: tgScrl 180s linear infinite
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      width: 100%;
+      animation: none;
     }
 
-    /* Removed .tg-track:hover to prevent freezing on desktop */
-
-    @keyframes tgScrl {
-      0% {
-        transform: translateX(0)
-      }
-
-      100% {
-        transform: translateX(-50%)
-      }
-    }
-
+    /* No-op: keep selector so legacy RTL doesn't error out */
     [dir="rtl"] .tg-track {
-      animation-name: tgScrlR
+      animation: none;
     }
 
-    @keyframes tgScrlR {
-      0% {
-        transform: translateX(0)
-      }
-
-      100% {
-        transform: translateX(50%)
-      }
-    }
-
+    /* Card: horizontal layout — logo | (symbol over price+change) | rank top-right */
     .tg-card {
       flex-shrink: 0;
-      width: 90px;
-      padding: 8px 6px;
-      border-radius: 12px;
+      width: auto;
+      padding: 8px 10px;
+      border-radius: 10px;
       border: 1px solid rgba(128, 128, 128, 0.08);
       background: rgba(255, 255, 255, 0.03);
       backdrop-filter: blur(4px);
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
       cursor: pointer;
-      transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
+      min-width: 0;
     }
 
     .tg-card:hover {
       border-color: var(--ac);
-      transform: translateY(-4px);
+      transform: translateY(-2px);
       background: var(--bg1);
-      box-shadow: 0 8px 20px rgba(56, 97, 251, 0.15);
+      box-shadow: 0 6px 16px rgba(56, 97, 251, 0.15);
     }
 
     .tg-rank {
       position: absolute;
-      top: 4px;
+      top: 3px;
       right: 5px;
       font-size: 8px;
       font-weight: 800;
-      color: var(--ac);
-      background: rgba(56, 97, 251, 0.1);
-      padding: 1px 4px;
-      border-radius: 4px;
+      color: var(--t2);
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
     }
 
     .tg-card img {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       border: 1.5px solid rgba(128, 128, 128, 0.1);
       background: var(--bg3);
-      transition: transform .3s;
+      transition: transform .25s;
+      flex-shrink: 0;
     }
 
     .tg-card:hover img {
@@ -5429,36 +5397,58 @@
     }
 
     .tg-noimg {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       background: var(--bg3);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 9px;
+      font-size: 10px;
       color: var(--t2);
-      border: 1.5px solid rgba(128, 128, 128, 0.1)
+      border: 1.5px solid rgba(128, 128, 128, 0.1);
+      flex-shrink: 0;
+    }
+
+    /* Body holds symbol on top, then price + change side-by-side */
+    .tg-body {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .tg-body-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
     }
 
     .tg-sym {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 800;
       color: var(--t1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .tg-pr {
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 600;
       color: var(--t2);
+      white-space: nowrap;
     }
 
     .tg-chg {
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 5px;
+      padding: 1px 5px;
+      border-radius: 4px;
+      white-space: nowrap;
     }
 
     .tg-up {
@@ -5472,28 +5462,31 @@
     }
 
     @media(max-width:640px) {
+      .tg-track {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
       .tg-card {
-        width: 72px;
-        padding: 5px 3px
+        padding: 6px 8px;
       }
 
       .tg-card img,
       .tg-noimg {
-        width: 20px;
-        height: 20px
+        width: 22px;
+        height: 22px;
       }
 
       .tg-sym {
-        font-size: 8px
+        font-size: 11px;
       }
 
       .tg-pr {
-        font-size: 8px
+        font-size: 9px;
       }
 
       .tg-chg {
-        font-size: 8px;
-        padding: 1px 4px
+        font-size: 9px;
+        padding: 1px 4px;
       }
     }
 
@@ -6163,8 +6156,7 @@
       }
 
       .tg-card {
-        width: 64px !important;
-        padding: 5px 3px !important
+        padding: 5px 6px !important;
       }
 
       .tg-card img,
@@ -6174,7 +6166,7 @@
       }
 
       .tg-sym {
-        font-size: 10px !important
+        font-size: 11px !important
       }
 
       .tg-chg {

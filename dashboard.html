@@ -39,8 +39,9 @@
     display: flex; align-items: center; justify-content: space-between;
     position: sticky; top: 0; z-index: 10;
   }
-  .nav-brand { display: flex; align-items: center; text-decoration: none; color: inherit; }
-  .nav-logo { height: 32px; width: auto; display: block; }
+  .nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: inherit; }
+  .nav-logo { height: 30px; width: auto; display: block; }
+  .nav-brand-name { font-size: 15px; font-weight: 500; }
   nav { display: flex; align-items: center; gap: 20px; }
   nav a {
     font-size: 13px; color: var(--t2); text-decoration: none;
@@ -98,17 +99,18 @@
   .stat-card {
     background: var(--bg2);
     border: 0.5px solid var(--bc);
-    border-radius: 10px;
-    padding: 16px;
+    border-radius: 12px;
+    padding: 18px;
   }
   .stat-label {
-    font-size: 11px; color: var(--t2);
-    margin-bottom: 6px;
-    text-transform: uppercase; letter-spacing: 0.05em;
+    font-size: 12px; color: var(--t2);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
   }
-  .stat-value { font-size: 18px; font-weight: 500; }
+  .stat-label i { font-size: 15px; }
+  .stat-value { font-size: 24px; font-weight: 500; line-height: 1; }
   .stat-value.accent { color: var(--ac); }
-  .stat-meta { font-size: 11px; color: var(--t2); margin-top: 4px; }
+  .stat-meta { font-size: 11.5px; color: var(--t2); margin-top: 8px; }
   .stat-meta.up { color: var(--gn); }
   .stat-meta.down { color: var(--rd); }
 
@@ -615,6 +617,7 @@
 <header>
   <a href="/" class="nav-brand">
     <img src="/logo.png" alt="CryptoHubCoin" class="nav-logo">
+    <span class="nav-brand-name">CryptoHubCoin <span style="color:var(--t2);">API</span></span>
   </a>
 
   <nav>
@@ -636,30 +639,25 @@
 
 <main class="main">
 
-  <div class="welcome">
-    <h1 id="welcome-heading">Welcome back</h1>
-    <p>Manage your API keys, usage, and billing</p>
-  </div>
-
   <!-- ─── Stats ─── -->
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-label">Current plan</div>
+      <div class="stat-label"><i class="ti ti-crown"></i> Current plan</div>
       <div class="stat-value accent" id="stat-plan">—</div>
       <div class="stat-meta" id="stat-plan-price">&nbsp;</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Requests today</div>
+      <div class="stat-label"><i class="ti ti-activity"></i> Requests today</div>
       <div class="stat-value" id="stat-today">—</div>
       <div class="stat-meta" id="stat-today-meta">across all keys</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">This month</div>
+      <div class="stat-label"><i class="ti ti-calendar-stats"></i> This month</div>
       <div class="stat-value" id="stat-month">—</div>
       <div class="stat-meta" id="stat-month-meta">&nbsp;</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Active keys</div>
+      <div class="stat-label"><i class="ti ti-key"></i> Active keys</div>
       <div class="stat-value" id="stat-keys">—</div>
       <div class="stat-meta" id="stat-keys-max">&nbsp;</div>
     </div>
@@ -712,80 +710,6 @@
       <button class="btn-primary" id="create-first-key-btn">
         <i class="ti ti-plus"></i> Create your first key
       </button>
-    </div>
-  </section>
-
-  <!-- ─── Usage Analytics — REDESIGNED ─── -->
-  <section id="usage-section">
-    <div class="usage-header-row">
-      <div>
-        <h2 style="font-size:16px;font-weight:500;margin-bottom:2px;">Usage analytics</h2>
-        <p style="font-size:12px;color:var(--t2);">API requests over time</p>
-      </div>
-      <div class="period-selector" id="period-selector">
-        <button class="period-option" data-period="1">24h</button>
-        <button class="period-option" data-period="7">7d</button>
-        <button class="period-option active" data-period="14">14d</button>
-        <button class="period-option" data-period="30">30d</button>
-        <button class="period-option" data-period="90">90d</button>
-      </div>
-    </div>
-
-    <div id="usage-loading" class="loading">Loading usage data…</div>
-
-    <div id="usage-content" style="display: none;">
-      <div class="usage-hero">
-        <span class="big-number" id="usage-total-num">—</span>
-        <span class="big-label">total requests</span>
-        <span class="trend up" id="usage-trend" style="display:none;">
-          <i class="ti ti-trending-up"></i>
-          <span id="usage-trend-text">—</span>
-        </span>
-      </div>
-
-      <div class="chart-wrapper">
-        <svg class="chart-svg" id="usage-chart" viewBox="0 0 620 200" preserveAspectRatio="none" role="img">
-          <title>API requests over time</title>
-        </svg>
-        <div class="chart-tooltip" id="chart-tooltip">
-          <div class="tt-date" id="tt-date">—</div>
-          <div class="tt-value" id="tt-value">—</div>
-        </div>
-      </div>
-
-      <div class="usage-summary">
-        <div>
-          <div class="label">Total requests</div>
-          <div class="value" id="usage-total-summary">—</div>
-          <div class="delta" id="usage-delta-total"></div>
-        </div>
-        <div>
-          <div class="label">Avg / day</div>
-          <div class="value" id="usage-avg">—</div>
-          <div class="delta" id="usage-delta-avg"></div>
-        </div>
-        <div>
-          <div class="label">Peak day</div>
-          <div class="value" id="usage-peak">—</div>
-          <div class="delta" id="usage-peak-date"></div>
-        </div>
-        <div>
-          <div class="label">Error rate</div>
-          <div class="value good" id="usage-errors">—</div>
-          <div class="delta" id="usage-delta-errors"></div>
-        </div>
-      </div>
-
-      <div class="endpoints-section">
-        <div class="endpoints-header">
-          <span class="label">Top endpoints</span>
-        </div>
-        <div id="endpoints-list"></div>
-      </div>
-    </div>
-
-    <div id="usage-empty" class="empty-state" style="display: none;">
-      No usage data yet. Start making API requests to see analytics here.
     </div>
   </section>
 
@@ -1070,7 +994,6 @@
     const firstName = (u.full_name || u.email).split(' ')[0].split('@')[0];
     const initial = firstName.charAt(0).toUpperCase();
 
-    $('welcome-heading').textContent = 'Welcome back, ' + firstName;
     $('user-name').textContent = firstName;
     $('user-avatar').textContent = initial;
 
@@ -1182,60 +1105,23 @@
   });
 
   async function loadUsage() {
-    $('usage-loading').style.display = 'block';
-    $('usage-content').style.display = 'none';
-    $('usage-empty').style.display = 'none';
-
-    // Fetch usage timeseries and top endpoints in parallel
-    const [usageResult, endpointsResult] = await Promise.all([
-      apiFetch('/api/usage/daily?days=' + currentPeriod),
-      apiFetch('/api/usage/endpoints?days=' + currentPeriod),
-    ]);
-
-    $('usage-loading').style.display = 'none';
+    // The Usage Analytics section was removed, but this data still
+    // drives the stat cards (today / this month) and the plan progress bar.
+    const usageResult = await apiFetch('/api/usage/daily?days=' + currentPeriod);
 
     if (!usageResult.res.ok || !usageResult.json.success || !usageResult.json.data || usageResult.json.data.length === 0) {
-      $('usage-empty').style.display = 'block';
       updateUsageStats(0, 0, 0);
       return;
     }
 
     const days = usageResult.json.data;
-    renderChart(days);
-    renderEndpoints(endpointsResult.json?.data || []);
 
-    // Compute totals & trends
     let totalReq = 0;
-    let totalErr = 0;
-    let peakDay = 0;
-    let peakDate = null;
+    days.forEach(d => { totalReq += d.requests || 0; });
 
-    days.forEach(d => {
-      const reqs = d.requests || 0;
-      totalReq += reqs;
-      totalErr += d.errors || 0;
-      if (reqs > peakDay) { peakDay = reqs; peakDate = d.date; }
-    });
-
-    const avg = Math.floor(totalReq / days.length);
-    const errorRate = totalReq > 0 ? ((totalErr / totalReq) * 100) : 0;
-
-    $('usage-total-num').textContent = formatNumber(totalReq);
-    $('usage-total-summary').textContent = formatNumber(totalReq);
-    $('usage-avg').textContent = formatNumber(avg);
-    $('usage-peak').textContent = formatNumber(peakDay);
-    if (peakDate) $('usage-peak-date').textContent = formatDateShort(peakDate);
-
-    const errEl = $('usage-errors');
-    errEl.textContent = errorRate.toFixed(2) + '%';
-    errEl.className = 'value ' + (errorRate < 1 ? 'good' : errorRate < 5 ? '' : 'bad');
-
-    // Today's stats from data
     const todayReq = days[days.length - 1]?.requests || 0;
     const yesterdayReq = days[days.length - 2]?.requests || 0;
     updateUsageStats(todayReq, yesterdayReq, totalReq);
-
-    $('usage-content').style.display = 'block';
   }
 
   function renderChart(days) {

@@ -17,6 +17,7 @@
 # API Redirects (لو عندك API worker)
 # ==========================================
 
+/api /dashboard.html 200
 /api/* https://late-wood-9120.bitcoinswapnet.workers.dev/api/:splat 200
 
 # ==========================================

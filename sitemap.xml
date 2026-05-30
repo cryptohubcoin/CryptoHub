@@ -1,210 +1,288 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
-  <!-- Main Pages -->
+  <!-- ============================================================ -->
+  <!--  MAIN PAGES — Priority 1.0 / 0.9                            -->
+  <!-- ============================================================ -->
+
+  <!-- Homepage -->
   <url>
     <loc>https://www.cryptohubcoin.com/</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/crypto-analyzer</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/crypto-arbitrage</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/forex-analyzer</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/about</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/faq</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/glossary</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/privacy</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/terms</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/?lang=ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.cryptohubcoin.com/"/>
   </url>
 
+  <!-- ============================================================ -->
+  <!--  PREMIUM TOOLS — Priority 0.9                               -->
+  <!-- ============================================================ -->
+
+  <!-- AI Crypto Analyzer / Price Predictor -->
   <url>
-    <loc>https://www.cryptohubcoin.com/crypto-prediction</loc>
-    <lastmod>2026-04-03</lastmod>
+    <loc>https://www.cryptohubcoin.com/crypto-analyzer</loc>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- Blog -->
+  <!-- Crypto Arbitrage Scanner -->
   <url>
-    <loc>https://www.cryptohubcoin.com/blog</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/bitcoin-guide-2025</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/brc20-vs-runes</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/fear-greed-index-guide</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/gold-vs-bitcoin</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/crypto-beginners-guide</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/crypto-security-guide</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/rsi-macd-bollinger-guide</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/what-is-defi</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/best-crypto-exchange-2025</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/bitcoin-halving-explained</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/what-is-web3</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/what-is-rwa</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/what-is-zero-knowledge-proofs</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/what-is-ai-crypto</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/decentralized-finance-protocols</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/defi-protocol</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/bitcoin-halving-meaning</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.cryptohubcoin.com/blog/what-is-staking</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Tools -->
-  <url>
-    <loc>https://www.cryptohubcoin.com/whale-alert</loc>
-    <lastmod>2026-04-17</lastmod>
+    <loc>https://www.cryptohubcoin.com/crypto-arbitrage</loc>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
-    <!-- Portfolio & Wallet Tracker -->
+
+  <!-- Forex Analyzer -->
   <url>
-    <loc>https://www.cryptohubcoin.com/portfolio</loc>
-    <lastmod>2026-04-18</lastmod>
+    <loc>https://www.cryptohubcoin.com/forex-analyzer</loc>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- AI Crypto Prediction -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/crypto-prediction</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Whale Alert -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/whale-alert</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Token Vesting & Unlocks -->
   <url>
     <loc>https://www.cryptohubcoin.com/token-vesting</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- Token Unlock Calendar -->
   <url>
     <loc>https://www.cryptohubcoin.com/token-unlock-calendar</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+  </url>
+
+  <!-- Portfolio Tracker -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/portfolio</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- ============================================================ -->
+  <!--  BLOG — Priority 0.8 / 0.7                                  -->
+  <!-- ============================================================ -->
+
+  <!-- Blog Index -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: Bitcoin Guide — إصلاح: كان 2025 وده 2026 -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/bitcoin-guide-2026</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: BRC20 vs Runes -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/brc20-vs-runes</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog: Fear & Greed Index Guide -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/fear-greed-index-guide</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: Gold vs Bitcoin -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/gold-vs-bitcoin</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: Crypto Beginners Guide -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/crypto-beginners-guide</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: Crypto Security Guide -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/crypto-security-guide</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog: RSI MACD Bollinger Guide -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/rsi-macd-bollinger-guide</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog: What is DeFi -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/what-is-defi</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: Best Crypto Exchange — إصلاح: كان 2025 وده 2026 -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/best-crypto-exchange-2026</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: Bitcoin Halving Explained -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/bitcoin-halving-explained</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: What is Web3 -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/what-is-web3</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: What is RWA -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/what-is-rwa</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: Zero Knowledge Proofs -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/what-is-zero-knowledge-proofs</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog: AI Crypto -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/what-is-ai-crypto</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: DeFi Protocols -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/decentralized-finance-protocols</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: DeFi Protocol (مكرر — محتاج تشيك لو URL مختلف) -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/defi-protocol</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog: Bitcoin Halving Meaning -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/bitcoin-halving-meaning</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog: What is Staking -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/blog/what-is-staking</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ============================================================ -->
+  <!--  STATIC PAGES — Priority 0.7 / 0.5                         -->
+  <!-- ============================================================ -->
+
+  <!-- About -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/about</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- FAQ -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/faq</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Glossary -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/glossary</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Privacy Policy -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/privacy</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <!-- Terms of Service -->
+  <url>
+    <loc>https://www.cryptohubcoin.com/terms</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
 
 </urlset>

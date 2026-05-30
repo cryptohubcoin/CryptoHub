@@ -546,6 +546,10 @@
     var _API_CORE  = 'https://api.cryptohubcoin.com';
     var _API_STATS = _API_CORE; // unified — stats now served from cryptohub-api
     var _API_KEY   = 'ch_live_7f3553f6c561ba6bdaa157f2254ae12f76c34cd08920e549';
+    // Expose on window so bundled modules (script.min.js) can always access them
+    window._API_CORE = _API_CORE;
+    window._API_STATS = _API_STATS;
+    window._API_KEY = _API_KEY;
 
     // ─── Logger (silent in production, enable via window._debug = true) ─
     var _log = function (label, ok, info) {

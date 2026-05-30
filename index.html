@@ -545,8 +545,9 @@
     // _API_STATS kept for backward compatibility — points to same domain.
     var _API_CORE  = 'https://api.cryptohubcoin.com';
     var _API_STATS = _API_CORE; // unified — stats now served from cryptohub-api
-    var _API_KEY   = 'ch_live_7f3553f6c561ba6bdaa157f2254ae12f76c34cd08920e549';
-    // Expose on window so bundled modules (script.min.js) can always access them
+    // API key removed from frontend for security. Requests from the trusted
+    // origin (cryptohubcoin.com) are authorized server-side via ALLOWED_ORIGINS.
+    var _API_KEY   = '';
     window._API_CORE = _API_CORE;
     window._API_STATS = _API_STATS;
     window._API_KEY = _API_KEY;
@@ -627,7 +628,7 @@
       var now = Date.now();
 
       // Always fire the real fetch — when it resolves, save to cache for next time.
-      var freshPromise = fetch(url, { headers: { 'x-api-key': _API_KEY } })
+      var freshPromise = fetch(url, _API_KEY ? { headers: { 'x-api-key': _API_KEY } } : {})
         .then(function (r) { return r.json(); })
         .then(function (d) {
           try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: d })); } catch (e) { /* quota — ignore */ }

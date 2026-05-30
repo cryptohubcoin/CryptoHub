@@ -202,7 +202,8 @@
       },
       "sameAs": [
         "https://t.me/cryptoHubcrypto1",
-        "https://twitter.com/cryptoHubcrypto1"
+        "https://twitter.com/cryptoHubcrypto1",
+        "https://www.facebook.com/profile.php?id=100083736664712"
       ]
     }
   }
@@ -266,7 +267,8 @@
     },
     "sameAs": [
       "https://t.me/cryptoHubcrypto1",
-      "https://twitter.com/cryptoHubcrypto1"
+      "https://twitter.com/cryptoHubcrypto1",
+      "https://www.facebook.com/profile.php?id=100083736664712"
     ]
   }
   </script>
@@ -1672,24 +1674,47 @@
       <!-- Top Gainers Orbital -->
       <div class="tg-section" id="tickerWrap" style="min-height:110px;contain:layout style paint">
         <div class="tg-hdr">
-          <div style="display:flex;align-items:center;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px" id="tgHdrInfo">
             <i class="fas fa-fire" style="color:#f97316"></i>
             <span>Top 100 Gainers</span>
             <span class="tg-live"><span class="ld" style="width:5px;height:5px"></span> LIVE</span>
           </div>
-          <button
-            onclick="requestAnimationFrame(()=>{document.getElementById('tickerWrap').style.display='none';sessionStorage.setItem('hideGainers','1')})"
-            style="background:none;border:none;cursor:pointer;color:var(--t2);font-size:16px;padding:4px 8px;border-radius:6px;line-height:1;min-width:32px;min-height:32px;flex-shrink:0"
-            title="Hide">✕</button>
+          <span id="tgToggle" onclick="toggleGainers()" role="button" tabindex="0" title="Show / Hide"
+            style="position:relative;width:38px;height:21px;border-radius:11px;display:inline-block;cursor:pointer;flex-shrink:0;transition:all .2s">
+          </span>
         </div>
-        <div class="tg-belt">
+        <div class="tg-belt" id="tgBelt">
           <div class="tg-track" id="tickerContent"></div>
         </div>
       </div>
 
-
-      <!-- Hidden select for backward compat -->
-      <script>if (sessionStorage.getItem('hideGainers') === '1') { var tw = document.getElementById('tickerWrap'); if (tw) tw.style.display = 'none'; }</script>
+      <script>
+        (function () {
+          var KEY = 'hideGainers';
+          function paint() {
+            var on = sessionStorage.getItem(KEY) !== '1';   // مشغّل = القسم ظاهر
+            var belt = document.getElementById('tgBelt');
+            var tog = document.getElementById('tgToggle');
+            var info = document.getElementById('tgHdrInfo');
+            if (belt) belt.style.display = on ? '' : 'none';
+            if (info) info.style.opacity = on ? '1' : '0.55';
+            var sec = document.getElementById('tickerWrap');
+            if (sec) sec.style.minHeight = on ? '110px' : '0';
+            if (tog) {
+              tog.style.background = on ? '#16c784' : '#d1d5db';
+              tog.innerHTML = on
+                ? '<span style="position:absolute;top:2px;left:2px;width:17px;height:17px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s"><i class="fas fa-check" style="font-size:10px;color:#16a34a"></i></span>'
+                : '<span style="position:absolute;top:2px;right:2px;width:17px;height:17px;background:#fff;border-radius:50%;transition:all .2s"></span>';
+            }
+          }
+          window.toggleGainers = function () {
+            var hidden = sessionStorage.getItem(KEY) === '1';
+            sessionStorage.setItem(KEY, hidden ? '0' : '1');   // اقلب الحالة
+            paint();
+          };
+          paint();
+        })();
+      </script>
       <select id="netSel" style="display:none">
         <option value="all">All</option>
       </select>
@@ -1863,10 +1888,7 @@
         <button onclick="gNext()" class="pg-btn" id="pgNext"><i class="fas fa-angle-right"></i></button>
         <button onclick="gLast()" class="pg-btn" title="Last"><i class="fas fa-angle-double-right"></i></button>
       </div>
-      <div class="text-center text-xs" style="color:var(--t2);padding-bottom:8px"><span data-i18n="showing">عرض</span>
-        <b id="sRange" style="color:var(--t1)">--</b> <span data-i18n="of">من</span> <b id="tCoins"
-          style="color:var(--t1)">--</b> <span data-i18n="coins">عملة</span>
-      </div>
+      <div id="aiSignalBar" style="padding:0 8px 12px"></div>
     </div><!-- /tab_crypto -->
 
     <!-- Tab: All Exchanges -->
@@ -2576,6 +2598,11 @@
             <a href="https://twitter.com/CryptoHubCoin" target="_blank" rel="noopener" title="@CryptoHubCoin" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:#1e293b;border-radius:8px;text-decoration:none;transition:all 0.2s;color:#94a3b8" onmouseenter="this.style.background='#000';this.style.color='#fff'" onmouseleave="this.style.background='#1e293b';this.style.color='#94a3b8'">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=100083736664712" target="_blank" rel="noopener" title="Facebook" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:#1e293b;border-radius:8px;text-decoration:none;transition:all 0.2s;color:#94a3b8" onmouseenter="this.style.background='#1877F2';this.style.color='#fff'" onmouseleave="this.style.background='#1e293b';this.style.color='#94a3b8'">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
             </a>
           </div>

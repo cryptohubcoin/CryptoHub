@@ -24,6 +24,18 @@
   <style id="anti-flash">
     body { display: none !important; }
   </style>
+  <style id="allow-text-select">
+    /* السماح بتحديد النص في كل الموقع (ما عدا الأزرار والأيقونات) */
+    body, p, span, div, td, th, h1, h2, h3, h4, h5, h6, li, a {
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      user-select: text;
+    }
+    button, .btn, [role="button"] i, svg, .fas, .far, .fab {
+      -webkit-user-select: none;
+      user-select: none;
+    }
+  </style>
   <script>
     // CRITICAL: Don't show page until applyLang runs (prevents language flash)
     // script.js sets _langApplied=true after applyLang() completes, then reveals body
@@ -5332,6 +5344,55 @@
   } else {
     document.addEventListener('DOMContentLoaded', startObserver);
   }
+})();
+</script>
+
+<script>
+/* ─── Allow text selection / copy everywhere without triggering row clicks ───
+   المشكلة: العناصر اللي عليها onclick (زي صفوف العملات) كانت بتفتح صفحة العملة
+   لما المستخدم يحاول يحدد نص بالماوس. الحل: لو المستخدم سحب الماوس (تحديد نص)
+   نوقف الـ click عشان يقدر ينسخ بدل ما تتفتح العملة. */
+(function () {
+  var downX = 0, downY = 0, moved = false;
+  var DRAG_THRESHOLD = 6; // px
+
+  document.addEventListener('mousedown', function (e) {
+    // نتتبع زرار الماوس الأيسر بس — الكليك اليمين منعملوش حاجة
+    if (e.button !== 0) return;
+    downX = e.clientX;
+    downY = e.clientY;
+    moved = false;
+  }, true);
+
+  document.addEventListener('mousemove', function (e) {
+    if (Math.abs(e.clientX - downX) > DRAG_THRESHOLD ||
+        Math.abs(e.clientY - downY) > DRAG_THRESHOLD) {
+      moved = true;
+    }
+  }, true);
+
+  // capture phase: نوقف الـ click (الأيسر) قبل ما يوصل لأي onclick على الصفوف
+  document.addEventListener('click', function (e) {
+    if (e.button !== 0) return;
+    var sel = window.getSelection && window.getSelection();
+    var hasSelection = sel && sel.toString().length > 0;
+    if (moved && hasSelection) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }, true);
+
+  // نضمن إن قائمة الكليك اليمين (نسخ) تشتغل دايمًا حتى لو في كود تاني بيمنعها
+  document.addEventListener('contextmenu', function (e) {
+    // لو فيه نص محدد، نلغي أي منع للقائمة من أي listener تاني
+    var sel = window.getSelection && window.getSelection();
+    var hasSelection = sel && sel.toString().length > 0;
+    if (hasSelection && e.defaultPrevented) {
+      // بنرجّع السلوك الافتراضي للقائمة
+      Object.defineProperty(e, 'defaultPrevented', { value: false, configurable: true });
+    }
+    e.stopPropagation();
+  }, true);
 })();
 </script>
 

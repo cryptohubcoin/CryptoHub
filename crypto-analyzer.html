@@ -1091,8 +1091,32 @@
   // No API key is needed: the Worker authorizes by Origin.
   // ───────────────────────────────────────────────────────────────
   const WORKER   = 'https://api.cryptohubcoin.com';
+
+  // ════════════════════════════════════════════════════════════════
+  //  ▼▼▼  ضع مفتاح الـ API بتاعك هنا بين علامتي التنصيص  ▼▼▼
+  const CH_API_KEY = "";
+  //  ▲▲▲                                                  ▲▲▲
+  // ════════════════════════════════════════════════════════════════
+
   const CACHE_TTL = 5 * 60 * 1000;        // coin detail
   const _origFetch = window.fetch;
+
+  // بيضيف المفتاح على أي طلب رايح للـ Worker (في الرابط + الهيدر، يغطي كل الاحتمالات)
+  function chFetch(u, o) {
+    o = o || {};
+    let url = u;
+    if (CH_API_KEY) {
+      const sep = url.indexOf('?') === -1 ? '?' : '&';
+      const k = encodeURIComponent(CH_API_KEY);
+      url += sep + 'api_key=' + k + '&apikey=' + k + '&key=' + k;
+    }
+    const h = new Headers(o.headers || {});
+    if (CH_API_KEY) {
+      h.set('X-API-Key', CH_API_KEY);
+      h.set('Authorization', 'Bearer ' + CH_API_KEY);
+    }
+    return _origFetch(url, Object.assign({}, o, { headers: h }));
+  }
 
   // Remember id → trading symbol so klines (which needs a symbol like
   // "BTC") works even when the app passes a CoinGecko slug like "bitcoin".
@@ -1171,7 +1195,7 @@
         const cached = readCache(cacheKey, CACHE_TTL);
         if (cached) return Promise.resolve(jsonResponse(cached));
 
-        return _origFetch(`${WORKER}/api/v1/market/coins/${encodeURIComponent(id)}`,
+        return chFetch(`${WORKER}/api/v1/market/coins/${encodeURIComponent(id)}`,
                           { signal: opts.signal })
           .then(async r => {
             if (!r.ok) throw new Error('worker ' + r.status);
@@ -1195,7 +1219,7 @@
         if (cached) return Promise.resolve(jsonResponse(cached));
 
         const u = `${WORKER}/api/v1/coins/${encodeURIComponent(sym)}/klines?interval=${interval}&limit=${limit}`;
-        return _origFetch(u, { signal: opts.signal }).then(async r => {
+        return chFetch(u, { signal: opts.signal }).then(async r => {
           if (!r.ok) throw new Error('worker ' + r.status);
           const body = await r.json();
           const rows = (body && body.data) || [];
@@ -1213,7 +1237,7 @@
         const cached = readCache(cacheKey, 10*60*1000);
         if (cached) return Promise.resolve(jsonResponse(cached));
 
-        return _origFetch(`${WORKER}/api/v1/market/search?query=${q}`, { signal: opts.signal })
+        return chFetch(`${WORKER}/api/v1/market/search?q=${q}`, { signal: opts.signal })
           .then(async r => {
             if (!r.ok) throw new Error('worker ' + r.status);
             const body = await r.json();
@@ -1236,7 +1260,7 @@
       const cached = readCache('ca_fng', 30*60*1000);
       if (cached) return Promise.resolve(jsonResponse(cached));
 
-      return _origFetch(`${WORKER}/api/v1/stats/fear`, { signal: opts.signal })
+      return chFetch(`${WORKER}/api/v1/stats/fear`, { signal: opts.signal })
         .then(async r => {
           if (!r.ok) throw new Error('worker ' + r.status);
           const body = await r.json();
@@ -1259,7 +1283,7 @@
       const m = urlStr.match(/[?&]search=([^&]*)/);
       if (m) {
         const q = m[1];
-        return _origFetch(`${WORKER}/api/v1/market/search?query=${q}`, { signal: opts.signal })
+        return chFetch(`${WORKER}/api/v1/market/search?q=${q}`, { signal: opts.signal })
           .then(async r => {
             if (!r.ok) throw new Error('worker ' + r.status);
             const body = await r.json();
@@ -1285,6 +1309,7 @@
       return Promise.reject(new Error('external source disabled'));
     }
 
+    if (urlStr.indexOf(WORKER) === 0) return chFetch(urlStr, opts);
     return _origFetch(url, opts);
   };
 
@@ -1351,7 +1376,7 @@
     if (q.length < 2) { hideSuggestions(); return; }
     const WORKER = 'https://api.cryptohubcoin.com';
     try {
-      const r = await fetch(`${WORKER}/api/v1/market/search?query=${encodeURIComponent(q)}`, {signal: AbortSignal.timeout(5000)});
+      const r = await fetch(`${WORKER}/api/v1/market/search?q=${encodeURIComponent(q)}`, {signal: AbortSignal.timeout(5000)});
       if (r.ok) {
         const d = await r.json();
         const coins = (d.data || []).slice(0, 7).map(c => ({

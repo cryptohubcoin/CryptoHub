@@ -1,14 +1,36 @@
-# robots.txt - CryptoHub
-# https://www.cryptohubcoin.com/
+# ==============================================================
+#  robots.txt — CryptoHub (https://www.cryptohubcoin.com/)
+#  آخر تحديث: 2026-05-31
+# ==============================================================
 
+# ============================================================
+#  ALL BOTS — القواعد الأساسية
+# ============================================================
 User-agent: *
 Allow: /
-Allow: /*?lang=
-Disallow: /admin/
-Disallow: /private/
-Disallow: /cdn-cgi/
+Allow: /blog/
+Allow: /whale-alert
+Allow: /crypto-arbitrage
+Allow: /crypto-analyzer
+Allow: /crypto-prediction
+Allow: /forex-analyzer
+Allow: /token-vesting
+Allow: /token-unlock-calendar
+Allow: /portfolio
+Allow: /about
+Allow: /faq
+Allow: /glossary
+Allow: /privacy
+Allow: /terms
+
+# ---- حل مشكلة ?lang= duplicates (17 صفحة مكررة في Search Console) ----
+Disallow: /*?lang=
+
+# ---- حماية الـ proxy (scraping + 5xx errors) ----
 Disallow: /cmc-proxy.php
-Disallow: /*.json$
+Disallow: /*cmc-proxy*
+
+# ---- منع parameters زيادة ----
 Disallow: /*?q=
 Disallow: /*?ag=
 Disallow: /*?sort=
@@ -16,33 +38,80 @@ Disallow: /*?filter=
 Disallow: /*?search=
 Disallow: /*?page=
 Disallow: /*?utm_
-Crawl-delay: 1
+Disallow: /*?ref=
+Disallow: /*?start=
 
-# Google - أولوية عالية
-User-agent: Googlebot
-Allow: /
-Allow: /*?lang=
+# ---- منع .html duplicates ----
+Disallow: /*.html$
+
+# ---- منع صفحات النظام ----
 Disallow: /admin/
 Disallow: /private/
+Disallow: /cdn-cgi/
+Disallow: /dashboard
+Disallow: /dashboard.html
+Disallow: /api/
+
+# ---- منع ملفات النظام ----
+Disallow: /*.json$
+
+Crawl-delay: 1
+
+# ============================================================
+#  GOOGLEBOT — أعلى أولوية، بدون crawl delay
+# ============================================================
+User-agent: Googlebot
+Allow: /
+Allow: /blog/
+Allow: /whale-alert
+Allow: /crypto-arbitrage
+Allow: /crypto-analyzer
+Allow: /crypto-prediction
+Allow: /forex-analyzer
+Allow: /token-vesting
+Allow: /token-unlock-calendar
+Allow: /portfolio
+Allow: /about
+Allow: /faq
+Allow: /glossary
+Allow: /privacy
+Allow: /terms
+
+Disallow: /*?lang=
 Disallow: /cmc-proxy.php
+Disallow: /*cmc-proxy*
 Disallow: /*?q=
 Disallow: /*?ag=
 Disallow: /*?sort=
 Disallow: /*?filter=
 Disallow: /*?search=
+Disallow: /*?page=
 Disallow: /*?utm_
+Disallow: /*?ref=
+Disallow: /*?start=
+Disallow: /*.html$
+Disallow: /admin/
+Disallow: /private/
+Disallow: /cdn-cgi/
+Disallow: /dashboard
+Disallow: /api/
+Disallow: /*.json$
+
 Crawl-delay: 0
 
+# ============================================================
+#  GOOGLEBOT-IMAGE — اسمح بكل الصور
+# ============================================================
 User-agent: Googlebot-Image
 Allow: /
 Crawl-delay: 0
 
-# Bing
+# ============================================================
+#  BINGBOT
+# ============================================================
 User-agent: Bingbot
 Allow: /
-Allow: /*?lang=
-Disallow: /admin/
-Disallow: /private/
+Disallow: /*?lang=
 Disallow: /cmc-proxy.php
 Disallow: /*?q=
 Disallow: /*?ag=
@@ -50,9 +119,15 @@ Disallow: /*?sort=
 Disallow: /*?filter=
 Disallow: /*?search=
 Disallow: /*?utm_
+Disallow: /*?ref=
+Disallow: /*.html$
+Disallow: /admin/
+Disallow: /cdn-cgi/
 Crawl-delay: 1
 
-# Social crawlers - اسمح لهم بالكامل
+# ============================================================
+#  SOCIAL CRAWLERS — اسمح لهم بالكامل عشان Preview يشتغل
+# ============================================================
 User-agent: facebookexternalhit
 Allow: /
 
@@ -71,7 +146,15 @@ Allow: /
 User-agent: Pinterest
 Allow: /
 
-# SEO tools - حد من الزحف الثقيل
+User-agent: Slackbot
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+# ============================================================
+#  SEO TOOLS — حد من الزحف الثقيل
+# ============================================================
 User-agent: AhrefsBot
 Crawl-delay: 10
 
@@ -87,5 +170,7 @@ Crawl-delay: 10
 User-agent: YandexBot
 Crawl-delay: 5
 
-# Sitemap
+# ============================================================
+#  Sitemap
+# ============================================================
 Sitemap: https://www.cryptohubcoin.com/sitemap.xml

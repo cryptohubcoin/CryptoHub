@@ -97,7 +97,7 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- Blog: Bitcoin Guide — إصلاح: كان 2025 وده 2026 -->
+  <!-- Blog: Bitcoin Guide 2026 -->
   <url>
     <loc>https://www.cryptohubcoin.com/blog/bitcoin-guide-2026</loc>
     <lastmod>2026-05-31</lastmod>
@@ -161,7 +161,7 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- Blog: Best Crypto Exchange — إصلاح: كان 2025 وده 2026 -->
+  <!-- Blog: Best Crypto Exchange 2026 -->
   <url>
     <loc>https://www.cryptohubcoin.com/blog/best-crypto-exchange-2026</loc>
     <lastmod>2026-05-31</lastmod>
@@ -243,6 +243,8 @@
 
   <!-- ============================================================ -->
   <!--  STATIC PAGES — Priority 0.7 / 0.5                         -->
+  <!--  ملاحظة: /dashboard و /dashboard.html محذوفين لأنهم        -->
+  <!--  بيعملوا redirect ويسببوا مشكلة في Search Console          -->
   <!-- ============================================================ -->
 
   <!-- About -->

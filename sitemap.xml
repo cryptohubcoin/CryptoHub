@@ -289,7 +289,7 @@
 
 
   <!-- ============================================================ -->
-  <!--  COIN PAGES - Priority 0.8                                  -->
+  <!--  COIN PAGES (40) - Priority 0.8                             -->
   <!-- ============================================================ -->
   <url>
     <loc>https://www.cryptohubcoin.com/coin/bitcoin</loc>
@@ -316,14 +316,6 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/binancecoin?lang=ar"/>
   </url>
   <url>
-    <loc>https://www.cryptohubcoin.com/coin/solana</loc>
-    <lastmod>2026-05-31</lastmod>
-    <changefreq>hourly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/solana"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/solana?lang=ar"/>
-  </url>
-  <url>
     <loc>https://www.cryptohubcoin.com/coin/ripple</loc>
     <lastmod>2026-05-31</lastmod>
     <changefreq>hourly</changefreq>
@@ -332,12 +324,20 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/ripple?lang=ar"/>
   </url>
   <url>
-    <loc>https://www.cryptohubcoin.com/coin/cardano</loc>
+    <loc>https://www.cryptohubcoin.com/coin/solana</loc>
     <lastmod>2026-05-31</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/cardano"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/cardano?lang=ar"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/solana"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/solana?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/tron</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/tron"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/tron?lang=ar"/>
   </url>
   <url>
     <loc>https://www.cryptohubcoin.com/coin/dogecoin</loc>
@@ -348,12 +348,140 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/dogecoin?lang=ar"/>
   </url>
   <url>
+    <loc>https://www.cryptohubcoin.com/coin/cardano</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/cardano"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/cardano?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/hyperliquid</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/hyperliquid"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/hyperliquid?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/zcash</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/zcash"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/zcash?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/stellar</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/stellar"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/stellar?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/monero</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/monero"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/monero?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/chainlink</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/chainlink"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/chainlink?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/bitcoin-cash</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/bitcoin-cash"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/bitcoin-cash?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/the-open-network</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/the-open-network"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/the-open-network?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/hedera-hashgraph</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/hedera-hashgraph"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/hedera-hashgraph?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/litecoin</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/litecoin"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/litecoin?lang=ar"/>
+  </url>
+  <url>
     <loc>https://www.cryptohubcoin.com/coin/avalanche-2</loc>
     <lastmod>2026-05-31</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/avalanche-2"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/avalanche-2?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/sui</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/sui"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/sui?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/shiba-inu</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/shiba-inu"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/shiba-inu?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/crypto-com-chain</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/crypto-com-chain"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/crypto-com-chain?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/near</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/near"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/near?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/bittensor</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/bittensor"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/bittensor?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/mantle</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/mantle"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/mantle?lang=ar"/>
   </url>
   <url>
     <loc>https://www.cryptohubcoin.com/coin/polkadot</loc>
@@ -364,12 +492,124 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/polkadot?lang=ar"/>
   </url>
   <url>
-    <loc>https://www.cryptohubcoin.com/coin/chainlink</loc>
+    <loc>https://www.cryptohubcoin.com/coin/uniswap</loc>
     <lastmod>2026-05-31</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/chainlink"/>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/chainlink?lang=ar"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/uniswap"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/uniswap?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/aster-2</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/aster-2"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/aster-2?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/world-liberty-financial</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/world-liberty-financial"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/world-liberty-financial?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/ondo-finance</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/ondo-finance"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/ondo-finance?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/pi-network</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/pi-network"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/pi-network?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/internet-computer</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/internet-computer"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/internet-computer?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/pepe</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/pepe"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/pepe?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/morpho</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/morpho"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/morpho?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/ethereum-classic</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/ethereum-classic"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/ethereum-classic?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/aave</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/aave"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/aave?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/algorand</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/algorand"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/algorand?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/kucoin-shares</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/kucoin-shares"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/kucoin-shares?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/worldcoin-wld</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/worldcoin-wld"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/worldcoin-wld?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/okb</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/okb"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/okb?lang=ar"/>
+  </url>
+  <url>
+    <loc>https://www.cryptohubcoin.com/coin/bitget-token</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.cryptohubcoin.com/coin/bitget-token"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.cryptohubcoin.com/coin/bitget-token?lang=ar"/>
   </url>
 
 </urlset>

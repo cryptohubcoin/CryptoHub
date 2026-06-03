@@ -576,13 +576,17 @@
       if (loggedIn) {
         window.location.href = href;
       } else {
-        // ابعت المستخدم لصفحة الدخول مع الوجهة اللي عايزها (الأداة) عشان يرجعله بعد الدخول.
+        // نحفظ الأداة اللي عايزها المستخدم في sessionStorage (مش في الرابط) عشان
+        // الرابط يفضل نضيف (/login). صفحة الدخول بتقراها وترجّعه للأداة بعد الدخول.
         // نتأكد إنها مسار داخلي آمن فقط (يبدأ بـ / ومش //) لمنع open-redirect.
-        var nextParam = '';
-        if (href && href.charAt(0) === '/' && href.charAt(1) !== '/') {
-          nextParam = '?next=' + encodeURIComponent(href);
-        }
-        window.location.href = LOGIN_URL + nextParam;
+        try {
+          if (href && href.charAt(0) === '/' && href.charAt(1) !== '/') {
+            sessionStorage.setItem('ch_pending_tool', href);
+          } else {
+            sessionStorage.removeItem('ch_pending_tool');
+          }
+        } catch (e) {}
+        window.location.href = LOGIN_URL;
       }
     });
   });

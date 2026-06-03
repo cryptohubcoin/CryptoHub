@@ -173,38 +173,30 @@
   // If the user was bounced here from a gated page, the gate will have
   // appended ?next=… or ?redirect=… so we can send them back after sign-in.
   // We only honor SAME-ORIGIN relative paths to prevent open-redirect abuse.
-  // Premium tools that should be returned to after login (not the dashboard)
-  var TOOL_PATHS = ['/crypto-prediction','/crypto-arbitrage','/crypto-analyzer','/forex-analyzer','/whale-alert','/token-vesting','/portfolio'];
-
-  function isToolPath(path) {
-    for (var i = 0; i < TOOL_PATHS.length; i++) {
-      if (path.indexOf(TOOL_PATHS[i]) === 0) return true;
-    }
-    return false;
+  function isSafeInternalPath(decoded) {
+    return decoded.startsWith('/') && !decoded.startsWith('//') && !/^[a-z]+:/i.test(decoded);
   }
 
   function getPostLoginUrl() {
+    // 1) لو فيه ?next= في الرابط، نستخدمه (أعلى أولوية)
     const raw = params.get('next') || params.get('redirect') || '';
     if (raw) {
       try {
         const decoded = decodeURIComponent(raw);
-        if (decoded.startsWith('/') && !decoded.startsWith('//') && !/^[a-z]+:/i.test(decoded)) {
-          return decoded;
-        }
+        if (isSafeInternalPath(decoded)) return decoded;
       } catch (e) {}
     }
-    // No explicit next: if the user came from a premium tool page, send them back to it
+    // 2) وإلا نشوف الأداة المحفوظة في sessionStorage (الرابط بيفضل نضيف /login)
     try {
-      if (document.referrer) {
-        const ref = new URL(document.referrer);
-        if (ref.origin === window.location.origin && isToolPath(ref.pathname)) {
-          return ref.pathname + ref.search;
-        }
-      }
+      const pending = sessionStorage.getItem('ch_pending_tool');
+      if (pending && isSafeInternalPath(pending)) return pending;
     } catch (e) {}
+    // 3) مفيش وجهة محددة → الداشبورد
     return '/dashboard.html';
   }
   const postLoginUrl = getPostLoginUrl();
+  // نمسح الأداة المحفوظة بعد ما قريناها (مش محتاجينها تاني)
+  try { sessionStorage.removeItem('ch_pending_tool'); } catch (e) {}
 
   // ─── Already-logged-in check ───────────────────────────────────
   // If a valid session already exists, skip the form and forward the user

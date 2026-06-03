@@ -575,10 +575,14 @@
     checkLoggedIn().then(function (loggedIn) {
       if (loggedIn) {
         window.location.href = href;
-      } else if (typeof window.openAuthModal === 'function') {
-        window.openAuthModal('login');
       } else {
-        window.location.href = LOGIN_URL;
+        // ابعت المستخدم لصفحة الدخول مع الوجهة اللي عايزها (الأداة) عشان يرجعله بعد الدخول.
+        // نتأكد إنها مسار داخلي آمن فقط (يبدأ بـ / ومش //) لمنع open-redirect.
+        var nextParam = '';
+        if (href && href.charAt(0) === '/' && href.charAt(1) !== '/') {
+          nextParam = '?next=' + encodeURIComponent(href);
+        }
+        window.location.href = LOGIN_URL + nextParam;
       }
     });
   });

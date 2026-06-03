@@ -1552,7 +1552,7 @@
               <div class="stats-panel-items" style="padding:6px 8px">
 
                 <!-- ═══ MARKETS SECTION ═══ -->
-                <div style="font-size:10px;font-weight:600;color:var(--t2);letter-spacing:1.2px;padding:8px 14px 6px;text-transform:uppercase">MARKETS</div>
+                <div style="font-size:10px;font-weight:600;color:var(--t2);letter-spacing:1.2px;padding:8px 14px 6px;text-transform:uppercase" data-i18n="navMarkets">MARKETS</div>
 
                 <a class="nav-item" onclick="navTo('crypto');return false" href="#" style="border-radius:10px">
                   <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(186,117,23,.12)"><i class="fas fa-coins" style="color:#BA7517;font-size:14px"></i></div>
@@ -1576,7 +1576,7 @@
                 </a>
 
                 <!-- ═══ PREMIUM TOOLS SECTION ═══ -->
-                <div style="font-size:10px;font-weight:600;color:var(--t2);letter-spacing:1.2px;padding:14px 14px 6px;text-transform:uppercase;margin-top:6px;border-top:0.5px solid var(--bc)">PREMIUM TOOLS</div>
+                <div style="font-size:10px;font-weight:600;color:var(--t2);letter-spacing:1.2px;padding:14px 14px 6px;text-transform:uppercase;margin-top:6px;border-top:0.5px solid var(--bc)" data-i18n="navPremiumTools">PREMIUM TOOLS</div>
 
                 <a class="nav-item" href="crypto-prediction" data-auth-required="1" data-feature="AI Price Predictor" style="border-radius:10px">
                   <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(226,75,74,.12)"><i class="fas fa-lightbulb" style="color:#E24B4A;font-size:14px"></i></div>
@@ -1610,7 +1610,7 @@
                 </a>
 
                 <!-- ═══ Login CTA (guests only) ═══ -->
-                <a href="login.html" class="guest-only" style="margin:14px 10px 6px;padding:13px;background:#2563eb;color:#fff;text-align:center;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;letter-spacing:0.3px;transition:background .15s" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
+                <a href="login.html" class="guest-only" style="margin:14px 10px 6px;padding:13px;background:#2563eb;color:#fff;text-align:center;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;letter-spacing:0.3px;transition:background .15s" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'" data-i18n="loginBtn">
                   Log in
                 </a>
 
@@ -1711,14 +1711,14 @@
           <div class="ind-head"><i class="fas fa-chart-pie ind-ico"></i><span class="ind-lbl">Altcoin Season</span></div>
           <div class="ind-val-row"><div class="stat-card-value" id="irAltV">--</div><span class="ind-status" id="irAltStatus"></span></div>
           <div class="ind-bar"><div class="ind-fill"></div></div>
-          <div class="ind-scale"><span>BTC</span><span>Alts</span></div>
+          <div class="ind-scale"><span>BTC</span><span data-i18n="alts">Alts</span></div>
         </div>
 
         <div class="stat-card ind-item" data-metric="rsi" data-bar="marker">
           <div class="ind-head"><i class="fas fa-chart-line ind-ico"></i><span class="ind-lbl">RSI (14)</span></div>
           <div class="ind-val-row"><div class="stat-card-value" id="irRsiV">--</div><span class="ind-status" id="irRsiStatus"></span></div>
           <div class="ind-bar"><div class="ind-grad"></div><div class="ind-marker"></div></div>
-          <div class="ind-scale"><span>Oversold</span><span>Bought</span></div>
+          <div class="ind-scale"><span>Oversold</span><span data-i18n="bought">Bought</span></div>
         </div>
 
         <div class="stat-card ind-item no-bar" data-metric="macd">
@@ -1730,7 +1730,7 @@
           <div class="ind-head"><i class="fas fa-chart-area ind-ico"></i><span class="ind-lbl">Bollinger %B</span></div>
           <div class="ind-val-row"><div class="stat-card-value" id="irBbV">--</div><span class="ind-status" id="irBbStatus"></span></div>
           <div class="ind-bar"><div class="ind-grad"></div><div class="ind-marker"></div></div>
-          <div class="ind-scale"><span>Lower</span><span>Upper</span></div>
+          <div class="ind-scale"><span data-i18n="bandLower">Lower</span><span data-i18n="bandUpper">Upper</span></div>
         </div>
 
         <div class="stat-card ind-item no-bar" data-metric="ema">
@@ -1742,14 +1742,14 @@
           <div class="ind-head"><i class="fas fa-percentage ind-ico"></i><span class="ind-lbl">Stochastic</span></div>
           <div class="ind-val-row"><div class="stat-card-value" id="irStochV">--</div><span class="ind-status" id="irStochStatus"></span></div>
           <div class="ind-bar"><div class="ind-grad"></div><div class="ind-marker"></div></div>
-          <div class="ind-scale"><span>Oversold</span><span>Bought</span></div>
+          <div class="ind-scale"><span>Oversold</span><span data-i18n="bought">Bought</span></div>
         </div>
 
         <div class="stat-card ind-item" data-metric="adx" data-bar="fill">
           <div class="ind-head"><i class="fas fa-bolt ind-ico"></i><span class="ind-lbl">ADX</span></div>
           <div class="ind-val-row"><div class="stat-card-value" id="irAdxV">--</div><span class="ind-status" id="irAdxStatus"></span></div>
           <div class="ind-bar"><div class="ind-fill"></div></div>
-          <div class="ind-scale"><span>Weak</span><span>Strong</span></div>
+          <div class="ind-scale"><span data-i18n="weak">Weak</span><span data-i18n="strong">Strong</span></div>
         </div>
 
         <div class="stat-card ind-item no-bar" data-metric="vol">
@@ -1758,7 +1758,7 @@
         </div>
 
         <div class="stat-card ind-item no-bar" data-metric="sr">
-          <div class="ind-head"><i class="fas fa-arrows-alt-v ind-ico"></i><span class="ind-lbl">Support / Res</span></div>
+          <div class="ind-head"><i class="fas fa-arrows-alt-v ind-ico"></i><span class="ind-lbl" data-i18n="supportRes">Support / Res</span></div>
           <div class="ind-val-row"><div class="stat-card-value" id="irSrV">--</div><span class="ind-status" id="irSrStatus"></span></div>
         </div>
 
@@ -1889,7 +1889,7 @@
                 <div class="ai-ring mb-1.5" style="width:60px;height:60px;display:flex;align-items:center;justify-content:center">
                   <div style="text-align:center">
                     <div class="text-lg font-bold" id="aiS">--</div>
-                    <div style="font-size:7px" class="opacity-70">Score</div>
+                    <div style="font-size:7px" class="opacity-70" data-i18n="score">Score</div>
                   </div>
                 </div>
                 <div class="text-center mb-1.5">
@@ -2040,7 +2040,7 @@
         <div class="tg-hdr">
           <div style="display:flex;align-items:center;gap:8px" id="tgHdrInfo">
             <i class="fas fa-fire" style="color:#f97316"></i>
-            <span>Top 100 Gainers</span>
+            <span data-i18n="top100Gainers">Top 100 Gainers</span>
             <span class="tg-live"><span class="ld" style="width:5px;height:5px"></span> LIVE</span>
           </div>
           <span id="tgToggle" onclick="toggleGainers()" role="button" tabindex="0" title="Show / Hide"
@@ -2122,7 +2122,7 @@
             </div>
             <button id="filterBtn" class="cmc-net-btn" style="display:none;flex-shrink:0;background:var(--bg2);gap:6px;cursor:default" type="button">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ac)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-              <span style="font-weight:600">Filters</span>
+              <span style="font-weight:600" data-i18n="filters">Filters</span>
               <span id="filterCount" style="background:var(--ac);color:#fff;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;min-width:20px;text-align:center;line-height:1.2">0</span>
             </button>
           </div>
@@ -2228,7 +2228,7 @@
                       class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
                 <th onclick="doSort('change_7d')" id="th_change_7d" class="col-7d" style="width:62px">7d% <span
                     class="sort-icon"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
-                <th class="col-spark" style="width:150px;text-align:center">Last 7 Days</th>
+                <th class="col-spark" style="width:150px;text-align:center" data-i18n="last7Days">Last 7 Days</th>
                 <th onclick="doSort('market_cap')" id="th_market_cap" class="col-mcap" style="width:95px"><span
                     data-i18n="colMarketCap">القيمة السوقية</span> <span class="sort-icon"><i
                       class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></th>
@@ -2296,9 +2296,9 @@
                 <th class="exg-th exg-th-center" data-i18n="volume" style="text-transform:uppercase;">VOLUME (24H)</th>
                 <th class="exg-th exg-th-center" style="text-transform:uppercase;">AVG. LIQUIDITY</th>
                 <th class="exg-th exg-th-center" style="text-transform:uppercase;">WEEKLY VISITS</th>
-                <th class="exg-th exg-th-center" style="text-transform:uppercase;">MARKETS</th>
+                <th class="exg-th exg-th-center" style="text-transform:uppercase;" data-i18n="navMarkets">MARKETS</th>
                 <th class="exg-th exg-th-center" style="text-transform:uppercase;">COINS</th>
-                <th class="exg-th exg-th-left">Fiat Supported</th>
+                <th class="exg-th exg-th-left" data-i18n="fiatSupported">Fiat Supported</th>
               </tr>
             </thead>
             <tbody id="exGBody"></tbody>
@@ -2347,8 +2347,8 @@
                 <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;cursor:pointer;text-align:right" onclick="_sortNFT('h7d')">7D% <i class="fas fa-sort" style="font-size:9px;opacity:.4"></i></th>
                 <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;cursor:pointer;text-align:right" onclick="_sortNFT('mcap')">Market Cap <i class="fas fa-sort" style="font-size:9px;opacity:.4"></i></th>
                 <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;cursor:pointer;text-align:right" onclick="_sortNFT('vol')">Volume 24H <i class="fas fa-sort" style="font-size:9px;opacity:.4"></i></th>
-                <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;text-align:right">Owners</th>
-                <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;text-align:right">Supply</th>
+                <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;text-align:right" data-i18n="owners">Owners</th>
+                <th style="padding:10px 8px;font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;text-align:right" data-i18n="supply">Supply</th>
               </tr>
             </thead>
             <tbody id="nftTbody"></tbody>
@@ -2746,7 +2746,7 @@
     <div class="cm-summary">
       <div class="cm-sum-box">
         <div class="cm-sn" id="cmOnline" style="color:var(--gn)">0</div>
-        <div class="cm-sl">Online</div>
+        <div class="cm-sl" data-i18n="statusOnline">Online</div>
       </div>
       <div class="cm-sum-box">
         <div class="cm-sn" id="cmLoading" style="color:#eab308">0</div>
@@ -2754,11 +2754,11 @@
       </div>
       <div class="cm-sum-box">
         <div class="cm-sn" id="cmOffline" style="color:var(--rd)">0</div>
-        <div class="cm-sl">Offline</div>
+        <div class="cm-sl" data-i18n="statusOffline">Offline</div>
       </div>
       <div class="cm-sum-box">
         <div class="cm-sn" id="cmLatency" style="color:var(--ac)">--</div>
-        <div class="cm-sl">Avg ms</div>
+        <div class="cm-sl" data-i18n="avgMs">Avg ms</div>
       </div>
     </div>
     <div class="cm-body" id="cmBody"></div>
@@ -2963,7 +2963,7 @@
             <img src="logo.png" alt="CryptoHubCoin" style="height:36px;width:36px;object-fit:contain;border-radius:50%;" width="36" height="36" loading="lazy" decoding="async">
             <div>
               <span style="font-size:18px;font-weight:600;color:#fff;display:block;line-height:1.2">CryptoHubCoin</span>
-              <span style="font-size:11px;color:#185FA5;font-weight:600;letter-spacing:1.5px">CRYPTO TRACKER</span>
+              <span style="font-size:11px;color:#185FA5;font-weight:600;letter-spacing:1.5px" data-i18n="cryptoTracker">CRYPTO TRACKER</span>
             </div>
           </a>
           <p data-i18n="footerDesc" style="color:#94a3b8;max-width:300px;font-size:13px;line-height:1.6;margin:0 0 18px">
@@ -2992,7 +2992,7 @@
 
         <!-- ═══ Markets ═══ -->
         <div>
-          <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase">MARKETS</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase" data-i18n="navMarkets">MARKETS</div>
           <div style="display:flex;flex-direction:column;gap:11px">
             <a href="#" onclick="if(typeof navTo==='function')navTo('crypto');return false" class="ft-link-new"><span class="ft-dot"></span><span data-i18n="tabCrypto">Cryptocurrencies</span></a>
             <a href="#" onclick="if(typeof navTo==='function')navTo('exchanges');return false" class="ft-link-new"><span class="ft-dot"></span><span data-i18n="tabExchanges">All Exchanges</span></a>
@@ -3004,7 +3004,7 @@
 
         <!-- ═══ Premium Tools ═══ -->
         <div>
-          <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase">PREMIUM TOOLS</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase" data-i18n="navPremiumTools">PREMIUM TOOLS</div>
           <div style="display:flex;flex-direction:column;gap:11px">
             <a href="crypto-prediction" data-auth-required="1" data-feature="AI Price Predictor" class="ft-link-new"><span class="ft-dot"></span>AI Price Predictor</a>
             <a href="crypto-arbitrage" data-auth-required="1" data-feature="Crypto Arbitrage" class="ft-link-new"><span class="ft-dot"></span>Arbitrage Scanner</a>
@@ -3018,7 +3018,7 @@
 
         <!-- ═══ Resources ═══ -->
         <div>
-          <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase">RESOURCES</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase" data-i18n="navResources">RESOURCES</div>
           <div style="display:flex;flex-direction:column;gap:11px">
             <a href="blog" class="ft-link-new"><span class="ft-dot"></span><span data-i18n="blogNav">Blog</span></a>
             <a href="faq" class="ft-link-new"><span class="ft-dot"></span>FAQ</a>
@@ -3031,7 +3031,7 @@
 
         <!-- ═══ Company ═══ -->
         <div>
-          <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase">COMPANY</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase" data-i18n="navCompany">COMPANY</div>
           <div style="display:flex;flex-direction:column;gap:11px">
             <a href="about" class="ft-link-new"><span class="ft-dot"></span>About Us</a>
             <a href="#" onclick="openLegal('aboutModal');return false" class="ft-link-new"><span class="ft-dot"></span>Pricing <span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:99px;background:rgba(22,199,132,.2);color:#16c784;letter-spacing:0.4px;margin-left:4px">SOON</span></a>
@@ -3491,7 +3491,7 @@
           </div>
         </div>
         <div class="exd-right" style="flex:1;min-width:0">
-          <div style="padding:12px 16px;border-bottom:1px solid var(--bc);font-weight:700;font-size:14px">Markets</div>
+          <div style="padding:12px 16px;border-bottom:1px solid var(--bc);font-weight:700;font-size:14px" data-i18n="navMarkets">Markets</div>
           <div id="exdMW">
             <table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--bg2);border-bottom:1px solid var(--bc)">
               <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700;width:30px">#</th>
@@ -4707,7 +4707,7 @@
             </div>
             <input id="authLoginPassword" name="password" type="password" autocomplete="current-password" required class="auth-input">
           </div>
-          <button type="submit" class="auth-btn-primary" id="authLoginBtn">Log in</button>
+          <button type="submit" class="auth-btn-primary" id="authLoginBtn" data-i18n="loginBtn">Log in</button>
         </form>
         <div class="auth-footer">
           Don't have an account? <a href="#" data-view-switch="signup">Sign up</a>
@@ -4738,7 +4738,7 @@
           <p class="auth-legal">By continuing, you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a></p>
         </form>
         <div class="auth-footer">
-          Have an account? <a href="#" data-view-switch="login">Log in</a>
+          Have an account? <a href="#" data-view-switch="login" data-i18n="loginBtn">Log in</a>
         </div>
       </div>
 
@@ -4758,7 +4758,7 @@
           <button type="submit" class="auth-btn-primary" id="authForgotBtn">Send reset link</button>
         </form>
         <div class="auth-footer">
-          Remember your password? <a href="#" data-view-switch="login">Log in</a>
+          Remember your password? <a href="#" data-view-switch="login" data-i18n="loginBtn">Log in</a>
         </div>
       </div>
 

@@ -545,30 +545,42 @@
 <script src="script.min.js"></script>
 <script>
 /* Auth gating for premium tools on the About page.
-   Uses the site-wide Auth system (loaded via script.min.js).
+   The session cookie (ch_session) is HttpOnly, so JS can't read it directly.
+   We must ASK the API whether the user is logged in.
    If logged in -> open the tool. If not -> go to login. */
 (function () {
+  var LOGIN_URL = '/login.html';
+  var API_ME = 'https://api.cryptohubcoin.com/api/auth/me';
+
+  function checkLoggedIn() {
+    // Prefer the site-wide Auth helper if it exists
+    if (window.Auth && typeof Auth.getCurrentUser === 'function') {
+      return Auth.getCurrentUser().then(function (u) { return !!u; });
+    }
+    // Fallback: ask the API directly (sends the HttpOnly cookie)
+    return fetch(API_ME, { method: 'GET', credentials: 'include' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) { return !!(data && (data.user || data.id || data.email)); })
+      .catch(function () { return false; });
+  }
+
   document.addEventListener('click', function (e) {
     var a = e.target.closest('a[data-auth-required="1"]');
     if (!a) return;
     var href = a.getAttribute('href');
 
-    if (window.Auth && typeof Auth.getCurrentUser === 'function') {
-      e.preventDefault();
-      Auth.getCurrentUser().then(function (user) {
-        if (user) {
-          window.location.href = href;
-        } else if (typeof window.openAuthModal === 'function') {
-          window.openAuthModal('login');
-        } else {
-          window.location.href = '/login.html';
-        }
-      }).catch(function () {
-        if (typeof window.openAuthModal === 'function') window.openAuthModal('login');
-        else window.location.href = '/login.html';
-      });
-    }
-    // لو Auth مش جاهز، نسيب الرابط يفتح عادي (الأداة نفسها هتطلب تسجيل)
+    // Always intercept and verify before opening a premium tool
+    e.preventDefault();
+
+    checkLoggedIn().then(function (loggedIn) {
+      if (loggedIn) {
+        window.location.href = href;
+      } else if (typeof window.openAuthModal === 'function') {
+        window.openAuthModal('login');
+      } else {
+        window.location.href = LOGIN_URL;
+      }
+    });
   });
 })();
 </script>

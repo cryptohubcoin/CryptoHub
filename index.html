@@ -3587,11 +3587,29 @@
       var pendingHref = null;
       var pendingOpenInNewTab = false;
 
+      // يحدّث روابط جوجل عشان ترجّع المستخدم للأداة اللي ضغط عليها بعد الدخول.
+      // لو مفيش أداة (pendingHref فاضي)، يرجّع الرابط الأساسي زي ما هو.
+      function syncGoogleAuthNext() {
+        try {
+          var base = 'https://api.cryptohubcoin.com/api/auth/google';
+          var dest = (pendingHref && pendingHref.charAt(0) === '/' && pendingHref.charAt(1) !== '/')
+            ? pendingHref
+            : (pendingHref && pendingHref !== '#' && pendingHref.charAt(0) !== '#'
+                ? '/' + pendingHref.replace(/^\/+/, '')
+                : null);
+          var url = dest ? (base + '?next=' + encodeURIComponent(dest)) : base;
+          document.querySelectorAll('a.auth-btn-google').forEach(function (g) {
+            g.setAttribute('href', url);
+          });
+        } catch (e) {}
+      }
+
       function openAuthModal(view) {
         var modal = document.getElementById('authModal');
         if (!modal) return;
         switchView(view || 'login');
         clearAlerts();
+        syncGoogleAuthNext();
         modal.classList.add('is-open');
         document.body.style.overflow = 'hidden';
       }

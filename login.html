@@ -173,15 +173,33 @@
   // If the user was bounced here from a gated page, the gate will have
   // appended ?next=… or ?redirect=… so we can send them back after sign-in.
   // We only honor SAME-ORIGIN relative paths to prevent open-redirect abuse.
+  // Premium tools that should be returned to after login (not the dashboard)
+  var TOOL_PATHS = ['/crypto-prediction','/crypto-arbitrage','/crypto-analyzer','/forex-analyzer','/whale-alert','/token-vesting','/portfolio'];
+
+  function isToolPath(path) {
+    for (var i = 0; i < TOOL_PATHS.length; i++) {
+      if (path.indexOf(TOOL_PATHS[i]) === 0) return true;
+    }
+    return false;
+  }
+
   function getPostLoginUrl() {
     const raw = params.get('next') || params.get('redirect') || '';
-    if (!raw) return '/dashboard.html';
+    if (raw) {
+      try {
+        const decoded = decodeURIComponent(raw);
+        if (decoded.startsWith('/') && !decoded.startsWith('//') && !/^[a-z]+:/i.test(decoded)) {
+          return decoded;
+        }
+      } catch (e) {}
+    }
+    // No explicit next: if the user came from a premium tool page, send them back to it
     try {
-      const decoded = decodeURIComponent(raw);
-      // Only allow site-relative paths (e.g. /crypto-prediction?coin=BTC).
-      // Reject anything starting with // (protocol-relative) or with a scheme.
-      if (decoded.startsWith('/') && !decoded.startsWith('//') && !/^[a-z]+:/i.test(decoded)) {
-        return decoded;
+      if (document.referrer) {
+        const ref = new URL(document.referrer);
+        if (ref.origin === window.location.origin && isToolPath(ref.pathname)) {
+          return ref.pathname + ref.search;
+        }
       }
     } catch (e) {}
     return '/dashboard.html';

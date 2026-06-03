@@ -542,48 +542,33 @@
     })();
     // ────────────────────────────────────────────────────────────────────
     </script>
+<script src="script.min.js"></script>
 <script>
 /* Auth gating for premium tools on the About page.
-   Matches the main site behavior: if a premium tool link is clicked and the
-   user is not logged in, redirect to the login page instead of opening the tool. */
+   Uses the site-wide Auth system (loaded via script.min.js).
+   If logged in -> open the tool. If not -> go to login. */
 (function () {
-  var LOGIN_URL = '/login.html';
-
-  function userIsLoggedIn() {
-    // Try the site-wide Auth helper if present
-    if (window.Auth && typeof Auth.getCurrentUser === 'function') return null; // handled async below
-    // Fallback: check common auth token keys in storage
-    var keys = ['auth_token','authToken','token','ch_token','jwt','accessToken','user','currentUser'];
-    for (var i = 0; i < keys.length; i++) {
-      if (localStorage.getItem(keys[i]) || sessionStorage.getItem(keys[i])) return true;
-    }
-    // Fallback: check for an auth cookie
-    if (/(?:^|;\s*)(auth_token|authToken|token|jwt|ch_token)=/.test(document.cookie)) return true;
-    return false;
-  }
-
   document.addEventListener('click', function (e) {
     var a = e.target.closest('a[data-auth-required="1"]');
     if (!a) return;
     var href = a.getAttribute('href');
 
-    // If the site-wide Auth helper exists, use it (async, accurate)
     if (window.Auth && typeof Auth.getCurrentUser === 'function') {
       e.preventDefault();
       Auth.getCurrentUser().then(function (user) {
-        if (user) window.location.href = href;
-        else window.location.href = LOGIN_URL;
+        if (user) {
+          window.location.href = href;
+        } else if (typeof window.openAuthModal === 'function') {
+          window.openAuthModal('login');
+        } else {
+          window.location.href = '/login.html';
+        }
       }).catch(function () {
-        window.location.href = LOGIN_URL;
+        if (typeof window.openAuthModal === 'function') window.openAuthModal('login');
+        else window.location.href = '/login.html';
       });
-      return;
     }
-
-    // Otherwise use the storage/cookie fallback
-    if (!userIsLoggedIn()) {
-      e.preventDefault();
-      window.location.href = LOGIN_URL;
-    }
+    // لو Auth مش جاهز، نسيب الرابط يفتح عادي (الأداة نفسها هتطلب تسجيل)
   });
 })();
 </script>

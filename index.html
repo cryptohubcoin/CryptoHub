@@ -1571,7 +1571,7 @@
                 </a>
                 <a class="nav-item" onclick="navTo('stocks');return false" href="#" style="border-radius:10px">
                   <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(216,90,48,.12)"><i class="fas fa-chart-line" style="color:#D85A30;font-size:14px"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="tabStocks">Stocks &amp; ETFs</div></div>
+                  <div style="flex:1" data-i18n="stocksEtfs"><div class="nav-title" data-i18n="tabStocks">Stocks &amp; ETFs</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
 
@@ -1580,32 +1580,32 @@
 
                 <a class="nav-item" href="crypto-prediction" data-auth-required="1" data-feature="AI Price Predictor" style="border-radius:10px">
                   <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(226,75,74,.12)"><i class="fas fa-lightbulb" style="color:#E24B4A;font-size:14px"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="aiPredictorTitle">AI Price Predictor</div></div>
+                  <div style="flex:1" data-i18n="toolPredictor"><div class="nav-title" data-i18n="aiPredictorTitle">AI Price Predictor</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" href="crypto-arbitrage" data-auth-required="1" data-feature="Crypto Arbitrage" style="border-radius:10px">
                   <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(29,158,117,.12)"><i class="fas fa-balance-scale" style="color:#1D9E75;font-size:14px"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="cryptoArbitrage">Arbitrage Scanner</div></div>
+                  <div style="flex:1" data-i18n="toolArbitrage"><div class="nav-title" data-i18n="cryptoArbitrage">Arbitrage Scanner</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" href="crypto-analyzer" data-auth-required="1" data-feature="Crypto Analyzer" style="border-radius:10px">
                   <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(55,138,221,.12)"><i class="fas fa-chart-pie" style="color:#378ADD;font-size:14px"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="cryptoAnalyzer">Liquidity Analyzer</div></div>
+                  <div style="flex:1" data-i18n="toolLiquidity"><div class="nav-title" data-i18n="cryptoAnalyzer">Liquidity Analyzer</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" href="forex-analyzer.html" data-auth-required="1" data-feature="Forex Analyzer" style="border-radius:10px">
                   <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(186,117,23,.12)"><i class="fas fa-dollar-sign" style="color:#BA7517;font-size:14px"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="forexAnalyzer">Forex Analyzer</div></div>
+                  <div style="flex:1" data-i18n="toolForex"><div class="nav-title" data-i18n="forexAnalyzer">Forex Analyzer</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" href="whale-alert" data-auth-required="1" data-feature="Whale Alert" style="border-radius:10px">
                   <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(55,138,221,.12)"><i class="fas fa-water" style="color:#378ADD;font-size:14px"></i></div>
-                  <div style="flex:1"><div class="nav-title">Whale Alert</div></div>
+                  <div style="flex:1"><div class="nav-title" data-i18n="toolWhale">Whale Alert</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
                 <a class="nav-item" href="token-vesting" data-auth-required="1" data-target="_blank" data-feature="Token Vesting" style="border-radius:10px">
                   <div class="nav-ico" style="width:34px;height:34px;border-radius:10px;background:rgba(127,119,221,.12)"><i class="fas fa-lock-open" style="color:#7F77DD;font-size:14px"></i></div>
-                  <div style="flex:1"><div class="nav-title" data-i18n="tokenVestingTitle">Token Vesting &amp; Unlocks</div></div>
+                  <div style="flex:1" data-i18n="toolVestingFull"><div class="nav-title" data-i18n="tokenVestingTitle">Token Vesting &amp; Unlocks</div></div>
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
 
@@ -2271,7 +2271,7 @@
               </div>
             </div>
             <div class="exg-badges">
-              <span class="exg-badge exg-badge-green"><i class="fas fa-clock"></i> 4h Refresh</span>
+              <span class="exg-badge exg-badge-green" data-i18n="refresh4h"><i class="fas fa-clock"></i> 4h Refresh</span>
               <span class="exg-badge exg-badge-gold"><i class="fas fa-link"></i> <span
                   data-i18n="colTrade">Trade</span></span>
             </div>
@@ -2333,7 +2333,7 @@
             <input type="text" id="nftSearch" placeholder="Search NFT collection..." oninput="_filterNFT(this.value)" style="width:100%;padding:7px 10px 7px 30px;background:var(--bg2);border:1px solid var(--bc);border-radius:8px;color:var(--t1);font-size:12px;outline:none">
           </div>
           <select id="nftChainFilter" onchange="_filterNFTChain(this.value)" style="padding:7px 10px;background:var(--bg2);border:1px solid var(--bc);border-radius:8px;color:var(--t2);font-size:12px;cursor:pointer;outline:none">
-            <option value="">All Chains</option><option value="ethereum">Ethereum</option><option value="solana">Solana</option><option value="bitcoin">Bitcoin</option><option value="polygon-pos">Polygon</option><option value="arbitrum-one">Arbitrum</option><option value="avalanche">Avalanche</option><option value="base">Base</option>
+            <option value="" data-i18n="allChains">All Chains</option><option value="ethereum">Ethereum</option><option value="solana">Solana</option><option value="bitcoin">Bitcoin</option><option value="polygon-pos">Polygon</option><option value="arbitrum-one">Arbitrum</option><option value="avalanche">Avalanche</option><option value="base">Base</option>
           </select>
         </div>
         <div class="ct" style="overflow-x:auto;width:100%;display:block">
@@ -2737,7 +2737,7 @@
   <!-- Connection Manager Panel -->
   <div class="cm-panel" id="cmPanel" style="display:none!important">
     <div class="cm-panel-hd">
-      <h4><i class="fas fa-satellite-dish" style="color:var(--ac)"></i> Connection Manager</h4>
+      <h4 data-i18n="connManager"><i class="fas fa-satellite-dish" style="color:var(--ac)"></i> Connection Manager</h4>
       <div class="cm-hd-acts">
         <div class="cm-hd-btn" onclick="_CM.refreshAll()" title="Refresh All"><i class="fas fa-sync-alt"></i></div>
         <div class="cm-hd-btn" onclick="_CM.toggle()" title="Close"><i class="fas fa-times"></i></div>
@@ -3011,8 +3011,8 @@
             <a href="crypto-analyzer" data-auth-required="1" data-feature="Crypto Analyzer" class="ft-link-new"><span class="ft-dot"></span>Liquidity Analyzer</a>
             <a href="forex-analyzer.html" data-auth-required="1" data-feature="Forex Analyzer" class="ft-link-new"><span class="ft-dot"></span>Forex Analyzer</a>
             <a href="whale-alert" data-auth-required="1" data-feature="Whale Alert" class="ft-link-new"><span class="ft-dot"></span>Whale Alert</a>
-            <a href="portfolio" data-auth-required="1" data-feature="Portfolio Tracker" class="ft-link-new"><span class="ft-dot"></span>Portfolio Tracker</a>
-            <a href="token-vesting" data-auth-required="1" data-target="_blank" data-feature="Token Vesting" class="ft-link-new"><span class="ft-dot"></span>Token Vesting</a>
+            <a href="portfolio" data-auth-required="1" data-feature="Portfolio Tracker" class="ft-link-new" data-i18n="toolPortfolio"><span class="ft-dot"></span>Portfolio Tracker</a>
+            <a href="token-vesting" data-auth-required="1" data-target="_blank" data-feature="Token Vesting" class="ft-link-new" data-i18n="toolVesting"><span class="ft-dot"></span>Token Vesting</a>
           </div>
         </div>
 
@@ -3022,10 +3022,10 @@
           <div style="display:flex;flex-direction:column;gap:11px">
             <a href="blog" class="ft-link-new"><span class="ft-dot"></span><span data-i18n="blogNav">Blog</span></a>
             <a href="faq" class="ft-link-new"><span class="ft-dot"></span>FAQ</a>
-            <a href="glossary" class="ft-link-new"><span class="ft-dot"></span>Glossary</a>
-            <a href="api-docs.html" target="_blank" class="ft-link-new"><span class="ft-dot"></span>Developer API</a>
-            <a href="bitcoin-guide-2025.html" class="ft-link-new"><span class="ft-dot"></span>Bitcoin Guide 2025</a>
-            <a href="crypto-security-guide.html" class="ft-link-new"><span class="ft-dot"></span>Security Guide</a>
+            <a href="glossary" class="ft-link-new" data-i18n="glossary"><span class="ft-dot"></span>Glossary</a>
+            <a href="api-docs.html" target="_blank" class="ft-link-new" data-i18n="developerApi"><span class="ft-dot"></span>Developer API</a>
+            <a href="bitcoin-guide-2025.html" class="ft-link-new" data-i18n="bitcoinGuide"><span class="ft-dot"></span>Bitcoin Guide 2025</a>
+            <a href="crypto-security-guide.html" class="ft-link-new" data-i18n="securityGuide"><span class="ft-dot"></span>Security Guide</a>
           </div>
         </div>
 
@@ -3033,9 +3033,9 @@
         <div>
           <div style="font-size:11px;font-weight:700;color:#fff;letter-spacing:1.5px;margin:0 0 18px;text-transform:uppercase" data-i18n="navCompany">COMPANY</div>
           <div style="display:flex;flex-direction:column;gap:11px">
-            <a href="about" class="ft-link-new"><span class="ft-dot"></span>About Us</a>
-            <a href="#" onclick="openLegal('aboutModal');return false" class="ft-link-new"><span class="ft-dot"></span>Pricing <span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:99px;background:rgba(22,199,132,.2);color:#16c784;letter-spacing:0.4px;margin-left:4px">SOON</span></a>
-            <a href="https://t.me/CryptoHubCoinNews" target="_blank" rel="noopener" class="ft-link-new"><span class="ft-dot"></span>Contact</a>
+            <a href="about" class="ft-link-new" data-i18n="aboutUs"><span class="ft-dot"></span>About Us</a>
+            <a href="#" onclick="openLegal('aboutModal');return false" class="ft-link-new" data-i18n="pricing"><span class="ft-dot"></span>Pricing <span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:99px;background:rgba(22,199,132,.2);color:#16c784;letter-spacing:0.4px;margin-left:4px">SOON</span></a>
+            <a href="https://t.me/CryptoHubCoinNews" target="_blank" rel="noopener" class="ft-link-new" data-i18n="contact"><span class="ft-dot"></span>Contact</a>
             <a href="terms.html" class="ft-link-new"><span class="ft-dot"></span>Terms of Service</a>
             <a href="privacy.html" class="ft-link-new"><span class="ft-dot"></span>Privacy Policy</a>
           </div>
@@ -3234,12 +3234,12 @@
       <button class="legal-close" onclick="closeLegal('aboutModal')">&times;</button>
       <h2><i class="fas fa-info-circle" style="color:var(--ac)"></i> About CryptoHub</h2>
 
-      <h3>Our Mission</h3>
+      <h3 data-i18n="ourMission">Our Mission</h3>
       <p>CryptoHub was created to provide everyone with free, comprehensive access to cryptocurrency market data and
         analysis tools. We believe in making financial information accessible, transparent, and easy to understand for
         traders and enthusiasts worldwide.</p>
 
-      <h3>What We Offer</h3>
+      <h3 data-i18n="whatWeOffer">What We Offer</h3>
       <ul>
         <li><strong>10,000+ Cryptocurrencies:</strong> Real-time prices, market caps, volumes, and detailed information
           for thousands of digital assets.</li>
@@ -3255,11 +3255,11 @@
         <li><strong>Exchange Information:</strong> Data from Binance, MEXC, Gate.io, OKX, and many more exchanges.</li>
       </ul>
 
-      <h3>Our Data Sources</h3>
+      <h3 data-i18n="ourDataSources">Our Data Sources</h3>
       <p>We aggregate data from multiple trusted global sources and premium APIs to provide you with the most accurate
         and up-to-date information possible.</p>
 
-      <h3>Privacy First</h3>
+      <h3 data-i18n="privacyFirst">Privacy First</h3>
       <p>CryptoHub does not require registration or personal information. All analysis is performed in your browser. We
         respect your privacy and only use essential cookies and analytics to improve our service.</p>
 
@@ -3443,11 +3443,11 @@
                   <tr style="background:var(--bg3);position:sticky;top:0;z-index:2">
                     <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Exchange
                     </th>
-                    <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Pair</th>
+                    <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700" data-i18n="pair">Pair</th>
                     <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Price</th>
                     <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700;min-width:110px">Volume (24h)
                     </th>
-                    <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Volume %</th>
+                    <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700" data-i18n="volumePct">Volume %</th>
                   </tr>
                 </thead>
                 <tbody id="exLst"></tbody>
@@ -3476,7 +3476,7 @@
       <div class="exd-body" style="display:flex;min-height:380px">
         <div class="exd-left" style="width:280px;flex-shrink:0;padding:20px;border-right:1px solid var(--bc)">
           <div id="exdLinks" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"></div>
-          <a id="exdRegBtn" href="#" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;background:#16c784;color:#fff;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;width:100%;margin-bottom:16px"><i class="fas fa-user-plus"></i> Register Now</a>
+          <a id="exdRegBtn" href="#" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;background:#16c784;color:#fff;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;width:100%;margin-bottom:16px" data-i18n="registerNow"><i class="fas fa-user-plus"></i> Register Now</a>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
             <div style="background:var(--bg3);border:1px solid var(--bc);border-radius:10px;padding:10px 12px">
               <div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:600">Volume (24h)</div>
@@ -3496,10 +3496,10 @@
             <table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--bg2);border-bottom:1px solid var(--bc)">
               <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700;width:30px">#</th>
               <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Currency</th>
-              <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Pair</th>
+              <th class="text-start px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700" data-i18n="pair">Pair</th>
               <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Price</th>
               <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700;min-width:110px">Volume (24h)</th>
-              <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700">Volume %</th>
+              <th class="text-end px-3 py-2.5" style="color:var(--t2);font-size:12px;font-weight:700" data-i18n="volumePct">Volume %</th>
             </tr></thead><tbody id="exdTB"></tbody></table>
           </div>
           <div class="exd-pag" id="exdPag" style="display:none;justify-content:center;gap:4px;padding:12px;flex-wrap:wrap"></div>
@@ -4682,7 +4682,7 @@
 
       <div class="auth-tabs" id="authTabs">
         <button type="button" class="auth-tab active" data-view="login">Log In</button>
-        <button type="button" class="auth-tab" data-view="signup">Sign Up</button>
+        <button type="button" class="auth-tab" data-view="signup" data-i18n="signUpTab">Sign Up</button>
       </div>
 
       <div id="authAlertError" class="auth-alert auth-alert-error"></div>
@@ -4692,25 +4692,25 @@
       <div class="auth-view" data-view="login">
         <a class="auth-btn-google" href="https://api.cryptohubcoin.com/api/auth/google">
           <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-          Continue with Google
+          <span data-i18n="continueGoogle">Continue with Google</span>
         </a>
         <div class="auth-divider"><span class="auth-divider-line"></span><span class="auth-divider-text">OR</span><span class="auth-divider-line"></span></div>
         <form id="authLoginForm" novalidate>
           <div class="auth-field">
-            <label for="authLoginEmail" class="auth-label">Email Address</label>
+            <label for="authLoginEmail" class="auth-label" data-i18n="emailAddress">Email Address</label>
             <input id="authLoginEmail" name="email" type="email" autocomplete="email" required class="auth-input">
           </div>
           <div class="auth-field">
             <div class="auth-field-row">
-              <label for="authLoginPassword" class="auth-label">Password</label>
-              <a href="#" class="auth-link" data-view-switch="forgot">Forgot?</a>
+              <label for="authLoginPassword" class="auth-label" data-i18n="password">Password</label>
+              <a href="#" class="auth-link" data-view-switch="forgot" data-i18n="forgot">Forgot?</a>
             </div>
             <input id="authLoginPassword" name="password" type="password" autocomplete="current-password" required class="auth-input">
           </div>
           <button type="submit" class="auth-btn-primary" id="authLoginBtn" data-i18n="loginBtn">Log in</button>
         </form>
         <div class="auth-footer">
-          Don't have an account? <a href="#" data-view-switch="signup">Sign up</a>
+          <span data-i18n="dontHaveAccount">Don't have an account?</span> <a href="#" data-view-switch="signup" data-i18n="signUpLink">Sign up</a>
         </div>
       </div>
 
@@ -4718,27 +4718,27 @@
       <div class="auth-view" data-view="signup" style="display:none">
         <a class="auth-btn-google" href="https://api.cryptohubcoin.com/api/auth/google">
           <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-          Sign up with Google
+          <span data-i18n="signUpGoogle">Sign up with Google</span>
         </a>
         <div class="auth-divider"><span class="auth-divider-line"></span><span class="auth-divider-text">OR</span><span class="auth-divider-line"></span></div>
         <form id="authSignupForm" novalidate>
           <div class="auth-field">
-            <label for="authSignupName" class="auth-label">Full Name</label>
+            <label for="authSignupName" class="auth-label" data-i18n="fullName">Full Name</label>
             <input id="authSignupName" name="full_name" type="text" autocomplete="name" required maxlength="100" class="auth-input">
           </div>
           <div class="auth-field">
-            <label for="authSignupEmail" class="auth-label">Email Address</label>
+            <label for="authSignupEmail" class="auth-label" data-i18n="emailAddress">Email Address</label>
             <input id="authSignupEmail" name="email" type="email" autocomplete="email" required maxlength="254" class="auth-input">
           </div>
           <div class="auth-field">
-            <label for="authSignupPassword" class="auth-label">Password</label>
+            <label for="authSignupPassword" class="auth-label" data-i18n="password">Password</label>
             <input id="authSignupPassword" name="password" type="password" autocomplete="new-password" required minlength="8" maxlength="128" class="auth-input" placeholder="Min. 8 characters">
           </div>
-          <button type="submit" class="auth-btn-primary" id="authSignupBtn">Create account</button>
+          <button type="submit" class="auth-btn-primary" id="authSignupBtn" data-i18n="createAccount">Create account</button>
           <p class="auth-legal">By continuing, you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a></p>
         </form>
         <div class="auth-footer">
-          Have an account? <a href="#" data-view-switch="login" data-i18n="loginBtn">Log in</a>
+          <span data-i18n="haveAccount">Have an account?</span> <a href="#" data-view-switch="login" data-i18n="loginBtn">Log in</a>
         </div>
       </div>
 
@@ -4748,14 +4748,14 @@
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           Back to Log in
         </a>
-        <h2 class="auth-h2" id="authModalTitle">Reset password</h2>
+        <h2 class="auth-h2" id="authModalTitle" data-i18n="resetPassword">Reset password</h2>
         <p class="auth-sub">Enter your email and we'll send you a reset link</p>
         <form id="authForgotForm" novalidate>
           <div class="auth-field">
-            <label for="authForgotEmail" class="auth-label">Email Address</label>
+            <label for="authForgotEmail" class="auth-label" data-i18n="emailAddress">Email Address</label>
             <input id="authForgotEmail" name="email" type="email" autocomplete="email" required class="auth-input">
           </div>
-          <button type="submit" class="auth-btn-primary" id="authForgotBtn">Send reset link</button>
+          <button type="submit" class="auth-btn-primary" id="authForgotBtn" data-i18n="sendResetLink">Send reset link</button>
         </form>
         <div class="auth-footer">
           Remember your password? <a href="#" data-view-switch="login" data-i18n="loginBtn">Log in</a>

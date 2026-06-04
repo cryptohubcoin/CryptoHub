@@ -675,12 +675,6 @@
           "@type": "Dataset",
           "name": "Cryptocurrencies",
           "description": "Live prices, market cap, volume, and charts for 10,000+ cryptocurrencies including Bitcoin, Ethereum, Solana, XRP, DOGE, BNB, and all major altcoins.",
-          "creator": {
-            "@type": "Organization",
-            "name": "CryptoHub",
-            "url": "https://www.cryptohubcoin.com/"
-          },
-          "license": "https://www.cryptohubcoin.com/terms",
           "url": "https://www.cryptohubcoin.com/#crypto"
         }
       },
@@ -691,12 +685,6 @@
           "@type": "Dataset",
           "name": "All Exchanges",
           "description": "Rankings and comparison of 500+ cryptocurrency exchanges by trading volume, trust score, fees, and supported coins. Includes Binance, Bybit, Coinbase, OKX, Kraken, KuCoin, MEXC, and more.",
-          "creator": {
-            "@type": "Organization",
-            "name": "CryptoHub",
-            "url": "https://www.cryptohubcoin.com/"
-          },
-          "license": "https://www.cryptohubcoin.com/terms",
           "url": "https://www.cryptohubcoin.com/#exchanges"
         }
       },
@@ -707,12 +695,6 @@
           "@type": "Dataset",
           "name": "NFT Collections",
           "description": "Live NFT collection rankings with floor prices, trading volume, and market cap. Track Bored Ape Yacht Club, CryptoPunks, Azuki, and thousands of NFT projects across Ethereum, Solana, and Polygon.",
-          "creator": {
-            "@type": "Organization",
-            "name": "CryptoHub",
-            "url": "https://www.cryptohubcoin.com/"
-          },
-          "license": "https://www.cryptohubcoin.com/terms",
           "url": "https://www.cryptohubcoin.com/#nft"
         }
       },
@@ -723,12 +705,6 @@
           "@type": "Dataset",
           "name": "Stocks & ETFs",
           "description": "Live stock and ETF prices including crypto-related equities, Bitcoin ETFs (IBIT, FBTC), Ethereum ETFs, and major indices like S&P 500, NASDAQ. Compare crypto and traditional markets side by side.",
-          "creator": {
-            "@type": "Organization",
-            "name": "CryptoHub",
-            "url": "https://www.cryptohubcoin.com/"
-          },
-          "license": "https://www.cryptohubcoin.com/terms",
           "url": "https://www.cryptohubcoin.com/#stocks"
         }
       }
@@ -2098,6 +2074,50 @@
           window.toggleGainers = function () {
             var hidden = sessionStorage.getItem(KEY) === '1';
             sessionStorage.setItem(KEY, hidden ? '0' : '1');   // اقلب الحالة
+            paint();
+          };
+          paint();
+        })();
+      </script>
+
+      <div class="tg-section" id="losersWrap" style="min-height:110px;contain:layout style paint">
+        <div class="tg-hdr">
+          <div style="display:flex;align-items:center;gap:8px" id="tlHdrInfo">
+            <i class="fas fa-arrow-trend-down" style="color:#ef4444"></i>
+            <span data-i18n="top100Losers">Top 100 Losers</span>
+            <span class="tg-live"><span class="ld" style="width:5px;height:5px"></span> LIVE</span>
+          </div>
+          <span id="tlToggle" onclick="toggleLosers()" role="button" tabindex="0" title="Show / Hide"
+            style="position:relative;width:38px;height:21px;border-radius:11px;display:inline-block;cursor:pointer;flex-shrink:0;transition:all .2s">
+          </span>
+        </div>
+        <div class="tg-belt" id="tlBelt">
+          <div class="tg-track" id="losersContent"></div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          var KEY = 'hideLosers';
+          function paint() {
+            var on = sessionStorage.getItem(KEY) !== '1';
+            var belt = document.getElementById('tlBelt');
+            var tog = document.getElementById('tlToggle');
+            var info = document.getElementById('tlHdrInfo');
+            if (belt) belt.style.display = on ? '' : 'none';
+            if (info) info.style.opacity = on ? '1' : '0.55';
+            var sec = document.getElementById('losersWrap');
+            if (sec) sec.style.minHeight = on ? '110px' : '0';
+            if (tog) {
+              tog.style.background = on ? '#16c784' : '#d1d5db';
+              tog.innerHTML = on
+                ? '<span style="position:absolute;top:2px;left:2px;width:17px;height:17px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s"><i class="fas fa-check" style="font-size:10px;color:#16a34a"></i></span>'
+                : '<span style="position:absolute;top:2px;right:2px;width:17px;height:17px;background:#fff;border-radius:50%;transition:all .2s"></span>';
+            }
+          }
+          window.toggleLosers = function () {
+            var hidden = sessionStorage.getItem(KEY) === '1';
+            sessionStorage.setItem(KEY, hidden ? '0' : '1');
             paint();
           };
           paint();

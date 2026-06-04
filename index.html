@@ -2079,50 +2079,6 @@
           paint();
         })();
       </script>
-
-      <div class="tg-section" id="losersWrap" style="min-height:110px;contain:layout style paint">
-        <div class="tg-hdr">
-          <div style="display:flex;align-items:center;gap:8px" id="tlHdrInfo">
-            <i class="fas fa-arrow-trend-down" style="color:#ef4444"></i>
-            <span data-i18n="top100Losers">Top 100 Losers</span>
-            <span class="tg-live"><span class="ld" style="width:5px;height:5px"></span> LIVE</span>
-          </div>
-          <span id="tlToggle" onclick="toggleLosers()" role="button" tabindex="0" title="Show / Hide"
-            style="position:relative;width:38px;height:21px;border-radius:11px;display:inline-block;cursor:pointer;flex-shrink:0;transition:all .2s">
-          </span>
-        </div>
-        <div class="tg-belt" id="tlBelt">
-          <div class="tg-track" id="losersContent"></div>
-        </div>
-      </div>
-
-      <script>
-        (function () {
-          var KEY = 'hideLosers';
-          function paint() {
-            var on = sessionStorage.getItem(KEY) !== '1';
-            var belt = document.getElementById('tlBelt');
-            var tog = document.getElementById('tlToggle');
-            var info = document.getElementById('tlHdrInfo');
-            if (belt) belt.style.display = on ? '' : 'none';
-            if (info) info.style.opacity = on ? '1' : '0.55';
-            var sec = document.getElementById('losersWrap');
-            if (sec) sec.style.minHeight = on ? '110px' : '0';
-            if (tog) {
-              tog.style.background = on ? '#16c784' : '#d1d5db';
-              tog.innerHTML = on
-                ? '<span style="position:absolute;top:2px;left:2px;width:17px;height:17px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s"><i class="fas fa-check" style="font-size:10px;color:#16a34a"></i></span>'
-                : '<span style="position:absolute;top:2px;right:2px;width:17px;height:17px;background:#fff;border-radius:50%;transition:all .2s"></span>';
-            }
-          }
-          window.toggleLosers = function () {
-            var hidden = sessionStorage.getItem(KEY) === '1';
-            sessionStorage.setItem(KEY, hidden ? '0' : '1');
-            paint();
-          };
-          paint();
-        })();
-      </script>
       <select id="netSel" style="display:none">
         <option value="all">All</option>
       </select>
@@ -2296,7 +2252,48 @@
         <button onclick="gNext()" class="pg-btn" id="pgNext"><i class="fas fa-angle-right"></i></button>
         <button onclick="gLast()" class="pg-btn" title="Last"><i class="fas fa-angle-double-right"></i></button>
       </div>
-      <div id="aiSignalBar" style="padding:0 8px 12px"></div>
+      <div class="tg-section" id="losersWrap" style="min-height:110px;contain:layout style paint;margin-top:12px">
+        <div class="tg-hdr">
+          <div style="display:flex;align-items:center;gap:8px" id="tlHdrInfo">
+            <i class="fas fa-arrow-trend-down" style="color:#ef4444"></i>
+            <span data-i18n="top100Losers">Top 100 Losers</span>
+            <span class="tg-live"><span class="ld" style="width:5px;height:5px"></span> LIVE</span>
+          </div>
+          <span id="tlToggle" onclick="toggleLosers()" role="button" tabindex="0" title="Show / Hide"
+            style="position:relative;width:38px;height:21px;border-radius:11px;display:inline-block;cursor:pointer;flex-shrink:0;transition:all .2s">
+          </span>
+        </div>
+        <div class="tg-belt" id="tlBelt">
+          <div class="tg-track" id="losersContent"></div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          var KEY = 'hideLosers';
+          function paint() {
+            var on = sessionStorage.getItem(KEY) !== '1';
+            var belt = document.getElementById('tlBelt');
+            var tog = document.getElementById('tlToggle');
+            var info = document.getElementById('tlHdrInfo');
+            if (belt) belt.style.display = on ? '' : 'none';
+            if (info) info.style.opacity = on ? '1' : '0.55';
+            var sec = document.getElementById('losersWrap');
+            if (sec) sec.style.minHeight = on ? '110px' : '0';
+            if (tog) {
+              tog.style.background = on ? '#16c784' : '#d1d5db';
+              tog.innerHTML = on
+                ? '<span style="position:absolute;top:2px;left:2px;width:17px;height:17px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s"><i class="fas fa-check" style="font-size:10px;color:#16a34a"></i></span>'
+                : '<span style="position:absolute;top:2px;right:2px;width:17px;height:17px;background:#fff;border-radius:50%;transition:all .2s"></span>';
+            }
+          }
+          window.toggleLosers = function () {
+            var hidden = sessionStorage.getItem(KEY) === '1';
+            sessionStorage.setItem(KEY, hidden ? '0' : '1');
+            paint();
+          };
+          paint();
+        })();
+      </script>
     </div><!-- /tab_crypto -->
 
     <!-- Tab: All Exchanges -->

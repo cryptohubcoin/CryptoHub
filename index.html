@@ -974,6 +974,14 @@
       if (!apiResp) return null;
       var raw = apiResp.data || apiResp;
       if (!raw) return null;
+      // ═══ FIX (Jun 2026): stats/fear wraps its payload one level deeper —
+      //     {data:{key:'fear_greed',source,data:{now,...}}}. Unwrap the inner
+      //     .data when the fear/greed fields live there, so `now` isn't
+      //     undefined. Leaves the flat /market/global shape untouched. ═══
+      if (raw.data && typeof raw.data === 'object' &&
+          (raw.data.now !== undefined || raw.key === 'fear_greed')) {
+        raw = raw.data;
+      }
       return {
         totalMarketCap: raw.totalMarketCap || raw.total_market_cap || 0,
         totalVolume24h: raw.totalVolume24h || raw.total_volume_24h || 0,

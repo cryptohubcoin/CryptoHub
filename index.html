@@ -974,14 +974,6 @@
       if (!apiResp) return null;
       var raw = apiResp.data || apiResp;
       if (!raw) return null;
-      // ═══ FIX (Jun 2026): stats/fear wraps its payload one level deeper —
-      //     {data:{key:'fear_greed',source,data:{now,...}}}. Unwrap the inner
-      //     .data when the fear/greed fields live there, so `now` isn't
-      //     undefined. Leaves the flat /market/global shape untouched. ═══
-      if (raw.data && typeof raw.data === 'object' &&
-          (raw.data.now !== undefined || raw.key === 'fear_greed')) {
-        raw = raw.data;
-      }
       return {
         totalMarketCap: raw.totalMarketCap || raw.total_market_cap || 0,
         totalVolume24h: raw.totalVolume24h || raw.total_volume_24h || 0,
@@ -5525,7 +5517,19 @@
       ['mPtP','text'], ['mPtHL','text'], ['mPtC','text'],
       ['mPdP','text'], ['mPdHL','text'], ['mPdC','text'],
       // Market stats bar — innerHTML preserves the layout
-      ['cmcBar', 'html']
+      ['cmcBar', 'html'],
+      // ═══ FIX (Jun 2026): cache the indicator cards too, so RSI/MACD/etc.
+      //     show their last-known values INSTANTLY on load instead of "--"
+      //     for the ~1s it takes calcAI() to fetch klines & recompute.
+      //     Value + status for each of the 10 indicators. ═══
+      ['irRsiV','text'],   ['irRsiStatus','html'],
+      ['irMacdV','text'],  ['irMacdStatus','html'],
+      ['irBbV','text'],    ['irBbStatus','html'],
+      ['irEmaV','text'],   ['irEmaStatus','html'],
+      ['irStochV','text'], ['irStochStatus','html'],
+      ['irAdxV','text'],   ['irAdxStatus','html'],
+      ['irVolV','text'],   ['irVolStatus','html'],
+      ['irSrV','text'],    ['irSrStatus','html']
     ];
 
     function loadSnapshot(){

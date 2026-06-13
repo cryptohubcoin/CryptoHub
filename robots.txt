@@ -41,9 +41,6 @@ Disallow: /*?utm_
 Disallow: /*?ref=
 Disallow: /*?start=
 
-# ---- منع .html duplicates ----
-Disallow: /*.html$
-
 # ---- منع صفحات النظام ----
 Disallow: /admin/
 Disallow: /private/
@@ -89,7 +86,6 @@ Disallow: /*?page=
 Disallow: /*?utm_
 Disallow: /*?ref=
 Disallow: /*?start=
-Disallow: /*.html$
 Disallow: /admin/
 Disallow: /private/
 Disallow: /cdn-cgi/
@@ -120,7 +116,6 @@ Disallow: /*?filter=
 Disallow: /*?search=
 Disallow: /*?utm_
 Disallow: /*?ref=
-Disallow: /*.html$
 Disallow: /admin/
 Disallow: /cdn-cgi/
 Crawl-delay: 1

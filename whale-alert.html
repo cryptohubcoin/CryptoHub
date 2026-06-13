@@ -11,24 +11,24 @@
 <link rel="stylesheet" href="style.css">
 <link rel="preconnect" href="https://api.cryptohubcoin.com" crossorigin>
 <style>
-:root{--wbg:#0a0e17;--wbg2:#111827;--wbg3:#1a2332;--wborder:#1e2d45;--waccent:#00d4ff;--waccent2:#7c3aed;--wgreen:#10b981;--wred:#ef4444;--wblue:#3b82f6;--worange:#f59e0b;--wpurple:#a855f7;--wt1:#f1f5f9;--wt2:#94a3b8;--wt3:#64748b}
+:root{--wbg:#F4F7FC;--wbg2:#FFFFFF;--wbg3:#E8EEF8;--wborder:#E0E5F0;--waccent:#185FA5;--waccent2:#534AB7;--wgreen:#059669;--wred:#DC2626;--wblue:#378ADD;--worange:#BA7517;--wpurple:#7F77DD;--wt1:#1B2440;--wt2:#5B6675;--wt3:#9AA3B5;color-scheme:light}
 *{margin:0;padding:0;box-sizing:border-box}
 body.whale-page{background:var(--wbg);color:var(--wt1);font-family:'Plus Jakarta Sans','Cairo',sans-serif;min-height:100vh;overflow-x:hidden}
-.wbg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(0,212,255,.07) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 100%,rgba(124,58,237,.05) 0%,transparent 50%)}
-.wbg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.03;background-image:linear-gradient(rgba(0,212,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.5) 1px,transparent 1px);background-size:60px 60px}
-.wnav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(10,14,23,.85);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--wborder)}
+.wbg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(24,95,165,.05) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 100%,rgba(83,74,183,.04) 0%,transparent 50%)}
+.wbg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.03;background-image:linear-gradient(rgba(24,95,165,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(24,95,165,.5) 1px,transparent 1px);background-size:60px 60px}
+.wnav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(255,255,255,.85);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--wborder)}
 .wnav-in{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;justify-content:space-between;align-items:center}
 .wnav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .wnav-logo img{height:32px;width:32px;border-radius:8px}
 .wnav-logo span{font-weight:800;font-size:17px;color:var(--wt1)}
 .wnav-back{font-size:13px;color:var(--waccent);text-decoration:none;font-weight:600;display:flex;align-items:center;gap:6px;transition:.2s}
-.wnav-back:hover{color:#fff}
+.wnav-back:hover{color:var(--waccent)}
 .wmain{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:80px 24px 40px}
 .whero{text-align:center;padding:28px 0 24px}
 .whero-icon{width:72px;height:72px;border-radius:22px;margin:0 auto 14px;background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(124,58,237,.12));border:1px solid rgba(0,212,255,.15);display:flex;align-items:center;justify-content:center;font-size:36px;position:relative}
 .whero-icon::after{content:'';position:absolute;inset:-4px;border-radius:26px;border:1px solid rgba(0,212,255,.08);animation:hring 3s ease-in-out infinite}
 @keyframes hring{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.08);opacity:0}}
-.whero h1{font-size:30px;font-weight:900;letter-spacing:-.5px;background:linear-gradient(135deg,#fff 0%,var(--waccent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.whero h1{font-size:30px;font-weight:900;letter-spacing:-.5px;background:linear-gradient(135deg,var(--wt1) 0%,var(--waccent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
 .whero p{color:var(--wt2);font-size:14px;max-width:520px;margin:0 auto;line-height:1.6}
 .live-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.18);border-radius:99px;font-size:11px;font-weight:700;color:var(--wgreen);margin-top:14px;letter-spacing:.3px}
 .live-dot{width:8px;height:8px;border-radius:50%;background:var(--wgreen);position:relative;display:inline-block}
@@ -36,7 +36,7 @@ body.whale-page{background:var(--wbg);color:var(--wt1);font-family:'Plus Jakarta
 @keyframes lpulse{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.8);opacity:0}}
 .wtabs{display:flex;gap:4px;background:var(--wbg2);border:1px solid var(--wborder);border-radius:14px;padding:4px;margin:0 auto 24px;max-width:360px}
 .wtab{flex:1;padding:10px 16px;border:none;background:transparent;color:var(--wt2);font-size:13px;font-weight:700;cursor:pointer;border-radius:10px;transition:.2s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
-.wtab.act{background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(124,58,237,.15));color:var(--waccent)}
+.wtab.act{background:linear-gradient(135deg,rgba(24,95,165,.12),rgba(83,74,183,.12));color:var(--waccent)}
 .wtab:hover:not(.act){color:var(--wt1)}
 .wview{display:none;animation:fadein .3s}
 .wview.act{display:block}
@@ -55,7 +55,7 @@ body.whale-page{background:var(--wbg);color:var(--wt1);font-family:'Plus Jakarta
 .wpanel{background:var(--wbg2);border:1px solid var(--wborder);border-radius:16px;padding:20px;margin-bottom:20px}
 .wpanel-title{font-size:14px;font-weight:700;color:var(--wt1);margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .wpanel-title i{color:var(--waccent);font-size:12px}
-.wsentiment{display:flex;align-items:center;gap:16px;padding:18px;background:var(--wbg);border-radius:12px;border:1px solid var(--wborder)}
+.wsentiment{display:flex;align-items:center;gap:16px;padding:18px;background:var(--wbg3);border-radius:12px;border:1px solid var(--wborder)}
 .wsent-gauge{flex-shrink:0;width:100px;height:100px;position:relative}
 .wsent-info{flex:1;min-width:0}
 .wsent-label{font-size:12px;color:var(--wt3);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:6px}
@@ -65,7 +65,7 @@ body.whale-page{background:var(--wbg);color:var(--wt1);font-family:'Plus Jakarta
 .wsent-val.neu{color:var(--wt2)}
 .wsent-desc{font-size:12px;color:var(--wt2);line-height:1.5}
 .wexch{display:flex;flex-direction:column;gap:10px}
-.wexch-row{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--wbg);border-radius:10px;border:1px solid var(--wborder)}
+.wexch-row{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--wbg3);border-radius:10px;border:1px solid var(--wborder)}
 .wexch-name{flex:1;font-size:13px;font-weight:700}
 .wexch-bar-wrap{flex:2;display:flex;align-items:center;gap:8px;min-width:0}
 .wexch-bar{flex:1;height:6px;background:var(--wbg3);border-radius:3px;overflow:hidden;display:flex;min-width:0}

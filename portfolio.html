@@ -33,39 +33,39 @@
    a publicnode/Solana Explorer aesthetic.
    ════════════════════════════════════════════════════════════════ */
 :root, html, body {
-  --bg1: #050505 !important;       /* page bg */
-  --bg2: #0a0a0a !important;       /* cards */
-  --bg3: #111111 !important;       /* elevated */
-  --bc:  #1a1a1a !important;       /* borders */
-  --t1:  #ffffff !important;       /* primary text */
-  --t2:  #888888 !important;       /* secondary text */
-  --t3:  #555555 !important;       /* muted text */
-  --ac:  #14f195 !important;       /* Solana mint — primary accent */
-  --gn:  #14f195 !important;       /* gains: mint green */
-  --rd:  #ef4444 !important;       /* losses: red (unchanged) */
-  --am:  #fbbf24 !important;       /* warnings: amber (unchanged) */
-  color-scheme: dark !important;
+  --bg1: #F4F7FC !important;       /* page bg — أزرق فاتح ناعم */
+  --bg2: #FFFFFF !important;       /* cards — أبيض */
+  --bg3: #E8EEF8 !important;       /* elevated — أزرق فاتح خفيف */
+  --bc:  #E0E5F0 !important;       /* borders — رمادي مزرق فاتح */
+  --t1:  #1B2440 !important;       /* primary text — كحلي غامق */
+  --t2:  #5B6675 !important;       /* secondary text — رمادي مزرق */
+  --t3:  #9AA3B5 !important;       /* muted text — رمادي فاتح */
+  --ac:  #185FA5 !important;       /* primary accent — أزرق احترافي */
+  --gn:  #059669 !important;       /* gains: أخضر مريح */
+  --rd:  #DC2626 !important;       /* losses: أحمر */
+  --am:  #BA7517 !important;       /* warnings: amber غامق للفاتح */
+  color-scheme: light !important;
 }
-body { background: #050505 !important; color: #ffffff !important; }
-::selection { background: #14f195 !important; color: #000 !important; }
+body { background: #F4F7FC !important; color: #1B2440 !important; }
+::selection { background: #B5D4F4 !important; color: #042C53 !important; }
 
-/* Scrollbar — Solana dark */
+/* Scrollbar — Sky Calm فاتح */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: #050505 !important; }
-::-webkit-scrollbar-thumb { background: #1a1a1a !important; border-radius: 5px; }
-::-webkit-scrollbar-thumb:hover { background: #2a2a2a !important; }
+::-webkit-scrollbar-track { background: #F4F7FC !important; }
+::-webkit-scrollbar-thumb { background: #D0D8E8 !important; border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: #B8C2D6 !important; }
 
-/* Inputs — keep them dark in all browsers */
-input, select, textarea { color-scheme: dark; }
-input::placeholder { color: #555 !important; }
+/* Inputs — فاتح */
+input, select, textarea { color-scheme: light; }
+input::placeholder { color: #9AA3B5 !important; }
 
-/* Logo glow — Solana mint (matches the brand image floating in topbar) */
+/* Logo glow — أزرق احترافي */
 nav img[alt="CryptoHubCoin"] {
-  box-shadow: 0 0 0 1px #1a1a1a, 0 0 12px rgba(20, 241, 149, 0.25);
+  box-shadow: 0 0 0 1px #E0E5F0, 0 0 12px rgba(24, 95, 165, 0.15);
   transition: box-shadow .2s, transform .2s;
 }
 nav img[alt="CryptoHubCoin"]:hover {
-  box-shadow: 0 0 0 1px #14f195, 0 0 16px rgba(20, 241, 149, 0.4);
+  box-shadow: 0 0 0 1px #185FA5, 0 0 16px rgba(24, 95, 165, 0.25);
 }
 
 /* Favorite badge — re-tint to Solana violet so the gold doesn't clash */
@@ -78,33 +78,31 @@ nav img[alt="CryptoHubCoin"]:hover {
 .fav-badge i.fa-star { color: #c4b5fd !important; }
 
 /* "Buy price" hint and other muted accents stay consistent */
-.pf-up { color: #14f195 !important; }
-.pf-down { color: #ef4444 !important; }
+.pf-up { color: #059669 !important; }
+.pf-down { color: #DC2626 !important; }
 
-/* Override hardcoded green (#16c784) and red (#ea3943) across the page
-   so gains/losses match the Solana palette consistently. */
-.total-badge.pf-up { background: rgba(20, 241, 149, 0.1) !important; color: #14f195 !important; }
-.total-badge.pf-down { background: rgba(239, 68, 68, 0.1) !important; color: #ef4444 !important; }
+/* gains/losses match Sky Calm palette consistently */
+.total-badge.pf-up { background: rgba(5, 150, 105, 0.1) !important; color: #059669 !important; }
+.total-badge.pf-down { background: rgba(220, 38, 38, 0.1) !important; color: #DC2626 !important; }
 
-.flow-lbl.in, .tx-icon.in { color: #14f195 !important; }
-.tx-icon.in { background: rgba(20, 241, 149, 0.12) !important; }
+.flow-lbl.in, .tx-icon.in { color: #059669 !important; }
+.tx-icon.in { background: rgba(5, 150, 105, 0.12) !important; }
 
-.flow-lbl.out, .tx-icon.out { color: #ef4444 !important; }
-.tx-icon.out { background: rgba(239, 68, 68, 0.12) !important; }
+.flow-lbl.out, .tx-icon.out { color: #DC2626 !important; }
+.tx-icon.out { background: rgba(220, 38, 38, 0.12) !important; }
 
-.del-btn { color: #ef4444 !important; }
-.action-btn.danger { color: #ef4444 !important; }
-.action-btn.danger:hover { border-color: #ef4444 !important; background: rgba(239, 68, 68, 0.08) !important; }
+.del-btn { color: #DC2626 !important; }
+.action-btn.danger { color: #DC2626 !important; }
+.action-btn.danger:hover { border-color: #DC2626 !important; background: rgba(220, 38, 38, 0.08) !important; }
 
-/* Coin allocation chart slices keep their assigned colors but the
-   surrounding card matches the dark theme */
-.donut-legend-name { color: #ffffff !important; }
-.donut-legend-pct  { color: #14f195 !important; }
+/* Coin allocation chart legend — كحلي غامق على الفاتح */
+.donut-legend-name { color: #1B2440 !important; }
+.donut-legend-pct  { color: #059669 !important; }
 
 /* Spinner — match accent */
 .spinner {
-  border-color: rgba(255,255,255,0.1) !important;
-  border-top-color: #14f195 !important;
+  border-color: rgba(24, 95, 165, 0.15) !important;
+  border-top-color: #185FA5 !important;
 }
 
 </style>
@@ -688,17 +686,22 @@ async function _ensureCoinCache(){
   var existing = _loadCoinsFromCache();
   if(existing.length >= 50) return existing;  // already have data
 
-  // Try the same preload URL the main site uses
+  // ✅ الـ endpoints الحقيقية من الـ API router (cryptohub-api/src/index.js):
+  //   /api/v1/coins → معفي من مفتاح API للطلبات من الموقع (isTrustedOrigin)
+  //   /api/v1/market/coins → بديل بتفاصيل أكتر
+  // المتصفح بيبعت Origin تلقائياً من داخل الموقع، فالطلب بيتعامل كموثوق.
   var sources = [
-    'https://api.cryptohubcoin.com/api/coins?limit=500',
-    API_BASE + '/api/coins?limit=500'
+    'https://api.cryptohubcoin.com/api/v1/coins?limit=500',
+    'https://api.cryptohubcoin.com/api/v1/market/coins?limit=500',
+    API_BASE + '/api/v1/coins?limit=500',
+    API_BASE + '/api/v1/market/coins?limit=500'
   ];
   for(var i=0; i<sources.length; i++){
     try{
       var r = await fetch(sources[i]);
       if(!r.ok) continue;
       var data = await r.json();
-      var coins = data.coins || data.data || data;
+      var coins = data.coins || data.data || data.result || data;
       if(Array.isArray(coins) && coins.length > 50){
         try{ localStorage.setItem('cryptohub_coins', JSON.stringify(coins)); }catch(e){}
         return coins;
@@ -709,15 +712,18 @@ async function _ensureCoinCache(){
 }
 
 function normalizeCoin(c){
-  // Main site uses: sy (symbol), na (name), pr (price), c24, mc, img, cmc_id/id
+  // ✅ يدعم شكلين من البيانات:
+  //   - كاش الموقع القديم: sy, na, pr, c24, mc, img
+  //   - الـ API الحقيقي (/api/v1/market/coins → rowToCoin): symbol, name, price, change_24h, market_cap, logo
+  var sym = c.sy || c.symbol || '';
   return {
-    id: (c.sy||'').toLowerCase(),
-    symbol: c.sy||'',
-    name: c.na||c.nm||c.sy||'Unknown',
-    image: c.img||'',
-    current_price: c.pr||0,
-    price_change_percentage_24h: c.c24||0,
-    market_cap: c.mc||0
+    id: (sym || c.id || '').toLowerCase(),
+    symbol: sym,
+    name: c.na || c.nm || c.name || sym || 'Unknown',
+    image: c.img || c.logo || c.logo_url || c.image || '',
+    current_price: c.pr || c.price || c.price_usd || c.current_price || 0,
+    price_change_percentage_24h: c.c24 || c.change_24h || c.price_change_percentage_24h || 0,
+    market_cap: c.mc || c.market_cap || 0
   };
 }
 
@@ -747,14 +753,15 @@ async function fetchPrices(){
   // Read latest prices from the main site's cache instead of an external API
   var coins = _loadCoinsFromCache();
   if(!coins.length){
-    coins = await _ensureCoinCache();
+    // ✅ لو الكاش فاضي والـ API فشل، نكمّل بالأسعار المحفوظة على الـ holdings
+    try{ coins = await _ensureCoinCache(); }catch(e){ coins = []; }
   }
   priceCache = {};
   coins.forEach(function(c){
-    priceCache[(c.sy||'').toLowerCase()] = {
-      usd: c.pr || 0,
-      usd_24h_change: c.c24 || 0,
-      image: c.img || ''
+    priceCache[((c.sy||c.symbol||'')).toLowerCase()] = {
+      usd: c.pr || c.price || c.price_usd || 0,
+      usd_24h_change: c.c24 || c.change_24h || 0,
+      image: c.img || c.logo || c.logo_url || ''
     };
   });
 
@@ -838,8 +845,8 @@ function searchCoins(q){
 
     var scored=[];
     raw.forEach(function(c){
-      var sym=(c.sy||'').toLowerCase();
-      var name=(c.na||c.nm||'').toLowerCase();
+      var sym=(c.sy||c.symbol||'').toLowerCase();
+      var name=(c.na||c.nm||c.name||'').toLowerCase();
       if(!sym && !name) return;
       var score=0;
       if(sym===query) score=1000;
@@ -1401,7 +1408,7 @@ function _getCoinPrice(symbol){
   var sym=symbol.toLowerCase();
   var coins=_loadCoinsFromCache();
   for(var i=0;i<coins.length;i++){
-    if((coins[i].sy||'').toLowerCase()===sym) return coins[i].pr||0;
+    if(((coins[i].sy||coins[i].symbol||'')).toLowerCase()===sym) return coins[i].pr||coins[i].price||coins[i].price_usd||0;
   }
   return 0;
 }
@@ -1976,7 +1983,7 @@ function exportWhales(){
    INIT
    ============================================================ */
 async function refreshPortfolio(){
-  await fetchPrices();
+  try{ await fetchPrices(); }catch(e){ console.warn('fetchPrices failed:', e.message); }
   renderHoldings();
 }
 
@@ -1990,8 +1997,10 @@ async function init(){
     if(tab==='whale')switchTab('whale');
   }catch(e){}
 
-  await fetchCoinList();
-  await fetchPrices();
+  // ✅ لو الـ API فشل (مثلاً /api/coins مش متاح)، التهيئة تكمّل بأي حال
+  // والعملات المحفوظة تتعرض بسعرها المخزّن — متختفيش بعد الـ refresh.
+  try{ await fetchCoinList(); }catch(e){ console.warn('fetchCoinList failed:', e.message); }
+  try{ await fetchPrices(); }catch(e){ console.warn('fetchPrices failed:', e.message); }
   renderHoldings();
 
   if(whales.length){

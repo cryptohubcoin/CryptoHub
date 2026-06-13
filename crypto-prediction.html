@@ -14,13 +14,14 @@
 
 <style>
 :root {
-  --bg:#0f0f1a; --bg2:#1a1a2e; --bg3:#16213e; --bg4:#0d1117;
-  --t1:#f1f5f9; --t2:#94a3b8; --t3:#64748b;
-  --bc:#1e293b; --bc2:#2d3748;
-  --ac:#3b82f6; --ac2:#f7931a; --ac3:#a855f7;
-  --gn:#22c55e; --rd:#ea3943; --yw:#f59e0b;
-  --grd1:linear-gradient(135deg,#3b82f6,#a855f7);
-  --grd2:linear-gradient(135deg,#f7931a,#f59e0b);
+  --bg:#F4F7FC; --bg2:#FFFFFF; --bg3:#E8EEF8; --bg4:#EEF2F8;
+  --t1:#1B2440; --t2:#5B6675; --t3:#9AA3B5;
+  --bc:#E0E5F0; --bc2:#D0D8E8;
+  --ac:#185FA5; --ac2:#BA7517; --ac3:#534AB7;
+  --gn:#059669; --rd:#DC2626; --yw:#BA7517;
+  --grd1:linear-gradient(135deg,#185FA5,#534AB7);
+  --grd2:linear-gradient(135deg,#BA7517,#D89A2E);
+  color-scheme:light;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;line-height:1.6;}
@@ -39,7 +40,7 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 .hero h1{font-size:clamp(28px,5vw,44px);font-weight:800;line-height:1.2;margin-bottom:12px;}
 .hero h1 span{background:var(--grd1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .hero p{color:var(--t2);font-size:16px;max-width:620px;margin:0 auto;line-height:1.7;}
-.hero-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 22px;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.06);max-width:620px;margin-inline:auto;}
+.hero-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 22px;margin-top:20px;padding-top:18px;border-top:1px solid var(--bc);max-width:620px;margin-inline:auto;}
 .hero-pill{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--t2);font-weight:500;}
 .hero-pill .dot{width:7px;height:7px;border-radius:50%;display:inline-block;}
 
@@ -153,7 +154,7 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 
 /* Sentiment */
 .sentiment-meter{position:relative;height:12px;background:linear-gradient(90deg,var(--rd),var(--yw),var(--gn));border-radius:6px;margin:12px 0;}
-.sentiment-needle{position:absolute;top:-4px;width:4px;height:20px;background:white;border-radius:2px;transform:translateX(-50%);transition:left 1s ease;box-shadow:0 0 8px rgba(255,255,255,.5);}
+.sentiment-needle{position:absolute;top:-4px;width:4px;height:20px;background:var(--t1);border-radius:2px;transform:translateX(-50%);transition:left 1s ease;box-shadow:0 0 6px rgba(27,36,64,.3);}
 
 /* Price Projection */
 .projection-card{background:var(--bg2);border:1px solid var(--bc);border-radius:16px;padding:24px;margin-bottom:20px;}
@@ -171,7 +172,7 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 .sentinel-fab:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(59,130,246,.5);}
 .sentinel-fab .notif-dot{position:absolute;top:-2px;right:-2px;width:18px;height:18px;background:var(--rd);border-radius:50%;font-size:10px;font-weight:800;display:none;align-items:center;justify-content:center;border:2px solid var(--bg);}
 .sentinel-fab .notif-dot.show{display:flex;}
-.sentinel-panel{position:fixed;bottom:90px;right:24px;width:380px;height:520px;background:var(--bg2);border:1px solid var(--bc);border-radius:20px;z-index:200;display:none;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.5);overflow:hidden;}
+.sentinel-panel{position:fixed;bottom:90px;right:24px;width:380px;height:520px;background:var(--bg2);border:1px solid var(--bc);border-radius:20px;z-index:200;display:none;flex-direction:column;box-shadow:0 8px 40px rgba(27,36,64,.15);overflow:hidden;}
 .sentinel-panel.open{display:flex;}
 .sentinel-header{padding:14px 16px;border-bottom:1px solid var(--bc);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .sentinel-header h3{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;margin:0;}
@@ -251,10 +252,10 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   <h1>AI <span>Price Direction Forecast</span></h1>
   <p>Discover the projected market direction for any cryptocurrency, backed by a confidence score that tells you when the signal is strong — and when to step aside.</p>
   <div class="hero-pills">
-    <div class="hero-pill"><span class="dot" style="background:#22c55e"></span>Technical Analysis</div>
-    <div class="hero-pill"><span class="dot" style="background:#3b82f6"></span>Whale Movements</div>
-    <div class="hero-pill"><span class="dot" style="background:#f59e0b"></span>Volume Conviction</div>
-    <div class="hero-pill"><span class="dot" style="background:#a855f7"></span>Signal Integrity</div>
+    <div class="hero-pill"><span class="dot" style="background:#059669"></span>Technical Analysis</div>
+    <div class="hero-pill"><span class="dot" style="background:#185FA5"></span>Whale Movements</div>
+    <div class="hero-pill"><span class="dot" style="background:#BA7517"></span>Volume Conviction</div>
+    <div class="hero-pill"><span class="dot" style="background:#534AB7"></span>Signal Integrity</div>
   </div>
 </div>
 

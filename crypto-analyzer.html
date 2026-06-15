@@ -808,9 +808,9 @@
     .search-box{ background:var(--bg); border:1px solid var(--border); border-radius:16px; padding:22px 24px; display:flex; flex-direction:column; gap:16px; max-width:900px; margin:0 auto; }
     .search-row{ display:flex; gap:12px; align-items:stretch; }
     .coin-input-wrap{ flex:1; position:relative; }
-    .coin-input-wrap input{ width:100%; padding:12px 16px 12px 44px; background:var(--surface); border:1px solid var(--border); border-radius:12px; color:var(--text); font-size:15px; font-family:inherit; outline:none; transition:.2s; }
+    .coin-input-wrap input{ width:100%; padding:12px 16px 12px 44px; background:var(--surface); border:1px solid var(--border); border-radius:12px; color:var(--text); font-size:15px; font-family:inherit; outline:none; transition:.2s; position:relative; z-index:2; }
     .coin-input-wrap input:focus{ border-color:var(--accent); box-shadow:var(--glow); }
-    .coin-input-wrap .search-icon{ position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:16px; }
+    .coin-input-wrap .search-icon{ position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:16px; pointer-events:none; z-index:3; }
     .popular-coins{ display:flex; gap:8px; flex-wrap:wrap; }
 
     /* ═══ GUIDE PANEL ═══ */
@@ -892,43 +892,43 @@
         <div class="popular-coins quick-coins">
 
       <span class="coin-chip" onclick="quickSearch('bitcoin')">
-          <img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" onerror="this.style.display='none'" alt="BTC">
+          <img src="https://api.cryptohubcoin.com/api/v1/icons/coin/bitcoin" onerror="this.style.display='none'" alt="BTC">
           <span class="coin-chip-name">BTC</span>
         </span>
         <span class="coin-chip" onclick="quickSearch('ethereum')">
-          <img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" onerror="this.style.display='none'" alt="ETH">
+          <img src="https://api.cryptohubcoin.com/api/v1/icons/coin/ethereum" onerror="this.style.display='none'" alt="ETH">
           <span class="coin-chip-name">ETH</span>
         </span>
         <span class="coin-chip" onclick="quickSearch('binancecoin')">
-          <img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" onerror="this.style.display='none'" alt="BNB">
+          <img src="https://api.cryptohubcoin.com/api/v1/icons/coin/binancecoin" onerror="this.style.display='none'" alt="BNB">
           <span class="coin-chip-name">BNB</span>
         </span>
         <span class="coin-chip" onclick="quickSearch('solana')">
-          <img src="https://assets.coingecko.com/coins/images/4128/small/solana.png" onerror="this.style.display='none'" alt="SOL">
+          <img src="https://api.cryptohubcoin.com/api/v1/icons/coin/solana" onerror="this.style.display='none'" alt="SOL">
           <span class="coin-chip-name">SOL</span>
         </span>
         <span class="coin-chip" onclick="quickSearch('ripple')">
-          <img src="https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png" onerror="this.style.display='none'" alt="XRP">
+          <img src="https://api.cryptohubcoin.com/api/v1/icons/coin/ripple" onerror="this.style.display='none'" alt="XRP">
           <span class="coin-chip-name">XRP</span>
         </span>
         <span class="coin-chip" onclick="quickSearch('cardano')">
-          <img src="https://assets.coingecko.com/coins/images/975/small/cardano.png" onerror="this.style.display='none'" alt="ADA">
+          <img src="https://api.cryptohubcoin.com/api/v1/icons/coin/cardano" onerror="this.style.display='none'" alt="ADA">
           <span class="coin-chip-name">ADA</span>
         </span>
         <span class="coin-chip" onclick="quickSearch('dogecoin')">
-          <img src="https://assets.coingecko.com/coins/images/5/small/dogecoin.png" onerror="this.style.display='none'" alt="DOGE">
+          <img src="https://api.cryptohubcoin.com/api/v1/icons/coin/dogecoin" onerror="this.style.display='none'" alt="DOGE">
           <span class="coin-chip-name">DOGE</span>
         </span>
         <span class="coin-chip" onclick="quickSearch('toncoin')">
-          <img src="https://assets.coingecko.com/coins/images/17980/small/ton_symbol.png" onerror="this.style.display='none'" alt="TON">
+          <img src="https://api.cryptohubcoin.com/api/v1/icons/coin/toncoin" onerror="this.style.display='none'" alt="TON">
           <span class="coin-chip-name">TON</span>
         </span>
         <span class="coin-chip" onclick="quickSearch('avalanche-2')">
-          <img src="https://assets.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png" onerror="this.style.display='none'" alt="AVAX">
+          <img src="https://api.cryptohubcoin.com/api/v1/icons/coin/avalanche-2" onerror="this.style.display='none'" alt="AVAX">
           <span class="coin-chip-name">AVAX</span>
         </span>
         <span class="coin-chip" onclick="quickSearch('chainlink')">
-          <img src="https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png" onerror="this.style.display='none'" alt="LINK">
+          <img src="https://api.cryptohubcoin.com/api/v1/icons/coin/chainlink" onerror="this.style.display='none'" alt="LINK">
           <span class="coin-chip-name">LINK</span>
         </span>
         </div>
@@ -1078,7 +1078,7 @@
             style="background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.2s;font-family:inherit;"
             onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
             <span style="font-size:16px;">🔮</span>
-            <span id="predBtnText">🔮 Predict Price</span>
+            <span id="predBtnText">Predict Price</span>
           </button>
         </div>
       </div>

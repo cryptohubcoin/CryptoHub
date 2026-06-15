@@ -594,8 +594,10 @@
       gap: 8px;
       flex-wrap: wrap;
       justify-content: center;
-      margin-bottom: 24px;
       align-items: center;
+      margin: 4px 0 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
     }
 
     .tf-label-sec {
@@ -803,13 +805,30 @@
 
 
     /* ═══ SEARCH BOX (matches crypto-prediction) ═══ */
-    .search-box{ background:var(--bg); border:1px solid var(--border); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px; max-width:700px; margin:0 auto; }
+    .search-box{ background:var(--bg); border:1px solid var(--border); border-radius:16px; padding:22px 24px; display:flex; flex-direction:column; gap:16px; max-width:900px; margin:0 auto; }
     .search-row{ display:flex; gap:12px; align-items:stretch; }
     .coin-input-wrap{ flex:1; position:relative; }
     .coin-input-wrap input{ width:100%; padding:12px 16px 12px 44px; background:var(--surface); border:1px solid var(--border); border-radius:12px; color:var(--text); font-size:15px; font-family:inherit; outline:none; transition:.2s; }
     .coin-input-wrap input:focus{ border-color:var(--accent); box-shadow:var(--glow); }
     .coin-input-wrap .search-icon{ position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:16px; }
     .popular-coins{ display:flex; gap:8px; flex-wrap:wrap; }
+
+    /* ═══ GUIDE PANEL ═══ */
+    .guide-panel{ max-width:900px; margin:8px auto 0; }
+    .guide-head{ text-align:center; margin-bottom:20px; }
+    .guide-title{ font-size:22px; font-weight:800; color:var(--text); margin:0 0 6px; }
+    .guide-sub{ font-size:14px; color:var(--muted); margin:0; }
+    .guide-card{ background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px 20px; margin-bottom:14px; }
+    .guide-card-head{ display:flex; align-items:center; gap:9px; margin-bottom:12px; }
+    .guide-card-head h3{ font-size:16px; font-weight:700; color:var(--text); margin:0; }
+    .guide-ic{ font-size:20px; }
+    .guide-card p{ font-size:14px; line-height:1.7; color:var(--text-soft); margin:0; }
+    .guide-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:14px; }
+    .guide-grid > div{ display:flex; flex-direction:column; gap:3px; padding:10px 12px; background:var(--bg); border-radius:10px; }
+    .guide-grid b{ font-size:13.5px; color:var(--accent); font-weight:700; }
+    .guide-grid span{ font-size:13px; line-height:1.6; color:var(--text-soft); }
+    .guide-note{ margin-top:12px !important; padding:10px 12px; background:var(--accent-soft); border-radius:10px; font-size:13px !important; }
+    [dir="rtl"] .guide-card-head{ flex-direction:row-reverse; justify-content:flex-end; }
 </style>
 
   <script>
@@ -913,21 +932,125 @@
           <span class="coin-chip-name">LINK</span>
         </span>
         </div>
+        <div class="tf-selector-container">
+          <div class="tf-label-sec" id="tfTitleSelect">📊 Timeframe:</div>
+          <span class="tf-pill" data-tf="15m" onclick="selectTimeframe(this)">15min</span>
+          <span class="tf-pill" data-tf="30m" onclick="selectTimeframe(this)">30min</span>
+          <span class="tf-pill active" data-tf="1h" onclick="selectTimeframe(this)">1H</span>
+          <span class="tf-pill" data-tf="2h" onclick="selectTimeframe(this)">2H</span>
+          <span class="tf-pill" data-tf="4h" onclick="selectTimeframe(this)">4H</span>
+          <span class="tf-pill" data-tf="8h" onclick="selectTimeframe(this)">8H</span>
+        </div>
       </div>
     </div>
 
-    <!-- TIMEFRAME SELECTOR -->
-    <div class="tf-selector-container">
-      <div class="tf-label-sec" id="tfTitleSelect">الفريم: 📊</div>
-      <span class="tf-pill" data-tf="15m" onclick="selectTimeframe(this)">15 دقيقة</span>
-      <span class="tf-pill" data-tf="30m" onclick="selectTimeframe(this)">30 دقيقة</span>
-      <span class="tf-pill active" data-tf="1h" onclick="selectTimeframe(this)">1 ساعة</span>
-      <span class="tf-pill" data-tf="2h" onclick="selectTimeframe(this)">2 ساعة</span>
-      <span class="tf-pill" data-tf="4h" onclick="selectTimeframe(this)">4 ساعات</span>
-      <span class="tf-pill" data-tf="8h" onclick="selectTimeframe(this)">8 ساعات</span>
-    </div>
+    
 
     
+
+    
+    <!-- ═══ HELP / GUIDE PANEL (shows on open, hides after analyze) ═══ -->
+    <div class="guide-panel" id="guidePanel">
+      <div class="guide-head">
+        <h2 class="guide-title">How to use the Liquidity Scanner</h2>
+        <p class="guide-sub">This panel shows when you open the tool, and hides once you analyze a coin.</p>
+      </div>
+
+      <!-- 1. Search -->
+      <div class="guide-card">
+        <div class="guide-card-head"><span class="guide-ic">🔍</span><h3>1 · Search any coin</h3></div>
+        <p>Type a coin name or symbol (e.g. <b>BTC</b>, <b>bitcoin</b>) or tap a quick chip. Pick a timeframe (15min–8H) to control how indicators are calculated, then press <b>Analyze Now</b>. The results below replace this guide.</p>
+      </div>
+
+      <!-- 2. Price & market data -->
+      <div class="guide-card">
+        <div class="guide-card-head"><span class="guide-ic">💵</span><h3>2 · Price &amp; market data</h3></div>
+        <div class="guide-grid">
+          <div><b>Current Price</b><span>Live price in USD with 24h change %. Green = up, red = down.</span></div>
+          <div><b>24h High / Low</b><span>The highest and lowest price in the selected timeframe.</span></div>
+          <div><b>ATH / ATL</b><span>All-time high and all-time low — the extreme prices ever reached.</span></div>
+          <div><b>7D / 30D Change</b><span>Percent change over the last week and month.</span></div>
+          <div><b>Market Cap</b><span>Total value = price × circulating supply. Bigger = more established.</span></div>
+          <div><b>24h Volume</b><span>How much was traded in 24h. High volume = active interest.</span></div>
+          <div><b>Rank</b><span>Position by market cap (#1 = largest).</span></div>
+          <div><b>Circulating / Total Supply</b><span>Coins in the market vs. total that will ever exist.</span></div>
+        </div>
+      </div>
+
+      <!-- 3. Liquidity signals -->
+      <div class="guide-card">
+        <div class="guide-card-head"><span class="guide-ic">🚦</span><h3>3 · Liquidity signals</h3></div>
+        <div class="guide-grid">
+          <div><b>Liquidity Status</b><span>Is money flowing in or out? Inflow with strong buying = healthy.</span></div>
+          <div><b>Buy Signal</b><span>Combines dip + volume + pressure. "Strong Buy" = several positives align.</span></div>
+          <div><b>Sell Signal</b><span>Flags overbought conditions — when taking profit may be wise.</span></div>
+        </div>
+      </div>
+
+      <!-- 4. Timing -->
+      <div class="guide-card">
+        <div class="guide-card-head"><span class="guide-ic">⏰</span><h3>4 · Entry &amp; exit timing</h3></div>
+        <div class="guide-grid">
+          <div><b>Best Time to Buy</b><span>Suggests the better entry moment (now, on a dip, or at support).</span></div>
+          <div><b>Best Time to Sell</b><span>Suggests when to consider exiting (now, at resistance, or at target).</span></div>
+        </div>
+      </div>
+
+      <!-- 5. Liquidity flow -->
+      <div class="guide-card">
+        <div class="guide-card-head"><span class="guide-ic">💰</span><h3>5 · Liquidity flow</h3></div>
+        <div class="guide-grid">
+          <div><b>Inflow (24h)</b><span>Estimated buying volume entering the coin.</span></div>
+          <div><b>Outflow (24h)</b><span>Estimated selling volume leaving the coin.</span></div>
+          <div><b>Net Flow</b><span>Inflow − outflow. Positive (green) = net buying, negative (red) = net selling.</span></div>
+          <div><b>Vol / MCap</b><span>Volume ÷ market cap. Higher % = more liquid &amp; active.</span></div>
+          <div><b>Buy Pressure</b><span>0–100% gauge of where price sits in its range. High = buyers in control.</span></div>
+          <div><b>Last Major Flow</b><span>Time of the last big liquidity movement.</span></div>
+        </div>
+      </div>
+
+      <!-- 6. Fear & Greed -->
+      <div class="guide-card">
+        <div class="guide-card-head"><span class="guide-ic">🧠</span><h3>6 · Fear &amp; Greed index</h3></div>
+        <p>A market-wide mood gauge from 0–100. <b>Below 25</b> = extreme fear (others panic-selling — often opportunity). <b>Above 75</b> = extreme greed (market euphoric — often risky). The needle shows today's reading.</p>
+      </div>
+
+      <!-- 7. Price levels -->
+      <div class="guide-card">
+        <div class="guide-card-head"><span class="guide-ic">🎯</span><h3>7 · Key price levels</h3></div>
+        <div class="guide-grid">
+          <div><b>Support 1 &amp; 2</b><span>Price floors where buyers tend to step in. Price often bounces here.</span></div>
+          <div><b>Resistance 1 &amp; 2</b><span>Price ceilings where sellers tend to appear. Price often stalls here.</span></div>
+        </div>
+        <p class="guide-note">Example: if price is near Support 1 with a buy signal, it may be a good entry. Near Resistance with a sell signal → consider taking profit.</p>
+      </div>
+
+      <!-- 8. Technical indicators -->
+      <div class="guide-card">
+        <div class="guide-card-head"><span class="guide-ic">📈</span><h3>8 · Technical indicators</h3></div>
+        <div class="guide-grid">
+          <div><b>RSI (14)</b><span>Momentum 0–100. Below 30 = oversold (possible buy), above 70 = overbought (possible sell). e.g. RSI 25 → bounce likely.</span></div>
+          <div><b>MACD Histogram</b><span>Trend strength. Positive = bullish momentum, negative = bearish.</span></div>
+          <div><b>Bollinger %B</b><span>Where price sits in its band. Near 0% = cheap edge, near 100% = expensive edge.</span></div>
+          <div><b>Stochastic K/D</b><span>Overbought/oversold gauge. Below 20 = oversold, above 80 = overbought.</span></div>
+          <div><b>EMA (50)</b><span>Trend line. Price above = uptrend, below = downtrend.</span></div>
+          <div><b>ATR Volatility</b><span>How much the coin typically moves (%). Higher = riskier swings.</span></div>
+          <div><b>Overall Bias</b><span>Combines all six into one read: Bullish, Bearish, or Mixed, with a buy/sell bar.</span></div>
+        </div>
+      </div>
+
+      <!-- 9. Deep liquidity -->
+      <div class="guide-card">
+        <div class="guide-card-head"><span class="guide-ic">🌊</span><h3>9 · Deep liquidity</h3></div>
+        <div class="guide-grid">
+          <div><b>Est. Spread</b><span>Gap between buy &amp; sell price. Smaller % = easier, cheaper trades.</span></div>
+          <div><b>Depth (±1%)</b><span>How much money sits within 1% of price. Higher = big orders move price less.</span></div>
+          <div><b>Slippage $10K / $100K / $1M</b><span>Expected price impact for orders of that size. Lower % = better.</span></div>
+          <div><b>Liquidity Grade</b><span><b>A</b> = excellent (easy execution), <b>B</b> = good, <b>C</b> = caution on big orders, <b>D</b> = poor (high slippage).</span></div>
+        </div>
+      </div>
+    </div>
+
 
     <div class="error-box" id="errorBox">❌ <span id="errorMsg"></span></div>
 

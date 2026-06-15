@@ -1422,7 +1422,38 @@
 
     // ترجمة شاملة للعناصر الثابتة (عناوين/ليبلات مكتوبة نص ثابت في الـ HTML)
     translateStaticUI(L, lang);
+    translateAllStatic(lang);
   });
+
+
+  /* ───────── ترجمة شاملة: تستبدل كل النصوص العربية الثابتة ───────── */
+  function translateAllStatic(lang){
+    if (lang === 'ar' || lang === 'fa' || lang === 'he') return; // عربي يفضل زي ما هو
+    var AR2EN = {"تحليل الآن": "Analyze Now", "الفريم: 📊": "📊 Timeframe:", "15 دقيقة": "15min", "30 دقيقة": "30min", "1 ساعة": "1H", "2 ساعة": "2H", "4 ساعات": "4H", "8 ساعات": "8H", "جاري جلب البيانات من المصادر...": "Fetching data from sources...", "أعلى سعر (24 ساعة)": "24h High", "أقل سعر (24 ساعة)": "24h Low", "حجم التداول (24 ساعة)": "24h Volume", "تغير الحجم: -": "Volume Change: -", "القيمة السوقية": "Market Cap", "الترتيب: -": "Rank: -", "🚦 إشارات السيولة": "🚦 Liquidity Signals", "حالة السيولة": "Liquidity Status", "إشارة الشراء": "🟢 Buy Signal", "إشارة البيع": "🔴 Sell Signal", "⏰ توقيت الدخول والخروج": "⏰ Entry & Exit Timing", "أفضل وقت للشراء": "Best Time to Buy", "أفضل وقت للبيع": "Best Time to Sell", "💰 تحليل دخول وخروج السيولة": "💰 Liquidity Flow", "📥 حجم السيولة الداخلة (24 ساعة)": "📥 Inflow (24h)", "📤 حجم السيولة الخارجة (24 ساعة)": "📤 Outflow (24h)", "⚖️ صافي تدفق السيولة": "⚖️ Net Flow", "🔄 نسبة التداول / القيمة السوقية": "🔄 Vol / MCap", "📊 ضغط البيع / الشراء": "📊 Buy Pressure", "⏱️ آخر تدفق سيولة كبير": "⏱️ Last Major Flow", "🧠 مؤشر الخوف والجشع": "🧠 Fear & Greed Index", "😨 خوف شديد": "😨 Extreme Fear", "😐 محايد": "😐 Neutral", "🤑 جشع شديد": "🤑 Extreme Greed", "🎯 مستويات السعر الهامة": "🎯 Key Price Levels", "منطقة دعم قوية": "Strong Support", "مستوى الدعم الأول": "Support 1", "منطقة دعم ثانوية": "Minor Support", "مستوى الدعم الثاني": "Support 2", "منطقة مقاومة أولى": "First Resistance", "مستوى المقاومة الأول": "Resistance 1", "منطقة مقاومة قوية": "Strong Resistance", "مستوى المقاومة الثاني": "Resistance 2", "📈 المؤشرات الفنية": "📈 Technical Indicators", "مؤشر القوة RSI (14)": "RSI (14)", "هيستوغرام MACD": "MACD Histogram", "بولينجر %B": "Bollinger %B", "ستوكاستيك K/D": "Stochastic K/D", "متوسط متحرك EMA (50)": "EMA (50)", "تقلّب ATR": "ATR Volatility", "الميل الفني العام": "Overall Technical Bias", "🌊 السيولة العميقة": "🌊 Deep Liquidity", "السبريد التقديري": "Est. Spread", "العمق (±1%)": "Depth (±1%)", "الانزلاق $10K": "Slippage $10K", "الانزلاق $100K": "Slippage $100K", "الانزلاق $1M": "Slippage $1M", "درجة السيولة": "Liquidity Grade", "📊 مؤشرات تقنية إضافية": "📊 Extra Metrics", "تغيير 7 أيام": "7D Change", "تغيير 30 يوم": "30D Change", "العرض المتداول": "Circulating Supply", "العرض الكلي": "Total Supply", "آخر تحديث:": "Last update:"};
+    // نمر على كل العناصر اللي ممكن تحتوي نص
+    var sel = '.section-title,.metric-label,.signal-type,.signal-text,.signal-desc,.tf-pill,.tf-label-sec,.metric-sub,.loading-text,.fg-label,.signal-time,button,span,div,p,h1,h2,h3,h4,label';
+    var nodes = document.querySelectorAll(sel);
+    for (var i=0;i<nodes.length;i++){
+      var el = nodes[i];
+      // بس لو العنصر مفهوش children كتير (نص مباشر)
+      if (el.children.length === 0){
+        var t = el.textContent.trim();
+        if (AR2EN[t]) el.textContent = AR2EN[t];
+      } else {
+        // عناصر فيها نص + children: نترجم الـ text nodes المباشرة
+        for (var j=0;j<el.childNodes.length;j++){
+          var cn = el.childNodes[j];
+          if (cn.nodeType === 3){ // text node
+            var tx = cn.nodeValue.trim();
+            if (AR2EN[tx]) cn.nodeValue = cn.nodeValue.replace(tx, AR2EN[tx]);
+          }
+        }
+      }
+    }
+    // placeholder
+    var ci = document.getElementById('coinInput');
+    if (ci) ci.placeholder = 'Search coin... e.g., BTC';
+  }
 
   /* ───────── ترجمة العناصر الثابتة عبر selectors ───────── */
   function translateStaticUI(L, lang){
@@ -1929,10 +1960,15 @@
       if (!coin || !coin.market_data){
         if (silent) throw new Error(L.errorNotFound);
         showLoading(L.loadingSearch);
-        coinId = await searchCoin(input);
-        url = cgBase + '/coins/' + coinId +
-          '?localization=false&tickers=true&market_data=true&community_data=false&developer_data=false';
-        coin = await fetchJSON(url);
+        // نجرب البحث بالاسم/الرمز
+        let foundId = null;
+        try { foundId = await searchCoin(input); } catch(e){ foundId = null; }
+        if (foundId){
+          coinId = foundId;
+          url = cgBase + '/coins/' + coinId +
+            '?localization=false&tickers=true&market_data=true&community_data=false&developer_data=false';
+          coin = await fetchJSON(url).catch(() => null);
+        }
         if (!coin || !coin.market_data) throw new Error(L.errorNotFound);
       }
       currentCoinId = coinId;
@@ -1954,8 +1990,13 @@
       renderData(coin, fear, ohlc);
     } catch (err) {
       let msg = err && err.message;
-      if (msg === 'Failed to fetch' || (msg && msg.includes('fetch'))) msg = L.errorConn;
-      showError(msg || L.errorGen);
+      if (msg === L.errorNotFound){
+        showError(L.errorNotFound);
+      } else if (msg === 'Failed to fetch' || (msg && msg.toLowerCase().includes('fetch')) || (msg && msg.includes('worker'))){
+        showError(L.errorConn);
+      } else {
+        showError(msg || L.errorGen);
+      }
     }
   }
   window.analyze = analyze;

@@ -298,22 +298,32 @@
     }
 
     .coin-chip {
-      padding: 7px 15px;
-      background: var(--surface);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 9px;
+      border-radius: 20px;
       cursor: pointer;
       font-size: 13px;
       font-weight: 500;
       font-family: inherit;
-      transition: all 0.2s;
-      color: var(--text-soft);
+      color: var(--text);
+      transition: 0.2s;
     }
+    .coin-chip img {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .coin-chip-name { line-height: 1; }
 
     .coin-chip:hover {
       border-color: var(--accent);
-      color: var(--accent);
-      background: var(--accent-soft);
+      background: var(--surface);
+      transform: translateY(-1px);
     }
 
     /* LOADING */
@@ -807,6 +817,15 @@
 .chc-disc-title{ font-size:17px; font-weight:800; color:var(--warning); margin-bottom:10px; }
 .chc-disc-text{ font-size:14px; line-height:1.7; color:var(--text-soft); margin:0; }
 
+
+    /* ═══ SEARCH BOX (matches crypto-prediction) ═══ */
+    .search-box{ background:var(--bg); border:1px solid var(--border); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px; max-width:700px; margin:0 auto; }
+    .search-row{ display:flex; gap:12px; align-items:stretch; }
+    .coin-input-wrap{ flex:1; position:relative; }
+    .coin-input-wrap input{ width:100%; padding:12px 16px 12px 44px; background:var(--surface); border:1px solid var(--border); border-radius:12px; color:var(--text); font-size:15px; font-family:inherit; outline:none; transition:.2s; }
+    .coin-input-wrap input:focus{ border-color:var(--accent); box-shadow:var(--glow); }
+    .coin-input-wrap .search-icon{ position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:16px; }
+    .popular-coins{ display:flex; gap:8px; flex-wrap:wrap; }
 </style>
 
   <script>
@@ -860,13 +879,58 @@
     </header>
 
     <div class="search-section">
-      <div class="search-wrapper">
-        <div class="coin-input-wrap" style="position:relative;width:100%">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="coinInput" placeholder="ابحث عن عملة... مثال: BTC أو bitcoin" autocomplete="off" />
+      <div class="search-box">
+        <div class="search-row">
+          <div class="coin-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="coinInput" placeholder="Search coin (e.g. Bitcoin, ETH, BNB...)" autocomplete="off" />
+          </div>
+          <button class="btn-analyze" id="analyzeBtn" onclick="analyze()">Analyze Now</button>
+        </div>
+        <div class="popular-coins quick-coins">
+
+      <span class="coin-chip" onclick="quickSearch('bitcoin')">
+          <img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" onerror="this.style.display='none'" alt="BTC">
+          <span class="coin-chip-name">BTC</span>
+        </span>
+        <span class="coin-chip" onclick="quickSearch('ethereum')">
+          <img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" onerror="this.style.display='none'" alt="ETH">
+          <span class="coin-chip-name">ETH</span>
+        </span>
+        <span class="coin-chip" onclick="quickSearch('binancecoin')">
+          <img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" onerror="this.style.display='none'" alt="BNB">
+          <span class="coin-chip-name">BNB</span>
+        </span>
+        <span class="coin-chip" onclick="quickSearch('solana')">
+          <img src="https://assets.coingecko.com/coins/images/4128/small/solana.png" onerror="this.style.display='none'" alt="SOL">
+          <span class="coin-chip-name">SOL</span>
+        </span>
+        <span class="coin-chip" onclick="quickSearch('ripple')">
+          <img src="https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png" onerror="this.style.display='none'" alt="XRP">
+          <span class="coin-chip-name">XRP</span>
+        </span>
+        <span class="coin-chip" onclick="quickSearch('cardano')">
+          <img src="https://assets.coingecko.com/coins/images/975/small/cardano.png" onerror="this.style.display='none'" alt="ADA">
+          <span class="coin-chip-name">ADA</span>
+        </span>
+        <span class="coin-chip" onclick="quickSearch('dogecoin')">
+          <img src="https://assets.coingecko.com/coins/images/5/small/dogecoin.png" onerror="this.style.display='none'" alt="DOGE">
+          <span class="coin-chip-name">DOGE</span>
+        </span>
+        <span class="coin-chip" onclick="quickSearch('toncoin')">
+          <img src="https://assets.coingecko.com/coins/images/17980/small/ton_symbol.png" onerror="this.style.display='none'" alt="TON">
+          <span class="coin-chip-name">TON</span>
+        </span>
+        <span class="coin-chip" onclick="quickSearch('avalanche-2')">
+          <img src="https://assets.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png" onerror="this.style.display='none'" alt="AVAX">
+          <span class="coin-chip-name">AVAX</span>
+        </span>
+        <span class="coin-chip" onclick="quickSearch('chainlink')">
+          <img src="https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png" onerror="this.style.display='none'" alt="LINK">
+          <span class="coin-chip-name">LINK</span>
+        </span>
         </div>
       </div>
-      <button class="btn-analyze" id="analyzeBtn" onclick="analyze()">تحليل الآن</button>
     </div>
 
     <!-- TIMEFRAME SELECTOR -->
@@ -880,18 +944,7 @@
       <span class="tf-pill" data-tf="8h" onclick="selectTimeframe(this)">8 ساعات</span>
     </div>
 
-    <div class="quick-coins">
-      <span class="coin-chip" onclick="quickSearch('bitcoin')">₿ BTC</span>
-      <span class="coin-chip" onclick="quickSearch('ethereum')">Ξ ETH</span>
-      <span class="coin-chip" onclick="quickSearch('binancecoin')">BNB</span>
-      <span class="coin-chip" onclick="quickSearch('solana')">SOL</span>
-      <span class="coin-chip" onclick="quickSearch('ripple')">XRP</span>
-      <span class="coin-chip" onclick="quickSearch('cardano')">ADA</span>
-      <span class="coin-chip" onclick="quickSearch('dogecoin')">DOGE</span>
-      <span class="coin-chip" onclick="quickSearch('toncoin')">TON</span>
-      <span class="coin-chip" onclick="quickSearch('avalanche-2')">AVAX</span>
-      <span class="coin-chip" onclick="quickSearch('chainlink')">LINK</span>
-    </div>
+    
 
     <div class="error-box" id="errorBox">❌ <span id="errorMsg"></span></div>
 
@@ -1203,6 +1256,17 @@
 
   const WORKER = 'https://api.cryptohubcoin.com';
 
+  /* ═══════════════════════════════════════════════════════════════════
+     الأداة بتشتغل بدون مفتاح API — زي صفحة التوقع بالظبط.
+     الـ Worker بيسمح للطلبات الجايّة من cryptohubcoin.com (trusted origin).
+     ⚠️ مهم: لازم تفتحها من الموقع المنشور، مش من file://
+     ═══════════════════════════════════════════════════════════════════ */
+  function _withKey(opts){
+    opts = opts || {};
+    opts.credentials = 'include';   // يبعت الكوكيز/الهوية مع الطلب
+    return opts;
+  }
+
   /* ───────── كاش بسيط في sessionStorage ───────── */
   const _now = () => Date.now();
   function readCache(key, ttl) {
@@ -1241,20 +1305,22 @@
   /* ───────── تحويل رد الـ Worker لشكل CoinGecko ───────── */
   function toCoinGeckoCoin(d) {
     if (!d) return null;
+    const num = (v) => { const n = Number(v); return isNaN(n) ? 0 : n; };
+    const price = num(d.price != null ? d.price : d.price_usd);
     const md = {
-      current_price:        { usd: +d.price_usd  ?? +d.price ?? 0 },
-      high_24h:             { usd: +d.high_24h   || 0 },
-      low_24h:              { usd: +d.low_24h    || 0 },
-      total_volume:         { usd: +d.volume_24h || +d.total_volume || 0 },
-      market_cap:           { usd: +d.market_cap || 0 },
-      price_change_percentage_24h:  +d.change_24h ?? +d.price_change_percentage_24h ?? 0,
-      price_change_percentage_1h_in_currency:  { usd: +d.change_1h  || 0 },
-      price_change_percentage_7d:   +d.change_7d  || 0,
-      price_change_percentage_30d:  +d.change_30d || 0,
-      circulating_supply:   +d.circulating_supply || 0,
-      total_supply:         +d.total_supply || 0,
-      ath:                  { usd: +d.ath || 0 },
-      atl:                  { usd: +d.atl || 0 }
+      current_price:        { usd: price },
+      high_24h:             { usd: num(d.high_24h) },
+      low_24h:              { usd: num(d.low_24h) },
+      total_volume:         { usd: num(d.volume_24h != null ? d.volume_24h : d.total_volume) },
+      market_cap:           { usd: num(d.market_cap) },
+      price_change_percentage_24h:  num(d.change_24h != null ? d.change_24h : d.price_change_percentage_24h),
+      price_change_percentage_1h_in_currency:  { usd: num(d.change_1h) },
+      price_change_percentage_7d:   num(d.change_7d),
+      price_change_percentage_30d:  num(d.change_30d),
+      circulating_supply:   num(d.circulating_supply),
+      total_supply:         num(d.total_supply),
+      ath:                  { usd: num(d.ath) },
+      atl:                  { usd: num(d.atl) }
     };
     return {
       id: d.id, symbol: d.symbol, name: d.name,
@@ -1525,14 +1591,14 @@
 
       // --- coin details: /coins/{id}?...market_data=true ---
       if (urlStr.includes('/coins/') && urlStr.includes('market_data') && !urlStr.includes('/ohlc')) {
-        const id = urlStr.slice(urlStr.indexOf('/coins/') + 8).split(/[?\/]/)[0];
+        const id = urlStr.slice(urlStr.indexOf('/coins/') + 7).split(/[?\/]/)[0];
         const sym = idToSymbol[String(id).toLowerCase()] || id;
         const cacheKey = 'ca_coin_' + sym;
         const cached = readCache(cacheKey, 2 * 60 * 1000);
         if (cached) return Promise.resolve(jsonResponse(cached));
 
         const u = `${WORKER}/api/v1/market/coins/${encodeURIComponent(id)}`;
-        return _origFetch(u, { signal: opts.signal }).then(async r => {
+        return _origFetch(u, _withKey({ signal: opts.signal })).then(async r => {
           if (!r.ok) throw new Error('worker ' + r.status);
           const body = await r.json();
           const d = (body && (body.data || body)) || null;
@@ -1545,7 +1611,7 @@
 
       // --- OHLC / candlesticks ---
       if (urlStr.includes('/ohlc')) {
-        const id = urlStr.slice(urlStr.indexOf('/coins/') + 8, urlStr.indexOf('/ohlc'));
+        const id = urlStr.slice(urlStr.indexOf('/coins/') + 7, urlStr.indexOf('/ohlc'));
         const days = (urlStr.match(/days=(\d+)/) || [])[1] || '1';
         const sym = idToSymbol[String(id).toLowerCase()] || id;
         const { interval, limit } = klineParams(days);
@@ -1555,7 +1621,7 @@
         if (cached) return Promise.resolve(jsonResponse(cached));
 
         const u = `${WORKER}/api/v1/coins/${encodeURIComponent(sym)}/klines?interval=${interval}&limit=${limit}`;
-        return _origFetch(u, { signal: opts.signal }).then(async r => {
+        return _origFetch(u, _withKey({ signal: opts.signal })).then(async r => {
           if (!r.ok) throw new Error('worker ' + r.status);
           const body = await r.json();
           const rows = (body && body.data) || [];
@@ -1573,7 +1639,7 @@
         const cached = readCache(cacheKey, 10*60*1000);
         if (cached) return Promise.resolve(jsonResponse(cached));
 
-        return _origFetch(`${WORKER}/api/v1/market/search?q=${q}&query=${q}`, { signal: opts.signal })
+        return _origFetch(`${WORKER}/api/v1/market/search?q=${q}&query=${q}`, _withKey({ signal: opts.signal }))
           .then(async r => {
             if (!r.ok) throw new Error('worker ' + r.status);
             const body = await r.json();
@@ -1589,7 +1655,7 @@
 
       // أي مسار CoinGecko آخر → الـ Worker، وممنوع النداء الخارجي
       const cgPath = urlStr.replace(/^https?:\/\/api\.coingecko\.com\/api\/v3/, WORKER + '/api/v1');
-      if (cgPath.startsWith(WORKER)) return _origFetch(cgPath, { signal: opts.signal });
+      if (cgPath.startsWith(WORKER)) return _origFetch(cgPath, _withKey({ signal: opts.signal }));
       return Promise.reject(new Error('external source disabled'));
     }
 
@@ -1598,7 +1664,7 @@
       const cached = readCache('ca_fng', 30*60*1000);
       if (cached) return Promise.resolve(jsonResponse(cached));
 
-      return _origFetch(`${WORKER}/api/v1/stats/fear`, { signal: opts.signal })
+      return _origFetch(`${WORKER}/api/v1/stats/fear`, _withKey({ signal: opts.signal }))
         .then(async r => {
           if (!r.ok) throw new Error('worker ' + r.status);
           const body = await r.json();

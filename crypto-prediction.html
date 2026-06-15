@@ -85,7 +85,7 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 .l-step.done .l-step-dot{background:var(--gn);}
 
 /* ── RESULTS ── */
-.results-section{max-width:1000px;margin:0 auto;padding:0 24px 60px;display:none;}
+.results-section{max-width:1100px;margin:0 auto;padding:0 24px 60px;display:none;}
 
 /* Prediction Hero Card */
 .pred-hero{background:var(--bg2);border:1px solid var(--bc);border-radius:20px;padding:28px;margin-bottom:20px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;}
@@ -233,6 +233,33 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   .search-row{flex-direction:column;}
 }
 </style>
+
+<style>
+  .pred-guide{ max-width:1100px; margin:18px auto 0; padding:0 24px; }
+  .pg-head{ text-align:center; margin-bottom:20px; }
+  .pg-title{ font-size:22px; font-weight:800; color:var(--t1); margin:0 0 6px; }
+  .pg-sub{ font-size:14px; color:var(--t2); margin:0; }
+  .pg-card{ background:var(--bg2); border:1px solid var(--bc); border-radius:14px; padding:18px 20px; margin-bottom:14px; }
+  .pg-ch{ display:flex; align-items:center; gap:9px; margin-bottom:12px; }
+  .pg-ch h3{ font-size:16px; font-weight:700; color:var(--t1); margin:0; }
+  .pg-ic{ font-size:20px; }
+  .pg-card p{ font-size:14px; line-height:1.7; color:var(--t2); margin:0; }
+  .pg-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:12px; }
+  .pg-grid > div{ display:flex; flex-direction:column; gap:3px; padding:10px 12px; background:var(--bg3); border-radius:10px; }
+  .pg-grid b{ font-size:13.5px; color:var(--ac); font-weight:700; }
+  .pg-grid span{ font-size:13px; line-height:1.6; color:var(--t2); }
+  .pg-note{ margin-top:12px !important; padding:10px 12px; background:var(--bg3); border-radius:10px; font-size:13px !important; }
+  .pg-disc{ text-align:center; font-size:13px; color:#BA7517 !important; margin:18px 0 0 !important; padding:12px; background:rgba(186,117,23,.07); border-radius:12px; }
+</style>
+
+<style>
+  .card-explain{ font-size:12.5px; line-height:1.6; color:var(--t2); margin:-2px 0 14px; padding:8px 11px; background:var(--bg3); border-radius:9px; border-left:3px solid var(--ac); }
+  [dir=rtl] .card-explain{ border-left:none; border-right:3px solid var(--ac); }
+</style>
+
+<style>
+  .sentinel-fab, .sentinel-panel { display:none !important; }
+</style>
 </head>
 <body>
 
@@ -274,16 +301,89 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
     </div>
     <div class="popular-coins" id="popularCoins">
       <!-- Pre-rendered for instant display; JS will rebind click handlers on load -->
-      <div class="pop-coin" data-coin-id="bitcoin"><img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" onerror="this.style.display='none'">BTC</div>
-      <div class="pop-coin" data-coin-id="ethereum"><img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" onerror="this.style.display='none'">ETH</div>
-      <div class="pop-coin" data-coin-id="binancecoin"><img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" onerror="this.style.display='none'">BNB</div>
-      <div class="pop-coin" data-coin-id="solana"><img src="https://assets.coingecko.com/coins/images/4128/small/solana.png" onerror="this.style.display='none'">SOL</div>
-      <div class="pop-coin" data-coin-id="ripple"><img src="https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png" onerror="this.style.display='none'">XRP</div>
-      <div class="pop-coin" data-coin-id="cardano"><img src="https://assets.coingecko.com/coins/images/975/small/cardano.png" onerror="this.style.display='none'">ADA</div>
-      <div class="pop-coin" data-coin-id="dogecoin"><img src="https://assets.coingecko.com/coins/images/5/small/dogecoin.png" onerror="this.style.display='none'">DOGE</div>
+      <div class="pop-coin" data-coin-id="bitcoin"><img src="https://api.cryptohubcoin.com/api/v1/icons/coin/bitcoin" onerror="this.style.display='none'">BTC</div>
+      <div class="pop-coin" data-coin-id="ethereum"><img src="https://api.cryptohubcoin.com/api/v1/icons/coin/ethereum" onerror="this.style.display='none'">ETH</div>
+      <div class="pop-coin" data-coin-id="binancecoin"><img src="https://api.cryptohubcoin.com/api/v1/icons/coin/binancecoin" onerror="this.style.display='none'">BNB</div>
+      <div class="pop-coin" data-coin-id="solana"><img src="https://api.cryptohubcoin.com/api/v1/icons/coin/solana" onerror="this.style.display='none'">SOL</div>
+      <div class="pop-coin" data-coin-id="ripple"><img src="https://api.cryptohubcoin.com/api/v1/icons/coin/ripple" onerror="this.style.display='none'">XRP</div>
+      <div class="pop-coin" data-coin-id="cardano"><img src="https://api.cryptohubcoin.com/api/v1/icons/coin/cardano" onerror="this.style.display='none'">ADA</div>
+      <div class="pop-coin" data-coin-id="dogecoin"><img src="https://api.cryptohubcoin.com/api/v1/icons/coin/dogecoin" onerror="this.style.display='none'">DOGE</div>
     </div>
   </div>
 </div>
+
+
+<!-- ═══ GUIDE PANEL (shows on open, hides after predict) ═══ -->
+<div class="pred-guide" id="predGuide">
+  <div class="pg-head">
+    <h2 class="pg-title">How the Price Predictor works</h2>
+    <p class="pg-sub">This guide shows when you open the tool, and hides once you run a prediction.</p>
+  </div>
+  <div class="pg-card">
+    <div class="pg-ch"><span class="pg-ic">🔍</span><h3>1 · Pick a coin</h3></div>
+    <p>Type a coin name or symbol (e.g. <b>BTC</b>, <b>bitcoin</b>) or tap a popular chip, then press <b>Predict</b>. The engine pulls live price, market and on-chain data and runs it through multiple models. The results below replace this guide.</p>
+  </div>
+  <div class="pg-card">
+    <div class="pg-ch"><span class="pg-ic">📈</span><h3>2 · Price Projection Timeline</h3></div>
+    <div class="pg-grid">
+      <div><b>1h / 4h / 24h</b><span>Short-term projected price path. Best for quick trades.</span></div>
+      <div><b>7d / 30d</b><span>Medium-term outlook based on trend, momentum and volatility.</span></div>
+      <div><b>Target & direction</b><span>Whether the model leans bullish (up) or bearish (down), with a projected target.</span></div>
+    </div>
+    <p class="pg-note">These are model estimates based on current data — not guarantees. Markets can move against any forecast.</p>
+  </div>
+  <div class="pg-card">
+    <div class="pg-ch"><span class="pg-ic">⚙️</span><h3>3 · Multi-Layer Prediction Engine</h3></div>
+    <p>The forecast blends several independent layers — technical indicators, momentum, chart patterns, volume, on-chain flows, derivatives and market sentiment. Each layer votes bullish or bearish, and the engine combines them into one weighted prediction. More layers agreeing = stronger signal.</p>
+  </div>
+  <div class="pg-card">
+    <div class="pg-ch"><span class="pg-ic">📊</span><h3>4 · Technical Indicators</h3></div>
+    <div class="pg-grid">
+      <div><b>RSI</b><span>Momentum 0–100. Below 30 = oversold (possible bounce), above 70 = overbought.</span></div>
+      <div><b>MACD</b><span>Trend & crossovers. Bullish crossover = upward momentum building.</span></div>
+      <div><b>Bollinger Bands</b><span>Above/below the midline shows where price sits in its volatility range.</span></div>
+      <div><b>ADX</b><span>Trend strength. High ADX = strong trend, low = sideways/choppy.</span></div>
+      <div><b>ATR %</b><span>Volatility — how much the coin typically moves. Higher = riskier swings.</span></div>
+      <div><b>Williams %R</b><span>Another overbought/oversold gauge confirming RSI.</span></div>
+    </div>
+  </div>
+  <div class="pg-card">
+    <div class="pg-ch"><span class="pg-ic">🔬</span><h3>5 · Advanced Market & On-Chain Data</h3></div>
+    <div class="pg-grid">
+      <div><b>Funding Rate</b><span>Cost to hold leveraged longs. Very high = market overheated (risk of pullback).</span></div>
+      <div><b>Open Interest</b><span>Total open futures positions. Rising OI + rising price = strong move.</span></div>
+      <div><b>Long / Short Ratio</b><span>How traders are positioned. Extreme readings often precede reversals.</span></div>
+      <div><b>Order Book (Bid / Ask)</b><span>Buy vs sell pressure sitting near the price right now.</span></div>
+      <div><b>Liquidity Flow</b><span>Money moving into or out of the coin (inflow = buying interest).</span></div>
+      <div><b>Whale Activity</b><span>Large transactions that can move the market.</span></div>
+    </div>
+  </div>
+  <div class="pg-card">
+    <div class="pg-ch"><span class="pg-ic">🎲</span><h3>6 · Monte Carlo Simulation</h3></div>
+    <p>Runs the price forward <b>1,000 times</b> with random but realistic moves, to map the range of likely outcomes. Instead of a single guess, you see the spread — best case, worst case, and the most probable zone. A wide spread means high uncertainty.</p>
+  </div>
+  <div class="pg-card">
+    <div class="pg-ch"><span class="pg-ic">💥</span><h3>7 · Liquidation Heatmap</h3></div>
+    <p>Shows price levels where large leveraged positions would get force-closed (liquidated). Price is often pulled toward these clusters — they act like magnets. Useful for spotting where a sharp move might accelerate.</p>
+  </div>
+  <div class="pg-card">
+    <div class="pg-ch"><span class="pg-ic">🧠</span><h3>8 · Fear &amp; Greed Index</h3></div>
+    <p>A market-wide mood gauge from 0–100. <b>Below 25</b> = extreme fear (others panic-selling — often opportunity). <b>Above 75</b> = extreme greed (market euphoric — often risky). It adds emotional context to the technical picture.</p>
+  </div>
+  <div class="pg-card">
+    <div class="pg-ch"><span class="pg-ic">💪</span><h3>9 · Signal Strength &amp; Confidence</h3></div>
+    <div class="pg-grid">
+      <div><b>Signal Strength</b><span>Strong / Moderate / Weak — how decisively the layers agree on a direction.</span></div>
+      <div><b>Confidence %</b><span>How reliable the model considers this prediction given current conditions.</span></div>
+    </div>
+    <p class="pg-note">Higher confidence + strong signal = the setup is clearer, but never risk-free.</p>
+  </div>
+  <div class="pg-card">
+    <div class="pg-ch"><span class="pg-ic">📡</span><h3>10 · Recent Intelligence Signals</h3></div>
+    <p>Pulls recent headlines and sentiment from crypto news sources (CoinDesk, CoinTelegraph, Decrypt, The Block and others) so you can see if news flow supports or contradicts the technical forecast.</p>
+  </div>
+</div>
+
 
 <!-- LOADING -->
 <div class="loading-section" id="loadingSection">
@@ -305,7 +405,7 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 <!-- RESULTS -->
 <div class="results-section" id="resultsSection"></div>
 
-<script src="crypto-prediction.min.js?v=6"></script>
+<script src="crypto-prediction.min.js?v=7"></script>
 
 <!-- Social Sentinel Floating Button + Panel -->
 <button class="sentinel-fab" onclick="toggleSentinelPanel()" title="Social Sentinel — Influencer Monitor">

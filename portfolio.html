@@ -610,8 +610,36 @@ function switchTab(name){
 /* ============================================================
    LOCAL STORAGE
    ============================================================ */
-function loadHoldings(){try{holdings=JSON.parse(localStorage.getItem('ch_portfolio')||'[]')}catch(e){holdings=[]}migrateFavoritesIds();}
-function saveHoldings(){try{localStorage.setItem('ch_portfolio',JSON.stringify(holdings))}catch(e){}}
+function loadHoldings(){try{holdings=JSON.parse(localStorage.getItem('ch_portfolio')||'[]')}catch(e){holdings=[]}
+  // نظّف أي صور data: قديمة كانت بتملأ التخزين (إصلاح المحافظ المتأثّرة سابقاً)
+  var _cleaned=false;
+  if(Array.isArray(holdings)){holdings.forEach(function(h){
+    if(h && typeof h.image==='string' && h.image.indexOf('data:')===0){
+      h.image = h.id ? ('https://api.cryptohubcoin.com/api/v1/icons/coin/'+encodeURIComponent(h.id)) : '';
+      _cleaned=true;
+    }
+  });}
+  migrateFavoritesIds();
+  if(_cleaned)saveHoldings();
+}
+function saveHoldings(){
+  try{
+    // نظّف الصور الضخمة (data: URLs) قبل الحفظ — دي بتملأ مساحة localStorage
+    // وتخلّي الحفظ يفشل بصمت فتضيع المحفظة. نستبدلها برابط أيقونة الموقع.
+    if(Array.isArray(holdings)){
+      holdings.forEach(function(h){
+        if(h && typeof h.image==='string' && h.image.indexOf('data:')===0){
+          h.image = h.id ? ('https://api.cryptohubcoin.com/api/v1/icons/coin/'+encodeURIComponent(h.id)) : '';
+        }
+      });
+    }
+    localStorage.setItem('ch_portfolio',JSON.stringify(holdings));
+  }catch(e){
+    // فشل الحفظ (غالباً امتلاء التخزين) — نحذّر المستخدم بدل ما تضيع بياناته بصمت
+    try{ console.error('[Portfolio] Save failed:', e); }catch(_){}
+    try{ alert('Could not save your portfolio — your browser storage may be full. Please remove some items or clear other site data.'); }catch(_){}
+  }
+}
 
 // One-time migration: favorites-synced holdings used to be stored with the
 // wrong id (CoinGecko slug or CMC numeric id) — but portfolio's fetchPrices
@@ -635,9 +663,11 @@ function loadWhales(){
   try{
     whales=JSON.parse(localStorage.getItem('ch_whales')||'[]');
   }catch(e){whales=[]}
-  // remove any corrupted entries (missing address or network)
+  // remove any corrupted entries (missing address or network only).
+  // ملاحظة: مانمسحش بسبب غياب NETWORK_META لوحده — لو الميتاداتا مش متاحة
+  // مؤقتاً ده مايبررش مسح محفظة المستخدم. نسيب الصف ونتعامل معاه عند العرض.
   var before=whales.length;
-  whales=whales.filter(function(w){return w&&w.address&&w.network&&NETWORK_META[w.network]});
+  whales=whales.filter(function(w){return w&&w.address&&w.network;});
   if(whales.length!==before){
     console.log('[WhaleTracker] Cleaned',before-whales.length,'corrupted entries');
     saveWhales();
@@ -652,7 +682,20 @@ function loadWhales(){
   });
   saveWhales();
 }
-function saveWhales(){try{localStorage.setItem('ch_whales',JSON.stringify(whales))}catch(e){}}
+function saveWhales(){
+  try{
+    // نخزّن المعلومات الأساسية فقط (العنوان/الشبكة/الليبل) — مش بيانات المعاملات
+    // الضخمة (w.data) اللي بتملأ التخزين وتخلّي الحفظ يفشل بصمت فتضيع المحافظ.
+    // الـ data بتتجاب من الـ API عند كل تحميل على أي حال.
+    var slim = (whales||[]).map(function(w){
+      return { address:w.address, network:w.network, addedAt:w.addedAt, label:w.label||'' };
+    });
+    localStorage.setItem('ch_whales',JSON.stringify(slim));
+  }catch(e){
+    try{ console.error('[WhaleTracker] Save failed:', e); }catch(_){}
+    try{ alert('Could not save your tracked wallets — your browser storage may be full. Please remove some items or clear other site data.'); }catch(_){}
+  }
+}
 
 /* ============================================================
    PORTFOLIO: COIN LIST — uses /api/search for full 10k coins
@@ -782,7 +825,7 @@ function persistLastPrices(){
     if(p && p.usd>0){
       if(h.lastPrice!==p.usd){h.lastPrice=p.usd;changed=true;}
       if(h.lastChange24h!==p.usd_24h_change){h.lastChange24h=p.usd_24h_change;changed=true;}
-      if(p.image && !h.image){h.image=p.image;changed=true;}
+      if(p.image && !h.image){h.image=(p.image.indexOf('data:')===0 ? (h.id?'https://api.cryptohubcoin.com/api/v1/icons/coin/'+encodeURIComponent(h.id):''): p.image);changed=true;}
     }
   });
   if(changed)saveHoldings();
@@ -964,7 +1007,7 @@ function addHolding(){
     }
   } else {
     if(!coin){alert('Coin data unavailable. Please retry.');return;}
-    holdings.push({id:coin.id,name:coin.name,symbol:coin.symbol,image:coin.image,amount:amount,buyPrice:buyPriceInput||coin.current_price,addedAt:Date.now()});
+    holdings.push({id:coin.id,name:coin.name,symbol:coin.symbol,image:(coin.image && coin.image.indexOf('data:')===0 ? (coin.id?'https://api.cryptohubcoin.com/api/v1/icons/coin/'+encodeURIComponent(coin.id):''): (coin.image||'')),amount:amount,buyPrice:buyPriceInput||coin.current_price,addedAt:Date.now()});
   }
   saveHoldings();
   closeAddPanel();
@@ -1535,7 +1578,7 @@ async function fetchEVMWallet(network, address){
     if(txR.ok){
       var txData=await txR.json();
       if(txData && (txData.status==='1' || txData.message==='OK') && Array.isArray(txData.result)){
-        transactions=txData.result.slice(0,12).map(function(tx){
+        transactions=txData.result.slice(0,50).map(function(tx){
           var fromLc=(tx.from||'').toLowerCase();
           var toLc=(tx.to||'').toLowerCase();
           var dir = fromLc===addrLower ? 'out' : (toLc===addrLower ? 'in' : 'unknown');
@@ -1612,7 +1655,7 @@ async function fetchBitcoinWallet(address){
     var txR=await fetch(baseUrl+'/address/'+encodeURIComponent(address)+'/txs');
     if(txR.ok){
       var txs=await txR.json();
-      transactions=txs.slice(0,12).map(function(tx){
+      transactions=txs.slice(0,50).map(function(tx){
         var inSum=0, outSum=0;
         (tx.vin||[]).forEach(function(v){if(v.prevout && v.prevout.scriptpubkey_address===address) inSum+=v.prevout.value||0;});
         (tx.vout||[]).forEach(function(v){if(v.scriptpubkey_address===address) outSum+=v.value||0;});
@@ -1676,7 +1719,7 @@ async function fetchTronWallet(address){
     var txR=await fetch('https://api.trongrid.io/v1/accounts/'+encodeURIComponent(address)+'/transactions?limit=15');
     if(txR.ok){
       var txData=await txR.json();
-      (txData.data||[]).slice(0,12).forEach(function(tx){
+      (txData.data||[]).slice(0,50).forEach(function(tx){
         if(!tx.raw_data || !tx.raw_data.contract || !tx.raw_data.contract[0]) return;
         var c=tx.raw_data.contract[0];
         if(c.type!=='TransferContract') return;
@@ -1869,6 +1912,43 @@ function calcFlow(txs){
 }
 
 /* ============================================================
+   WHALE: إحصائيات شاملة — إجمالي الإيداع/السحب + مكسب/خسارة تقريبي
+   ملاحظة: محسوب من المعاملات المتاحة (آخر ~50) بالأصل الأصلي للشبكة.
+   الـ P&L تقريبي: صافي التدفّق مُقيّماً بالسعر الحالي — ليس P&L محاسبي دقيق.
+   ============================================================ */
+function calcWalletStats(d){
+  var txs=(d&&d.transactions)||[];
+  var sym=(d&&d.balance&&d.balance.symbol)||'';
+  var price=(d&&d.price&&d.price.usd)||0;
+  var totalIn=0,totalOut=0,inCount=0,outCount=0,firstTs=null,lastTs=null;
+  txs.forEach(function(t){
+    if(t.type && t.type!=='native')return; // نحسب الأصل الأصلي فقط
+    var amt=t.amount||0;
+    if(t.direction==='in'){ totalIn+=amt; inCount++; }
+    else if(t.direction==='out'){ totalOut+=amt; outCount++; }
+    if(t.timestamp){
+      if(firstTs===null||t.timestamp<firstTs)firstTs=t.timestamp;
+      if(lastTs===null||t.timestamp>lastTs)lastTs=t.timestamp;
+    }
+  });
+  var netUnits=totalIn-totalOut;          // صافي الوحدات الداخلة
+  var currentBal=(d&&d.balance&&d.balance.native)||0;
+  var currentUsd=currentBal*price;
+  // تقدير الربح/الخسارة: قيمة الرصيد الحالي مقابل صافي ما دخل المحفظة
+  // (لو الرصيد الحالي أكبر من صافي التدفّق المرصود = ربح غير محقّق تقريبي)
+  var pnlUnits=currentBal-netUnits;       // الفرق بين الرصيد وصافي التدفّق المرصود
+  var pnlUsd=pnlUnits*price;
+  return {
+    totalIn:totalIn, totalOut:totalOut, netUnits:netUnits,
+    inCount:inCount, outCount:outCount,
+    totalInUsd:totalIn*price, totalOutUsd:totalOut*price, netUsd:netUnits*price,
+    currentBal:currentBal, currentUsd:currentUsd,
+    pnlUnits:pnlUnits, pnlUsd:pnlUsd,
+    sym:sym, price:price, firstTs:firstTs, lastTs:lastTs, txCount:txs.length
+  };
+}
+
+/* ============================================================
    WHALE: RENDER
    ============================================================ */
 function renderWhales(){
@@ -1897,6 +1977,7 @@ function renderWhales(){
     var usdPrice=(d.price&&d.price.usd)||0;
     var usd=native*usdPrice;
     var flow=calcFlow(d.transactions);
+    var stats=calcWalletStats(d);
 
     var html='<div class="wallet-card" id="wallet-'+idx+'">';
     html+='<div class="wallet-head" onclick="toggleWallet('+idx+')">';
@@ -1914,6 +1995,21 @@ function renderWhales(){
     html+='<div class="flow-box out"><div class="flow-lbl out">Outflow 24h</div><div class="flow-val pf-down">'+(flow.outflow>0?'-':'')+fmtNum(flow.outflow,4)+' '+escapeHtml(d.balance.symbol)+'</div></div>';
     html+='<div class="flow-box net"><div class="flow-lbl net">Net 24h</div><div class="flow-val '+(flow.net>=0?'pf-up':'pf-down')+'">'+(flow.net>=0?'+':'')+fmtNum(flow.net,4)+'</div></div>';
     html+='</div>';
+
+    // ── Overall stats: total deposits / withdrawals / P&L ──
+    html+='<div class="tx-section-title">Overall — across tracked transactions ('+stats.txCount+')</div>';
+    html+='<div class="flow-grid" style="margin-bottom:10px">';
+    html+='<div class="flow-box in"><div class="flow-lbl in">Total Deposits</div><div class="flow-val pf-up">+'+fmtNum(stats.totalIn,4)+' '+escapeHtml(stats.sym)+'</div><div style="font-size:10px;color:var(--t2);margin-top:2px">'+fmtUSD(stats.totalInUsd)+' • '+stats.inCount+' in</div></div>';
+    html+='<div class="flow-box out"><div class="flow-lbl out">Total Withdrawals</div><div class="flow-val pf-down">-'+fmtNum(stats.totalOut,4)+' '+escapeHtml(stats.sym)+'</div><div style="font-size:10px;color:var(--t2);margin-top:2px">'+fmtUSD(stats.totalOutUsd)+' • '+stats.outCount+' out</div></div>';
+    html+='<div class="flow-box net"><div class="flow-lbl net">Net Flow</div><div class="flow-val '+(stats.netUnits>=0?'pf-up':'pf-down')+'">'+(stats.netUnits>=0?'+':'')+fmtNum(stats.netUnits,4)+' '+escapeHtml(stats.sym)+'</div><div style="font-size:10px;color:var(--t2);margin-top:2px">'+fmtUSD(stats.netUsd)+'</div></div>';
+    html+='</div>';
+
+    // ── P&L (approx) + current value ──
+    html+='<div class="flow-grid" style="margin-bottom:4px">';
+    html+='<div class="flow-box"><div class="flow-lbl">Current Balance</div><div class="flow-val">'+fmtNum(stats.currentBal,6)+' '+escapeHtml(stats.sym)+'</div><div style="font-size:10px;color:var(--t2);margin-top:2px">'+fmtUSD(stats.currentUsd)+'</div></div>';
+    html+='<div class="flow-box '+(stats.pnlUsd>=0?'in':'out')+'"><div class="flow-lbl '+(stats.pnlUsd>=0?'in':'out')+'">Est. P&L</div><div class="flow-val '+(stats.pnlUsd>=0?'pf-up':'pf-down')+'">'+(stats.pnlUsd>=0?'+':'')+fmtUSD(stats.pnlUsd)+'</div><div style="font-size:10px;color:var(--t2);margin-top:2px">'+(stats.pnlUnits>=0?'+':'')+fmtNum(stats.pnlUnits,4)+' '+escapeHtml(stats.sym)+'</div></div>';
+    html+='</div>';
+    html+='<div style="font-size:10px;color:var(--t2);margin:0 0 8px;padding:6px 8px;background:var(--bg3);border-radius:6px;line-height:1.5">⚠️ Estimated from the latest tracked transactions at current price — not an exact accounting P&L.</div>';
 
     if(d.tokens&&d.tokens.length){
       html+='<div class="tx-section-title">Top tokens ('+d.tokens.length+')</div>';

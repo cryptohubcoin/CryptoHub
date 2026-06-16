@@ -743,21 +743,24 @@
 
     /* Nav Quick Panel - Professional */
     .stats-panel {
-      position: absolute;
-      top: calc(100% + 10px);
-      left: 0;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: auto;
       background: var(--bg1);
-      border: 1px solid var(--bc);
-      border-radius: 18px;
-      width: 320px;
-      box-shadow: 0 25px 80px rgba(0, 0, 0, .15), 0 0 0 1px rgba(255, 255, 255, .05);
-      z-index: 1000;
+      border: none;
+      border-inline-start: 1px solid var(--bc);
+      border-radius: 0;
+      width: 340px;
+      max-width: 88vw;
+      box-shadow: -12px 0 48px rgba(0, 0, 0, .18);
+      z-index: 2000;
       display: none;
       overflow: hidden;
       backdrop-filter: blur(24px);
-      transform-origin: top left;
       flex-direction: column;
-      max-height: calc(100vh - 80px);
+      max-height: 100vh;
     }
 
     .stats-panel.active {
@@ -804,12 +807,12 @@
     @keyframes spOpen {
       0% {
         opacity: 0;
-        transform: scale(.92) translateY(-8px)
+        transform: translateX(100%)
       }
 
       100% {
         opacity: 1;
-        transform: scale(1) translateY(0)
+        transform: translateX(0)
       }
     }
 

@@ -891,6 +891,33 @@
 
   <!-- Linked Styles -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- تحسين شكل سكرول القائمة: رفيع + مسافة مريحة، يشتغل على الكمبيوتر والموبايل -->
+  <style>
+    .stats-panel{
+      scrollbar-width: thin;                         /* Firefox: سكرول رفيع */
+      scrollbar-color: var(--bc, #d0d5e0) transparent;
+    }
+    .stats-panel::-webkit-scrollbar{                 /* Chrome / Edge / Safari */
+      width: 6px;
+    }
+    .stats-panel::-webkit-scrollbar-track{
+      background: transparent;
+      margin: 6px 0;
+    }
+    .stats-panel::-webkit-scrollbar-thumb{
+      background: var(--bc, #d0d5e0);
+      border-radius: 10px;
+    }
+    .stats-panel::-webkit-scrollbar-thumb:hover{
+      background: var(--t2, #9aa3b2);
+    }
+    /* مسافة مريحة بين المحتوى والسكرول عشان مايلزقش */
+    .stats-panel-items{
+      padding-inline-end: 12px !important;
+    }
+  </style>
+
   <link rel="preload" href="script.min.js" as="script">
 
   <!-- ═══════════════════════════════════════════════════════════ -->

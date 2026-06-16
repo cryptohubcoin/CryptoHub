@@ -892,18 +892,18 @@
   <!-- Linked Styles -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- تحسين شكل سكرول القائمة: رفيع + مسافة مريحة، يشتغل على الكمبيوتر والموبايل -->
+  <!-- سكرول ملاصق للحافة بدون أي فراغ جانبي، على الكمبيوتر والموبايل -->
   <style>
     .stats-panel{
-      scrollbar-width: thin;                         /* Firefox: سكرول رفيع */
+      scrollbar-width: thin;                         /* Firefox */
       scrollbar-color: var(--bc, #d0d5e0) transparent;
+      overflow-y: auto;
     }
     .stats-panel::-webkit-scrollbar{                 /* Chrome / Edge / Safari */
-      width: 6px;
+      width: 5px;
     }
     .stats-panel::-webkit-scrollbar-track{
       background: transparent;
-      margin: 6px 0;
     }
     .stats-panel::-webkit-scrollbar-thumb{
       background: var(--bc, #d0d5e0);
@@ -912,9 +912,9 @@
     .stats-panel::-webkit-scrollbar-thumb:hover{
       background: var(--t2, #9aa3b2);
     }
-    /* مسافة مريحة بين المحتوى والسكرول عشان مايلزقش */
+    /* المحتوى يلزق في الحافة — نشيل أي فراغ يمين زيادة */
     .stats-panel-items{
-      padding-inline-end: 12px !important;
+      padding-inline-end: 6px !important;
     }
   </style>
 

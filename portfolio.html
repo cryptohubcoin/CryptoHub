@@ -2166,13 +2166,23 @@ async function refreshPortfolio(){
 
 async function init(){
   // ─── لازم تسجيل دخول: المحفظة مربوطة بالحساب على السيرفر ───
+  // نتحقق من المستخدم مباشرةً عبر /api/auth/me (مش بنعتمد على auth-helper
+  // عشان لو اتأخّر تحميله الكود ما يفشلش).
   var user = null;
   try{
-    if(window.Auth && Auth.requireLogin){
-      user = await Auth.requireLogin();   // يوجّه لتسجيل الدخول لو مش مسجّل
-      if(!user) return;                   // جارٍ التحويل لصفحة الدخول
+    var meRes = await fetch('https://api.cryptohubcoin.com/api/auth/me', { credentials:'include' });
+    if(meRes.ok){
+      var meJson = await meRes.json();
+      if(meJson && meJson.success && meJson.user) user = meJson.user;
     }
   }catch(e){ console.warn('[Auth] check failed:', e.message); }
+
+  if(!user){
+    // مش مسجّل دخول → نوجّهه لتسجيل الدخول ونرجّعه للمحفظة بعدها
+    var next = encodeURIComponent(window.location.pathname + window.location.search);
+    window.location.href = '/login.html?next=' + next;
+    return;
+  }
   currentUser = user;
 
   // ─── حمّل من السحابة أولاً (مربوط بالحساب) ───

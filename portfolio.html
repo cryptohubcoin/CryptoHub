@@ -342,6 +342,7 @@ html,body{overflow-x:hidden;max-width:100vw}
 .pf-footer a{color:var(--ac);text-decoration:none;font-weight:600}
 .pf-footer .note{margin-top:6px;opacity:.6}
 </style>
+<script src="https://cryptohubcoin.com/auth-helper.js?v=4"></script>
 </head>
 <body>
 
@@ -554,6 +555,84 @@ var COLORS = ['#f7931a','#627eea','#9945ff','#f3ba2f','#26a17b','#00aae4','#e24b
    ============================================================ */
 var holdings = [];
 var whales = [];
+
+// ═══════════════════════════════════════════════════════════════════
+// CLOUD SYNC — يخزّن المحفظة على السيرفر مربوطة بحساب المستخدم
+// عشان البيانات تتبع الحساب على أي جهاز/متصفّح (مش localStorage بس).
+// localStorage بيفضل كـ cache سريع/احتياطي offline.
+// ═══════════════════════════════════════════════════════════════════
+var CLOUD_API = 'https://api.cryptohubcoin.com/api/v1/portfolio';
+var currentUser = null;           // يتحدّد عند التهيئة من Auth.getCurrentUser()
+var cloudSaveTimer = null;        // debounce للحفظ
+var cloudReady = false;           // اتحمّلت البيانات من السحابة؟
+
+// يجيب المحفظة من السيرفر ويملأ holdings/whales
+// يرجّع: {ok:bool, empty:bool}  — empty=true يعني الحساب لسه مفيهوش بيانات على السيرفر
+async function cloudLoad(){
+  try{
+    var res = await fetch(CLOUD_API, { credentials:'include' });
+    if(!res.ok) return {ok:false, empty:false};
+    var data = await res.json();
+    if(!data || !data.success) return {ok:false, empty:false};
+    var h = Array.isArray(data.holdings) ? data.holdings : [];
+    var wl = Array.isArray(data.whales) ? data.whales : [];
+    holdings = h;
+    whales = wl;
+    cloudReady = true;
+    // نحفظ نسخة محلية كـ cache احتياطي
+    try{ localStorage.setItem('ch_portfolio', JSON.stringify(holdings)); }catch(e){}
+    try{ localStorage.setItem('ch_whales',    JSON.stringify(whales));   }catch(e){}
+    return {ok:true, empty:(h.length===0 && wl.length===0)};
+  }catch(e){ console.warn('[Cloud] load failed:', e.message); return {ok:false, empty:false}; }
+}
+
+// نقل لمرة واحدة: لو الحساب على السيرفر فاضي وفيه بيانات محلية قديمة،
+// نرفع المحلية للسيرفر عشان المستخدم ما يخسرش محفظته القديمة.
+async function migrateLocalToCloud(){
+  try{
+    if(localStorage.getItem('ch_cloud_migrated')==='1') return false; // اتعمل قبل كده
+    var localH=[], localW=[];
+    try{ localH=JSON.parse(localStorage.getItem('ch_portfolio')||'[]'); }catch(e){}
+    try{ localW=JSON.parse(localStorage.getItem('ch_whales')||'[]'); }catch(e){}
+    if((!localH||!localH.length) && (!localW||!localW.length)){
+      localStorage.setItem('ch_cloud_migrated','1'); // مفيش حاجة تتنقل
+      return false;
+    }
+    // فيه بيانات محلية → نحطها في الذاكرة ونرفعها للسيرفر
+    if(localH&&localH.length) holdings=localH;
+    if(localW&&localW.length) whales=localW;
+    // نظّف data: URLs قبل الرفع (زي حماية saveHoldings)
+    holdings.forEach(function(h){ if(h&&typeof h.image==='string'&&h.image.indexOf('data:')===0){ h.image=h.id?('https://api.cryptohubcoin.com/api/v1/icons/coin/'+encodeURIComponent(h.id)):''; } });
+    var res = await fetch(CLOUD_API, {
+      method:'PUT', credentials:'include',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({ holdings:holdings, whales:whales })
+    });
+    if(res.ok){
+      localStorage.setItem('ch_cloud_migrated','1');
+      console.log('[Cloud] migrated local data →', holdings.length, 'coins,', whales.length, 'wallets');
+      return true;
+    }
+  }catch(e){ console.warn('[Cloud] migration failed:', e.message); }
+  return false;
+}
+
+// يحفظ المحفظة على السيرفر (مع debounce صغير لتجميع التعديلات المتتابعة)
+function cloudSave(){
+  if(!currentUser) return;            // مش مسجّل → مفيش حفظ سحابي
+  if(cloudSaveTimer) clearTimeout(cloudSaveTimer);
+  cloudSaveTimer = setTimeout(async function(){
+    try{
+      await fetch(CLOUD_API, {
+        method:'PUT',
+        credentials:'include',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ holdings:holdings, whales:whales })
+      });
+    }catch(e){ console.warn('[Cloud] save failed:', e.message); }
+  }, 600);
+}
+
 var coinList = [];   // used for search (from /api/coins)
 var priceCache = {};
 var selectedCoinId = '';
@@ -639,6 +718,7 @@ function saveHoldings(){
     try{ console.error('[Portfolio] Save failed:', e); }catch(_){}
     try{ alert('Could not save your portfolio — your browser storage may be full. Please remove some items or clear other site data.'); }catch(_){}
   }
+  cloudSave();
 }
 
 // One-time migration: favorites-synced holdings used to be stored with the
@@ -695,6 +775,7 @@ function saveWhales(){
     try{ console.error('[WhaleTracker] Save failed:', e); }catch(_){}
     try{ alert('Could not save your tracked wallets — your browser storage may be full. Please remove some items or clear other site data.'); }catch(_){}
   }
+  cloudSave();
 }
 
 /* ============================================================
@@ -2084,8 +2165,32 @@ async function refreshPortfolio(){
 }
 
 async function init(){
-  loadHoldings();
-  loadWhales();
+  // ─── لازم تسجيل دخول: المحفظة مربوطة بالحساب على السيرفر ───
+  var user = null;
+  try{
+    if(window.Auth && Auth.requireLogin){
+      user = await Auth.requireLogin();   // يوجّه لتسجيل الدخول لو مش مسجّل
+      if(!user) return;                   // جارٍ التحويل لصفحة الدخول
+    }
+  }catch(e){ console.warn('[Auth] check failed:', e.message); }
+  currentUser = user;
+
+  // ─── حمّل من السحابة أولاً (مربوط بالحساب) ───
+  var res = {ok:false, empty:false};
+  if(currentUser){ res = await cloudLoad(); }
+
+  if(res.ok && res.empty){
+    // الحساب جديد على السيرفر — لو فيه بيانات محلية قديمة، ننقلها مرة واحدة
+    await migrateLocalToCloud();
+    migrateFavoritesIds();
+  } else if(res.ok){
+    // السحابة فيها بيانات — نستخدمها
+    migrateFavoritesIds();
+  } else {
+    // فشل الاتصال بالسحابة — نستخدم المحلي (offline / خطأ مؤقت)
+    loadHoldings(); loadWhales();
+  }
+
   renderNetChips();
 
   try{

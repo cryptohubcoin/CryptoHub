@@ -892,32 +892,6 @@
   <!-- Linked Styles -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- سكرول ملاصق للحافة بدون أي فراغ جانبي، على الكمبيوتر والموبايل -->
-  <style>
-    .stats-panel{
-      scrollbar-width: thin;                         /* Firefox */
-      scrollbar-color: var(--bc, #d0d5e0) transparent;
-      overflow-y: auto;
-    }
-    .stats-panel::-webkit-scrollbar{                 /* Chrome / Edge / Safari */
-      width: 5px;
-    }
-    .stats-panel::-webkit-scrollbar-track{
-      background: transparent;
-    }
-    .stats-panel::-webkit-scrollbar-thumb{
-      background: var(--bc, #d0d5e0);
-      border-radius: 10px;
-    }
-    .stats-panel::-webkit-scrollbar-thumb:hover{
-      background: var(--t2, #9aa3b2);
-    }
-    /* المحتوى يلزق في الحافة — نشيل أي فراغ يمين زيادة */
-    .stats-panel-items{
-      padding-inline-end: 6px !important;
-    }
-  </style>
-
   <link rel="preload" href="script.min.js" as="script">
 
   <!-- ═══════════════════════════════════════════════════════════ -->

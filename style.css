@@ -768,11 +768,13 @@
     .stats-panel-items {
       overflow-y: auto;
       flex: 1;
+      scrollbar-width: thin;
+      scrollbar-color: var(--bc) transparent;
     }
 
     /* Custom Scrollbar for Panel Items */
     .stats-panel-items::-webkit-scrollbar {
-      width: 4px;
+      width: 5px;
     }
 
     .stats-panel-items::-webkit-scrollbar-track {
@@ -780,12 +782,12 @@
     }
 
     .stats-panel-items::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
+      background: var(--bc);
+      border-radius: 10px;
     }
 
     .stats-panel-items::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: var(--t2);
     }
 
     [dir=ltr] .stats-panel {

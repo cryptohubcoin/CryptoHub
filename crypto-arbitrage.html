@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
   <head>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FTBNSF9WJT"></script>
@@ -248,7 +248,31 @@
         th, td { padding: 1rem; font-size: 0.9rem; }
         h1 { font-size: 2rem; }
       }
-    </style>
+    
+  /* ═══ Arbitrage Guide Panel ═══ */
+  .arb-guide{ max-width:1100px; margin:24px auto 0; padding:0 16px; }
+  .arb-guide[hidden]{ display:none; }
+  .ag-head{ text-align:center; margin-bottom:22px; }
+  .ag-title{ font-size:24px; font-weight:800; color:var(--text-main); margin:0 0 8px; }
+  .ag-sub{ font-size:15px; color:var(--text-muted); margin:0; line-height:1.7; }
+  .ag-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(320px,1fr)); gap:16px; }
+  .ag-card{ background:var(--bg-panel); border:1px solid var(--border-light); border-radius:16px; padding:22px 24px; }
+  .ag-ch{ display:flex; align-items:center; gap:11px; margin-bottom:13px; }
+  .ag-ch h3{ font-size:17px; font-weight:700; color:var(--text-main); margin:0; }
+  .ag-ic{ width:40px; height:40px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; flex-shrink:0; }
+  .ag-card p{ font-size:14.5px; line-height:1.8; color:var(--text-muted); margin:0; }
+  .ag-steps{ counter-reset:agstep; list-style:none; padding:0; margin:0; }
+  .ag-steps li{ counter-increment:agstep; position:relative; padding-inline-start:42px; margin-bottom:16px; font-size:14.5px; line-height:1.75; color:var(--text-muted); }
+  .ag-steps li:last-child{ margin-bottom:0; }
+  .ag-steps li::before{ content:counter(agstep); position:absolute; inset-inline-start:0; top:0; width:28px; height:28px; border-radius:50%; background:var(--primary); color:#fff; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; }
+  .ag-steps li b{ color:var(--text-main); font-weight:700; }
+  .ag-terms{ display:flex; flex-direction:column; gap:12px; }
+  .ag-term{ padding:13px 15px; background:var(--bg-panel-hover); border-radius:11px; }
+  .ag-term b{ display:block; font-size:14.5px; color:var(--primary); font-weight:700; margin-bottom:3px; }
+  .ag-term span{ font-size:14px; color:var(--text-muted); line-height:1.7; }
+  .ag-warn{ margin-top:18px; padding:15px 18px; background:rgba(186,117,23,.08); border:1px solid rgba(186,117,23,.25); border-radius:14px; font-size:14px; line-height:1.8; color:#8a5a12; text-align:center; }
+  .ag-span2{ grid-column:1/-1; }
+</style>
   </head>
   <body>
     <div class="container">
@@ -274,6 +298,113 @@
           autocomplete="off" />
         <button id="searchBtn" class="search-btn">ابحث</button>
       </div>
+
+
+      <!-- ═══ GUIDE PANEL (يظهر عند الفتح، يختفي بعد البحث) ═══ -->
+      <div class="arb-guide" id="arbGuide">
+
+        <!-- ── عربي ── -->
+        <div id="arbGuideAr">
+          <div class="ag-head">
+            <h2 class="ag-title">إزاي تستخدم ماسح فروقات العملات؟</h2>
+            <p class="ag-sub">الأداة بتقارن سعر أي عملة عبر أكثر من 100 منصة تداول في نفس اللحظة، وتكتشفلك فرص <b>المراجحة (Arbitrage)</b> — أي تشتري من منصة بسعر أرخص وتبيع في منصة تانية بسعر أغلى وتكسب الفرق.</p>
+          </div>
+          <div class="ag-grid">
+
+            <div class="ag-card ag-span2">
+              <div class="ag-ch"><span class="ag-ic" style="background:#185FA5">🔍</span><h3>طريقة الاستخدام — خطوة بخطوة</h3></div>
+              <ol class="ag-steps">
+                <li>اكتب اسم العملة أو رمزها (مثل <b>Bitcoin</b> أو <b>BTC</b>) في خانة البحث واضغط <b>ابحث</b>.</li>
+                <li>الأداة بتجيب سعر العملة من كل المنصات وترتّبهم، وتحدّد <b>أرخص منصة للشراء</b> و<b>أغلى منصة للبيع</b>.</li>
+                <li>شوف <b>أكبر فرق سعر (Spread)</b> — ده اللي بيقولك حجم فرصة الربح المحتملة بين أرخص وأغلى منصة.</li>
+                <li>راجع <b>الجدول</b> اللي بيعرض كل منصة بسعرها وحجم تداولها، عشان تختار المنصات الأعلى سيولة.</li>
+              </ol>
+            </div>
+
+            <div class="ag-card">
+              <div class="ag-ch"><span class="ag-ic" style="background:#059669">💰</span><h3>الإحصائيات الثلاثة</h3></div>
+              <div class="ag-terms">
+                <div class="ag-term"><b>أدنى سعر (للشراء)</b><span>أرخص منصة تقدر تشتري منها العملة دلوقتي — نقطة الدخول المثالية.</span></div>
+                <div class="ag-term"><b>أعلى سعر (للبيع)</b><span>أغلى منصة تقدر تبيع فيها — نقطة الخروج المثالية.</span></div>
+                <div class="ag-term"><b>أكبر فرق سعر (Spread)</b><span>النسبة بين أرخص وأغلى سعر = فرصة الربح المحتملة قبل خصم الرسوم.</span></div>
+              </div>
+            </div>
+
+            <div class="ag-card">
+              <div class="ag-ch"><span class="ag-ic" style="background:#534AB7">📊</span><h3>أعمدة الجدول</h3></div>
+              <div class="ag-terms">
+                <div class="ag-term"><b>المنصة</b><span>اسم منصة التداول اللي السعر منها.</span></div>
+                <div class="ag-term"><b>الزوج</b><span>زوج التداول (مثل BTC/USDT).</span></div>
+                <div class="ag-term"><b>السعر</b><span>سعر العملة على المنصة دي بالدولار.</span></div>
+                <div class="ag-term"><b>الحجم 24س</b><span>حجم التداول في آخر 24 ساعة — كل ما زاد، كل ما كانت السيولة أعلى وأأمن للتنفيذ.</span></div>
+                <div class="ag-term"><b>الفرق</b><span>فرق سعر المنصة دي عن أرخص سعر — بيوضّح فرصة الربح لكل منصة.</span></div>
+              </div>
+            </div>
+
+            <div class="ag-card ag-span2">
+              <div class="ag-ch"><span class="ag-ic" style="background:#DC2626">⚠️</span><h3>قبل ما تنفّذ أي صفقة مراجحة</h3></div>
+              <p>فرق السعر (Spread) <b>مش ربح صافي</b>. في عوامل لازم تحسبها الأول:</p>
+              <div class="ag-warn">
+                💸 <b>رسوم التداول</b> على المنصتين (شراء + بيع) &nbsp;•&nbsp; 🔄 <b>رسوم السحب والتحويل</b> بين المنصات &nbsp;•&nbsp; ⏱️ <b>وقت التحويل</b> اللي ممكن السعر يتغيّر خلاله &nbsp;•&nbsp; 💧 <b>السيولة</b> — لازم يكون فيه حجم كافي للتنفيذ بالسعر المعروض
+                <br><br>احسب الرسوم دي كلها، ولو الفرق فضل أكبر منها → الفرصة مربحة. الأداة بتوريك الفرص، بس القرار والمخاطرة قرارك.
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── English ── -->
+        <div id="arbGuideEn" style="display:none">
+          <div class="ag-head">
+            <h2 class="ag-title">How to use the Spread Scanner</h2>
+            <p class="ag-sub">This tool compares a coin's price across 100+ exchanges in real time to find <b>arbitrage</b> opportunities — buy cheaper on one exchange, sell higher on another, and pocket the difference.</p>
+          </div>
+          <div class="ag-grid">
+
+            <div class="ag-card ag-span2">
+              <div class="ag-ch"><span class="ag-ic" style="background:#185FA5">🔍</span><h3>How to use it — step by step</h3></div>
+              <ol class="ag-steps">
+                <li>Type a coin name or symbol (e.g. <b>Bitcoin</b> or <b>BTC</b>) and press <b>Search</b>.</li>
+                <li>The tool pulls the price from every exchange, ranks them, and identifies the <b>cheapest to buy</b> and the <b>most expensive to sell</b>.</li>
+                <li>Check the <b>biggest spread</b> — it shows the size of the potential profit between the lowest and highest exchange.</li>
+                <li>Review the <b>table</b> showing each exchange's price and volume, so you can pick the most liquid venues.</li>
+              </ol>
+            </div>
+
+            <div class="ag-card">
+              <div class="ag-ch"><span class="ag-ic" style="background:#059669">💰</span><h3>The three stats</h3></div>
+              <div class="ag-terms">
+                <div class="ag-term"><b>Lowest price (to buy)</b><span>The cheapest exchange to buy the coin right now — your ideal entry.</span></div>
+                <div class="ag-term"><b>Highest price (to sell)</b><span>The most expensive exchange to sell on — your ideal exit.</span></div>
+                <div class="ag-term"><b>Biggest spread</b><span>The % gap between lowest and highest = potential profit before fees.</span></div>
+              </div>
+            </div>
+
+            <div class="ag-card">
+              <div class="ag-ch"><span class="ag-ic" style="background:#534AB7">📊</span><h3>Table columns</h3></div>
+              <div class="ag-terms">
+                <div class="ag-term"><b>Exchange</b><span>The trading platform the price comes from.</span></div>
+                <div class="ag-term"><b>Pair</b><span>The trading pair (e.g. BTC/USDT).</span></div>
+                <div class="ag-term"><b>Price</b><span>The coin's price on that exchange in USD.</span></div>
+                <div class="ag-term"><b>24h Volume</b><span>Trading volume in the last 24h — higher means deeper liquidity and safer execution.</span></div>
+                <div class="ag-term"><b>Spread</b><span>How far this exchange's price is from the lowest — shows each venue's profit gap.</span></div>
+              </div>
+            </div>
+
+            <div class="ag-card ag-span2">
+              <div class="ag-ch"><span class="ag-ic" style="background:#DC2626">⚠️</span><h3>Before you execute any arbitrage trade</h3></div>
+              <p>The spread is <b>not</b> net profit. Account for these first:</p>
+              <div class="ag-warn">
+                💸 <b>Trading fees</b> on both exchanges (buy + sell) &nbsp;•&nbsp; 🔄 <b>Withdrawal & transfer fees</b> between exchanges &nbsp;•&nbsp; ⏱️ <b>Transfer time</b> during which the price can move &nbsp;•&nbsp; 💧 <b>Liquidity</b> — there must be enough volume to fill at the shown price
+                <br><br>Add up these costs — if the spread is still larger, the opportunity is profitable. The tool surfaces opportunities; the decision and risk are yours.
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
 
       <div id="errorMsg" class="error-message"></div>
 
@@ -1203,7 +1334,7 @@
       const stored = localStorage.getItem('lang');
       if (stored && T[stored]) return stored;
 
-      return 'ar';
+      return 'en';
     }
 
     function applyLang(lang) {
@@ -1232,6 +1363,14 @@
       document.getElementById('thPrice').textContent        = tr.thPrice;
       document.getElementById('thVolume').textContent       = tr.thVolume;
       document.getElementById('thSpread').textContent       = tr.thSpread;
+
+      // Guide language: Arabic for 'ar', English for everything else
+      const _gAr = document.getElementById('arbGuideAr');
+      const _gEn = document.getElementById('arbGuideEn');
+      if(_gAr && _gEn){
+        if(lang === 'ar'){ _gAr.style.display = ''; _gEn.style.display = 'none'; }
+        else { _gAr.style.display = 'none'; _gEn.style.display = ''; }
+      }
 
       // Back arrow direction
       const backIcon = document.getElementById('backIcon');
@@ -1341,6 +1480,8 @@
     }
 
     function showLoader(message) {
+      var _ag = document.getElementById('arbGuide');
+      if(_ag) _ag.hidden = true;
       loaderText.textContent = message || '...';
       loader.classList.add('visible');
     }

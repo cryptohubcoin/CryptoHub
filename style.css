@@ -768,6 +768,25 @@
       animation: spOpen .3s cubic-bezier(.32, .72, .24, 1.02)
     }
 
+    /* غطاء معتم يغطّي باقي الشاشة عند فتح الدرج (يخفي سكرول/محتوى الموقع) */
+    #statsDrawerOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .38);
+      z-index: 1999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .3s ease, visibility .3s ease;
+    }
+    .stats-panel.active ~ #statsDrawerOverlay {
+      opacity: 1;
+      visibility: visible;
+    }
+    /* منع تمرير صفحة الموقع خلف الدرج (المتصفحات الحديثة) */
+    body:has(.stats-panel.active) {
+      overflow: hidden;
+    }
+
     .stats-panel-items {
       overflow-y: auto;
       flex: 1;

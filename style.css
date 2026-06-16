@@ -782,10 +782,6 @@
       opacity: 1;
       visibility: visible;
     }
-    /* منع تمرير صفحة الموقع خلف الدرج (المتصفحات الحديثة) */
-    body:has(.stats-panel.active) {
-      overflow: hidden;
-    }
 
     .stats-panel-items {
       overflow-y: auto;

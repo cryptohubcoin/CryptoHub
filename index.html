@@ -3638,6 +3638,26 @@
 
   <!-- Bundled & minified application script (built from auth-helper.js + 00-bootstrap.js through 08-main.js) -->
   <script src="script.min.js" defer></script>
+  <script>
+    // منع تمرير صفحة الموقع لما الدرج الجانبي يكون مفتوح (مضمون لكل المتصفحات)
+    (function(){
+      function syncDrawerScroll(){
+        var p = document.getElementById('statsPanel');
+        if(!p) return;
+        var open = p.classList.contains('active');
+        document.body.style.overflow = open ? 'hidden' : '';
+        document.documentElement.style.overflow = open ? 'hidden' : '';
+      }
+      function startObserver(){
+        var p = document.getElementById('statsPanel');
+        if(!p){ setTimeout(startObserver, 300); return; }
+        new MutationObserver(syncDrawerScroll).observe(p, { attributes:true, attributeFilter:['class'] });
+        syncDrawerScroll();
+      }
+      if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startObserver);
+      else startObserver();
+    })();
+  </script>
 
   <!-- ═══════════════════════════════════════════════════════════════
        AUTH GATING + MODAL CONTROLLER

@@ -3871,43 +3871,6 @@
         refreshAuthBodyClass();
         window.refreshAuthOnlyVisibility = refreshAuthBodyClass;
 
-        // ── Settings: collapse toggle + theme segmented control ──
-        (function () {
-          var st = document.getElementById('chSettings');
-          var hd = document.getElementById('chSetHd');
-          if (st && hd) {
-            window.__chToggleSettings = function () {
-              var open = st.classList.toggle('open');
-              hd.setAttribute('aria-expanded', open ? 'true' : 'false');
-            };
-          }
-          var L = document.getElementById('chThemeLight');
-          var D = document.getElementById('chThemeDark');
-          function isLight() {
-            var m = document.getElementById('mI');
-            return m ? m.classList.contains('hidden') : true;
-          }
-          function sync() {
-            var light = isLight();
-            if (L) L.classList.toggle('on', light);
-            if (D) D.classList.toggle('on', !light);
-          }
-          if (L) L.addEventListener('click', function () {
-            if (!isLight() && typeof window.toggleTheme === 'function') window.toggleTheme();
-            setTimeout(sync, 40);
-          });
-          if (D) D.addEventListener('click', function () {
-            if (isLight() && typeof window.toggleTheme === 'function') window.toggleTheme();
-            setTimeout(sync, 40);
-          });
-          sync();
-          setTimeout(sync, 300);
-          var mI = document.getElementById('mI');
-          if (mI && window.MutationObserver) {
-            new MutationObserver(sync).observe(mI, { attributes: true, attributeFilter: ['class'] });
-          }
-        })();
-
         // Mobile menu logout — tries multiple possible Auth helper names,
         // falls back to clearing storage and reloading
         window.__mobileLogout = function () {
@@ -5973,6 +5936,50 @@
 })();
 </script>
 
+  <script>
+    /* Settings menu: collapse toggle + theme segmented control — standalone & defensive */
+    (function () {
+      function init() {
+        try {
+          var st = document.getElementById('chSettings');
+          var hd = document.getElementById('chSetHd');
+          if (st && hd) {
+            window.__chToggleSettings = function () {
+              var open = st.classList.toggle('open');
+              hd.setAttribute('aria-expanded', open ? 'true' : 'false');
+            };
+          }
+          var L = document.getElementById('chThemeLight');
+          var D = document.getElementById('chThemeDark');
+          function isLight() {
+            var m = document.getElementById('mI');
+            return m ? m.classList.contains('hidden') : true;
+          }
+          function sync() {
+            var light = isLight();
+            if (L) L.classList.toggle('on', light);
+            if (D) D.classList.toggle('on', !light);
+          }
+          if (L) L.addEventListener('click', function () {
+            if (!isLight() && typeof window.toggleTheme === 'function') window.toggleTheme();
+            setTimeout(sync, 40);
+          });
+          if (D) D.addEventListener('click', function () {
+            if (isLight() && typeof window.toggleTheme === 'function') window.toggleTheme();
+            setTimeout(sync, 40);
+          });
+          sync();
+          setTimeout(sync, 400);
+          var mI = document.getElementById('mI');
+          if (mI && window.MutationObserver) {
+            new MutationObserver(sync).observe(mI, { attributes: true, attributeFilter: ['class'] });
+          }
+        } catch (e) { console.warn('[CryptoHub] settings init skipped:', e); }
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+      else init();
+    })();
+  </script>
 </body>
 
 </html>

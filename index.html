@@ -1392,53 +1392,89 @@
       .cmc-stat-val { font-size: 14px; }
     }
 
-    /* ─── Mobile: hide user button from nav (it goes inside menu) ─── */
-    @media (max-width: 640px) {
-      body.auth-logged-in #auth-nav-slot { display: none !important; }
-      body.auth-logged-in #mobileUserHeader { display: block !important; }
-    }
-    /* Mobile user info card inside the dropdown menu */
-    #mobileUserHeader .mu-card {
+    /* ═══ Settings section (collapsible, end of menu) ─ moved theme/lang/user here ═══ */
+    #auth-nav-slot { display: none !important; }
+    #topThemeBtn { display: none !important; }
+
+    .ch-settings { margin: 8px 8px 0; padding-top: 8px; border-top: 0.5px solid var(--bc); }
+    .ch-set-hd {
+      all: unset; box-sizing: border-box; cursor: pointer;
       display: flex; align-items: center; gap: 12px;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--bc);
-      background: linear-gradient(180deg, rgba(124,58,237,.08) 0%, transparent 100%);
+      width: 100%; padding: 11px 6px; border-radius: 10px;
     }
-    #mobileUserHeader .mu-avatar {
-      width: 42px; height: 42px; border-radius: 50%;
-      background: linear-gradient(135deg, #7c3aed, #a855f7);
-      color: #fff; display: flex; align-items: center; justify-content: center;
-      font-size: 17px; font-weight: 700; flex-shrink: 0;
+    .ch-set-hd:hover { background: var(--hv); }
+    .ch-set-ico {
+      width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(24,95,165,.12); color: #185FA5; font-size: 15px;
     }
-    #mobileUserHeader .mu-name { font-size: 14px; font-weight: 700; color: var(--t1); }
-    #mobileUserHeader .mu-email { font-size: 11px; color: var(--t2); margin-top: 2px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
-    #mobileUserHeader .mu-logout {
+    .ch-set-title { flex: 1; font-size: 14px; font-weight: 600; color: var(--t1); text-align: start; }
+    .ch-set-chev { color: var(--t2); font-size: 13px; transition: transform .25s ease; }
+    .ch-settings.open .ch-set-chev { transform: rotate(180deg); }
+
+    .ch-set-body { max-height: 0; overflow: hidden; transition: max-height .32s ease; }
+    .ch-settings.open .ch-set-body { max-height: 1200px; }
+
+    .ch-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 6px; border-radius: 10px;
+      text-decoration: none; color: var(--t1);
+    }
+    .ch-row-lang, .ch-row-link, .ch-user { border-top: 0.5px solid var(--bc); }
+    .ch-row-link:hover { background: var(--hv); }
+    .ch-row-ico {
+      width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 14px;
+    }
+    .ch-row-lbl { flex: 1; font-size: 14px; color: var(--t1); text-align: start; }
+    .ch-row-arrow { color: var(--t2); font-size: 12px; }
+
+    /* Theme segmented control */
+    .ch-seg { display: flex; background: var(--hv); border-radius: 9px; padding: 2px; }
+    .ch-seg-btn {
+      all: unset; cursor: pointer; display: flex; align-items: center; gap: 5px;
+      font-size: 12px; padding: 6px 10px; border-radius: 7px; color: var(--t2);
+    }
+    .ch-seg-btn.on { background: var(--bg1); color: var(--t1); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+
+    /* Language row uses relocated #langDd */
+    .ch-row-lang .dropdown { flex: 1; min-width: 0; }
+    .ch-langbtn {
+      all: unset; box-sizing: border-box; cursor: pointer;
+      display: flex; align-items: center; gap: 8px; width: 100%;
+    }
+    .ch-langbtn #cFlag { font-size: 16px; }
+    .ch-langbtn #cCode { color: var(--t2); font-weight: 600; }
+    .ch-langbtn .fa-chevron-down { color: var(--t2); }
+    #chSettings #lMenu {
+      position: static !important; display: none; width: 100%;
+      margin-top: 8px; min-width: 0 !important; max-height: 240px; overflow-y: auto;
+      box-shadow: none; border: 0.5px solid var(--bc); border-radius: 10px; inset: auto !important;
+    }
+    #chSettings #lMenu.active { display: block; }
+
+    /* Auth-only block (Portfolio + identity + sign out) */
+    .ch-auth-only { display: none; }
+    body.auth-logged-in .ch-auth-only { display: block; }
+    .ch-user { display: flex; align-items: center; gap: 12px; padding: 11px 6px; }
+    .ch-user-av {
+      width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+      background: #534AB7; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 600;
+    }
+    .ch-user-name { font-size: 13px; font-weight: 600; color: var(--t1); }
+    .ch-user-email { font-size: 11px; color: var(--t2); margin-top: 1px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+    .ch-signout {
+      all: unset; box-sizing: border-box; cursor: pointer;
       display: flex; align-items: center; justify-content: center; gap: 8px;
-      margin: 10px 12px 6px;
-      padding: 10px 14px;
-      background: rgba(239,68,68,.08);
-      border: 1px solid rgba(239,68,68,.25);
-      border-radius: 10px;
-      color: #ef4444;
-      font-size: 13px; font-weight: 600;
-      cursor: pointer; width: calc(100% - 24px);
+      width: 100%; margin: 10px 6px 4px; padding: 11px;
+      background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.25);
+      border-radius: 10px; color: #ef4444; font-size: 13px; font-weight: 600;
+      width: calc(100% - 12px);
     }
-    #mobileUserHeader .mu-logout:hover { background: rgba(239,68,68,.15); }
-    #mobileUserHeader .mu-portfolio {
-      display: flex; align-items: center; gap: 10px;
-      margin: 10px 12px 0;
-      padding: 11px 14px;
-      background: rgba(24,95,165,.06);
-      border: 1px solid rgba(24,95,165,.18);
-      border-radius: 10px;
-      color: var(--t1);
-      font-size: 13px; font-weight: 600;
-      text-decoration: none; width: calc(100% - 24px);
-      box-sizing: border-box;
-    }
-    #mobileUserHeader .mu-portfolio i { color: #185FA5; font-size: 14px; width: 16px; text-align: center; }
-    #mobileUserHeader .mu-portfolio:hover { background: rgba(24,95,165,.12); }
+    .ch-signout:hover { background: rgba(239,68,68,.15); }
 
     /* ─── AI Analysis panel header with close button ─── */
     #analysisPanel {
@@ -1555,19 +1591,14 @@
           <button class="nav-icon-btn" onclick="toggleMobileSearch()" title="بحث" id="navSearchBtn">
             <i class="fas fa-search" style="font-size:15px"></i>
           </button>
-          <!-- Dark Mode Icon Button -->
-          <button onclick="toggleTheme()" class="nav-icon-btn" title="Dark/Light Mode">
+          <!-- Theme state-holder: visible control moved into Settings menu -->
+          <button onclick="toggleTheme()" id="topThemeBtn" class="nav-icon-btn" title="Dark/Light Mode" aria-hidden="true" tabindex="-1">
             <i class="fas fa-sun text-yellow-500" id="sI"></i>
             <i class="fas fa-moon hidden" style="color:var(--ac)" id="mI"></i>
           </button>
-          <div class="dropdown" id="langDd"><button class="nav-icon-btn nav-lang-btn" onclick="toggleDD('langDd')"><span
-                id="cFlag">🇸🇦</span><span id="cCode" class="text-xs font-bold" style="font-size:10px">AR</span><i
-                class="fas fa-chevron-down" style="font-size:8px;opacity:.6"></i></button>
-            <div class="ddm" id="lMenu" style="min-width:190px"></div>
-          </div>
 
-          <!-- Auth Nav Slot (Sign in button OR User dropdown) -->
-          <div id="auth-nav-slot" style="display:flex;align-items:center"></div>
+          <!-- Auth Nav Slot: kept as Auth.renderNavSlot target; user controls moved into Settings menu -->
+          <div id="auth-nav-slot"></div>
 
           <div class="dropdown" id="statsDd" style="display:flex;align-items:center;gap:8px;">
             <button class="nav-icon-btn nav-hamburger" onclick="toggleDD('statsDd')" id="navSecBtn"
@@ -1581,7 +1612,6 @@
 
             <div class="stats-panel" id="statsPanel">
               <!-- Mobile user info (shown only when logged in AND on mobile) -->
-              <div id="mobileUserHeader" style="display:none"></div>
               <div class="stats-panel-items" style="padding:6px 8px">
 
                 <!-- ═══ MARKETS SECTION ═══ -->
@@ -1646,6 +1676,61 @@
                 <a href="login.html" class="guest-only" style="margin:14px 10px 6px;padding:13px;background:#2563eb;color:#fff;text-align:center;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;letter-spacing:0.3px;transition:background .15s" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'" data-i18n="loginBtn">
                   Log in
                 </a>
+
+                <!-- ═══ SETTINGS (collapsible) ═══ -->
+                <div id="chSettings" class="ch-settings">
+                  <button type="button" id="chSetHd" class="ch-set-hd" aria-expanded="false" onclick="window.__chToggleSettings&&window.__chToggleSettings()">
+                    <span class="ch-set-ico"><i class="fas fa-gear"></i></span>
+                    <span class="ch-set-title" data-i18n="navSettings">Settings</span>
+                    <i id="chSetChev" class="fas fa-chevron-down ch-set-chev"></i>
+                  </button>
+                  <div id="chSetBody" class="ch-set-body">
+
+                    <!-- Theme -->
+                    <div class="ch-row">
+                      <span class="ch-row-ico" style="background:rgba(186,117,23,.14);color:#BA7517"><i class="fas fa-circle-half-stroke"></i></span>
+                      <span class="ch-row-lbl" data-i18n="settingsTheme">Theme</span>
+                      <span class="ch-seg">
+                        <button type="button" id="chThemeLight" class="ch-seg-btn"><i class="fas fa-sun"></i><span data-i18n="themeLight">Light</span></button>
+                        <button type="button" id="chThemeDark" class="ch-seg-btn"><i class="fas fa-moon"></i><span data-i18n="themeDark">Dark</span></button>
+                      </span>
+                    </div>
+
+                    <!-- Language (relocated #langDd — wiring preserved) -->
+                    <div class="ch-row ch-row-lang">
+                      <span class="ch-row-ico" style="background:rgba(29,158,117,.14);color:#1D9E75"><i class="fas fa-globe"></i></span>
+                      <div class="dropdown" id="langDd">
+                        <button class="nav-lang-btn ch-langbtn" onclick="toggleDD('langDd')">
+                          <span class="ch-row-lbl" data-i18n="settingsLanguage">Language</span>
+                          <span id="cFlag">🇸🇦</span>
+                          <span id="cCode" class="text-xs font-bold" style="font-size:11px">AR</span>
+                          <i class="fas fa-chevron-down" style="font-size:9px;opacity:.6"></i>
+                        </button>
+                        <div class="ddm" id="lMenu" style="min-width:190px"></div>
+                      </div>
+                    </div>
+
+                    <!-- Auth-only: Portfolio + identity + sign out -->
+                    <div class="ch-auth-only">
+                      <a class="ch-row ch-row-link" href="portfolio" data-auth-required="1" data-feature="Portfolio Tracker">
+                        <span class="ch-row-ico" style="background:rgba(24,95,165,.12);color:#185FA5"><i class="fas fa-wallet"></i></span>
+                        <span class="ch-row-lbl" data-i18n="toolPortfolio">Portfolio</span>
+                        <i class="fas fa-chevron-left ch-row-arrow"></i>
+                      </a>
+                      <div class="ch-user">
+                        <div class="ch-user-av" id="chUserAv">U</div>
+                        <div style="flex:1;min-width:0">
+                          <div class="ch-user-name" id="chUserName">User</div>
+                          <div class="ch-user-email" id="chUserEmail"></div>
+                        </div>
+                      </div>
+                      <button type="button" class="ch-signout" onclick="window.__mobileLogout&&window.__mobileLogout()">
+                        <i class="fas fa-right-from-bracket"></i><span data-i18n="signOut">Sign out</span>
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
 
                 <!-- ═══ Logo Footer ═══ -->
                 <div style="margin-top:14px;padding:12px;border-top:0.5px solid var(--bc);display:flex;align-items:center;justify-content:center;gap:8px">
@@ -3761,36 +3846,22 @@
 
         function refreshAuthBodyClass() {
           Auth.getCurrentUser().then(function (user) {
-            var mh = document.getElementById('mobileUserHeader');
             if (user) {
               document.body.classList.add('auth-logged-in');
               document.body.classList.remove('auth-guest');
-              // Populate mobile user card (shown only on mobile via CSS)
-              if (mh) {
-                var name  = user.name || user.username || user.email || 'User';
-                var email = user.email || '';
-                var initial = (name.charAt(0) || 'U').toUpperCase();
-                mh.innerHTML =
-                  '<div class="mu-card">' +
-                    '<div class="mu-avatar">' + initial + '</div>' +
-                    '<div style="flex:1;min-width:0">' +
-                      '<div class="mu-name">' + name + '</div>' +
-                      (email ? '<div class="mu-email">' + email + '</div>' : '') +
-                    '</div>' +
-                  '</div>' +
-                  '<a class="mu-portfolio" href="portfolio">' +
-                    '<i class="fas fa-wallet"></i>' +
-                    '<span data-i18n="toolPortfolio">Portfolio</span>' +
-                  '</a>' +
-                  '<button class="mu-logout" onclick="window.__mobileLogout()">' +
-                    '<i class="fas fa-sign-out-alt"></i>' +
-                    '<span>Logout</span>' +
-                  '</button>';
-              }
+              // Populate Settings identity (Settings section is shown on desktop + mobile)
+              var name  = user.name || user.username || user.email || 'User';
+              var email = user.email || '';
+              var initial = (name.charAt(0) || 'U').toUpperCase();
+              var elN = document.getElementById('chUserName');
+              var elE = document.getElementById('chUserEmail');
+              var elA = document.getElementById('chUserAv');
+              if (elN) elN.textContent = name;
+              if (elE) elE.textContent = email;
+              if (elA) elA.textContent = initial;
             } else {
               document.body.classList.add('auth-guest');
               document.body.classList.remove('auth-logged-in');
-              if (mh) mh.innerHTML = '';
             }
           }).catch(function () {
             document.body.classList.add('auth-guest');
@@ -3799,6 +3870,43 @@
         }
         refreshAuthBodyClass();
         window.refreshAuthOnlyVisibility = refreshAuthBodyClass;
+
+        // ── Settings: collapse toggle + theme segmented control ──
+        (function () {
+          var st = document.getElementById('chSettings');
+          var hd = document.getElementById('chSetHd');
+          if (st && hd) {
+            window.__chToggleSettings = function () {
+              var open = st.classList.toggle('open');
+              hd.setAttribute('aria-expanded', open ? 'true' : 'false');
+            };
+          }
+          var L = document.getElementById('chThemeLight');
+          var D = document.getElementById('chThemeDark');
+          function isLight() {
+            var m = document.getElementById('mI');
+            return m ? m.classList.contains('hidden') : true;
+          }
+          function sync() {
+            var light = isLight();
+            if (L) L.classList.toggle('on', light);
+            if (D) D.classList.toggle('on', !light);
+          }
+          if (L) L.addEventListener('click', function () {
+            if (!isLight() && typeof window.toggleTheme === 'function') window.toggleTheme();
+            setTimeout(sync, 40);
+          });
+          if (D) D.addEventListener('click', function () {
+            if (isLight() && typeof window.toggleTheme === 'function') window.toggleTheme();
+            setTimeout(sync, 40);
+          });
+          sync();
+          setTimeout(sync, 300);
+          var mI = document.getElementById('mI');
+          if (mI && window.MutationObserver) {
+            new MutationObserver(sync).observe(mI, { attributes: true, attributeFilter: ['class'] });
+          }
+        })();
 
         // Mobile menu logout — tries multiple possible Auth helper names,
         // falls back to clearing storage and reloading

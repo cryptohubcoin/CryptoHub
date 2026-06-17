@@ -1476,6 +1476,16 @@
       width: calc(100% - 12px);
     }
     .ch-signout:hover { background: rgba(239,68,68,.15); }
+    .ch-signin {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin: 8px 6px 4px; padding: 13px;
+      background: #2563eb; color: #fff;
+      border-radius: 10px; font-size: 14px; font-weight: 600;
+      text-decoration: none; width: calc(100% - 12px); box-sizing: border-box;
+      letter-spacing: 0.2px; transition: background .15s;
+    }
+    .ch-signin:hover { background: #1d4ed8; }
+    body.auth-guest .ch-signin { display: flex; }
 
     /* ─── AI Analysis panel header with close button ─── */
     #analysisPanel {
@@ -1673,11 +1683,6 @@
                   <i class="fas fa-chevron-left nav-arrow"></i>
                 </a>
 
-                <!-- ═══ Login CTA (guests only) ═══ -->
-                <a href="login.html" class="guest-only" style="margin:14px 10px 6px;padding:13px;background:#2563eb;color:#fff;text-align:center;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;letter-spacing:0.3px;transition:background .15s" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'" data-i18n="loginBtn">
-                  Log in
-                </a>
-
                 <!-- ═══ SETTINGS (collapsible) ═══ -->
                 <div id="chSettings" class="ch-settings">
                   <button type="button" id="chSetHd" class="ch-set-hd" aria-expanded="false" onclick="window.__chToggleSettings&&window.__chToggleSettings()">
@@ -1729,6 +1734,11 @@
                         <i class="fas fa-right-from-bracket"></i><span>Sign out</span>
                       </button>
                     </div>
+
+                    <!-- Guest-only: combined sign in / sign up -->
+                    <a href="login.html" class="ch-signin guest-only">
+                      <i class="fas fa-right-to-bracket"></i><span>Sign in / Sign up</span>
+                    </a>
 
                   </div>
                 </div>

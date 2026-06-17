@@ -1437,21 +1437,22 @@
     }
     .ch-seg-btn.on { background: var(--bg1); color: var(--t1); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
 
-    /* Language row uses relocated #langDd */
-    .ch-row-lang .dropdown { flex: 1; min-width: 0; }
+    /* Language row uses an inline custom menu (NOT .ddm, so toggleDD('statsDd') still finds the panel) */
+    .ch-langwrap { position: relative; flex: 1; min-width: 0; }
     .ch-langbtn {
       all: unset; box-sizing: border-box; cursor: pointer;
       display: flex; align-items: center; gap: 8px; width: 100%;
     }
     .ch-langbtn #cFlag { font-size: 16px; }
     .ch-langbtn #cCode { color: var(--t2); font-weight: 600; }
-    .ch-langbtn .fa-chevron-down { color: var(--t2); }
-    #chSettings #lMenu {
-      position: static !important; display: none; width: 100%;
-      margin-top: 8px; min-width: 0 !important; max-height: 240px; overflow-y: auto;
-      box-shadow: none; border: 0.5px solid var(--bc); border-radius: 10px; inset: auto !important;
+    .ch-langbtn .ch-lang-chev { color: var(--t2); transition: transform .2s ease; }
+    .ch-langwrap.open .ch-lang-chev { transform: rotate(180deg); }
+    .ch-langmenu {
+      display: none; width: 100%; margin-top: 8px;
+      max-height: 240px; overflow-y: auto;
+      border: 0.5px solid var(--bc); border-radius: 10px; background: var(--bg1);
     }
-    #chSettings #lMenu.active { display: block; }
+    .ch-langmenu.open { display: block; }
 
     /* Auth-only block (Portfolio + identity + sign out) */
     .ch-auth-only { display: none; }
@@ -1681,7 +1682,7 @@
                 <div id="chSettings" class="ch-settings">
                   <button type="button" id="chSetHd" class="ch-set-hd" aria-expanded="false" onclick="window.__chToggleSettings&&window.__chToggleSettings()">
                     <span class="ch-set-ico"><i class="fas fa-gear"></i></span>
-                    <span class="ch-set-title" data-i18n="navSettings">Settings</span>
+                    <span class="ch-set-title">Settings</span>
                     <i id="chSetChev" class="fas fa-chevron-down ch-set-chev"></i>
                   </button>
                   <div id="chSetBody" class="ch-set-body">
@@ -1689,24 +1690,24 @@
                     <!-- Theme -->
                     <div class="ch-row">
                       <span class="ch-row-ico" style="background:rgba(186,117,23,.14);color:#BA7517"><i class="fas fa-circle-half-stroke"></i></span>
-                      <span class="ch-row-lbl" data-i18n="settingsTheme">Theme</span>
+                      <span class="ch-row-lbl">Theme</span>
                       <span class="ch-seg">
-                        <button type="button" id="chThemeLight" class="ch-seg-btn"><i class="fas fa-sun"></i><span data-i18n="themeLight">Light</span></button>
-                        <button type="button" id="chThemeDark" class="ch-seg-btn"><i class="fas fa-moon"></i><span data-i18n="themeDark">Dark</span></button>
+                        <button type="button" id="chThemeLight" class="ch-seg-btn"><i class="fas fa-sun"></i><span>Light</span></button>
+                        <button type="button" id="chThemeDark" class="ch-seg-btn"><i class="fas fa-moon"></i><span>Dark</span></button>
                       </span>
                     </div>
 
-                    <!-- Language (relocated #langDd — wiring preserved) -->
+                    <!-- Language (inline custom menu; #lMenu kept by id for buildLM/applyLang/setLang) -->
                     <div class="ch-row ch-row-lang">
                       <span class="ch-row-ico" style="background:rgba(29,158,117,.14);color:#1D9E75"><i class="fas fa-globe"></i></span>
-                      <div class="dropdown" id="langDd">
-                        <button class="nav-lang-btn ch-langbtn" onclick="toggleDD('langDd')">
-                          <span class="ch-row-lbl" data-i18n="settingsLanguage">Language</span>
+                      <div class="ch-langwrap">
+                        <button type="button" class="ch-langbtn" onclick="window.__chToggleLang&&window.__chToggleLang()">
+                          <span class="ch-row-lbl">Language</span>
                           <span id="cFlag">🇸🇦</span>
                           <span id="cCode" class="text-xs font-bold" style="font-size:11px">AR</span>
-                          <i class="fas fa-chevron-down" style="font-size:9px;opacity:.6"></i>
+                          <i class="fas fa-chevron-down ch-lang-chev" style="font-size:9px;opacity:.6"></i>
                         </button>
-                        <div class="ddm" id="lMenu" style="min-width:190px"></div>
+                        <div id="lMenu" class="ch-langmenu"></div>
                       </div>
                     </div>
 
@@ -1725,7 +1726,7 @@
                         </div>
                       </div>
                       <button type="button" class="ch-signout" onclick="window.__mobileLogout&&window.__mobileLogout()">
-                        <i class="fas fa-right-from-bracket"></i><span data-i18n="signOut">Sign out</span>
+                        <i class="fas fa-right-from-bracket"></i><span>Sign out</span>
                       </button>
                     </div>
 
@@ -5974,6 +5975,31 @@
           if (mI && window.MutationObserver) {
             new MutationObserver(sync).observe(mI, { attributes: true, attributeFilter: ['class'] });
           }
+
+          // Inline language menu (not a .ddm, so it never hijacks toggleDD('statsDd'))
+          var lm = document.getElementById('lMenu');
+          var lw = lm ? lm.closest('.ch-langwrap') : null;
+          window.__chToggleLang = function () {
+            if (!lm) return;
+            var open = lm.classList.toggle('open');
+            if (lw) lw.classList.toggle('open', open);
+          };
+          if (lm) {
+            // close after a language is picked (the .ddi onclick=setLang runs first)
+            lm.addEventListener('click', function (e) {
+              if (e.target.closest('.ddi')) {
+                lm.classList.remove('open');
+                if (lw) lw.classList.remove('open');
+              }
+            });
+          }
+          // close the language menu when clicking outside it
+          document.addEventListener('click', function (e) {
+            if (lm && lm.classList.contains('open') && !e.target.closest('.ch-langwrap')) {
+              lm.classList.remove('open');
+              if (lw) lw.classList.remove('open');
+            }
+          }, true);
         } catch (e) { console.warn('[CryptoHub] settings init skipped:', e); }
       }
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

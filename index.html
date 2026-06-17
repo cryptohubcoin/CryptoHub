@@ -1687,7 +1687,7 @@
                 <div id="chSettings" class="ch-settings">
                   <button type="button" id="chSetHd" class="ch-set-hd" aria-expanded="false" onclick="window.__chToggleSettings&&window.__chToggleSettings()">
                     <span class="ch-set-ico"><i class="fas fa-gear"></i></span>
-                    <span class="ch-set-title">Settings</span>
+                    <span class="ch-set-title" data-i18n="navSettings">Settings</span>
                     <i id="chSetChev" class="fas fa-chevron-down ch-set-chev"></i>
                   </button>
                   <div id="chSetBody" class="ch-set-body">
@@ -1695,10 +1695,10 @@
                     <!-- Theme -->
                     <div class="ch-row">
                       <span class="ch-row-ico" style="background:rgba(186,117,23,.14);color:#BA7517"><i class="fas fa-circle-half-stroke"></i></span>
-                      <span class="ch-row-lbl">Theme</span>
+                      <span class="ch-row-lbl" data-i18n="settingsTheme">Theme</span>
                       <span class="ch-seg">
-                        <button type="button" id="chThemeLight" class="ch-seg-btn"><i class="fas fa-sun"></i><span>Light</span></button>
-                        <button type="button" id="chThemeDark" class="ch-seg-btn"><i class="fas fa-moon"></i><span>Dark</span></button>
+                        <button type="button" id="chThemeLight" class="ch-seg-btn"><i class="fas fa-sun"></i><span data-i18n="themeLight">Light</span></button>
+                        <button type="button" id="chThemeDark" class="ch-seg-btn"><i class="fas fa-moon"></i><span data-i18n="themeDark">Dark</span></button>
                       </span>
                     </div>
 
@@ -1707,7 +1707,7 @@
                       <span class="ch-row-ico" style="background:rgba(29,158,117,.14);color:#1D9E75"><i class="fas fa-globe"></i></span>
                       <div class="ch-langwrap">
                         <button type="button" class="ch-langbtn" onclick="window.__chToggleLang&&window.__chToggleLang()">
-                          <span class="ch-row-lbl">Language</span>
+                          <span class="ch-row-lbl" data-i18n="settingsLanguage">Language</span>
                           <span id="cFlag">🇸🇦</span>
                           <span id="cCode" class="text-xs font-bold" style="font-size:11px">AR</span>
                           <i class="fas fa-chevron-down ch-lang-chev" style="font-size:9px;opacity:.6"></i>
@@ -1731,13 +1731,13 @@
                         </div>
                       </div>
                       <button type="button" class="ch-signout" onclick="window.__mobileLogout&&window.__mobileLogout()">
-                        <i class="fas fa-right-from-bracket"></i><span>Sign out</span>
+                        <i class="fas fa-right-from-bracket"></i><span data-i18n="signOut">Sign out</span>
                       </button>
                     </div>
 
                     <!-- Guest-only: combined sign in / sign up -->
                     <a href="login.html" class="ch-signin guest-only">
-                      <i class="fas fa-right-to-bracket"></i><span>Sign in / Sign up</span>
+                      <i class="fas fa-right-to-bracket"></i><span data-i18n="signInUp">Sign in / Sign up</span>
                     </a>
 
                   </div>

@@ -1425,6 +1425,20 @@
       cursor: pointer; width: calc(100% - 24px);
     }
     #mobileUserHeader .mu-logout:hover { background: rgba(239,68,68,.15); }
+    #mobileUserHeader .mu-portfolio {
+      display: flex; align-items: center; gap: 10px;
+      margin: 10px 12px 0;
+      padding: 11px 14px;
+      background: rgba(24,95,165,.06);
+      border: 1px solid rgba(24,95,165,.18);
+      border-radius: 10px;
+      color: var(--t1);
+      font-size: 13px; font-weight: 600;
+      text-decoration: none; width: calc(100% - 24px);
+      box-sizing: border-box;
+    }
+    #mobileUserHeader .mu-portfolio i { color: #185FA5; font-size: 14px; width: 16px; text-align: center; }
+    #mobileUserHeader .mu-portfolio:hover { background: rgba(24,95,165,.12); }
 
     /* ─── AI Analysis panel header with close button ─── */
     #analysisPanel {
@@ -3764,6 +3778,10 @@
                       (email ? '<div class="mu-email">' + email + '</div>' : '') +
                     '</div>' +
                   '</div>' +
+                  '<a class="mu-portfolio" href="portfolio">' +
+                    '<i class="fas fa-wallet"></i>' +
+                    '<span data-i18n="toolPortfolio">Portfolio</span>' +
+                  '</a>' +
                   '<button class="mu-logout" onclick="window.__mobileLogout()">' +
                     '<i class="fas fa-sign-out-alt"></i>' +
                     '<span>Logout</span>' +

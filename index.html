@@ -1478,10 +1478,10 @@
     .ch-signout:hover { background: rgba(239,68,68,.15); }
     .ch-signin {
       display: flex; align-items: center; justify-content: center; gap: 8px;
-      margin: 8px 6px 4px; padding: 13px;
+      margin: 12px 8px 4px; padding: 13px;
       background: #2563eb; color: #fff;
       border-radius: 10px; font-size: 14px; font-weight: 600;
-      text-decoration: none; width: calc(100% - 12px); box-sizing: border-box;
+      text-decoration: none; width: calc(100% - 16px); box-sizing: border-box;
       letter-spacing: 0.2px; transition: background .15s;
     }
     .ch-signin:hover { background: #1d4ed8; }
@@ -1735,13 +1735,14 @@
                       </button>
                     </div>
 
-                    <!-- Guest-only: combined sign in / sign up -->
-                    <a href="login.html" class="ch-signin guest-only">
-                      <i class="fas fa-right-to-bracket"></i><span data-i18n="signInUp">Sign in / Sign up</span>
-                    </a>
-
                   </div>
                 </div>
+
+                <!-- Guest-only: combined sign in / sign up (outside Settings, always visible) -->
+                <a href="login.html" class="ch-signin guest-only">
+                  <i class="fas fa-right-to-bracket"></i><span data-i18n="signInUp">Sign in / Sign up</span>
+                </a>
+
 
                 <!-- ═══ Logo Footer ═══ -->
                 <div style="margin-top:14px;padding:12px;border-top:0.5px solid var(--bc);display:flex;align-items:center;justify-content:center;gap:8px">

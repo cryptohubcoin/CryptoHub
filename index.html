@@ -1329,6 +1329,18 @@
     .cmc-bar-display::-webkit-scrollbar { display: none; }
     .cmc-bar-display:empty { display: none; }
 
+    /* Market stats bar relocated into the Top 100 Gainers header */
+    #tickerWrap .tg-hdr { flex-wrap: wrap; }
+    #tickerWrap .tg-hdr .cmc-bar-wrap {
+      margin: 0 !important;
+      flex: 1 1 300px;
+      min-width: 0;
+    }
+    #tickerWrap .tg-hdr .cmc-bar-display { margin: 0; }
+    @media (max-width: 640px) {
+      #tickerWrap .tg-hdr .cmc-bar-wrap { flex-basis: 100%; }
+    }
+
     /* Structured item produced by JS render */
     .cmc-stat {
       flex: 1 0 auto;
@@ -1819,12 +1831,7 @@
       </div>
     </div>
 
-    <!-- CMC Top Bar -->
-    <div class="cmc-bar-wrap">
-      <button class="cmc-bar-arrow cmc-arr-start" id="cmcArrStart" aria-label="Scroll start">&#8249;</button>
-      <div class="cmc-bar" id="cmcBar"></div>
-      <button class="cmc-bar-arrow cmc-arr-end" id="cmcArrEnd" aria-label="Scroll end">&#8250;</button>
-    </div>
+    <!-- CMC Top Bar — moved into the Top 100 Gainers header (see #tickerWrap .tg-hdr) -->
 
     <!-- Indicators Bar — card-row layout -->
     <div class="cards-row-wrap" id="indBarWrap">
@@ -2169,14 +2176,19 @@
       <!-- Top Gainers Orbital -->
       <div class="tg-section" id="tickerWrap" style="min-height:110px;contain:layout style paint">
         <div class="tg-hdr">
-          <div style="display:flex;align-items:center;gap:8px" id="tgHdrInfo">
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0" id="tgHdrInfo">
             <i class="fas fa-fire" style="color:#f97316"></i>
             <span data-i18n="top100Gainers">Top 100 Gainers</span>
-            <span class="tg-live"><span class="ld" style="width:5px;height:5px"></span> LIVE</span>
+            <span id="tgToggle" onclick="toggleGainers()" role="button" tabindex="0" title="Show / Hide"
+              style="position:relative;width:38px;height:21px;border-radius:11px;display:inline-block;cursor:pointer;flex-shrink:0;transition:all .2s">
+            </span>
           </div>
-          <span id="tgToggle" onclick="toggleGainers()" role="button" tabindex="0" title="Show / Hide"
-            style="position:relative;width:38px;height:21px;border-radius:11px;display:inline-block;cursor:pointer;flex-shrink:0;transition:all .2s">
-          </span>
+          <!-- Market stats bar (moved here from CMC Top Bar) -->
+          <div class="cmc-bar-wrap">
+            <button class="cmc-bar-arrow cmc-arr-start" id="cmcArrStart" aria-label="Scroll start">&#8249;</button>
+            <div class="cmc-bar" id="cmcBar"></div>
+            <button class="cmc-bar-arrow cmc-arr-end" id="cmcArrEnd" aria-label="Scroll end">&#8250;</button>
+          </div>
         </div>
         <div class="tg-belt" id="tgBelt">
           <div class="tg-track" id="tickerContent"></div>

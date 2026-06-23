@@ -191,8 +191,8 @@
       const pending = sessionStorage.getItem('ch_pending_tool');
       if (pending && isSafeInternalPath(pending)) return pending;
     } catch (e) {}
-    // 3) مفيش وجهة محددة → الداشبورد
-    return '/dashboard.html';
+    // 3) مفيش وجهة محددة → الصفحة الرئيسية
+    return '/';
   }
   const postLoginUrl = getPostLoginUrl();
   // نمسح الأداة المحفوظة بعد ما قريناها (مش محتاجينها تاني)
@@ -233,7 +233,7 @@
   // Forward the redirect param to Google OAuth so the backend can hand
   // the user back to the right page after the OAuth round-trip.
   const googleBtn = document.querySelector('.btn-google');
-  if (googleBtn && postLoginUrl !== '/dashboard.html') {
+  if (googleBtn && postLoginUrl !== '/') {
     const u = new URL(googleBtn.href);
     u.searchParams.set('next', postLoginUrl);
     googleBtn.href = u.toString();

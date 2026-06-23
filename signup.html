@@ -190,6 +190,17 @@
     border: 0.5px solid rgba(234, 57, 67, 0.3);
   }
 
+  .pw-wrap { position: relative; }
+  .pw-wrap input { padding-inline-end: 40px; }
+  .pw-toggle {
+    position: absolute; top: 50%; inset-inline-end: 8px;
+    transform: translateY(-50%); background: none; border: none;
+    padding: 4px; cursor: pointer; color: var(--t2);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 4px;
+  }
+  .pw-toggle:hover { color: var(--t1); }
+
   /* Auto dark-mode if system prefers, unless explicitly set */
   @media (prefers-color-scheme: dark) {
     html:not([data-theme="light"]) body { background: #0d1421; color: #e8eaed; }
@@ -246,7 +257,15 @@
 
     <div class="field">
       <label for="password">Password</label>
-      <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8" maxlength="128">
+      <div class="pw-wrap">
+        <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8" maxlength="128">
+        <button type="button" class="pw-toggle" id="pw-toggle" aria-label="Show password">
+          <svg id="pw-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </button>
+      </div>
       <p class="hint">Minimum 8 characters</p>
     </div>
 
@@ -270,6 +289,23 @@
   const form = document.getElementById('signup-form');
   const submitBtn = document.getElementById('submit-btn');
   const alertBox = document.getElementById('alert');
+
+  // Password show/hide toggle
+  (function () {
+    var toggle = document.getElementById('pw-toggle');
+    var pw = document.getElementById('password');
+    var eye = document.getElementById('pw-eye');
+    if (toggle && pw) {
+      toggle.addEventListener('click', function () {
+        var show = pw.type === 'password';
+        pw.type = show ? 'text' : 'password';
+        toggle.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        eye.innerHTML = show
+          ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+          : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+      });
+    }
+  })();
 
   function showError(message) {
     alertBox.textContent = message;

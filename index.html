@@ -3218,7 +3218,7 @@
           <div style="display:flex;flex-direction:column;gap:11px">
             <a href="about" class="ft-link-new" data-i18n="aboutUs"><span class="ft-dot"></span>About Us</a>
             <a href="advertise" class="ft-link-new" data-i18n="advertise"><span class="ft-dot"></span>Advertise</a>
-            <a href="#" onclick="openLegal('aboutModal');return false" class="ft-link-new" data-i18n="pricing"><span class="ft-dot"></span>Pricing <span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:99px;background:rgba(22,199,132,.2);color:#16c784;letter-spacing:0.4px;margin-left:4px">SOON</span></a>
+            <a href="#" onclick="chShowSoon('Pricing plans coming soon!'); return false" class="ft-link-new" data-i18n="pricing"><span class="ft-dot"></span>Pricing <span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:99px;background:rgba(22,199,132,.2);color:#16c784;letter-spacing:0.4px;margin-left:4px">SOON</span></a>
             <a href="https://t.me/CryptoHubCoinNews" target="_blank" rel="noopener" class="ft-link-new" data-i18n="contact"><span class="ft-dot"></span>Contact</a>
             <a href="terms" class="ft-link-new" data-i18n="termsOfService"><span class="ft-dot"></span>Terms of Service</a>
             <a href="privacy" class="ft-link-new" data-i18n="privacyPolicy"><span class="ft-dot"></span>Privacy Policy</a>
@@ -6064,6 +6064,23 @@
     }
   });
 })();
+</script>
+<script>
+/* Lightweight "coming soon" toast */
+function chShowSoon(msg){
+  var t=document.createElement('div');
+  t.textContent=msg||'Coming soon!';
+  t.style.cssText='position:fixed;left:50%;bottom:32px;transform:translateX(-50%) translateY(20px);'
+    +'background:#222531;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;'
+    +'box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:99999;opacity:0;transition:opacity .25s,transform .25s;'
+    +'font-family:inherit;border:0.5px solid rgba(255,255,255,.1)';
+  document.body.appendChild(t);
+  requestAnimationFrame(function(){ t.style.opacity='1'; t.style.transform='translateX(-50%) translateY(0)'; });
+  setTimeout(function(){
+    t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(20px)';
+    setTimeout(function(){ t.remove(); }, 300);
+  }, 2400);
+}
 </script>
 </body>
 

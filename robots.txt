@@ -49,6 +49,12 @@ Disallow: /dashboard
 Disallow: /dashboard.html
 Disallow: /api/
 
+# ---- منع روابط تقنية اتفهرست بالغلط (404 fixes) ----
+Disallow: /fapi/
+Disallow: /v3/
+Disallow: /candles
+Disallow: /market_char
+
 # ---- منع ملفات النظام ----
 Disallow: /*.json$
 

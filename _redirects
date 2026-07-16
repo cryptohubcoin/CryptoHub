@@ -10,6 +10,14 @@
 https://cryptohubcoin.com/* https://www.cryptohubcoin.com/:splat 301
 
 # ==========================================
+# Arabic path fixes (301) — /coin/*/ar + /ar
+# ==========================================
+
+/coin/:coin/ar /coin/:coin 301
+/ar / 301
+/ar/* /:splat 301
+
+# ==========================================
 # SEO Redirects - 301 Permanent
 # ==========================================
 

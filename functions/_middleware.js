@@ -1,21 +1,38 @@
+// ============================================================
+//  CryptoHub — SEO Middleware (Cloudflare Pages Functions)
+//  الوظيفة: 301 لأي URL فيه ?lang= / ?ref= / ?utm_*
+//  + تأمين non-www → www كطبقة احتياطية
+//  أي طلب تاني بيعدي عادي من غير أي تأثير (context.next)
+// ============================================================
+
+const STRIP_PARAMS = ['lang', 'ref'];
+
 export async function onRequest(context) {
-  const { request } = context;
-  const url = new URL(request.url);
-  const path = url.pathname.toLowerCase();
-  
-  const blocked = [
-    '/wp-admin', '/wp-login', '/wp-content', '/wp-includes',
-    '/xmlrpc.php', '/phpmyadmin', '/pma', '/.env', '/.git',
-    '/admin', '/config', '/setup', '/install'
-  ];
-  
-  const isBlocked = blocked.some(p => path.startsWith(p));
-  
-  if (isBlocked) {
-    return new Response('Not Found', { 
-      status: 404,
-      headers: { 'Cache-Control': 'no-store' }
-    });
+  const url = new URL(context.request.url);
+
+  // 0) متلمسش الـ API proxy خالص
+  if (url.pathname.startsWith('/api/')) {
+    return context.next();
+  }
+
+  let changed = false;
+
+  // 1) non-www → www (طبقة احتياطية فوق _redirects)
+  if (url.hostname === 'cryptohubcoin.com') {
+    url.hostname = 'www.cryptohubcoin.com';
+    changed = true;
+  }
+
+  // 2) امسح lang / ref / utm_* من الـ query string
+  for (const key of [...url.searchParams.keys()]) {
+    if (STRIP_PARAMS.includes(key) || key.startsWith('utm_')) {
+      url.searchParams.delete(key);
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    return Response.redirect(url.toString(), 301);
   }
 
   return context.next();

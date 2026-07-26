@@ -27,8 +27,21 @@
   function injectStyle() {
     if (document.getElementById('ch-ads-style')) return;
     var css =
+      // الحاوية
       '.ch-ad{display:block;line-height:0;text-align:center;margin:12px auto;max-width:100%}' +
-      '.ch-ad img{max-width:100%;height:auto;border-radius:8px;display:inline-block}' +
+      // الصورة: تتظبط جوّه الخانة من غير تشويه، بسقف ارتفاع افتراضي
+      '.ch-ad img{max-width:100%;max-height:110px;width:auto;height:auto;object-fit:contain;border-radius:8px;display:inline-block}' +
+      // بانرات عريضة (أعلى/أسفل الأقسام) — سقف أعلى شوية
+      '.ch-ad[data-slot="top-header"] img,' +
+      '.ch-ad[data-slot="nft-top"] img,' +
+      '.ch-ad[data-slot="nft-inline"] img,' +
+      '.ch-ad[data-slot="nft-bottom"] img,' +
+      '.ch-ad[data-slot$="-top"] img{max-height:120px}' +
+      // مواضع جانبية (يمين/يسار الأدوات) — أضيق وأطول
+      '.ch-ad[data-slot$="-right"] img,' +
+      '.ch-ad[data-slot$="-left"] img{max-height:250px}' +
+      // شريط جانبي صفحة العملة
+      '.ch-ad[data-slot="coin-detail-sidebar"] img{max-height:200px}' +
       '.ch-ad--empty{display:none!important}';
     var s = document.createElement('style');
     s.id = 'ch-ads-style';
@@ -44,6 +57,7 @@
     a.target = '_blank';
     a.rel = 'nofollow sponsored noopener';
     a.setAttribute('data-ad-id', ad.id);
+    a.setAttribute('data-slot', slotEl.getAttribute('data-ad-slot') || '');
 
     var img = document.createElement('img');
     img.src = ad.imageUrl;

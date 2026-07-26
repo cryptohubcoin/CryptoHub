@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>إدارة الإعلانات — CryptoHubCoin</title>
+<style>
+  :root{--ac:#4F46E5;--bg:#f6f7f9;--card:#fff;--bc:#e6e8ec;--t1:#111827;--t2:#6b7280;--ok:#0f6e56;--okbg:#e1f5ee;--off:#9ca3af;--offbg:#f1f2f4;--dng:#b42318;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--t1);padding:24px}
+  .wrap{max-width:1000px;margin:0 auto}
+  h1{font-size:22px;font-weight:600;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+  .sub{color:var(--t2);font-size:13px;margin:0 0 20px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+  .stat{background:var(--card);border:1px solid var(--bc);border-radius:12px;padding:14px}
+  .stat .n{font-size:24px;font-weight:600}
+  .stat .l{font-size:13px;color:var(--t2)}
+  .card{background:var(--card);border:1px solid var(--bc);border-radius:12px;padding:18px;margin-bottom:20px}
+  .card h2{font-size:16px;font-weight:600;margin:0 0 14px}
+  label{font-size:12px;color:var(--t2);display:block;margin-bottom:4px}
+  input,select{width:100%;height:38px;padding:0 10px;border:1px solid var(--bc);border-radius:8px;font-size:14px;background:#fff;font-family:inherit}
+  input:focus,select:focus{outline:none;border-color:var(--ac)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{margin-bottom:12px}
+  button{cursor:pointer;font-family:inherit;font-size:14px;border-radius:8px;border:1px solid var(--bc);background:#fff;padding:9px 16px}
+  button.primary{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:600}
+  button.sm{padding:5px 10px;font-size:12px}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .preview{width:100%;height:90px;border:1px dashed var(--bc);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--t2);font-size:12px;overflow:hidden;background:#fafafa}
+  .preview img{max-width:100%;max-height:100%;object-fit:contain}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:right;color:var(--t2);font-weight:500;font-size:12px;padding:10px 8px;border-bottom:1px solid var(--bc)}
+  td{padding:10px 8px;border-bottom:1px solid var(--bc);vertical-align:middle}
+  .thumb{width:60px;height:34px;object-fit:cover;border-radius:4px;border:1px solid var(--bc)}
+  .pill{font-size:12px;padding:3px 10px;border-radius:20px;font-weight:500}
+  .pill.on{background:var(--okbg);color:var(--ok)}
+  .pill.off{background:var(--offbg);color:var(--off)}
+  .row-actions{display:flex;gap:6px;flex-wrap:wrap}
+  .msg{padding:10px 14px;border-radius:8px;margin-bottom:14px;font-size:13px;display:none}
+  .msg.err{background:#fdecea;color:var(--dng);display:block}
+  .msg.ok{background:var(--okbg);color:var(--ok);display:block}
+  .muted{color:var(--t2);font-size:12px}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr}body{padding:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📢 إدارة الإعلانات</h1>
+  <p class="sub">CryptoHubCoin — أضف إعلان، اختَر المكان، فعّله أو أوقفه. الإعلان المتوقف يختفي فوراً من الموقع.</p>
+
+  <div id="msg" class="msg"></div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="card">
+    <h2>➕ إضافة إعلان جديد</h2>
+    <div class="grid2">
+      <div class="field"><label>اسم المُعلن</label><input id="f-adv" placeholder="مثال: Binance"></div>
+      <div class="field"><label>المكان (Slot)</label><select id="f-slot"></select></div>
+    </div>
+    <div class="field"><label>رابط الإعلان عند الضغط (targetUrl)</label><input id="f-target" placeholder="https://..." dir="ltr"></div>
+    <div class="grid2">
+      <div class="field">
+        <label>صورة البانر (ترفع على R2)</label>
+        <input id="f-file" type="file" accept="image/*">
+        <div class="muted" id="up-status"></div>
+      </div>
+      <div class="field"><label>معاينة</label><div class="preview" id="prev">لا صورة</div></div>
+    </div>
+    <input type="hidden" id="f-imageurl">
+    <button class="primary" id="btn-add">حفظ ونشر</button>
+    <button id="btn-reset">تفريغ</button>
+  </div>
+
+  <div class="card">
+    <h2>📋 الإعلانات الحالية</h2>
+    <div id="list"><p class="muted">جارِ التحميل…</p></div>
+  </div>
+</div>
+
+<script>
+const API = location.origin;
+const SLOTS_LABELS = {
+  'top-header':'الصفحة الرئيسية — أعلى (تحت الهيدر)',
+  'coin-detail-sidebar':'صفحة العملة — تحت Max Supply',
+  'predictor-top':'Price Predictor — أعلى','predictor-right':'Price Predictor — يمين','predictor-left':'Price Predictor — يسار',
+  'arbitrage-top':'Arbitrage — أعلى','arbitrage-right':'Arbitrage — يمين','arbitrage-left':'Arbitrage — يسار',
+  'liquidity-top':'Liquidity — أعلى','liquidity-right':'Liquidity — يمين','liquidity-left':'Liquidity — يسار',
+  'forex-top':'Forex — أعلى','forex-right':'Forex — يمين','forex-left':'Forex — يسار',
+  'whale-top':'Whale Alert — أعلى','whale-right':'Whale Alert — يمين','whale-left':'Whale Alert — يسار',
+  'vesting-top':'Token Vesting — أعلى','vesting-right':'Token Vesting — يمين','vesting-left':'Token Vesting — يسار',
+  'nft-top':'NFT — أعلى القسم','nft-inline':'NFT — بين الصفوف','nft-bottom':'NFT — تحت الجدول',
+};
+let SLOTS = [];
+
+function msg(t, ok){ const m=document.getElementById('msg'); m.textContent=t; m.className='msg '+(ok?'ok':'err'); setTimeout(()=>{m.className='msg'},4000); }
+async function api(path, opts={}){
+  const r = await fetch(API+path, { credentials:'include', ...opts });
+  const d = await r.json().catch(()=>({}));
+  if(!r.ok || d.success===false) throw new Error(d.message || d.error || ('HTTP '+r.status));
+  return d;
+}
+
+async function load(){
+  try{
+    const d = await api('/admin/ads');
+    SLOTS = d.slots || [];
+    fillSlots();
+    render(d.data);
+  }catch(e){
+    if(String(e.message).includes('auth')) { document.getElementById('list').innerHTML='<p class="muted">لازم تسجّل دخول الأدمن الأول.</p>'; }
+    else msg('خطأ في التحميل: '+e.message, false);
+  }
+}
+
+function fillSlots(){
+  const sel=document.getElementById('f-slot');
+  if(sel.options.length) return;
+  sel.innerHTML = SLOTS.map(s=>'<option value="'+s+'">'+(SLOTS_LABELS[s]||s)+'</option>').join('');
+}
+
+function render(ads){
+  const total=ads.length, on=ads.filter(a=>a.active).length, off=total-on;
+  const usedSlots=new Set(ads.filter(a=>a.active).map(a=>a.slot)).size;
+  document.getElementById('stats').innerHTML =
+    stat(total,'إجمالي الإعلانات')+stat(on,'مفعّلة الآن')+stat(off,'متوقفة')+stat((SLOTS.length-usedSlots),'أماكن فاضية');
+
+  if(!total){ document.getElementById('list').innerHTML='<p class="muted">لا توجد إعلانات بعد.</p>'; return; }
+  let h='<table><thead><tr><th>معاينة</th><th>المُعلن</th><th>المكان</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>';
+  for(const a of ads){
+    h+='<tr>'+
+      '<td><img class="thumb" src="'+a.imageUrl+'" alt=""></td>'+
+      '<td>'+esc(a.advertiser)+'<br><a class="muted" href="'+a.targetUrl+'" target="_blank" dir="ltr">'+esc(a.targetUrl.slice(0,30))+'…</a></td>'+
+      '<td>'+(SLOTS_LABELS[a.slot]||a.slot)+'</td>'+
+      '<td><span class="pill '+(a.active?'on':'off')+'">'+(a.active?'مفعّل':'متوقف')+'</span></td>'+
+      '<td class="row-actions">'+
+        '<button class="sm" onclick="toggle('+a.id+')">'+(a.active?'إيقاف':'تفعيل')+'</button>'+
+        '<button class="sm" onclick="del('+a.id+')" style="color:var(--dng)">حذف</button>'+
+      '</td></tr>';
+  }
+  h+='</tbody></table>';
+  document.getElementById('list').innerHTML=h;
+}
+function stat(n,l){return '<div class="stat"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>';}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+// upload image → R2
+document.getElementById('f-file').addEventListener('change', async e=>{
+  const file=e.target.files[0]; if(!file) return;
+  const st=document.getElementById('up-status'); st.textContent='جارِ الرفع…';
+  try{
+    const d = await api('/admin/ads/upload',{ method:'POST', headers:{'content-type':file.type}, body:file });
+    document.getElementById('f-imageurl').value=d.imageUrl;
+    document.getElementById('prev').innerHTML='<img src="'+d.imageUrl+'">';
+    st.textContent='تم الرفع ✓';
+  }catch(err){ st.textContent=''; msg('فشل رفع الصورة: '+err.message,false); }
+});
+
+document.getElementById('btn-add').addEventListener('click', async ()=>{
+  const advertiser=document.getElementById('f-adv').value.trim();
+  const slot=document.getElementById('f-slot').value;
+  const targetUrl=document.getElementById('f-target').value.trim();
+  const imageUrl=document.getElementById('f-imageurl').value;
+  if(!advertiser) return msg('اكتب اسم المُعلن',false);
+  if(!imageUrl) return msg('ارفع صورة البانر الأول',false);
+  if(!/^https?:\/\//.test(targetUrl)) return msg('الرابط لازم يبدأ بـ http',false);
+  try{
+    await api('/admin/ads',{ method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({advertiser,slot,imageUrl,targetUrl}) });
+    msg('تمت إضافة الإعلان ونشره',true);
+    resetForm(); load();
+  }catch(e){ msg('فشل الحفظ: '+e.message,false); }
+});
+
+document.getElementById('btn-reset').addEventListener('click', resetForm);
+function resetForm(){
+  document.getElementById('f-adv').value='';
+  document.getElementById('f-target').value='';
+  document.getElementById('f-imageurl').value='';
+  document.getElementById('f-file').value='';
+  document.getElementById('prev').textContent='لا صورة';
+  document.getElementById('up-status').textContent='';
+}
+
+window.toggle=async id=>{ try{ await api('/admin/ads/'+id+'/toggle',{method:'POST'}); load(); }catch(e){ msg(e.message,false);} };
+window.del=async id=>{ if(!confirm('متأكد من حذف الإعلان؟')) return; try{ await api('/admin/ads/'+id,{method:'DELETE'}); load(); }catch(e){ msg(e.message,false);} };
+
+load();
+</script>
+</body>
+</html>

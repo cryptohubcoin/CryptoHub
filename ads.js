@@ -28,15 +28,15 @@
     if (document.getElementById('ch-ads-style')) return;
     var css =
       // الحاوية
-      '.ch-ad{display:block;line-height:0;text-align:center;margin:12px auto;max-width:100%}' +
+      '.ch-ad{display:block;line-height:0;text-align:center;margin:8px auto;max-width:100%}' +
       // الصورة: تتظبط جوّه الخانة من غير تشويه، بسقف ارتفاع افتراضي
-      '.ch-ad img{max-width:100%;max-height:110px;width:auto;height:auto;object-fit:contain;border-radius:8px;display:inline-block}' +
-      // بانرات عريضة (أعلى/أسفل الأقسام) — سقف أعلى شوية
+      '.ch-ad img{max-width:100%;max-height:90px;width:auto;height:auto;object-fit:contain;border-radius:8px;display:inline-block;vertical-align:middle}' +
+      // بانرات عريضة (أعلى/أسفل الأقسام) — سقف ارتفاع مناسب لبانر 728×90
       '.ch-ad[data-slot="top-header"] img,' +
       '.ch-ad[data-slot="nft-top"] img,' +
       '.ch-ad[data-slot="nft-inline"] img,' +
       '.ch-ad[data-slot="nft-bottom"] img,' +
-      '.ch-ad[data-slot$="-top"] img{max-height:120px}' +
+      '.ch-ad[data-slot$="-top"] img{max-height:100px}' +
       // مواضع جانبية (يمين/يسار الأدوات) — أضيق وأطول
       '.ch-ad[data-slot$="-right"] img,' +
       '.ch-ad[data-slot$="-left"] img{max-height:250px}' +

@@ -53,8 +53,9 @@
       // مواضع جانبية (يمين/يسار الأدوات) — أضيق وأطول
       '.ch-ad[data-slot$="-right"] img,' +
       '.ch-ad[data-slot$="-left"] img{max-height:250px}' +
-      // شريط جانبي صفحة العملة
-      '.ch-ad[data-slot="coin-detail-sidebar"] img{max-height:200px}' +
+      // شريط جانبي صفحة العملة — ياخد عرض العمود كامل
+      '.ch-ad[data-slot="coin-detail-sidebar"]{margin:12px 0;width:100%}' +
+      '.ch-ad[data-slot="coin-detail-sidebar"] img{width:100%;max-width:100%;max-height:none;height:auto;object-fit:contain}' +
       '.ch-ad--empty{display:none!important}';
     var s = document.createElement('style');
     s.id = 'ch-ads-style';

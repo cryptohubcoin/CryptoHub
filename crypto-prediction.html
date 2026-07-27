@@ -45,7 +45,7 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 .hero-pill .dot{width:7px;height:7px;border-radius:50%;display:inline-block;}
 
 /* ── SEARCH ── */
-.search-section{max-width:700px;margin:0 auto 40px;padding:0 24px;}
+.search-section{max-width:1100px;margin:0 auto 40px;padding:0 24px;}
 .search-box{background:var(--bg2);border:1px solid var(--bc);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px;}
 .search-row{display:flex;gap:12px;align-items:stretch;}
 .coin-input-wrap{flex:1;position:relative;}
@@ -252,11 +252,13 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   .pg-note{ margin-top:12px !important; padding:10px 12px; background:var(--bg3); border-radius:10px; font-size:13px !important; }
   .pg-disc{ text-align:center; font-size:13px; color:#BA7517 !important; margin:18px 0 0 !important; padding:12px; background:rgba(186,117,23,.07); border-radius:12px; }
 
-/* ── Sticky side ads (wide desktop only) ── */
-.ch-rail{position:fixed;top:120px;width:160px;height:600px;max-height:calc(100vh - 140px);overflow:hidden;display:none;z-index:30;}
-.ch-rail-left{left:24px;}
-.ch-rail-right{right:24px;}
-@media(min-width:1400px){.ch-rail{display:block;}}
+/* ── Side ads aligned to the search card ── */
+.pred-card-row{display:flex;align-items:stretch;justify-content:center;gap:20px;max-width:1100px;margin:0 auto;}
+.pred-card-row .search-box{flex:0 1 700px;min-width:0;}
+.ch-card-ad{flex:0 0 auto;width:160px;display:none;align-items:center;overflow:hidden;}
+.ch-card-ad .ch-ad{width:100%;}
+.ch-card-ad .ch-ad img{width:100%;height:auto;max-height:100%;object-fit:contain;border-radius:8px;}
+@media(min-width:1200px){.ch-card-ad{display:flex;}}
 
 
 <style>
@@ -300,13 +302,11 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   </div>
 </div>
 
-<!-- SIDE ADS (sticky, wide desktop only) -->
-<div data-ad-slot="predictor-left" class="ch-rail ch-rail-left"></div>
-<div data-ad-slot="predictor-right" class="ch-rail ch-rail-right"></div>
-
-<!-- SEARCH -->
+<!-- SEARCH (with side ads aligned to the card) -->
 <div class="search-section">
-  <div class="search-box">
+  <div class="pred-card-row">
+    <div data-ad-slot="predictor-left" class="ch-card-ad"></div>
+    <div class="search-box">
     <div class="search-row">
       <div class="coin-input-wrap">
         <span class="icon">🔍</span>
@@ -327,6 +327,9 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
       <div class="pop-coin" data-coin-id="cardano"><img src="https://api.cryptohubcoin.com/api/v1/icons/coin/cardano" onerror="this.style.display='none'">ADA</div>
       <div class="pop-coin" data-coin-id="dogecoin"><img src="https://api.cryptohubcoin.com/api/v1/icons/coin/dogecoin" onerror="this.style.display='none'">DOGE</div>
     </div>
+    </div>
+    <div data-ad-slot="predictor-right" class="ch-card-ad"></div>
+  </div>
   </div>
 </div>
 

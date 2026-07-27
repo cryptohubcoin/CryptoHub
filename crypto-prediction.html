@@ -233,11 +233,6 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   .search-row{flex-direction:column;}
 }
 
-/* Ad side rails — desktop only */
-.ch-side-rail{position:fixed;top:50%;transform:translateY(-50%);z-index:50;width:160px;display:none}
-.ch-side-left{left:16px}
-.ch-side-right{right:16px}
-@media(min-width:1280px){.ch-side-rail{display:block}}
 </style>
 
 <style>
@@ -269,20 +264,23 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 </head>
 <body>
 
-<!-- Ad Slots: predictor side rails (desktop only) -->
-<div data-ad-slot="predictor-left" class="ch-side-rail ch-side-left"></div>
-<div data-ad-slot="predictor-right" class="ch-side-rail ch-side-right"></div>
-
 <!-- NAV -->
 <nav>
   <a href="/" class="nav-brand">
     <img src="/logo.png" alt="CryptoHubCoin">
     <span>CryptoHubCoin</span>
   </a>
+
+  <!-- Ad Slot: predictor-top (inside nav, desktop) -->
+  <div data-ad-slot="predictor-top" class="ch-ad-header"></div>
+
   <a href="/" class="nav-back">
     ← Back to Home
   </a>
 </nav>
+
+<!-- Ad Slot: predictor-top (mobile — below nav) -->
+<div data-ad-slot="predictor-top" class="ch-ad-below-header" style="max-width:970px;margin:10px auto 0;padding:0 24px"></div>
 
 <!-- HERO -->
 <div class="hero">
@@ -295,9 +293,6 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
     <div class="hero-pill"><span class="dot" style="background:#534AB7"></span>Signal Integrity</div>
   </div>
 </div>
-
-<!-- Ad Slot: predictor-top -->
-<div data-ad-slot="predictor-top" style="max-width:970px;margin:0 auto 24px;padding:0 24px"></div>
 
 <!-- SEARCH -->
 <div class="search-section">

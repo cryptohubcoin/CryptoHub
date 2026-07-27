@@ -36,7 +36,8 @@
       '.ch-ad[data-slot="top-header"]{margin:10px auto}' +
       '.ch-ad[data-slot="top-header"] img{width:100%;max-width:970px;max-height:120px;object-fit:cover}' +
 
-      // ── نسخة الهيدر (ديسكتوب): جوّه الهيدر بين اللوجو والأيقونات ──
+      // ── نسخة الهيدر (ديسكتوب): جوّه الهيدر/النav بين اللوجو والأيقونات ──
+      // تشتغل مع أي slot داخل عنصر .ch-ad-header (الرئيسية + كل الأدوات)
       '.ch-ad-header{flex:1 1 auto;min-width:0;max-width:600px;margin:0 20px;overflow:hidden;display:flex;justify-content:center}' +
       '.ch-ad-header .ch-ad{margin:0;width:100%;display:block}' +
       '.ch-ad-header .ch-ad img{height:40px;width:100%;max-width:100%;object-fit:cover;border-radius:6px}' +

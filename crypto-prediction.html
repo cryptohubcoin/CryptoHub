@@ -252,13 +252,14 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   .pg-note{ margin-top:12px !important; padding:10px 12px; background:var(--bg3); border-radius:10px; font-size:13px !important; }
   .pg-disc{ text-align:center; font-size:13px; color:#BA7517 !important; margin:18px 0 0 !important; padding:12px; background:rgba(186,117,23,.07); border-radius:12px; }
 
-/* ── Side ads filling the FULL side space, aligned to card height ── */
-.pred-card-row{display:flex;align-items:stretch;justify-content:center;gap:16px;max-width:100%;margin:0 auto;padding:0 16px;}
-.pred-card-row .search-box{flex:0 0 700px;min-width:0;}
-.ch-card-ad{flex:1 1 0;min-width:0;display:none;overflow:hidden;border-radius:16px;}
-.ch-card-ad .ch-ad{width:100%;height:100%;display:block;}
-.ch-card-ad .ch-ad img{width:100%;height:100%;object-fit:cover;border-radius:16px;display:block;}
-@media(min-width:1000px){.ch-card-ad{display:block;}}
+/* ── Full-height side ads: from below nav to end of search card ── */
+.hero-zone{position:relative;}
+.ch-zone-ad{position:absolute;top:0;bottom:0;width:200px;display:none;overflow:hidden;border-radius:16px;z-index:5;}
+.ch-zone-left{left:24px;}
+.ch-zone-right{right:24px;}
+.ch-zone-ad .ch-ad{width:100%;height:100%;display:block;}
+.ch-zone-ad .ch-ad img{width:100%;height:100%;object-fit:cover;border-radius:16px;display:block;}
+@media(min-width:1100px){.ch-zone-ad{display:block;}}
 
 
 <style>
@@ -290,6 +291,11 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 <!-- Ad Slot: predictor-top (mobile — below nav) -->
 <div data-ad-slot="predictor-top" class="ch-ad-below-header" style="max-width:970px;margin:10px auto 0;padding:0 24px"></div>
 
+<!-- ZONE: hero + search with full-height side ads -->
+<div class="hero-zone">
+  <div data-ad-slot="predictor-left" class="ch-zone-ad ch-zone-left"></div>
+  <div data-ad-slot="predictor-right" class="ch-zone-ad ch-zone-right"></div>
+
 <!-- HERO -->
 <div class="hero">
   <h1>AI <span>Price Direction Forecast</span></h1>
@@ -302,11 +308,9 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   </div>
 </div>
 
-<!-- SEARCH (with side ads aligned to the card) -->
+<!-- SEARCH -->
 <div class="search-section">
-  <div class="pred-card-row">
-    <div data-ad-slot="predictor-left" class="ch-card-ad"></div>
-    <div class="search-box">
+  <div class="search-box">
     <div class="search-row">
       <div class="coin-input-wrap">
         <span class="icon">🔍</span>
@@ -328,9 +332,8 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
       <div class="pop-coin" data-coin-id="dogecoin"><img src="https://api.cryptohubcoin.com/api/v1/icons/coin/dogecoin" onerror="this.style.display='none'">DOGE</div>
     </div>
     </div>
-    <div data-ad-slot="predictor-right" class="ch-card-ad"></div>
   </div>
-  </div>
+</div>
 </div>
 
 

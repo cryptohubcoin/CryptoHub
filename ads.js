@@ -45,8 +45,14 @@
       // خانة top-header اللي تحت الهيدر: تختفي على الديسكتوب، تظهر على الموبايل
       '@media(min-width:769px){.ch-ad-below-header{display:none!important}}' +
 
-      // باقي البانرات العريضة (أعلى الأقسام / NFT)
-      '.ch-ad[data-slot="nft-top"] img,' +
+      // بانرات أعلى الأقسام (Exchanges / NFT / Stocks) — تمتد على عرض القسم
+      '.ch-ad[data-slot="exchanges-top"],' +
+      '.ch-ad[data-slot="stocks-top"],' +
+      '.ch-ad[data-slot="nft-top"]{margin:4px auto 14px;width:100%}' +
+      '.ch-ad[data-slot="exchanges-top"] img,' +
+      '.ch-ad[data-slot="stocks-top"] img,' +
+      '.ch-ad[data-slot="nft-top"] img{width:100%;max-width:970px;max-height:110px;object-fit:cover}' +
+      // باقي البانرات العريضة (nft-inline / nft-bottom / أي -top آخر)
       '.ch-ad[data-slot="nft-inline"] img,' +
       '.ch-ad[data-slot="nft-bottom"] img,' +
       '.ch-ad[data-slot$="-top"] img{max-height:100px}' +

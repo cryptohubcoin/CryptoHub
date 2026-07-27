@@ -234,13 +234,6 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 }
 
 
-/* ── Ad side rails (professional skyscraper, wide desktop only) ── */
-.ch-side-rail{position:fixed;top:50%;transform:translateY(-50%);z-index:40;width:160px;display:none;}
-.ch-side-left{left:24px;}
-.ch-side-right{right:24px;}
-/* تظهر فقط لما يكون فيه مساحة كافية على الجنبين (المحتوى 1100px + إعلانين + هوامش) */
-@media(min-width:1500px){.ch-side-rail{display:block;}}
-
 
 <style>
   .pred-guide{ max-width:1100px; margin:18px auto 0; padding:0 24px; }
@@ -258,7 +251,14 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   .pg-grid span{ font-size:13px; line-height:1.6; color:var(--t2); }
   .pg-note{ margin-top:12px !important; padding:10px 12px; background:var(--bg3); border-radius:10px; font-size:13px !important; }
   .pg-disc{ text-align:center; font-size:13px; color:#BA7517 !important; margin:18px 0 0 !important; padding:12px; background:rgba(186,117,23,.07); border-radius:12px; }
-</style>
+
+/* ── Side ads anchored around the search box (not floating) ── */
+.pred-search-zone{position:relative;}
+.ch-zone-ad{position:absolute;top:0;width:160px;display:none;}
+.ch-zone-left{left:24px;}
+.ch-zone-right{right:24px;}
+@media(min-width:1400px){.ch-zone-ad{display:block;}}
+
 
 <style>
   .card-explain{ font-size:12.5px; line-height:1.6; color:var(--t2); margin:-2px 0 14px; padding:8px 11px; background:var(--bg3); border-radius:9px; border-left:3px solid var(--ac); }
@@ -270,10 +270,6 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 </style>
 </head>
 <body>
-
-<!-- Ad Slots: side rails (desktop wide screens only) -->
-<div data-ad-slot="predictor-left" class="ch-side-rail ch-side-left"></div>
-<div data-ad-slot="predictor-right" class="ch-side-rail ch-side-right"></div>
 
 <!-- NAV -->
 <nav>
@@ -305,7 +301,10 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   </div>
 </div>
 
-<!-- SEARCH -->
+<!-- SEARCH (with side ads) -->
+<div class="pred-search-zone">
+  <div data-ad-slot="predictor-left" class="ch-zone-ad ch-zone-left"></div>
+  <div data-ad-slot="predictor-right" class="ch-zone-ad ch-zone-right"></div>
 <div class="search-section">
   <div class="search-box">
     <div class="search-row">
@@ -329,6 +328,7 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
       <div class="pop-coin" data-coin-id="dogecoin"><img src="https://api.cryptohubcoin.com/api/v1/icons/coin/dogecoin" onerror="this.style.display='none'">DOGE</div>
     </div>
   </div>
+</div>
 </div>
 
 

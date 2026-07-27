@@ -57,9 +57,9 @@
       '.ch-ad[data-slot="nft-inline"] img,' +
       '.ch-ad[data-slot="nft-bottom"] img,' +
       '.ch-ad[data-slot$="-top"] img{max-height:100px}' +
-      // مواضع جانبية (يمين/يسار الأدوات) — عمودية في الـ side rail
-      '.ch-side-rail .ch-ad{margin:0;width:100%}' +
-      '.ch-side-rail .ch-ad img{width:100%;max-width:100%;max-height:600px;height:auto;object-fit:contain;border-radius:8px}' +
+      // مواضع جانبية (يمين/يسار الأدوات) — عمودية مربوطة بالمحتوى
+      '.ch-side-rail .ch-ad,.ch-zone-ad .ch-ad{margin:0;width:100%}' +
+      '.ch-side-rail .ch-ad img,.ch-zone-ad .ch-ad img{width:100%;max-width:100%;max-height:600px;height:auto;object-fit:contain;border-radius:8px}' +
       '.ch-ad[data-slot$="-right"] img,' +
       '.ch-ad[data-slot$="-left"] img{max-height:600px}' +
       // شريط جانبي صفحة العملة — ياخد عرض العمود كامل

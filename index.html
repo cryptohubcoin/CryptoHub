@@ -1608,6 +1608,10 @@
             <div class="gs-results" id="gsResults"></div>
           </div>
         </div>
+
+        <!-- Ad Slot: top-header (Desktop — inside header, hidden on mobile) -->
+        <div data-ad-slot="top-header" data-ad-variant="header" class="ch-ad-header"></div>
+
         <div class="flex items-center gap-2">
           <!-- Search Icon Button (all screens) -->
           <button class="nav-icon-btn" onclick="toggleMobileSearch()" title="بحث" id="navSearchBtn">
@@ -1775,8 +1779,8 @@
   <main class="pt-16 max-w-7xl mx-auto px-4 py-5">
     <input type="text" id="search" style="display:none">
 
-    <!-- Ad Slot: top-header -->
-    <div data-ad-slot="top-header"></div>
+    <!-- Ad Slot: top-header (Mobile — below header, hidden on desktop) -->
+    <div data-ad-slot="top-header" class="ch-ad-below-header"></div>
 
 
     <!-- Precious Metals Live -->

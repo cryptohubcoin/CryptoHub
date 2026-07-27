@@ -34,6 +34,16 @@
       // بانر الهيدر العريض — يمتد على عرض الخانة (بحد أقصى 970px زي القياسي)
       '.ch-ad[data-slot="top-header"]{margin:10px auto}' +
       '.ch-ad[data-slot="top-header"] img{width:100%;max-width:970px;max-height:120px;object-fit:cover}' +
+
+      // ── نسخة الهيدر (ديسكتوب): جوّه الهيدر بين اللوجو والأيقونات ──
+      '.ch-ad-header{flex:1;min-width:0;margin:0 16px;overflow:hidden}' +
+      '.ch-ad-header .ch-ad{margin:0 auto}' +
+      '.ch-ad-header .ch-ad img{max-height:44px;width:auto;max-width:100%;object-fit:contain}' +
+      // تظهر على الديسكتوب فقط
+      '@media(max-width:768px){.ch-ad-header{display:none!important}}' +
+      // خانة top-header اللي تحت الهيدر: تختفي على الديسكتوب، تظهر على الموبايل
+      '@media(min-width:769px){.ch-ad-below-header{display:none!important}}' +
+
       // باقي البانرات العريضة (أعلى الأقسام / NFT)
       '.ch-ad[data-slot="nft-top"] img,' +
       '.ch-ad[data-slot="nft-inline"] img,' +

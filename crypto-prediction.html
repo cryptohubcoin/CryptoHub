@@ -252,9 +252,10 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   .pg-note{ margin-top:12px !important; padding:10px 12px; background:var(--bg3); border-radius:10px; font-size:13px !important; }
   .pg-disc{ text-align:center; font-size:13px; color:#BA7517 !important; margin:18px 0 0 !important; padding:12px; background:rgba(186,117,23,.07); border-radius:12px; }
 
-/* ── Full-height side ads: from below nav to end of search card ── */
+/* ── Side ads: from the divider line (under hero) to top of search card ── */
 .hero-zone{position:relative;}
-.ch-zone-ad{position:absolute;top:0;bottom:0;width:200px;display:none;overflow:hidden;border-radius:16px;z-index:5;}
+/* الإعلان يمتد من مستوى الخط الفاصل تحت الوصف، لحد بداية الكارت */
+.ch-zone-ad{position:absolute;top:200px;bottom:120px;width:200px;display:none;overflow:hidden;border-radius:16px;z-index:5;}
 .ch-zone-left{left:24px;}
 .ch-zone-right{right:24px;}
 .ch-zone-ad .ch-ad{width:100%;height:100%;display:block;}

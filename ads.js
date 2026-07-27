@@ -57,11 +57,9 @@
       '.ch-ad[data-slot="nft-inline"] img,' +
       '.ch-ad[data-slot="nft-bottom"] img,' +
       '.ch-ad[data-slot$="-top"] img{max-height:100px}' +
-      // مواضع جانبية (يمين/يسار الأدوات) — عمودية مربوطة بالمحتوى
-      '.ch-side-rail .ch-ad,.ch-zone-ad .ch-ad{margin:0;width:100%}' +
-      '.ch-side-rail .ch-ad img,.ch-zone-ad .ch-ad img{width:100%;max-width:100%;max-height:600px;height:auto;object-fit:contain;border-radius:8px}' +
-      '.ch-ad[data-slot$="-right"] img,' +
-      '.ch-ad[data-slot$="-left"] img{max-height:600px}' +
+      // مواضع جانبية (يمين/يسار الأدوات) — عمودية ثابتة (sticky rail)
+      '.ch-rail .ch-ad,.ch-side-rail .ch-ad,.ch-zone-ad .ch-ad{margin:0;width:100%;height:100%}' +
+      '.ch-rail .ch-ad img,.ch-side-rail .ch-ad img,.ch-zone-ad .ch-ad img{width:100%;max-width:100%;max-height:600px;height:auto;object-fit:contain;border-radius:8px}' +
       // شريط جانبي صفحة العملة — ياخد عرض العمود كامل
       '.ch-ad[data-slot="coin-detail-sidebar"]{margin:12px 0;width:100%}' +
       '.ch-ad[data-slot="coin-detail-sidebar"] img{width:100%;max-width:100%;max-height:none;height:auto;object-fit:contain}' +

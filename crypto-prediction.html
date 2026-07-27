@@ -252,12 +252,11 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   .pg-note{ margin-top:12px !important; padding:10px 12px; background:var(--bg3); border-radius:10px; font-size:13px !important; }
   .pg-disc{ text-align:center; font-size:13px; color:#BA7517 !important; margin:18px 0 0 !important; padding:12px; background:rgba(186,117,23,.07); border-radius:12px; }
 
-/* ── Side ads anchored around the search box (not floating) ── */
-.pred-search-zone{position:relative;}
-.ch-zone-ad{position:absolute;top:0;width:160px;display:none;}
-.ch-zone-left{left:24px;}
-.ch-zone-right{right:24px;}
-@media(min-width:1400px){.ch-zone-ad{display:block;}}
+/* ── Sticky side ads (wide desktop only) ── */
+.ch-rail{position:fixed;top:120px;width:160px;height:600px;max-height:calc(100vh - 140px);overflow:hidden;display:none;z-index:30;}
+.ch-rail-left{left:24px;}
+.ch-rail-right{right:24px;}
+@media(min-width:1400px){.ch-rail{display:block;}}
 
 
 <style>
@@ -301,10 +300,11 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   </div>
 </div>
 
-<!-- SEARCH (with side ads) -->
-<div class="pred-search-zone">
-  <div data-ad-slot="predictor-left" class="ch-zone-ad ch-zone-left"></div>
-  <div data-ad-slot="predictor-right" class="ch-zone-ad ch-zone-right"></div>
+<!-- SIDE ADS (sticky, wide desktop only) -->
+<div data-ad-slot="predictor-left" class="ch-rail ch-rail-left"></div>
+<div data-ad-slot="predictor-right" class="ch-rail ch-rail-right"></div>
+
+<!-- SEARCH -->
 <div class="search-section">
   <div class="search-box">
     <div class="search-row">
@@ -328,7 +328,6 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
       <div class="pop-coin" data-coin-id="dogecoin"><img src="https://api.cryptohubcoin.com/api/v1/icons/coin/dogecoin" onerror="this.style.display='none'">DOGE</div>
     </div>
   </div>
-</div>
 </div>
 
 

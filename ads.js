@@ -22,6 +22,7 @@
   'use strict';
 
   var API = 'https://api.cryptohubcoin.com';
+  var _adsMap = {}; // خريطة الإعلانات المفعّلة { slot: ad }
 
   // ستايل الخانة — يتحقن مرة واحدة
   function injectStyle() {
@@ -98,18 +99,63 @@
     fetch(API + '/api/v1/ads/all', { credentials: 'omit' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (res) {
-        var map = (res && res.data) ? res.data : {};
-        slots.forEach(function (slotEl) {
-          var slot = slotEl.getAttribute('data-ad-slot');
-          var ad = map[slot];
-          if (ad && ad.imageUrl && ad.targetUrl) buildAd(slotEl, ad);
-          else emptySlot(slotEl);
-        });
+        _adsMap = (res && res.data) ? res.data : {};
+        renderSlots();
+        watchCoinDetail(); // فعّل مراقبة صفحة تفاصيل العملة
       })
       .catch(function () {
         // فشل الشبكة → نسيب الخانات فاضية بهدوء
         slots.forEach(emptySlot);
       });
+  }
+
+  // عرض كل الخانات حسب الخريطة المحمّلة
+  function renderSlots() {
+    var slots = document.querySelectorAll('[data-ad-slot]');
+    slots.forEach(function (slotEl) {
+      var slot = slotEl.getAttribute('data-ad-slot');
+
+      // خانة تفاصيل العملة: تظهر فقط لأول 250 عملة
+      if (slot === 'coin-detail-sidebar' && !coinRankAllowed()) {
+        emptySlot(slotEl);
+        return;
+      }
+
+      var ad = _adsMap[slot];
+      if (ad && ad.imageUrl && ad.targetUrl) buildAd(slotEl, ad);
+      else emptySlot(slotEl);
+    });
+  }
+
+  // نقرأ رانك العملة المفتوحة من #mRank (شكله "#5" أو "#--")
+  function coinRankAllowed() {
+    var el = document.getElementById('mRank');
+    if (!el) return false;
+    var txt = (el.textContent || '').replace(/[^0-9]/g, '');
+    var rank = parseInt(txt, 10);
+    if (!rank || isNaN(rank)) return false; // مفيش رانك = مانعرضش
+    return rank <= 250;
+  }
+
+  // نراقب تغيّر رانك العملة (لما المستخدم يفتح عملة تانية) ونعيد التقييم
+  var _watching = false;
+  function watchCoinDetail() {
+    if (_watching) return;
+    var el = document.getElementById('mRank');
+    if (!el) return;
+    _watching = true;
+    var mo = new MutationObserver(function () {
+      var slotEl = document.querySelector('[data-ad-slot="coin-detail-sidebar"]');
+      if (!slotEl) return;
+      if (coinRankAllowed()) {
+        var ad = _adsMap['coin-detail-sidebar'];
+        if (ad && ad.imageUrl && ad.targetUrl) buildAd(slotEl, ad);
+        else emptySlot(slotEl);
+      } else {
+        emptySlot(slotEl);
+      }
+    });
+    mo.observe(el, { childList: true, characterData: true, subtree: true });
   }
 
   if (document.readyState === 'loading') {

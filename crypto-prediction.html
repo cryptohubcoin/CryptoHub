@@ -233,7 +233,14 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
   .search-row{flex-direction:column;}
 }
 
-</style>
+
+/* ── Ad side rails (professional skyscraper, wide desktop only) ── */
+.ch-side-rail{position:fixed;top:50%;transform:translateY(-50%);z-index:40;width:160px;display:none;}
+.ch-side-left{left:24px;}
+.ch-side-right{right:24px;}
+/* تظهر فقط لما يكون فيه مساحة كافية على الجنبين (المحتوى 1100px + إعلانين + هوامش) */
+@media(min-width:1500px){.ch-side-rail{display:block;}}
+
 
 <style>
   .pred-guide{ max-width:1100px; margin:18px auto 0; padding:0 24px; }
@@ -263,6 +270,10 @@ nav{background:var(--bg2);border-bottom:1px solid var(--bc);padding:0 24px;heigh
 </style>
 </head>
 <body>
+
+<!-- Ad Slots: side rails (desktop wide screens only) -->
+<div data-ad-slot="predictor-left" class="ch-side-rail ch-side-left"></div>
+<div data-ad-slot="predictor-right" class="ch-side-rail ch-side-right"></div>
 
 <!-- NAV -->
 <nav>

@@ -46,9 +46,10 @@
       // خانة top-header اللي تحت الهيدر: تختفي على الديسكتوب، تظهر على الموبايل
       '@media(min-width:769px){.ch-ad-below-header{display:none!important}}' +
       // ── موبايل: تقليل الفراغ حوالين بانر تحت-الهيدر (يلزق على ارتفاع الصورة) ──
+      // البانر جوّه <main class="pt-16"> فيه padding-top كبير — نسحبه لفوق بـ margin سالب
       '@media(max-width:768px){' +
-        '.ch-ad-below-header{margin:0;padding:0;line-height:0}' +
-        '.ch-ad-below-header .ch-ad{margin:4px auto;line-height:0}' +
+        '.ch-ad-below-header{margin:-40px 0 0 0;padding:0;line-height:0}' +
+        '.ch-ad-below-header .ch-ad{margin:0 auto;line-height:0}' +
         '.ch-ad-below-header .ch-ad img{max-height:70px}' +
       '}' +
 

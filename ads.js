@@ -45,6 +45,12 @@
       '@media(max-width:768px){.ch-ad-header{display:none!important}}' +
       // خانة top-header اللي تحت الهيدر: تختفي على الديسكتوب، تظهر على الموبايل
       '@media(min-width:769px){.ch-ad-below-header{display:none!important}}' +
+      // ── موبايل: تقليل الفراغ حوالين بانر تحت-الهيدر (يلزق على ارتفاع الصورة) ──
+      '@media(max-width:768px){' +
+        '.ch-ad-below-header{margin:0;padding:0;line-height:0}' +
+        '.ch-ad-below-header .ch-ad{margin:4px auto;line-height:0}' +
+        '.ch-ad-below-header .ch-ad img{max-height:70px}' +
+      '}' +
 
       // بانرات أعلى الأقسام (Exchanges / NFT / Stocks) — تمتد على عرض القسم
       '.ch-ad[data-slot="exchanges-top"],' +

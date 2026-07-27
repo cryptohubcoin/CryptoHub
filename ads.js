@@ -36,9 +36,9 @@
       '.ch-ad[data-slot="top-header"] img{width:100%;max-width:970px;max-height:120px;object-fit:cover}' +
 
       // ── نسخة الهيدر (ديسكتوب): جوّه الهيدر بين اللوجو والأيقونات ──
-      '.ch-ad-header{flex:1;min-width:0;margin:0 16px;overflow:hidden}' +
-      '.ch-ad-header .ch-ad{margin:0 auto}' +
-      '.ch-ad-header .ch-ad img{max-height:44px;width:auto;max-width:100%;object-fit:contain}' +
+      '.ch-ad-header{flex:1 1 auto;min-width:0;max-width:600px;margin:0 20px;overflow:hidden;display:flex;justify-content:center}' +
+      '.ch-ad-header .ch-ad{margin:0;width:100%;display:block}' +
+      '.ch-ad-header .ch-ad img{height:40px;width:100%;max-width:100%;object-fit:cover;border-radius:6px}' +
       // تظهر على الديسكتوب فقط
       '@media(max-width:768px){.ch-ad-header{display:none!important}}' +
       // خانة top-header اللي تحت الهيدر: تختفي على الديسكتوب، تظهر على الموبايل

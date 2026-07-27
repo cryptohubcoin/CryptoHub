@@ -33,7 +33,8 @@
       // الصورة: تتظبط جوّه الخانة من غير تشويه، بسقف ارتفاع افتراضي
       '.ch-ad img{max-width:100%;max-height:90px;width:auto;height:auto;object-fit:contain;border-radius:8px;display:inline-block;vertical-align:middle}' +
       // بانر الهيدر العريض — يمتد على عرض الخانة (بحد أقصى 970px زي القياسي)
-     '.ch-ad[data-slot="top-header"] img{width:100%;max-width:970px;max-height:120px;object-fit:contain}' +
+      '.ch-ad[data-slot="top-header"]{margin:10px auto}' +
+      '.ch-ad[data-slot="top-header"] img{width:100%;max-width:970px;max-height:120px;object-fit:contain}' +
 
       // ── نسخة الهيدر (ديسكتوب): جوّه الهيدر/النav بين اللوجو والأيقونات ──
       // تشتغل مع أي slot داخل عنصر .ch-ad-header (الرئيسية + كل الأدوات)

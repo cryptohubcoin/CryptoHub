@@ -64,6 +64,16 @@
       '.ch-ad[data-slot="nft-inline"] img,' +
       '.ch-ad[data-slot="nft-bottom"] img,' +
       '.ch-ad[data-slot$="-top"] img{max-height:100px}' +
+      // ── موبايل: خلّي بانرات الأقسام عريضة تملأ العرض بلا فراغ فوق/تحت ──
+      // (بعد القواعد العامة عشان تكسب الأولوية على max-height)
+      '@media(max-width:768px){' +
+        '.ch-ad[data-slot="exchanges-top"],' +
+        '.ch-ad[data-slot="stocks-top"],' +
+        '.ch-ad[data-slot="nft-top"]{margin:6px auto;line-height:0}' +
+        '.ch-ad[data-slot="exchanges-top"] img,' +
+        '.ch-ad[data-slot="stocks-top"] img,' +
+        '.ch-ad[data-slot="nft-top"] img{width:100%;max-width:100%;max-height:none;height:auto;object-fit:contain}' +
+      '}' +
       // مواضع جانبية (يمين/يسار الأدوات) — محاذية للكارت، الصورة تملأ المساحة
       '.ch-card-ad .ch-ad{margin:0;width:100%;height:100%;line-height:0}' +
       '.ch-card-ad .ch-ad img{width:100%;height:100%;max-height:100%;object-fit:cover;border-radius:12px}' +

@@ -59,7 +59,7 @@
       '.ch-ad[data-slot="nft-top"]{margin:4px auto 14px;width:100%}' +
       '.ch-ad[data-slot="exchanges-top"] img,' +
       '.ch-ad[data-slot="stocks-top"] img,' +
-      '.ch-ad[data-slot="nft-top"] img{width:100%;max-width:970px;max-height:110px;object-fit:cover}' +
+      '.ch-ad[data-slot="nft-top"] img{width:100%;max-width:970px;max-height:110px;object-fit:contain}' +
       // باقي البانرات العريضة (nft-inline / nft-bottom / أي -top آخر)
       '.ch-ad[data-slot="nft-inline"] img,' +
       '.ch-ad[data-slot="nft-bottom"] img,' +

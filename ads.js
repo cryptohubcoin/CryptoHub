@@ -69,10 +69,10 @@
       '@media(max-width:768px){' +
         '.ch-ad[data-slot="exchanges-top"],' +
         '.ch-ad[data-slot="stocks-top"],' +
-        '.ch-ad[data-slot="nft-top"]{margin:6px auto;line-height:0}' +
+        '.ch-ad[data-slot="nft-top"]{margin:6px auto;line-height:0;min-height:0}' +
         '.ch-ad[data-slot="exchanges-top"] img,' +
         '.ch-ad[data-slot="stocks-top"] img,' +
-        '.ch-ad[data-slot="nft-top"] img{width:100%;max-width:100%;max-height:none;height:auto;object-fit:contain}' +
+        '.ch-ad[data-slot="nft-top"] img{width:100%;max-width:100%;max-height:70px;height:auto;object-fit:contain;display:block}' +
       '}' +
       // مواضع جانبية (يمين/يسار الأدوات) — محاذية للكارت، الصورة تملأ المساحة
       '.ch-card-ad .ch-ad{margin:0;width:100%;height:100%;line-height:0}' +

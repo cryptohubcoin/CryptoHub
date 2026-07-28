@@ -53,7 +53,7 @@
   <div class="stats" id="stats"></div>
 
   <div class="card">
-    <h2>➕ إضافة إعلان جديد</h2>
+    <h2 id="form-title">➕ إضافة إعلان جديد</h2>
     <div class="grid2">
       <div class="field"><label>اسم المُعلن</label><input id="f-adv" placeholder="مثال: Binance"></div>
       <div class="field"><label>المكان (Slot)</label><select id="f-slot"></select></div>
@@ -93,6 +93,8 @@ const SLOTS_LABELS = {
   'exchanges-top':'All Exchanges — أعلى الجدول','stocks-top':'Stocks & ETFs — أعلى الجدول',
 };
 let SLOTS = [];
+let ADS = [];          // كل الإعلانات المحمّلة (عشان زرار التعديل يلاقي بياناتها)
+let EDIT_ID = null;    // id الإعلان اللي بنعدّله دلوقتي (null = وضع الإضافة)
 
 function msg(t, ok){ const m=document.getElementById('msg'); m.textContent=t; m.className='msg '+(ok?'ok':'err'); setTimeout(()=>{m.className='msg'},4000); }
 async function api(path, opts={}){
@@ -106,6 +108,7 @@ async function load(){
   try{
     const d = await api('/admin/ads');
     SLOTS = d.slots || [];
+    ADS = d.data || [];
     fillSlots();
     render(d.data);
   }catch(e){
@@ -135,6 +138,7 @@ function render(ads){
       '<td>'+(SLOTS_LABELS[a.slot]||a.slot)+'</td>'+
       '<td><span class="pill '+(a.active?'on':'off')+'">'+(a.active?'مفعّل':'متوقف')+'</span></td>'+
       '<td class="row-actions">'+
+        '<button class="sm" onclick="editAd('+a.id+')">تعديل</button>'+
         '<button class="sm" onclick="toggle('+a.id+')">'+(a.active?'إيقاف':'تفعيل')+'</button>'+
         '<button class="sm" onclick="del('+a.id+')" style="color:var(--dng)">حذف</button>'+
       '</td></tr>';
@@ -166,21 +170,47 @@ document.getElementById('btn-add').addEventListener('click', async ()=>{
   if(!imageUrl) return msg('ارفع صورة البانر الأول',false);
   if(!/^https?:\/\//.test(targetUrl)) return msg('الرابط لازم يبدأ بـ http',false);
   try{
-    await api('/admin/ads',{ method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({advertiser,slot,imageUrl,targetUrl}) });
-    msg('تمت إضافة الإعلان ونشره',true);
+    if(EDIT_ID){
+      await api('/admin/ads/'+EDIT_ID,{ method:'PUT', headers:{'content-type':'application/json'}, body:JSON.stringify({advertiser,slot,imageUrl,targetUrl}) });
+      msg('تم حفظ التعديلات',true);
+    } else {
+      await api('/admin/ads',{ method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({advertiser,slot,imageUrl,targetUrl}) });
+      msg('تمت إضافة الإعلان ونشره',true);
+    }
     resetForm(); load();
   }catch(e){ msg('فشل الحفظ: '+e.message,false); }
 });
 
 document.getElementById('btn-reset').addEventListener('click', resetForm);
 function resetForm(){
+  EDIT_ID=null;
   document.getElementById('f-adv').value='';
   document.getElementById('f-target').value='';
   document.getElementById('f-imageurl').value='';
   document.getElementById('f-file').value='';
   document.getElementById('prev').textContent='لا صورة';
   document.getElementById('up-status').textContent='';
+  document.getElementById('form-title').textContent='➕ إضافة إعلان جديد';
+  document.getElementById('btn-add').textContent='حفظ ونشر';
+  document.getElementById('btn-reset').textContent='تفريغ';
 }
+
+// وضع التعديل: عبّي الفورم ببيانات الإعلان المختار
+window.editAd=function(id){
+  const a = ADS.find(x=>String(x.id)===String(id));
+  if(!a){ msg('الإعلان غير موجود',false); return; }
+  EDIT_ID=a.id;
+  document.getElementById('f-adv').value=a.advertiser||'';
+  document.getElementById('f-slot').value=a.slot||'';
+  document.getElementById('f-target').value=a.targetUrl||'';
+  document.getElementById('f-imageurl').value=a.imageUrl||'';
+  document.getElementById('prev').innerHTML = a.imageUrl ? '<img src="'+a.imageUrl+'">' : 'لا صورة';
+  document.getElementById('up-status').textContent='الصورة الحالية محفوظة — ارفع صورة جديدة فقط لو عايز تغيّرها';
+  document.getElementById('form-title').textContent='✏️ تعديل الإعلان';
+  document.getElementById('btn-add').textContent='حفظ التعديلات';
+  document.getElementById('btn-reset').textContent='إلغاء';
+  document.querySelector('.card').scrollIntoView({behavior:'smooth',block:'start'});
+};
 
 window.toggle=async id=>{ try{ await api('/admin/ads/'+id+'/toggle',{method:'POST'}); load(); }catch(e){ msg(e.message,false);} };
 window.del=async id=>{ if(!confirm('متأكد من حذف الإعلان؟')) return; try{ await api('/admin/ads/'+id,{method:'DELETE'}); load(); }catch(e){ msg(e.message,false);} };
